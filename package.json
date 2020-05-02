@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "node ./server/server.js",
+    "serve": "node ./server/server.js"
   },
   "private": true,
   "dependencies": {
