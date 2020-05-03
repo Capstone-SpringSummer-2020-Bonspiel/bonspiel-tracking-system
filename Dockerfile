@@ -7,6 +7,6 @@ RUN npm install
 
 RUN cd ../
 COPY . .
-EXPOSE 8080
+EXPOSE $PORT 
 CMD ["ng", "build"]
 CMD ["node", "./server/server.js"]
