@@ -1,0 +1,6 @@
+# This config file is loaded by the node-config package (see dependencies in package.json)
+#   if the NODE_ENV environment variable is set to 'dev' from the Deploy-dev.yml workflow (github action).
+#   Therefore, there is no need of the src/environments folder as the environment is set prior to app build
+
+backend:
+  url: https://bonspiel-tracking-system-dev.herokuapp.com/ #Make API call with this URL

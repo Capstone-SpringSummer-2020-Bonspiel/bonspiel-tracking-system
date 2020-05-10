@@ -1,9 +1,12 @@
-name: Deploy
+name: Deploy-prd
 
 on:
   push:
     branches:
       - master
+
+env:
+  NODE_ENV: prd
 
 jobs:
   build:
