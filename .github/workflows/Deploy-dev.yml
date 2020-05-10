@@ -3,7 +3,8 @@ name: Deploy-prd
 on:
   push:
     branches:
-      - '!master'
+      - "*"
+      - "!master"
 
 env:
   NODE_ENV: dev
