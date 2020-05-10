@@ -3,7 +3,7 @@ name: Deploy-prd
 on:
   push:
     branches:
-      - "!master"
+      - heroku_CD/BP-21
 
 env:
   NODE_ENV: dev
