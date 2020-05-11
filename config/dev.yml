@@ -3,4 +3,4 @@
 #   Therefore, there is no need of the src/environments folder as the environment is set prior to app build
 
 backend:
-  url: https://bonspiel-tracking-system-dev.herokuapp.com/ #Make API call with this URL
+  url: https://bonspiel-tracking-system-devl.herokuapp.com/ #Make API call with this URL
