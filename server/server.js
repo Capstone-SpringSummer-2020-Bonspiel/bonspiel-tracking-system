@@ -20,4 +20,5 @@ app.all('*', (req, res) => {
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 console.log("Frontend Environment", config.env);
+console.log("NODE_ENV", NODE_ENV);
 console.log("API URL", config.backend.url);
