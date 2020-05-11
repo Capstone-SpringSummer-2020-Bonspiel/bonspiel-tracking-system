@@ -1,5 +1,5 @@
 # This config file is loaded by the node-config package (see dependencies in package.json)
-#   if the NODE_ENV environment variable is set to 'prd' from the Deploy-prd.yml workflow (github action).
+#   if the NODE_ENV environment variable is set to 'prd' from the config var in the Heroku image.
 #   Therefore, there is no need of the src/environments folder as the environment is set prior to app build
 
 env: ${ { process.env.NODE_ENV } }

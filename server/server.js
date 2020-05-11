@@ -2,6 +2,8 @@
 
 const express = require('express');
 const compression = require('compression');
+
+process.env.NODE_CONFIG_DIR = './config'
 const config = require('config');
 
 const PORT = process.env.PORT || 8080
