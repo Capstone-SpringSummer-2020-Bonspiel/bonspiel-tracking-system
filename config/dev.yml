@@ -5,4 +5,4 @@
 env: dev
 
 backend:
-  url: https://bonspiel-tracking-system-server-devl.herokuapp.com/ #Make API call with this URL
+  url: https://bonspiel-server-devl.herokuapp.com/ #Make API call with this URL

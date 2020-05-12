@@ -5,4 +5,4 @@
 env: prd
 
 backend:
-  url: https://bonspiel-tracking-system.herokuapp.com/ #Make API call with this URL
+  url: https://bonspiel-server.herokuapp.com/ #Make API call with this URL
