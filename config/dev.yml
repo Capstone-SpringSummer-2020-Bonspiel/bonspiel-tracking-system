@@ -2,7 +2,7 @@
 #   if the NODE_ENV environment variable is set to 'dev' from the config var in the Heroku image.
 #   Therefore, there is no need of the src/environments folder as the environment is set prior to app build
 
-env: ${process.env.NODE_ENV}
+env: dev
 
 backend:
   url: https://bonspiel-tracking-system-server-devl.herokuapp.com/ #Make API call with this URL
