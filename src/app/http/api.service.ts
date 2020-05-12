@@ -7,24 +7,19 @@ const apiURL: string = environment.apiURL;
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:4200'
   }),
   withCredentials: true,
-
-}
+};
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
-  constructor(private httpClient: HttpClient) {}
-
-  public getPokemon(){
-    return this.httpClient.get(`${apiURL}/pokemon/ditto/`);
+  constructor(private httpClient: HttpClient) {
+    console.log(`apiUrl  ==>  ${apiURL}`);
   }
 
-  public getBeer(){
-    return this.httpClient.get(`${apiURL}/breweries/5494`);
+  public testAPI() {
+    return this.httpClient.get(`${apiURL}`);
   }
 }

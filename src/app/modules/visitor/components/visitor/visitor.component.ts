@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/http/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 
 @Component({
   selector: 'app-visitor',
@@ -24,13 +26,28 @@ export class VisitorComponent implements OnInit {
   dataSource = BONSPIEL_DATA;
   panelOpenState = false;
 
-  constructor(private apiService: ApiService) {
-    this.apiService.getBeer().subscribe((res) => {
+  animal: string;
+  name: string;
+
+  constructor(private apiService: ApiService, public dialog: MatDialog) {
+    this.apiService.testAPI().subscribe((res) => {
       console.log(res);
     });
   }
 
   ngOnInit(): void {}
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
+      width: '250px',
+      data: { name: this.name, animal: this.animal },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
+  }
 
   getFinalScore(team) {
     return (
@@ -77,4 +94,9 @@ for (let i = 1; i < 50; i++) {
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
   });
+}
+
+export interface DialogData {
+  animal: string;
+  name: string;
 }
