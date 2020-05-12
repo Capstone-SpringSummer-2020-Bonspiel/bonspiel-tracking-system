@@ -1,11 +1,10 @@
 .example-container {
-    height: 400px;
-    width: 550px;
+    display: flex;
     overflow: auto;
 }
 
 table {
-    width: 800px;
+    width: 100%;
 }
 
 td.mat-column-star {
@@ -24,4 +23,13 @@ td.mat-column-position {
 
 .mat-table-sticky:last-child {
     border-left: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+}
+
+.mat-form-field+.mat-form-field {
+    margin-left: 8px;
 }

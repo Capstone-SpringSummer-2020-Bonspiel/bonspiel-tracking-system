@@ -4,10 +4,9 @@ import { ApiService } from 'src/app/http/api.service';
 @Component({
   selector: 'app-visitor',
   templateUrl: './visitor.component.html',
-  styleUrls: ['./visitor.component.scss']
+  styleUrls: ['./visitor.component.scss'],
 })
 export class VisitorComponent implements OnInit {
-
   displayedColumns = [
     'name',
     'home',
@@ -20,8 +19,10 @@ export class VisitorComponent implements OnInit {
     'round_7',
     'round_8',
     'final_score',
+    'star',
   ];
   dataSource = BONSPIEL_DATA;
+  panelOpenState = false;
 
   constructor(private apiService: ApiService) {
     this.apiService.getBeer().subscribe((res) => {
@@ -29,13 +30,23 @@ export class VisitorComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
+  getFinalScore(team) {
+    return (
+      Number(team.round_1) +
+      Number(team.round_2) +
+      Number(team.round_3) +
+      Number(team.round_4) +
+      Number(team.round_5) +
+      Number(team.round_6) +
+      Number(team.round_7) +
+      Number(team.round_8)
+    );
   }
-
 }
 
-export interface PeriodicElement {
+export interface Game {
   name: string;
   home: string;
   round_1: string;
@@ -49,82 +60,21 @@ export interface PeriodicElement {
   final_score: string;
 }
 
-const BONSPIEL_DATA: PeriodicElement[] = [
-  {
-    name: 'team1',
-    home: '*',
-    round_1: '1',
-    round_2: '2',
-    round_3: '3',
-    round_4: '4',
-    round_5: '5',
-    round_6: '6',
-    round_7: '7',
-    round_8: '8',
-    final_score: '36',
-  },
-  {
-    name: 'team2',
-    home: '*',
-    round_1: '1',
-    round_2: '2',
-    round_3: '3',
-    round_4: '4',
-    round_5: '5',
-    round_6: '6',
-    round_7: '7',
-    round_8: '8',
-    final_score: '36',
-  },
-  {
-    name: 'team3',
-    home: '*',
-    round_1: '1',
-    round_2: '2',
-    round_3: '3',
-    round_4: '4',
-    round_5: '5',
-    round_6: '6',
-    round_7: '7',
-    round_8: '8',
-    final_score: '36',
-  },
-  {
-    name: 'team4',
-    home: '*',
-    round_1: '1',
-    round_2: '2',
-    round_3: '3',
-    round_4: '4',
-    round_5: '5',
-    round_6: '6',
-    round_7: '7',
-    round_8: '8',
-    final_score: '36',
-  },
-  {
-    name: 'team5',
-    home: '*',
-    round_1: '1',
-    round_2: '2',
-    round_3: '3',
-    round_4: '4',
-    round_5: '5',
-    round_6: '6',
-    round_7: '7',
-    round_8: '8',
-    final_score: '36',
-  },
+const BONSPIEL_DATA: Game[] = [];
 
-  // {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  // {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  // {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  // {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  // {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  // {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  // {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  // {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  // {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  // {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-
-];
+// Add dummy data
+for (let i = 1; i < 50; i++) {
+  BONSPIEL_DATA.push({
+    name: `team_${i}`,
+    home: i % 2 === 0 ? '*' : '',
+    round_1: Math.floor(Math.random() * 10 + 1).toString(),
+    round_2: Math.floor(Math.random() * 10 + 1).toString(),
+    round_3: Math.floor(Math.random() * 10 + 1).toString(),
+    round_4: Math.floor(Math.random() * 10 + 1).toString(),
+    round_5: Math.floor(Math.random() * 10 + 1).toString(),
+    round_6: Math.floor(Math.random() * 10 + 1).toString(),
+    round_7: Math.floor(Math.random() * 10 + 1).toString(),
+    round_8: Math.floor(Math.random() * 10 + 1).toString(),
+    final_score: '0',
+  });
+}
