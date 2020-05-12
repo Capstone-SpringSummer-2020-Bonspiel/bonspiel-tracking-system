@@ -9,4 +9,8 @@ RUN cd ../
 COPY . .
 EXPOSE $PORT 
 RUN ng build
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+
 CMD ["node", "./server/server.js"]

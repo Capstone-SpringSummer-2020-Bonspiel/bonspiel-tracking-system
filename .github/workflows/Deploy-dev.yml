@@ -1,8 +1,8 @@
-name: Deploy
+name: Deploy-dev
 
 on:
   push:
-    branches:
+    branches-ignore:
       - master
 
 jobs:
@@ -13,6 +13,6 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.0.4 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "bonspiel-tracking-system" #Must be unique in Heroku
+          heroku_app_name: "bonspiel-tracking-system-devl" #Must be unique in Heroku
           heroku_email: "tejas2@pdx.edu"
           usedocker: true #OPTIONAL and DEFAULT - false
