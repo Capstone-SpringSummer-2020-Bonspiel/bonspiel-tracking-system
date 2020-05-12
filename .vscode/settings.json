@@ -1,0 +1,72 @@
+{
+  "vscodeWorkspaceSwitcher.paths": ["/home/raven/Documents/workspaces"],
+  "workbench.startupEditor": "newUntitledFile",
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+  "editor.minimap.enabled": false,
+  "html.format.unformatted": "code",
+  "ego.power-tools": {
+    "buttons": [
+      {
+        "text": "Format discogs",
+        "tooltip": "Transform raw discogs copy/paste into ytscraper formatted input.",
+        "action": {
+          "type": "script",
+          "script": "formatDiscogs.js"
+        }
+      },
+      {
+        "text": "Format xspf",
+        "tooltip": "Transform raw xspf into ytscraper formatted input",
+        "action": {
+          "type": "script",
+          "script": "formatXspf.js"
+        }
+      }
+    ]
+  },
+  "workbench.colorTheme": "Gloom Contrast (rainglow)",
+  "editor.tabSize": 2,
+  "workbench.statusBar.feedback.visible": false,
+  "wordcounter.count_words": true,
+  "editor.fontFamily": "'FiraCode-Retina'",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 16,
+  "editor.formatOnSave": true,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "python.formatting.autopep8Args": ["--ignore E121"],
+  "markdown.styles": ["markdown.css"],
+  "window.zoomLevel": 1.15,
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "terminal.integrated.copyOnSelection": true,
+  "workbench.iconTheme": "file-icons",
+  "breadcrumbs.enabled": false,
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "C_Cpp.updateChannel": "Insiders",
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "C_Cpp.clang_format_fallbackStyle": "LLVM",
+  "git.autofetch": true,
+  "editor.detectIndentation": false,
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "terminal.explorerKind": "external",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "html.format.wrapLineLength": 0
+}
