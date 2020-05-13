@@ -13,7 +13,6 @@ import { FooterComponent } from './footer/footer.component';
 import { VisitorModule } from './modules/visitor/visitor.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,11 +27,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     HttpClientModule,
     VisitorModule,
   ],
-  providers: [
-    ApiService
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+  providers: [ApiService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
