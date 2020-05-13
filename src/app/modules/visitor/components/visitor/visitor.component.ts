@@ -39,7 +39,7 @@ export class VisitorComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-      width: '250px',
+      width: 'auto',
       data: { name: this.name, animal: this.animal },
     });
 
