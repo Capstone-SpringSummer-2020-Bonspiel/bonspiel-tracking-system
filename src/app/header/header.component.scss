@@ -1,7 +1,7 @@
 $primary-color: #004713;
-$secondary-color: #58595B;
-$accent-color-1: #DBE120;
-$accent-color-2: #13778E;
+$secondary-color: #58595b;
+$accent-color-1: #dbe120;
+$accent-color-2: #13778e;
 header {
     #navbar {
         width: 100%;
@@ -10,9 +10,10 @@ header {
         .dropdown-toggle,
         .dropdown-item,
         a.nav-link,
+        button.nav-link,
         .btn-outline-secondary {
             color: $primary-color;
-            border-color: $secondary-color;
+            // border-color: $secondary-color;
         }
     }
 }
