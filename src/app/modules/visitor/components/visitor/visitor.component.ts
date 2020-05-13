@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/http/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
+import { YoutubeDialogComponent } from '../../components/youtube-dialog/youtube-dialog.component';
 
 @Component({
   selector: 'app-visitor',
@@ -49,6 +50,12 @@ export class VisitorComponent implements OnInit {
     });
   }
 
+  openYoutubeDialog(): void {
+    const dialogRef = this.dialog.open(YoutubeDialogComponent, {
+      width: '800px',
+    });
+  }
+
   getFinalScore(team) {
     return (
       Number(team.round_1) +
@@ -75,6 +82,7 @@ export interface Game {
   round_7: string;
   round_8: string;
   final_score: string;
+  youtube_link: string;
 }
 
 const BONSPIEL_DATA: Game[] = [];
@@ -93,6 +101,7 @@ for (let i = 1; i < 50; i++) {
     round_7: Math.floor(Math.random() * 10 + 1).toString(),
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
+    youtube_link: 'https://www.youtube.com/watch?v=u2bigf337aU',
   });
 }
 
@@ -100,3 +109,8 @@ export interface DialogData {
   animal: string;
   name: string;
 }
+
+let YT_LINK: string[] = [
+  'https://www.youtube.com/watch?v=u2bigf337aU',
+  'https://www.youtube.com/watch?v=u2bigf337aU',
+];

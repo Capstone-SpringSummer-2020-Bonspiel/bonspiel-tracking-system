@@ -72,7 +72,9 @@
                     <ng-container matColumnDef="star" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef></th>
                         <td mat-cell *matCellDef="let team" class="px-2 py-1" style="justify-content: center">
-                            <mat-icon style="vertical-align: middle">play_arrow</mat-icon>
+                            <button mat-icon-button matTooltip="YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog()">
+                <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
+              </button>
                         </td>
                     </ng-container>
 
