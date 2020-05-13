@@ -50,9 +50,12 @@ export class VisitorComponent implements OnInit {
     });
   }
 
-  openYoutubeDialog(): void {
+  openYoutubeDialog(team): void {
+    console.log(`team  ==>  `);
+    console.log(team);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
+      data: { youtube_link: team.youtube_link },
     });
   }
 
@@ -101,7 +104,12 @@ for (let i = 1; i < 50; i++) {
     round_7: Math.floor(Math.random() * 10 + 1).toString(),
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
-    youtube_link: 'https://www.youtube.com/watch?v=u2bigf337aU',
+    youtube_link:
+      i % 3 === 0
+        ? 'https://www.youtube.com/embed/f0NDjR9C28o?start=13'
+        : i === 2
+        ? 'https://www.youtube.com/embed/zwqw-i0kQhQ?start=20'
+        : 'https://www.youtube.com/embed/Cm0dmpFd3l8?start=12',
   });
 }
 
