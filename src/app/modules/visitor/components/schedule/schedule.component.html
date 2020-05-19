@@ -1,0 +1,72 @@
+<div class="conatiner">
+  <div class="row">
+    <div class="col-sm-6">
+      <h1 class="text-center"> Draw Schedule </h1>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <table mat-table [dataSource]="dataSource" class="schedule-container mat-elevation-z8">
+
+      <ng-container matColumnDef="draw">
+        <th mat-header-cell *matHeaderCellDef> Draw </th>
+        <td mat-cell *matCellDef="let draw">
+          Draw #{{draw.drawnum}}<br>
+          Time: {{draw.drawtime}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_a">
+        <th mat-header-cell *matHeaderCellDef> A </th>
+        <td mat-cell *matCellDef="let draw"> Game{{draw.game1[0]}} <br>
+          Team: {{draw.game1[1]}} <br>
+          Team: {{draw.game1[2]}} <br>
+          Winner -> Game{{draw.game1[3]}} <br>
+          Loser -> Game{{draw.game1[4]}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_b">
+        <th mat-header-cell *matHeaderCellDef> B </th>
+        <td mat-cell *matCellDef="let draw"> Game{{draw.game2[0]}} <br>
+          Team: {{draw.game2[1]}} <br>
+          Team: {{draw.game2[2]}} <br>
+          Winner -> Game{{draw.game2[3]}} <br>
+          Loser -> Game{{draw.game2[4]}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_c">
+        <th mat-header-cell *matHeaderCellDef> C </th>
+        <td mat-cell *matCellDef="let draw"> Game{{draw.game3[0]}} <br>
+          Team: {{draw.game3[1]}} <br>
+          Team: {{draw.game3[2]}} <br>
+          Winner -> Game{{draw.game3[3]}} <br>
+          Loser -> Game{{draw.game3[4]}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_d">
+        <th mat-header-cell *matHeaderCellDef> D </th>
+        <td mat-cell *matCellDef="let draw"> Game{{draw.game4[0]}} <br>
+          Team: {{draw.game4[1]}} <br>
+          Team: {{draw.game4[2]}} <br>
+          Winner -> Game{{draw.game4[3]}} <br>
+          Loser -> Game{{draw.game4[4]}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_e">
+        <th mat-header-cell *matHeaderCellDef> E </th>
+        <td mat-cell *matCellDef="let draw"> Game{{draw.game5[0]}} <br>
+          Team: {{draw.game5[1]}} <br>
+          Team: {{draw.game5[2]}} <br>
+          Winner -> Game{{draw.game5[3]}} <br>
+          Loser -> Game{{draw.game5[4]}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns ;" ng-repeat='x in records' ng-class-odd="'odd'"></tr>
+    </table>
+  </div>
+</div>

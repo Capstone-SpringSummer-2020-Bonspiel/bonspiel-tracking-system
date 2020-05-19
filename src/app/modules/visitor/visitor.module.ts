@@ -6,9 +6,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { TeamDialogOverviewComponent } from './components/team-dialog-overview/team-dialog-overview.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 
 @NgModule({
-  declarations: [VisitorComponent, TeamDialogOverviewComponent],
+  declarations: [VisitorComponent, TeamDialogOverviewComponent, ScheduleComponent],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -18,4 +19,4 @@ import { TeamDialogOverviewComponent } from './components/team-dialog-overview/t
   ],
   exports: [VisitorComponent],
 })
-export class VisitorModule {}
+export class VisitorModule { }
