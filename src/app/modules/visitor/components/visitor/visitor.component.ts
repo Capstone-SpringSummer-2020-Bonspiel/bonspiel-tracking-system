@@ -54,6 +54,10 @@ export class VisitorComponent implements OnInit {
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
     });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Youtube dialog was closed');
+    });
   }
 
   getFinalScore(team) {
