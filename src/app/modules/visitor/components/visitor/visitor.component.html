@@ -1,10 +1,10 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <p class="text-center"> Some Text </p>
+            <p class="text-center"> Bonspiel #1 </p>
         </div>
         <div class="col-sm-6">
-            <p class="text-center"> Some Text </p>
+            <p class="text-center"> Saturday, 5/13/20 </p>
         </div>
     </div>
     <div class="row">
@@ -71,8 +71,10 @@
 
                     <ng-container matColumnDef="star" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let team">
-                            <mat-icon>more_vert</mat-icon>
+                        <td mat-cell *matCellDef="let team" class="px-2 py-1" style="justify-content: center">
+                            <button mat-icon-button matTooltip="YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog(team)">
+                <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
+              </button>
                         </td>
                     </ng-container>
 
