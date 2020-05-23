@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -40,5 +41,14 @@ export class AppComponent {
     },
   ];
 
+  reason = '';
+
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
   constructor(public router: Router) {}
+
+  close(reason: string) {
+    this.reason = reason;
+    this.sidenav.close();
+  }
 }

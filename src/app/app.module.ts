@@ -1,20 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { ApiService } from './http/api.service';
 
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from './core/api/api.service';
 
 import { VisitorModule } from './modules/visitor/visitor.module';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { AdminModule } from './modules/admin/admin.module';
+
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
 
@@ -33,6 +34,7 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
     MatIconModule,
     MatMenuModule,
     VisitorModule,
+    AdminModule,
     MatSidenavModule,
     MatCheckboxModule,
   ],
