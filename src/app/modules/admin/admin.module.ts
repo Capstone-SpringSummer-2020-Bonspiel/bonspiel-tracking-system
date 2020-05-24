@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AdminComponent } from './components/admin/admin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
-import { DashboardService } from 'src/app/modules/admin/dashboard.service';
+import { DashboardService } from './dashboard.service';
 
 // import { DefaultComponent } from './default.component';
 import { RouterModule } from '@angular/router';

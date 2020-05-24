@@ -1,31 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AppRoutingModule } from '@app/app-routing.module';
+import { AppComponent } from '@app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule } from '@angular/common/http';
-import { ApiService } from './core/api/api.service';
+import { ApiService } from '@app/core/api/api.service';
 
-import { VisitorModule } from './modules/visitor/visitor.module';
-import { AdminModule } from './modules/admin/admin.module';
+import { VisitorModule } from '@app/modules/visitor/visitor.module';
+import { AdminModule } from '@app/modules/admin/admin.module';
+import { SharedModule } from '@app/shared/shared.module';
 
-import { HeaderComponent } from './layout/header/header.component';
-import { FooterComponent } from './layout/footer/footer.component';
-import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { HeaderComponent } from '@app/layout/header/header.component';
+import { FooterComponent } from '@app/layout/footer/footer.component';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    PageNotFoundComponent,
-  ],
+  declarations: [AppComponent, HeaderComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,10 +31,13 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
     MatMenuModule,
     VisitorModule,
     AdminModule,
+    SharedModule,
     MatSidenavModule,
     MatCheckboxModule,
+    ToastrModule.forRoot(),
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

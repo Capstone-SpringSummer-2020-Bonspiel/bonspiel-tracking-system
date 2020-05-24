@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 const apiURL: string = environment.apiURL;
 const httpOptions = {
@@ -20,6 +21,6 @@ export class ApiService {
   }
 
   public testAPI() {
-    return this.httpClient.get(`${apiURL}`);
+    return this.httpClient.get('https://restcountries.eu/rest/v2/all');
   }
 }

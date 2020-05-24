@@ -1,22 +1,10 @@
-// import { NgModule } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-
-// @NgModule({
-//   declarations: [],
-//   imports: [
-//     CommonModule
-//   ]
-// })
-// export class CoreModule { }
-
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AuthGuard } from '@app/guard/auth.guard';
-import { NoAuthGuard } from '@app/guard/no-auth.guard';
-import { throwIfAlreadyLoaded } from '@app/guard/module-import.guard';
-
-import { TokenInterceptor } from '@app/interceptor/token.interceptor';
+import { AuthGuard } from './guards/auth.guard';
+import { NoAuthGuard } from './guards/no-auth.guard';
+import { throwIfAlreadyLoaded } from './guards/module-import.guard';
+import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -27,7 +15,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NoAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: HttpTokenInterceptor,
       multi: true,
     },
   ],

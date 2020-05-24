@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
+import { NotificationService } from './shared/services/notification.service';
 
 @Component({
   selector: 'app-root',
