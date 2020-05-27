@@ -46,6 +46,7 @@ export interface onemember {
   memberwinrate: Number;
 }
 
+
 export interface oneteam {
   teamid: Number;
   teamname: String;
