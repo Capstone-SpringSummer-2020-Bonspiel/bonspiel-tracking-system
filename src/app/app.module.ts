@@ -11,12 +11,14 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { VisitorModule } from './modules/visitor/visitor.module';
+
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
+
 
 @NgModule({
   declarations: [
@@ -39,4 +41,4 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
   providers: [ApiService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
