@@ -24,6 +24,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 export interface Organization {
   id: number;
@@ -103,28 +104,28 @@ export class DashboardComponent implements OnInit {
     {
       category: 'myCategory',
       label: 'Export to CSV',
-      option: 'myFunction',
+      option: 'exportCSV',
       icon: 'get_app',
       tooltip: '',
     },
     {
       category: 'myCategory',
       label: 'Some Batch Function',
-      option: 'myFunction',
+      option: 'someBatchFunction',
       icon: 'done_all',
       tooltip: '',
     },
     {
       category: 'myCategory',
       label: 'Delete Events',
-      option: 'myFunction',
+      option: 'deleteEvents',
       icon: 'delete_forever',
       tooltip: '',
     },
     {
       category: 'myCategory',
       label: 'Refresh Data',
-      option: 'myFunction',
+      option: 'refreshData',
       icon: 'refresh',
       tooltip: '',
     },
@@ -185,13 +186,19 @@ export class DashboardComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private api: ApiService,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private notifier: NotificationService,
   ) { }
 
   ngOnInit() {
     this.spinner.on();
-    this.api.testSQL().subscribe((data: any) => {
-      console.log('test sql:');
+    this.api.fetchCurlingEvents().subscribe((data: any) => {
+      if (data === null || data === undefined) {
+        this.notifier.showError('Could not fetch curling events', 'ERROR');
+        this.spinner.off();
+        return;
+      }
+      console.log('Fetching curling events:');
       console.log(data);
 
       const newData = this.dataSource.data;
@@ -274,6 +281,26 @@ export class DashboardComponent implements OnInit {
     }
 
     console.log('this.dataSource:', this.dataSource);
+  }
+
+  exportCSV() {
+    this.notifier.showSuccess('Exported CSV', '');
+  }
+
+  someBatchFunction() {
+    this.notifier.showWarning('Some batch function...', '');
+  }
+
+  deleteEvents() {
+    this.notifier.showError('Event deleted!', '');
+  }
+
+  refreshData() {
+    this.spinner.on();
+    setTimeout(() => {
+      this.notifier.showInfo('Refreshed data', '');
+      this.spinner.off();
+    }, 2000);
   }
 
   /**************************************************************************/

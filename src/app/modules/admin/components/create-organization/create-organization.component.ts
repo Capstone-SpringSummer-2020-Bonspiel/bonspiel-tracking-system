@@ -12,7 +12,7 @@ export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder, private api: ApiService) {}
+  constructor(private _formBuilder: FormBuilder, private api: ApiService) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -22,7 +22,7 @@ export class CreateOrganizationComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
 
-    this.api.testSQL().subscribe((data) => {
+    this.api.fetchCurlingEvents().subscribe((data) => {
       console.log('test sql:');
       console.log(data);
     });
