@@ -17,10 +17,10 @@ const httpOptions = {
 })
 export class ApiService {
   constructor(private httpClient: HttpClient) {
-    console.log(`apiUrl  ==>  ${apiURL}`);
+    console.log(`apiURL  ==>  ${apiURL}`);
   }
 
   public testAPI() {
-    return this.httpClient.get('https://restcountries.eu/rest/v2/all');
+    return this.httpClient.get('https://restcountries.eu/rest/v2/all'); // This returns an observable
   }
 }

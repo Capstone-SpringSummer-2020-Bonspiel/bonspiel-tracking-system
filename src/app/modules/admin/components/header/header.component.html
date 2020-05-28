@@ -1,13 +1,14 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" style="background-color: #004712">
     <mat-toolbar-row>
         <button mat-icon-button (click)="toggleSideBar()">
-      <mat-icon>menu</mat-icon>
+      <mat-icon *ngIf="isSidebarOpen"> arrow_back_ios </mat-icon>
+      <mat-icon *ngIf="!isSidebarOpen"> arrow_forward_ios </mat-icon>
     </button>
 
         <!-- <span> APP LOGO </span> -->
 
-        <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-            <ul fxLayout="row" fxLayoutGap="20px">
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+            <ul fxLayout="row" fxLayoutGap="20px" style="margin-bottom: 0">
                 <li>
                     <button mat-icon-button>
             <mat-icon>settings</mat-icon>
@@ -28,7 +29,6 @@
               Sign out
             </button>
                     </mat-menu>
-
                 </li>
             </ul>
         </div>

@@ -34,30 +34,42 @@ export class VisitorComponent implements OnInit {
 
   currentReq$ = null;
 
+  innerWidth = 0;
+  isMobileHeaderHidden = '0';
+  previousPageYOffset = 0;
+  currentPageYOffset = window.pageYOffset;
+
   constructor(
-    private apiService: ApiService,
+    private api: ApiService,
     public dialog: MatDialog,
     public spinner: SpinnerService,
     public notifier: NotificationService
   ) {}
 
   ngOnInit(): void {
-    const start = new Date().getTime();
+    const start = new Date().getTime(); // Set start time
     this.spinner.on();
-    this.currentReq$ = this.apiService.testAPI().subscribe((res) => {
+
+    // Make an API request
+    this.currentReq$ = this.api.testAPI().subscribe((res) => {
+      // Simulate a 5 second request
       setTimeout(() => {
         this.currentReq$ = null;
         const end = new Date().getTime();
         this.notifier.showSuccess(
-          `Query took ${((end - start) / 1000).toString()} seconds.`,
+          `Query took ${((end - start) / 1000).toString()} seconds.`, // Display execution time
           ''
         );
         console.log(res);
         this.spinner.off();
       }, 5000);
     });
+
+    // Set initial inner width
+    this.innerWidth = window.innerWidth;
   }
 
+  // Listen for key press
   @HostListener('document:keyup', ['$event'])
   onKeyupHandler(event: KeyboardEvent) {
     const ESC_KEYCODE = 27;
@@ -74,6 +86,13 @@ export class VisitorComponent implements OnInit {
       // this.notifier.showInfo('', '');
       console.log('Request cancelled!');
     }
+  }
+
+  // Watch for window resize
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    console.log(this.innerWidth);
   }
 
   openDialog(): void {

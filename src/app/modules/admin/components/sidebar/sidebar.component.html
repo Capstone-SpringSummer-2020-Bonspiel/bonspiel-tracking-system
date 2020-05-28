@@ -11,9 +11,22 @@
 
     <h2 matSubheader>Pages</h2>
 
-    <a mat-list-item routerLinkActive="list-item-active" routerLink="/">Dashboard</a>
-    <a mat-list-item routerLinkActive="list-item-active" routerLink="/posts">Posts</a>
-    <a mat-list-item routerLinkActive="list-item-active" routerLink="/articles">Articles</a>
+    <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin">
+        <mat-icon>dashboard</mat-icon>
+        Dashboard
+    </a>
+    <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-organization">
+        <mat-icon>sports</mat-icon>
+        Create a new Organization
+    </a>
+    <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-team">
+        <mat-icon>group_add</mat-icon>
+        Create a new Curling Team
+    </a>
+    <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-event">
+        <mat-icon>event_note</mat-icon>
+        Create a new Curling Event
+    </a>
 
     <mat-divider></mat-divider>
 
