@@ -1,29 +1,267 @@
 <h1> Curling Events </h1>
 
-<br>
 
 <mat-divider></mat-divider>
 
 <br>
 
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-    <div fxFlex="100">
-        <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource">
+<div fxLayout="row"
+     fxLayoutAlign="space-between center"
+     fxLayoutGap="20px">
+  <div fxFlex="100">
 
-                <ng-container *ngFor="let col of columns" matColumnDef="{{col.name}}">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{col.header}} </th>
-                    <td mat-cell *matCellDef="let row"> {{row[col.name]}} </td>
-                </ng-container>
+    <!-- MAIN CONTAINER -->
+    <div class="mat-elevation-z8 bg-white">
+      <div class="row h-50 justify-content-center align-items-center"
+           style="margin: 0 0 0 30">
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-
-            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"></mat-paginator>
+        <!-- FILTER INPUT BOX -->
+        <div class="col-5"
+             style="padding-top: 15px; padding-left: 35px">
+          <mat-form-field class="no-padding"
+                          appearance="outline"
+                          style="width: 100%">
+            <mat-label> Enter in any keywords to filter events </mat-label>
+            <input matInput
+                   (keyup)="applyFilter($event.target.value)"
+                   placeholder="e.g. Bonspiel PDX, pools, 2020-01-25">
+          </mat-form-field>
         </div>
 
+        <!-- SELECT COLUMN FILTER DROPDOWN -->
+        <!-- <div class="col-2"
+             style="padding-top: 15px">
+          <mat-form-field class="no-padding"
+                          appearance="outline">
+            <mat-label> Select Column Filter </mat-label>
+            <mat-select placeholder=""
+                        [(value)]="selectedColumn"
+                        (selectionChange)="updFilterPredicate()">
+              <mat-option *ngFor="let column of filterColumns"
+                          [value]="column.name">
+                {{ column.header }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+
+        <!-- MENU BUTTON -->
+        <div class="col-1"
+             style="padding-left: 0px">
+          <button id="menu"
+                  mat-raised-button
+                  [matMenuTriggerFor]="menu"
+                  class="align-middle"
+                  color="primary"
+                  style="background-color: #004712;">
+            <mat-icon> more_horiz </mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item
+                    *ngFor="let item of menuItems"
+                    (click)="this[item.option]()">
+              <mat-icon> {{item.icon}} </mat-icon>
+              <span> {{item.label}} </span>
+            </button>
+          </mat-menu>
+        </div>
+
+        <div class="col-6"
+             style="padding-top: 15px">
+
+          <!-- TOP PAGINATOR -->
+          <mat-paginator #paginatorTop
+                         [pageSize]="50"
+                         [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                         (page)="paginatorBottom.pageIndex = $event.pageIndex"
+                         showFirstLastButtons>
+          </mat-paginator>
+
+        </div>
+      </div>
+
+
+      <!-- TABLE -->
+      <table mat-table
+             [dataSource]="dataSource"
+             multiTemplateDataRows
+             #mainTableSort="matSort"
+             matSort>
+        <ng-container [matColumnDef]="column"
+                      *ngFor="let column of displayedColumns">
+          <div [ngSwitch]="column">
+
+            <!-- UP/DOWN ARROW COLUMN -->
+            <ng-container *ngSwitchCase="'arrow'"
+                          sticky>
+              <th mat-header-cell
+                  *matHeaderCellDef>
+                <mat-icon style="opacity: 0.0"> keyboard_arrow_right </mat-icon>
+              </th>
+
+              <td mat-cell
+                  *matCellDef="let sample">
+                <div [ngSwitch]="sample">
+                  <ng-container *ngSwitchCase="expandedElement">
+                    <mat-icon style="cursor: default"> expand_less </mat-icon>
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <mat-icon style="cursor: default"> expand_more </mat-icon>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- CHECKBOX COLUMN -->
+            <ng-container *ngSwitchCase="'checkbox'"
+                          sticky>
+              <th mat-header-cell
+                  *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()"
+                              [aria-label]="checkboxLabel()"
+                              color="primary"
+                              style="margin-right: 10px"></mat-checkbox>
+              </th>
+              <td mat-cell
+                  *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)"
+                              color="primary"
+                              style="margin-right: 10px"></mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- STATUS COLUMN -->
+            <ng-container *ngSwitchCase="'completed'"
+                          sticky>
+              <th mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header> {{columnsTable[column]}} </th>
+              <td mat-cell
+                  *matCellDef="let sample">
+                <ng-container *ngIf="sample; else elseTemplate">
+                  <mat-icon style="color: green"> done </mat-icon>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <mat-icon style="color: orangered"> highlight_off </mat-icon>
+                </ng-template>
+              </td>
+            </ng-container>
+
+            <!-- DEFAULT COLUMN -->
+            <ng-container *ngSwitchDefault>
+              <th mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header> {{columnsTable[column]}} </th>
+              <td mat-cell
+                  *matCellDef="let sample"> {{sample[column]}} </td>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <!-- EXPANDED CONTENT COLUMN: The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell
+              *matCellDef="let sample"
+              [attr.colspan]="displayedColumns.length">
+            <div class="example-sample-detail"
+                 [@detailExpand]="sample == expandedElement ? 'expanded' : 'collapsed'"
+                 style="min-height: 800px">
+
+              <mat-tab-group dynamicHeight
+                             style="width: 100%"
+                             (selectedTabChange)="onClickTabs($event, sample)">
+
+                <!-- EVENT INFO TAB -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    Event Info
+                    <mat-icon class="example-tab-icon"> info </mat-icon>
+                  </ng-template>
+
+                  <ng-template matTabContent>
+                    <div class="container-fluid example-large-box start mat-elevation-z4">
+
+                      <ng-container *ngFor="let key of objectKeys(sample); let i = index">
+                        <p *ngIf="!['lab_notes_rich_txt', 'step_history', 'shmoos'].includes(key)">
+                          <b> {{key}}: </b> {{sample[key]}}
+                        </p>
+                      </ng-container>
+
+                    </div>
+                  </ng-template>
+                </mat-tab>
+
+                <!-- BRACKET TAB -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    Bracket
+                    <mat-icon class="example-tab-icon"> account_tree </mat-icon>
+                  </ng-template>
+
+                  <ng-template matTabContent>
+                    <div class="container-fluid example-large-box start mat-elevation-z4">
+
+                      <img src="https://bozemancurlingclub.com/images/2018_2019_Schedules/Bracket-2019-_1_complete.png"
+                           class="w-100">
+
+                    </div>
+                  </ng-template>
+                </mat-tab>
+
+                <!-- DRAW TAB -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    Draws
+                    <mat-icon class="example-tab-icon"> date_range </mat-icon>
+                  </ng-template>
+
+                  <ng-template matTabContent>
+                    <div class="container-fluid example-large-box start mat-elevation-z4">
+
+                      <ng-container *ngFor="let key of objectKeys(sample); let i = index">
+                        <p *ngIf="!['lab_notes_rich_txt', 'step_history', 'shmoos'].includes(key)">
+                          <b> {{key}}: </b> {{sample[key]}}
+                        </p>
+                      </ng-container>
+
+                    </div>
+                  </ng-template>
+                </mat-tab>
+
+              </mat-tab-group>
+
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row
+            *matRowDef="let sample; columns: displayedColumns; let i = index;"
+            class="example-sample-row"
+            [class.example-expanded-row]="expandedElement === sample"
+            (click)="expandedElement = expandedElement === sample ? null : sample"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: ['expandedDetail']; let i = index;"
+            class="example-detail-row"></tr>
+      </table>
+
+      <!-- BOTTOM PAGINATOR -->
+      <mat-paginator *ngIf="dataSource.data.length > 0"
+                     #paginatorBottom
+                     [length]="paginatorTop.length"
+                     [pageSize]="paginatorTop.pageSize"
+                     [pageSizeOptions]="paginatorTop.pageSizeOptions"
+                     (page)="syncPaginatorTop($event)"
+                     showFirstLastButtons></mat-paginator>
     </div>
+  </div>
 </div>
 
 <br>

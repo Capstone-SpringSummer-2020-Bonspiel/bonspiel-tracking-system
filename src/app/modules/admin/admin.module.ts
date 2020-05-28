@@ -20,6 +20,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AdminComponent } from './components/admin/admin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -33,6 +35,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CreateOrganizationComponent } from './components/create-organization/create-organization.component';
 import { CreateCurlingTeamComponent } from './components/create-curling-team/create-curling-team.component';
 import { CreateCurlingEventComponent } from './components/create-curling-event/create-curling-event.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -69,6 +73,11 @@ import { CreateCurlingEventComponent } from './components/create-curling-event/c
     FormsModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatSortModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatMenuModule,
+    MatSelectModule,
   ],
   providers: [DashboardService],
 })
