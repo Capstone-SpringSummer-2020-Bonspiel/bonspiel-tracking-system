@@ -23,12 +23,11 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
-app.post('/api/sqltest', (req, res) => {
+app.get('/api/sqltest', (req, res) => {
     // Test postgres db connection
     pool.query('SELECT * FROM public.curlingevent ORDER BY id ASC', (err, _res) => {
         console.log(err, _res);
         res.send(_res);
-        pool.end();
     });
 });
 

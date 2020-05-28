@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
+import { ApiService } from '@app/core/api/api.service';
 
 @Component({
   selector: 'app-create-organization',
@@ -11,7 +12,7 @@ export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private _formBuilder: FormBuilder, private api: ApiService) {}
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -19,6 +20,11 @@ export class CreateOrganizationComponent implements OnInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
+    });
+
+    this.api.testSQL().subscribe((data) => {
+      console.log('test sql:');
+      console.log(data);
     });
   }
 

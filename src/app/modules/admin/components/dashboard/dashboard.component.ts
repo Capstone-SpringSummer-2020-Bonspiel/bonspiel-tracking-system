@@ -2,35 +2,27 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../../dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { ApiService } from '@app/core/api/api.service';
+import { Timestamp } from 'rxjs';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
-export interface PeriodicElement {
+export interface Organization {
+  id: number;
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  event_type: string;
+  info: string;
+  completed: boolean;
+  begin_date: Date;
+  end_date: Date;
 }
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];
 
 @Component({
   selector: 'app-dashboard',
@@ -42,14 +34,65 @@ export class DashboardComponent implements OnInit {
   cards = [];
   pieChart = [];
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  columns = [
+    {
+      name: 'id',
+      header: 'ID',
+    },
+    {
+      name: 'name',
+      header: 'Name',
+    },
+    {
+      name: 'event_type',
+      header: 'Event Type',
+    },
+    {
+      name: 'info',
+      header: 'Info',
+    },
+    {
+      name: 'completed',
+      header: 'Status',
+    },
+    {
+      name: 'start_date',
+      header: 'Start Date',
+    },
+    {
+      name: 'end_date',
+      header: 'End Date',
+    },
+  ];
+  columnsTable = {
+    arrow: '',
+    id: 'ID',
+    name: 'Name',
+    event_type: 'Event Type',
+    info: 'Info',
+    status: 'Status',
+    start_date: 'Start Date',
+    end_date: 'End Date',
+  };
+  displayedColumns: string[] = this.columns.map((e) => e.name);
+  dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private api: ApiService,
+    private spinner: SpinnerService
+  ) {}
 
   ngOnInit() {
+    this.api.testSQL().subscribe((data: any) => {
+      console.log('test sql:');
+      console.log(data);
+
+      this.dataSource = new MatTableDataSource<Organization>(data.rows);
+    });
+
     this.bigChart = this.dashboardService.bigChart();
     this.cards = this.dashboardService.cards();
     this.pieChart = this.dashboardService.pieChart();
