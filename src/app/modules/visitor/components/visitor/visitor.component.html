@@ -1,87 +1,224 @@
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <p class="text-center"> Some Text </p>
-        </div>
-        <div class="col-sm-6">
-            <p class="text-center"> Some Text </p>
-        </div>
+
+  <!-- Draw Header -->
+  <div class="row">
+    <div class="col-sm-6">
+      <h3 class="text-center"> Draw 1 </h3>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="example-container mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" class="">
+    <div class="col-sm-5">
+      <h3 class="text-center"> Date </h3>
+    </div>
+    <div class="col-sm-1">
+      <button mat-icon-button matTooltip="Youtube link" aria-label="Youtube link button" (click)="openYoutubeDialog()">
+        <mat-icon>live_tv</mat-icon>
+      </button>
+    </div>
+  </div>
 
-                    <ng-container matColumnDef="name" sticky>
-                        <th mat-header-cell *matHeaderCellDef class="m-0 p-0"> Team Name </th>
-                        <td mat-cell *matCellDef="let team" class="m-0 p-0">
-                            <button type="button" class="btn btn-light" (click)="openDialog()"> {{team.name}} </button>
-                        </td>
-                    </ng-container>
+  <!-- Standings Expansion Panel-->
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Standings</mat-panel-title>
+          </mat-expansion-panel-header>
+          <table mat-table [dataSource]="dataSourceStandings" class="mat-elevation-z8">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Team Name </th>
+              <td mat-cell *matCellDef="let team"> {{team.name}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="home">
-                        <th mat-header-cell *matHeaderCellDef> H </th>
-                        <td mat-cell *matCellDef="let team"> {{team.home}} </td>
-                    </ng-container>
+            <!-- Wins Column -->
+            <ng-container matColumnDef="wins">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Wins </th>
+              <td mat-cell *matCellDef="let team"> {{team.wins}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_1">
-                        <th mat-header-cell *matHeaderCellDef> 1 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_1}} </td>
-                    </ng-container>
+            <!-- Losses Column -->
+            <ng-container matColumnDef="losses">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Losses </th>
+              <td mat-cell *matCellDef="let team"> {{team.losses}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="standingsColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: standingsColumns;"></tr>
+          </table>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
 
-                    <ng-container matColumnDef="round_2">
-                        <th mat-header-cell *matHeaderCellDef> 2 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_2}} </td>
-                    </ng-container>
+  <!--Game Expansion Panel-->
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]=true>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Sheet A
+            </mat-panel-title>
+            <mat-panel-description>
+              Team A vs. Team B
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <table mat-table [dataSource]="dataSourceGame" class="">
 
-                    <ng-container matColumnDef="round_3">
-                        <th mat-header-cell *matHeaderCellDef> 3 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_3}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="name" sticky>
+              <th mat-header-cell *matHeaderCellDef class="m-0 p-0"> Team Name </th>
+              <td mat-cell *matCellDef="let team" class="m-0 p-0">
+                <button type="button" class="btn btn-light" (click)="openDialog()"> {{team.name}} </button>
+              </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_4">
-                        <th mat-header-cell *matHeaderCellDef> 4 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_4}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="home">
+              <th mat-header-cell *matHeaderCellDef> H </th>
+              <td mat-cell *matCellDef="let team"> {{team.home}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_5">
-                        <th mat-header-cell *matHeaderCellDef> 5 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_5}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="round_1">
+              <th mat-header-cell *matHeaderCellDef> 1 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_1}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_6">
-                        <th mat-header-cell *matHeaderCellDef> 6 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_6}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="round_2">
+              <th mat-header-cell *matHeaderCellDef> 2 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_2}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_7">
-                        <th mat-header-cell *matHeaderCellDef> 7 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_7}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="round_3">
+              <th mat-header-cell *matHeaderCellDef> 3 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_3}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="round_8">
-                        <th mat-header-cell *matHeaderCellDef> 8 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_8}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="round_4">
+              <th mat-header-cell *matHeaderCellDef> 4 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_4}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="final_score">
-                        <th mat-header-cell *matHeaderCellDef> Final </th>
-                        <td mat-cell *matCellDef="let team"> {{getFinalScore(team)}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="round_5">
+              <th mat-header-cell *matHeaderCellDef> 5 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_5}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="star" stickyEnd>
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let team">
-                            <button mat-icon-button matTooltip="Youtube link" aria-label="Youtube link button" (click)="openYoutubeDialog()">
+            <ng-container matColumnDef="round_6">
+              <th mat-header-cell *matHeaderCellDef> 6 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_6}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="round_7">
+              <th mat-header-cell *matHeaderCellDef> 7 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_7}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="round_8">
+              <th mat-header-cell *matHeaderCellDef> 8 </th>
+              <td mat-cell *matCellDef="let team"> {{team.round_8}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="final_score">
+              <th mat-header-cell *matHeaderCellDef> Final </th>
+              <td mat-cell *matCellDef="let team"> {{getFinalScore(team)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="star" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let team">
+                <button mat-icon-button matTooltip="Youtube link" aria-label="Youtube link button" (click)="openYoutubeDialog()">
+                  <mat-icon>live_tv</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <!-- Game Card -->
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-card>
+        <mat-card-title>Sheet A </mat-card-title>
+        <mat-card-subtitle>Team A vs Team B</mat-card-subtitle>
+        <table mat-table [dataSource]="dataSourceGame" class="">
+          <ng-container matColumnDef="name" sticky>
+            <th mat-header-cell *matHeaderCellDef class="m-0 p-0"> Team Name </th>
+            <td mat-cell *matCellDef="let team" class="m-0 p-0">
+              <button type="button" class="btn btn-light" (click)="openDialog()"> {{team.name}} </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="home">
+            <th mat-header-cell *matHeaderCellDef> H </th>
+            <td mat-cell *matCellDef="let team"> {{team.home}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_1">
+            <th mat-header-cell *matHeaderCellDef> 1 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_2">
+            <th mat-header-cell *matHeaderCellDef> 2 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_2}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_3">
+            <th mat-header-cell *matHeaderCellDef> 3 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_3}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_4">
+            <th mat-header-cell *matHeaderCellDef> 4 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_4}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_5">
+            <th mat-header-cell *matHeaderCellDef> 5 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_5}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_6">
+            <th mat-header-cell *matHeaderCellDef> 6 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_6}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_7">
+            <th mat-header-cell *matHeaderCellDef> 7 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_7}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="round_8">
+            <th mat-header-cell *matHeaderCellDef> 8 </th>
+            <td mat-cell *matCellDef="let team"> {{team.round_8}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="final_score">
+            <th mat-header-cell *matHeaderCellDef> Final </th>
+            <td mat-cell *matCellDef="let team"> {{getFinalScore(team)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="star" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let team">
+              <button mat-icon-button matTooltip="Youtube link" aria-label="Youtube link button" (click)="openYoutubeDialog()">
                 <mat-icon>live_tv</mat-icon>
               </button>
-                        </td>
-                    </ng-container>
+            </td>
+          </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </div>
-        </div>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card>
     </div>
+  </div>
+
+
+
 </div>

@@ -7,16 +7,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { TeamDialogOverviewComponent } from './components/team-dialog-overview/team-dialog-overview.component';
 import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dialog.component';
+import { YouTubePlayer, YouTubePlayerModule } from '@angular/youtube-player';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
-  declarations: [VisitorComponent, TeamDialogOverviewComponent, YoutubeDialogComponent],
+  declarations: [
+    VisitorComponent,
+    TeamDialogOverviewComponent,
+    YoutubeDialogComponent,
+  ],
   imports: [
     CommonModule,
     MatDialogModule,
     MatExpansionModule,
     MatIconModule,
     MatTableModule,
+    YouTubePlayerModule,
+    MatCardModule,
   ],
-  exports: [VisitorComponent],
+  exports: [VisitorComponent, YoutubeDialogComponent],
 })
 export class VisitorModule {}

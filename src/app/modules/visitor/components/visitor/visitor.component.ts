@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/http/api.service';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { YoutubeDialogComponent } from '../../components/youtube-dialog/youtube-dialog.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-visitor',
@@ -22,31 +25,32 @@ export class VisitorComponent implements OnInit {
     'round_7',
     'round_8',
     'final_score',
-    'star',
   ];
-  dataSource = BONSPIEL_DATA;
-  panelOpenState = false;
 
-  animal: string;
-  name: string;
+  standingsColumns = ['name', 'wins', 'losses'];
+  dataSourceGame = BONSPIEL_DATA_GAME;
+  dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
+
+  panelOpenState = false;
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
     this.apiService.testAPI().subscribe((res) => {
       console.log(res);
     });
   }
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataSourceStandings.sort = this.sort;
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
       width: '250px',
-      data: { name: this.name, animal: this.animal },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
-      this.animal = result;
     });
   }
 
@@ -86,14 +90,23 @@ export interface Game {
   round_7: string;
   round_8: string;
   final_score: string;
-  youtube_link: string;
 }
 
-const BONSPIEL_DATA: Game[] = [];
+export interface Draw {
+  name: string;
+  games: Game[];
+}
+export interface Standing {
+  name: string;
+  wins: string;
+  losses: string;
+}
 
-// Add dummy data
-for (let i = 1; i < 50; i++) {
-  BONSPIEL_DATA.push({
+// Dummy data for Games
+const BONSPIEL_DATA_GAME: Game[] = [];
+
+for (let i = 1; i <= 2; i++) {
+  BONSPIEL_DATA_GAME.push({
     name: `team_${i}`,
     home: i % 2 === 0 ? '*' : '',
     round_1: Math.floor(Math.random() * 10 + 1).toString(),
@@ -105,16 +118,20 @@ for (let i = 1; i < 50; i++) {
     round_7: Math.floor(Math.random() * 10 + 1).toString(),
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
-    youtube_link: 'https://www.youtube.com/watch?v=u2bigf337aU',
   });
 }
 
-export interface DialogData {
-  animal: string;
-  name: string;
+// Dummy data for a standing
+const BONSPIEL_DATA_STANDING: Standing[] = [];
+
+for (let i = 1; i <= 6; i++) {
+  BONSPIEL_DATA_STANDING.push({
+    name: `team_${i}`,
+    wins: Math.floor(Math.random() * 10 + 1).toString(),
+    losses: Math.floor(Math.random() * 10 + 1).toString(),
+  });
 }
 
-let YT_LINK: string[] = [
-  'https://www.youtube.com/watch?v=u2bigf337aU',
-  'https://www.youtube.com/watch?v=u2bigf337aU',
-];
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
