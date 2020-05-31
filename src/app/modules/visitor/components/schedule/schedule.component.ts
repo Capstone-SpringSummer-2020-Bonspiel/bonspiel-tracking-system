@@ -89,6 +89,7 @@ export interface DialogData {
 export interface draw {
   drawnum: Number;
   drawtime: Date;
+  gamenumber: Number;
   game1: [number, string, string, number, number];
   game2: [number, string, string, number, number];
   game3: [number, string, string, number, number];
@@ -102,6 +103,7 @@ for (let i = 1; i < 10; i++) {
   SCHEDULE_DATA.push({
     drawnum: i,
     drawtime: null,
+    gamenumber: 5,
     game1: [11, 'teamA', 'teamB', 13, 15],
     game2: [(i - 1) * 5 + 2, 'team_${i}', 'team_${i}', (i - 1) * 1 + 2, (i - 1) * 1 + 3],
     game3: [(i - 1) * 5 + 3, 'team_${i}', 'team_${i}', (i - 1) * 1 + 3, (i - 1) * 1 + 4],

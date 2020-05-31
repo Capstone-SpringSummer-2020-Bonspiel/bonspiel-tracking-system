@@ -28,6 +28,7 @@ export class TeamlistComponent {
     'teamTotalGame',
     'teamWinGame',
     'teamWinRate',
+    'teamMemberNumber',
   ];
   expandedElement: Team | null;
 
@@ -56,6 +57,7 @@ export interface Team {
   teamWinGame: Number;
   teamWinRate: Number;
   member: Member[];
+  teamMemberNumber;
 }
 
 const TEAM_DATA: Team[] = [];
@@ -74,13 +76,14 @@ for (let i = 1; i < 6; i++) {
     teamWinGame: 6,
     teamWinRate: 0.6,
     member: memberData,
+    teamMemberNumber: 4,
   })
 }
-for (let i = 6; i < 10; i++) {
+for (let i = 6; i < 15; i++) {
   for (let n = 1; n < 3; n++) {
     memberData = [];
-    memberData.push({ memberImage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", memberName: 'member_${i}', memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
-    memberData.push({ memberImage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", memberName: 'member_${i}', memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
+    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
+    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
   }
   TEAM_DATA.push({
     teamId: i,
@@ -89,6 +92,7 @@ for (let i = 6; i < 10; i++) {
     teamWinGame: 6,
     teamWinRate: 0.6,
     member: memberData,
+    teamMemberNumber: 2,
   })
 }
 
