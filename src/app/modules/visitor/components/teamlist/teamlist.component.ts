@@ -7,8 +7,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-teamlist',
-  templateUrl: './Teamlist.component.html',
-  styleUrls: ['./Teamlist.component.scss'],
+  templateUrl: './teamlist.component.html',
+  styleUrls: ['./teamlist.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -18,16 +18,18 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ],
 })
 
+
+
 export class TeamlistComponent {
-  dataSource = teamdata;
+  dataSource = TEAM_DATA;
   displayedColumns = [
-    'teamid',
-    'teamname',
-    'teamtotgame',
-    'teamwinnum',
-    'teamwinrate',
+    'teamId',
+    'teamName',
+    'teamTotalGame',
+    'teamWinGame',
+    'teamWinRate',
   ];
-  expandedData: oneteam | null;
+  expandedElement: Team | null;
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
     this.apiService.testAPI().subscribe((res) => {
@@ -37,55 +39,56 @@ export class TeamlistComponent {
   ngOnInit(): void { }
 }
 
-export interface onemember {
-  memberimage: String;
-  membername: String;
-  membergender: String;
-  membertotgame: Number;
-  memberwingame: Number;
-  memberwinrate: Number;
+export interface Member {
+  memberImage: String;
+  memberName: String;
+  memberGender: String;
+  memberTotalGame: Number;
+  memberWinGame: Number;
+  memberWinRate: Number;
 }
 
 
-export interface oneteam {
-  teamid: Number;
-  teamname: String;
-  teamtotgame: Number;
-  teamwinnum: Number;
-  teamwinrate: Number;
-  member: onemember[];
+export interface Team {
+  teamId: Number;
+  teamName: String;
+  teamTotalGame: Number;
+  teamWinGame: Number;
+  teamWinRate: Number;
+  member: Member[];
 }
 
-const teamdata: oneteam[] = [];
-var memberdata: onemember[] = [];
+const TEAM_DATA: Team[] = [];
+var memberData: Member[] = [];
+
 //test data
 for (let i = 1; i < 6; i++) {
-  memberdata = [];
+  memberData = [];
   for (let n = 1; n < 5; n++) {
-    memberdata.push({ memberimage: "abc", membername: `team_${i}`, membergender: 'male', membertotgame: 1, memberwingame: 5, memberwinrate: 0.5 });
+    memberData.push({ memberImage: "abc", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
   }
-  teamdata.push({
-    teamid: i,
-    teamname: `team_${i}`,
-    teamtotgame: 10,
-    teamwinnum: 6,
-    teamwinrate: 0.6,
-    member: memberdata,
+  TEAM_DATA.push({
+    teamId: i,
+    teamName: `team_${i}`,
+    teamTotalGame: 10,
+    teamWinGame: 6,
+    teamWinRate: 0.6,
+    member: memberData,
   })
 }
 for (let i = 6; i < 10; i++) {
   for (let n = 1; n < 3; n++) {
-    memberdata = [];
-    memberdata.push({ memberimage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", membername: 'member_${i}', membergender: 'male', membertotgame: 1, memberwingame: 5, memberwinrate: 0.5 });
-    memberdata.push({ memberimage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", membername: 'member_${i}', membergender: 'male', membertotgame: 1, memberwingame: 5, memberwinrate: 0.5 });
+    memberData = [];
+    memberData.push({ memberImage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", memberName: 'member_${i}', memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
+    memberData.push({ memberImage: "www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65", memberName: 'member_${i}', memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
   }
-  teamdata.push({
-    teamid: i,
-    teamname: `team_${i}`,
-    teamtotgame: 10,
-    teamwinnum: 6,
-    teamwinrate: 0.6,
-    member: memberdata,
+  TEAM_DATA.push({
+    teamId: i,
+    teamName: `team_${i}`,
+    teamTotalGame: 10,
+    teamWinGame: 6,
+    teamWinRate: 0.6,
+    member: memberData,
   })
 }
 

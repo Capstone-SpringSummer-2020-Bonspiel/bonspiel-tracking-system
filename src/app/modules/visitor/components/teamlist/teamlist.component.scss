@@ -22,19 +22,19 @@ tr.detail-row {
   height: 0;
 }
 
-tr.element-row:not(.expanded-row):hover {
+tr.team-row:not(.expanded-row):hover {
   background: whitesmoke;
 }
 
-tr.element-row:not(.expanded-row):active {
+tr.team-row:not(.expanded-row):active {
   background: #efefef;
 }
 
-.element-row td {
+.team-row td {
   border-bottom-width: 0;
 }
 
-.element-detail {
+.team-detail {
   overflow: hidden;
   display: flex;
 }
@@ -48,16 +48,16 @@ tr.element-row:not(.expanded-row):active {
   height: 104px;
 }
 
-.element-symbol {
+.team-symbol {
   font-weight: bold;
   font-size: 40px;
   line-height: normal;
 }
 
-.element-description {
+.team-description {
   padding: 16px;
 }
 
-.element-description-attribution {
+.team-description-attribution {
   opacity: 0.5;
 }
