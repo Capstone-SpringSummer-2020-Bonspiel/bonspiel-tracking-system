@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ApiService } from 'src/app/http/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
+import { ApiService } from '../../../../http/api.service';
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { YoutubeDialogComponent } from '../../components/youtube-dialog/youtube-dialog.component';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-visitor',
