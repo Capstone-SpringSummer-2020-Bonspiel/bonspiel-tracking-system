@@ -1,4 +1,3 @@
-<div id="video_player">
-    <youtube-player videoId={{youtube_source}} suggestedQuality="highres">
-    </youtube-player>
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" [src]="sanitizeURL()" allowfullscreen></iframe>
 </div>

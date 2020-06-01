@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
+import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
+import { YoutubeDialogComponent } from '@app/modules/visitor/components/youtube-dialog/youtube-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
-
-import { ApiService } from '../../../../http/api.service';
-import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
-import { YoutubeDialogComponent } from '../../components/youtube-dialog/youtube-dialog.component';
+import { SpinnerService } from '@app/shared/services/spinner.service';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-visitor',
@@ -33,20 +33,53 @@ export class VisitorComponent implements OnInit {
 
   panelOpenState = false;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
-    this.apiService.testAPI().subscribe((res) => {
-      console.log(res);
-    });
-  }
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  currentReq$ = null;
+
+  constructor(
+    private apiService: ApiService,
+    public dialog: MatDialog,
+    public spinner: SpinnerService,
+    public notifier: NotificationService
+  ) {}
 
   ngOnInit(): void {
-    this.dataSourceStandings.sort = this.sort;
+    const start = new Date().getTime();
+    this.spinner.on();
+    this.currentReq$ = this.apiService.testAPI().subscribe((res) => {
+      setTimeout(() => {
+        this.currentReq$ = null;
+        const end = new Date().getTime();
+        this.notifier.showSuccess(
+          `Query took ${((end - start) / 1000).toString()} seconds.`,
+          ''
+        );
+        console.log(res);
+        this.spinner.off();
+      }, 5000);
+    });
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  onKeyupHandler(event: KeyboardEvent) {
+    const ESC_KEYCODE = 27;
+
+    // Case: ESC character
+    if (event.keyCode === ESC_KEYCODE && this.currentReq$ !== null) {
+      // Cancel current HTTP request
+      this.currentReq$.unsubscribe();
+      this.currentReq$ = null;
+      this.spinner.off();
+      this.notifier.showWarning('Request Cancelled!', '');
+      // this.notifier.showSuccess('', '');
+      // this.notifier.showError('', '');
+      // this.notifier.showInfo('', '');
+      console.log('Request cancelled!');
+    }
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-      width: '250px',
+      width: 'auto',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -54,9 +87,12 @@ export class VisitorComponent implements OnInit {
     });
   }
 
-  openYoutubeDialog(): void {
+  openYoutubeDialog(team): void {
+    console.log(`team  ==>  `);
+    console.log(team);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
+      data: { youtube_link: team.youtube_link },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

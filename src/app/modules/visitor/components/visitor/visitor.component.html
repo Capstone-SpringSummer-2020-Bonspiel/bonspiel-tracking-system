@@ -13,6 +13,23 @@
         <mat-icon>live_tv</mat-icon>
       </button>
     </div>
+    <div class="col-sm-12">
+      <button (click)="notifier.showSuccess('success', 'Bold')">
+        Success Toaster
+      </button>
+
+      <button (click)="notifier.showError('Something is wrong', 'ItSolutionStuff.com')">
+        Error Toaster
+      </button>
+
+      <button (click)="notifier.showInfo('info', 'BOLD')">
+        Info Toaster
+      </button>
+
+      <button (click)="notifier.showWarning('warning', 'BOLD')">
+        Warning Toaster
+      </button>
+    </div>
   </div>
 
   <!-- Standings Expansion Panel-->

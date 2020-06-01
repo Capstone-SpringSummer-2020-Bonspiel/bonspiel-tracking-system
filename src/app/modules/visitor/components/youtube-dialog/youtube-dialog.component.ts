@@ -1,4 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import {
+  DomSanitizer,
+  SafeResourceUrl,
+  SafeUrl,
+} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-youtube-dialog',
@@ -6,13 +16,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./youtube-dialog.component.scss'],
 })
 export class YoutubeDialogComponent implements OnInit {
-  youtube_source = 'zesl6jZnSDM';
+  youtube_link = '';
 
-  constructor() {}
-
-  ngOnInit(): void {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.body.appendChild(tag);
+  constructor(
+    public dialogRef: MatDialogRef<YoutubeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private sanitizer: DomSanitizer
+  ) {
+    this.youtube_link = data.youtube_link;
+    console.log(this.youtube_link);
   }
+
+  ngOnInit(): void {}
+
+  sanitizeURL() {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.youtube_link);
+  }
+}
+
+export interface DialogData {
+  youtube_link: string;
 }
