@@ -10,14 +10,22 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { VisitorComponent } from './components/visitor/visitor.component';
 import { TeamDialogOverviewComponent } from './components/team-dialog-overview/team-dialog-overview.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { TeamlistComponent } from './components/teamlist/teamlist.component';
 import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dialog.component';
+import { MobileViewComponent } from './components/mobile-view/mobile-view.component';
+
 
 @NgModule({
   declarations: [
     VisitorComponent,
     TeamDialogOverviewComponent,
     YoutubeDialogComponent,
+    ScheduleComponent,
+    TeamlistComponent,
+    MobileViewComponent,
   ],
+
   imports: [
     CommonModule,
     MatButtonModule,
@@ -29,4 +37,4 @@ import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dial
   ],
   exports: [VisitorComponent],
 })
-export class VisitorModule {}
+export class VisitorModule { }

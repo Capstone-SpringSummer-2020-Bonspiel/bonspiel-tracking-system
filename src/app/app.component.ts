@@ -17,17 +17,17 @@ export class AppComponent {
   navLinks = [
     {
       label: 'Route 1',
-      path: '/',
+      path: '/home',
       icon: 'home',
     },
     {
-      label: 'Route 2',
-      path: '/',
+      label: 'Schedule',
+      path: '/schedule',
       icon: 'drag_handle',
     },
     {
-      label: 'Route 3',
-      path: '/',
+      label: 'Team',
+      path: '/teamlist',
       icon: 'add_box',
     },
     {

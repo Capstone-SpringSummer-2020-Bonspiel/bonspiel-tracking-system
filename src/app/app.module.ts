@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { ToastrModule } from 'ngx-toastr';
 
+
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
   imports: [
@@ -40,4 +41,4 @@ import { ToastrModule } from 'ngx-toastr';
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule { }
