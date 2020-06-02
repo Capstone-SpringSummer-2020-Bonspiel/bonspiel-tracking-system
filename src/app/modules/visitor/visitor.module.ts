@@ -11,6 +11,7 @@ import { TeamDialogOverviewComponent } from './components/team-dialog-overview/t
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { TeamlistComponent } from './components/teamlist/teamlist.component';
 import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dialog.component';
+import { MobileViewComponent } from './components/mobile-view/mobile-view.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dial
     YoutubeDialogComponent,
     ScheduleComponent,
     TeamlistComponent,
+    MobileViewComponent,
   ],
 
   imports: [

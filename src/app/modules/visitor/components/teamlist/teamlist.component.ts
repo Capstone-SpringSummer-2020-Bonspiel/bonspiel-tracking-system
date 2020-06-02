@@ -49,7 +49,6 @@ export interface Member {
   memberWinRate: Number;
 }
 
-
 export interface Team {
   teamId: Number;
   teamName: String;
