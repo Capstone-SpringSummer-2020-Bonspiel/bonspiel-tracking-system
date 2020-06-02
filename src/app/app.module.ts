@@ -18,7 +18,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
-import { ToastrModule } from 'ngx-toastr';
+//import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -35,7 +35,7 @@ import { ToastrModule } from 'ngx-toastr';
     SharedModule,
     MatSidenavModule,
     MatCheckboxModule,
-    ToastrModule.forRoot(),
+    //ToastrModule.forRoot(),
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/http/api.service';
+import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { YoutubeDialogComponent } from '../../components/youtube-dialog/youtube-dialog.component';
