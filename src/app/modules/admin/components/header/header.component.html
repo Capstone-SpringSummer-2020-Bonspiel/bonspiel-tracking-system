@@ -1,36 +1,81 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <button mat-icon-button (click)="toggleSideBar()">
-      <mat-icon>menu</mat-icon>
+<mat-toolbar color="primary"
+             style="background-color: #004712">
+  <mat-toolbar-row>
+    <button mat-icon-button
+            (click)="toggleSideBar()">
+      <mat-icon *ngIf="isSidebarOpen"> arrow_back_ios </mat-icon>
+      <mat-icon *ngIf="!isSidebarOpen"> arrow_forward_ios </mat-icon>
     </button>
 
-        <!-- <span> APP LOGO </span> -->
+    <!-- <span> APP LOGO </span> -->
 
-        <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-            <ul fxLayout="row" fxLayoutGap="20px">
-                <li>
-                    <button mat-icon-button>
+    <div fxFlex
+         fxLayout="row"
+         fxLayoutAlign="end center">
+      <ul fxLayout="row"
+          fxLayoutGap="20px"
+          style="margin-bottom: 0">
+        <li>
+          <button mat-button
+                  [matMenuTriggerFor]="menu">
             <mat-icon>settings</mat-icon>
           </button>
-                </li>
-                <li>
-                    <button mat-icon-button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>sentiment_very_satisfied</mat-icon>
+              Bliss
+            </button>
+            <button mat-menu-item>
+              <mat-icon>sentiment_satisfied</mat-icon>
+              Happy
+            </button>
+            <button mat-menu-item>
+              <mat-icon>sentiment_dissatisfied</mat-icon>
+              Sad
+            </button>
+            <button mat-menu-item>
+              <mat-icon>sentiment_very_dissatisfied</mat-icon>
+              Pissed Off
+            </button>
+          </mat-menu>
+        </li>
+        <li>
+          <button mat-button
+                  [matMenuTriggerFor]="helpMenu">
             <mat-icon>help_outline</mat-icon>
           </button>
-                </li>
-                <li>
-                    <button mat-button [matMenuTriggerFor]="menu">
+          <mat-menu #helpMenu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>contact_support</mat-icon>
+              Contact Support
+            </button>
+            <button mat-menu-item>
+              <mat-icon>help</mat-icon>
+              Help
+            </button>
+            <button mat-menu-item>
+              <mat-icon>help_center</mat-icon>
+              Help Center
+            </button>
+            <button mat-menu-item>
+              <mat-icon>help_outline</mat-icon>
+              Help Outline
+            </button>
+          </mat-menu>
+        </li>
+        <li>
+          <button mat-button
+                  [matMenuTriggerFor]="loginMenu">
             <mat-icon>person_outline</mat-icon>
           </button>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+          <mat-menu #loginMenu="matMenu">
+            <button mat-menu-item>
               <mat-icon>exit_to_app</mat-icon>
               Sign out
             </button>
-                    </mat-menu>
-
-                </li>
-            </ul>
-        </div>
-    </mat-toolbar-row>
+          </mat-menu>
+        </li>
+      </ul>
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>

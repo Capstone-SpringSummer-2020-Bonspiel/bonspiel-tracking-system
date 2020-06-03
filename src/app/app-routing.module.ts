@@ -5,6 +5,9 @@ import { TeamlistComponent } from './modules/visitor/components/teamlist/teamlis
 import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { DashboardComponent } from './modules/admin/components/dashboard/dashboard.component';
+import { CreateOrganizationComponent } from './modules/admin/components/create-organization/create-organization.component';
+import { CreateCurlingEventComponent } from './modules/admin/components/create-curling-event/create-curling-event.component';
+import { CreateCurlingTeamComponent } from './modules/admin/components/create-curling-team/create-curling-team.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 
@@ -21,6 +24,18 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardComponent,
+      },
+      {
+        path: 'create-organization',
+        component: CreateOrganizationComponent,
+      },
+      {
+        path: 'create-event',
+        component: CreateCurlingEventComponent,
+      },
+      {
+        path: 'create-team',
+        component: CreateCurlingTeamComponent,
       },
     ],
   },

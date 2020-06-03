@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: 'https://bonspiel-server-devl.herokuapp.com/',
+  apiURL: 'https://bonspiel-server-devl.herokuapp.com',
 };
 
 /*

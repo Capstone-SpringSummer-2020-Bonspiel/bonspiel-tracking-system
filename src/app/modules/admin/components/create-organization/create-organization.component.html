@@ -1,0 +1,99 @@
+<mat-vertical-stepper linear
+                      #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Organization's Full Name </ng-template>
+      <mat-form-field>
+        <mat-label> Full Name </mat-label>
+        <input matInput
+               placeholder="Evergreen Curling Club"
+               formControlName="firstCtrl"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button
+                matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel> Organization's Short Name </ng-template>
+      <mat-form-field>
+        <mat-label> Short Name </mat-label>
+        <input matInput
+               formControlName="secondCtrl"
+               placeholder="Evergreen"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button
+                matStepperPrevious>Back</button>
+        <button mat-button
+                matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel> Event Type </ng-template>
+      <mat-form-field>
+        <mat-label> Event Type... </mat-label>
+
+        <mat-select [(ngModel)]="selectedValue"
+                    name="eventTypes">
+          <mat-option *ngFor="let eventType of eventTypes"
+                      [value]="eventType.value">
+            {{eventType.viewValue}}
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+      <div>
+        <button mat-button
+                matStepperPrevious>Back</button>
+        <button mat-button
+                matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step> -->
+
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel> Event Type </ng-template>
+
+      <mat-form-field>
+        <mat-label> Event Type... </mat-label>
+        <mat-select formControlName="thirdCtrl"
+                    name="eventType">
+          <mat-option *ngFor="let eventType of eventTypes"
+                      [value]="eventType.value">
+            {{eventType.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <button mat-button
+                matStepperPrevious>Back</button>
+        <button mat-button
+                matStepperNext>Next</button>
+      </div>
+
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button
+              matStepperPrevious>Back</button>
+      <button mat-button
+              (click)="stepper.reset()">Reset</button>
+      <button mat-button
+              (click)="createOrganization()">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

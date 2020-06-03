@@ -1,59 +1,307 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DashboardService } from '../../dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { ApiService } from '@app/core/api/api.service';
+import { Timestamp } from 'rxjs';
+import { SpinnerService } from '@app/shared/services/spinner.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { NotificationService } from '@app/shared/services/notification.service';
 
-export interface PeriodicElement {
+export interface Organization {
+  id: number;
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  event_type: string;
+  info: string;
+  completed: boolean;
+  begin_date: Date;
+  end_date: Date;
 }
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', display: 'none' })
+      ),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
-  bigChart = [];
-  cards = [];
-  pieChart = [];
+  /**************************************************************************/
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  @ViewChild('paginatorTop', { static: false }) paginatorTop: MatPaginator;
+  @ViewChild('paginatorBottom', { static: false })
+  paginatorBottom: MatPaginator;
+  @ViewChild('mainTableSort', { static: false }) mainTableSort: MatSort;
+
+  selection = new SelectionModel<any>(true, []);
+  expandedElement: any;
+  objectKeys = Object.keys;
+  selectedColumn = 'all';
+  defaultFilterPredicate: any;
+
+  filterColumns = [
+    {
+      name: 'all',
+      header: 'All',
+    },
+    {
+      name: 'id',
+      header: 'ID',
+    },
+    {
+      name: 'name',
+      header: 'Name',
+    },
+    {
+      name: 'event_type',
+      header: 'Event Type',
+    },
+    {
+      name: 'completed',
+      header: 'Status',
+    },
+    {
+      name: 'begin_date',
+      header: 'Start Date',
+    },
+    {
+      name: 'end_date',
+      header: 'End Date',
+    },
+  ];
+
+  menuItems = [
+    {
+      category: 'myCategory',
+      label: 'Export to CSV',
+      option: 'exportCSV',
+      icon: 'get_app',
+      tooltip: '',
+    },
+    {
+      category: 'myCategory',
+      label: 'Some Batch Function',
+      option: 'someBatchFunction',
+      icon: 'done_all',
+      tooltip: '',
+    },
+    {
+      category: 'myCategory',
+      label: 'Delete Events',
+      option: 'deleteEvents',
+      icon: 'delete_forever',
+      tooltip: '',
+    },
+    {
+      category: 'myCategory',
+      label: 'Refresh Data',
+      option: 'refreshData',
+      icon: 'refresh',
+      tooltip: '',
+    },
+  ];
+
+  /**************************************************************************/
+
+  columns = [
+    {
+      name: 'arrow',
+      header: '',
+    },
+    {
+      name: 'checkbox',
+      header: '',
+    },
+    {
+      name: 'id',
+      header: 'ID',
+    },
+    {
+      name: 'name',
+      header: 'Name',
+    },
+    {
+      name: 'event_type',
+      header: 'Event Type',
+    },
+    {
+      name: 'completed',
+      header: 'Status',
+    },
+    {
+      name: 'begin_date',
+      header: 'Start Date',
+    },
+    {
+      name: 'end_date',
+      header: 'End Date',
+    },
+  ];
+
+  columnsTable = {
+    arrow: '',
+    id: 'ID',
+    name: 'Name',
+    event_type: 'Event Type',
+    info: 'Info',
+    completed: 'Status',
+    begin_date: 'Start Date',
+    end_date: 'End Date',
+  };
+  displayedColumns: string[] = this.columns.map((e) => e.name);
+  dataSource = new MatTableDataSource<Organization>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private api: ApiService,
+    private spinner: SpinnerService,
+    private notifier: NotificationService,
+  ) { }
 
   ngOnInit() {
-    this.bigChart = this.dashboardService.bigChart();
-    this.cards = this.dashboardService.cards();
-    this.pieChart = this.dashboardService.pieChart();
+    this.spinner.on();
+    this.api.fetchCurlingEvents().subscribe((data: any) => {
+      if (data === null || data === undefined) {
+        this.notifier.showError('Could not fetch curling events', 'ERROR');
+        this.spinner.off();
+        return;
+      }
+      console.log('Fetching curling events:');
+      console.log(data);
+
+      const newData = this.dataSource.data;
+      for (let row of data.rows) {
+        newData.push(row);
+        console.log(row);
+      }
+      this.dataSource.data = newData;
+      this.spinner.off();
+    });
 
     this.dataSource.paginator = this.paginator;
+    this.defaultFilterPredicate = this.dataSource.filterPredicate;
   }
+
+  /**************************************************************************/
+
+  syncPaginatorTop(event: PageEvent) {
+    this.paginatorTop.pageIndex = event.pageIndex;
+    this.paginatorTop.pageSize = event.pageSize;
+    this.paginatorTop.page.emit(event);
+  }
+
+  // Whether the number of selected elements matches the total number of rows
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  // Selects all rows if they are not all selected; otherwise clear selection
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  // The label for the checkbox on the passed row
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.position + 1
+      }`;
+  }
+
+  onClickTabs(event: MatTabChangeEvent, sample: any) {
+    console.log('event => ', event);
+    console.log('index => ', event.index);
+    console.log('tab => ', event.tab);
+    console.log('sample => ', sample);
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
+    console.log('filtered dataSource:', this.dataSource);
+  }
+
+  updFilterPredicate() {
+    console.log(`selectedColumn: |${this.selectedColumn}|`);
+
+    this.applyFilter(this.dataSource.filter);
+
+    if (this.selectedColumn === 'all') {
+      this.dataSource.filterPredicate = this.defaultFilterPredicate;
+    } else {
+      // Define how a filter value should be applied on your data when a filter value is given
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        console.log('data:', data);
+        return data[this.selectedColumn]
+          .toLowerCase()
+          .includes(filter.trim().toLowerCase());
+      };
+    }
+
+    console.log('this.dataSource:', this.dataSource);
+  }
+
+  exportCSV() {
+    this.notifier.showSuccess('Exported CSV', '');
+  }
+
+  someBatchFunction() {
+    this.notifier.showWarning('Some batch function...', '');
+  }
+
+  deleteEvents() {
+    this.notifier.showError('Event deleted!', '');
+  }
+
+  refreshData() {
+    this.spinner.on();
+    setTimeout(() => {
+      this.notifier.showInfo('Refreshed data', '');
+      this.spinner.off();
+    }, 2000);
+  }
+
+  /**************************************************************************/
 }

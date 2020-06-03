@@ -1,9 +1,396 @@
+/* Structure */
+
+table {
+    width: 100%;
+}
+
+tr.example-detail-row {
+    height: 0;
+}
+
+tr.example-sample-row:not(.example-expanded-row):hover {
+    background: #f5f5f5;
+}
+
+tr.example-sample-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-sample-row td {
+    border-bottom-width: 0;
+}
+
+.example-sample-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.example-sample-diagram {
+    // min-width: 80px;
+    border: 1px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    width: 100%;
+    height: 100%;
+}
+
+.example-sample-visual-id-txt {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+
+.example-sample-lab-notes-rich-txt {
+    padding: 16px;
+}
+
+.example-sample-lab-notes-rich-txt-attribution {
+    opacity: 0.5;
+}
+
+.example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    // z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.example-rate-limit-reached {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+}
+
+
+/* Column Widths */
+
+.mat-column-number,
+.mat-column-state {
+    max-width: 64px;
+}
+
+.mat-column-created {
+    max-width: 124px;
+}
+
+
+/* Structure */
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 90%;
+    float: left;
+}
+
+.mat-table {
+    overflow: scroll;
+    height: max-content;
+    max-height: 1000px;
+}
+
+table.mat-table {
+    overflow: auto;
+    max-height: none;
+}
+
+.example-button-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.inline {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.chip-list {
+    width: 100%;
+}
+
+.mat-table {
+    overflow: auto;
+    /*max-height: none;*/
+    max-height: 1000px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+    color: black;
+}
+
+.element-row {
+    position: relative;
+}
+
+.element-row:not(.expanded) {
+    cursor: pointer;
+}
+
+.element-row:not(.expanded):hover {
+    background: #f5f5f5;
+}
+
+.element-row.expanded {
+    border-bottom-color: transparent;
+}
+
+// CSS for mat-checkbox
+.example-h2 {
+    margin: 10px;
+}
+
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.example-margin {
+    margin: 0 10px;
+}
+
+// global styles
+.my-centered-dialog {
+    max-width: 80vw;
+    .mat-dialog-container {
+        max-width: none;
+    }
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+    color: black;
+}
+
+.slide-in-text {
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+}
+
+.slide-in-text h3 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    line-height: 50px;
+    text-align: left;
+    /* Apply animation to this element */
+    -moz-animation: slide-in-text 1s ease-out;
+    -webkit-animation: slide-in-text 1s ease-out;
+    animation: slide-in-text 1s ease-out;
+}
+
+
+/* Move it (define the animation) */
+
+@-moz-keyframes slide-in-text {
+    0% {
+        -moz-transform: translateX(200%);
+    }
+    100% {
+        -moz-transform: translateX(0%);
+    }
+}
+
+@-webkit-keyframes slide-in-text {
+    0% {
+        -webkit-transform: translateX(200%);
+    }
+    100% {
+        -webkit-transform: translateX(0%);
+    }
+}
+
+@keyframes slide-in-text {
+    0% {
+        -moz-transform: translateX(200%);
+        /* Firefox bug fix */
+        -webkit-transform: translateX(200%);
+        /* Firefox bug fix */
+        transform: translateX(200%);
+    }
+    100% {
+        -moz-transform: translateX(0%);
+        /* Firefox bug fix */
+        -webkit-transform: translateX(0%);
+        /* Firefox bug fix */
+        transform: translateX(0%);
+    }
+}
+
+.example-large-box {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    height: auto;
+    width: auto;
+}
+
+.example-large-box.start {
+    justify-content: start;
+}
+
+.example-large-box-step-history {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    height: auto;
+    width: auto;
+    // background-color: yellow;
+}
+
+.example-form {
+    display: flex;
+    width: auto;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.vl {
+    border-left: 6px solid black;
+    height: auto;
+}
+
+.example-tab-icon {
+    margin-left: 8px;
+}
+
+.mat-button.mat-small {
+    min-width: 1%;
+    width: 24px;
+    height: 24px;
+    padding: 0 0 0 0;
+}
+
+.mat-list-icon {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.sample-info-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.sample-info-full-width {
+    width: 100%;
+}
+
+.gray {
+    // background-color: #fafafa;
+    background-color: #ffffff;
+}
+
+.k-window-titlebar {
+    background-color: #005a8c;
+}
+
+.example-container {
+    height: 400px;
+    width: 550px;
+    overflow: auto;
+}
+
+// table {
+//   width: 800px;
+// }
+td.mat-column-star {
+    width: 20px;
+    padding-right: 8px;
+}
+
+th.mat-column-position,
+td.mat-column-position {
+    padding-left: 8px;
+}
+
+// .mat-table-sticky:first-child {
+//   border-right: 1px solid #e0e0e0;
+// }
+// .mat-table-sticky:last-child {
+//   border-left: 1px solid #e0e0e0;
+// }
+.box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+ul li {
+    display: inline;
+}
+
+.mat-form-field {
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+    }
+    .mat-form-field-underline {
+        display: none;
+    }
+}
+
+#example .col {
+    border: 1px solid #c9c9c9;
+}
+
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    height: 2px;
+}
+
+.ng-hide.ng-hide-animate {
+    display: none !important;
+}
+
 .stats-cards {
     .mat-card {
         overflow: hidden;
     }
-}
-
-table {
-    width: 100%;
 }

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { SpinnerService } from '@app/shared/services/spinner.service';
 
 const apiURL: string = environment.apiURL;
+// const apiURL = 'http://localhost:8080';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -17,10 +17,26 @@ const httpOptions = {
 })
 export class ApiService {
   constructor(private httpClient: HttpClient) {
-    console.log(`apiUrl  ==>  ${apiURL}`);
+    console.log(`apiURL  ==>  ${apiURL}`);
   }
 
   public testAPI() {
-    return this.httpClient.get('https://restcountries.eu/rest/v2/all');
+    return this.httpClient.get('https://restcountries.eu/rest/v2/all'); // This returns an observable
+  }
+
+  public fetchCurlingEvents() {
+    return this.httpClient.get(`${apiURL}/api/fetch-curling-events`);
+  }
+
+  public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
+    const body = {
+      name: name,
+      eventType: eventType,
+      info: info,
+      completed: completed,
+      beginDate: beginDate,
+      endDate: endDate
+    }
+    return this.httpClient.post(`${apiURL}/api/create-curling-event`, body);
   }
 }

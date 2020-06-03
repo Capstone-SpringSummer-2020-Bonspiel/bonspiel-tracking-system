@@ -2,5 +2,5 @@
 
 export const environment = {
   production: true,
-  apiURL: 'https://bonspiel-server.herokuapp.com/',
+  apiURL: 'https://bonspiel-server.herokuapp.com',
 };
