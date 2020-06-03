@@ -6,7 +6,7 @@ import { YoutubeDialogComponent } from '@app/modules/visitor/components/youtube-
 import { MatTableDataSource } from '@angular/material/table';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-desktop-view',
@@ -39,6 +39,10 @@ export class DesktopViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSourceStandings.sort = this.sort;
+    const sortState: Sort = { active: 'wins', direction: 'desc' };
+    this.sort.active = sortState.active;
+    this.sort.direction = sortState.direction;
+    this.sort.sortChange.emit(sortState);
     const start = new Date().getTime();
     this.currentReq$ = this.apiService.testAPI().subscribe((res) => {});
   }
@@ -135,7 +139,7 @@ const BONSPIEL_DATA_DRAW: Draw = {
   game_1: BONSPIEL_DATA_GAME,
   game_2: BONSPIEL_DATA_GAME,
   game_3: BONSPIEL_DATA_GAME,
-  youtube_link: 'https://www.youtube.com/watch?v=zesl6jZnSDM',
+  youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
 };
 
 // Dummy data for a standing
