@@ -31,14 +31,14 @@ export class VisitorComponent implements OnInit {
 
     // Make an API request
     this.currentReq$ = this.api.testAPI().subscribe((res) => {
-        this.currentReq$ = null;
-        const end = new Date().getTime();
-        this.notifier.showSuccess(
-          `Query took ${((end - start) / 1000).toString()} seconds.`, // Display execution time
-          ''
-        );
-        console.log(res);
-        this.spinner.off();
+      this.currentReq$ = null;
+      const end = new Date().getTime();
+      this.notifier.showSuccess(
+        `Query took ${((end - start) / 1000).toString()} seconds.`, // Display execution time
+        ''
+      );
+      console.log(res);
+      this.spinner.off();
     });
 
     // Set initial inner width
@@ -69,26 +69,5 @@ export class VisitorComponent implements OnInit {
   onResize(event) {
     this.innerWidth = window.innerWidth;
     console.log(this.innerWidth);
-  }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-      width: 'auto',
-      data: { name: this.name, animal: this.animal },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      this.animal = result;
-    });
-  }
-
-  openYoutubeDialog(team): void {
-    console.log(`team  ==>  `);
-    console.log(team);
-    const dialogRef = this.dialog.open(YoutubeDialogComponent, {
-      width: '800px',
-      data: { youtube_link: team.youtube_link },
-    });
   }
 }
