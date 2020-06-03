@@ -21,12 +21,14 @@
 -->
   <hr>
   <!-- Desktop View -->
-  <div class="desktop" *ngIf="currentWindowWidth>=576">
+  <div class="desktop"
+    *ngIf="innerWidth >= 576">
     <app-desktop-view></app-desktop-view>
   </div>
 
   <!-- Mobile View -->
-  <div class="mobile" *ngIf="currentWindowWidth<576">
+  <div class="mobile"
+    *ngIf="innerWidth < 576">
     <app-mobile-view></app-mobile-view>
   </div>
 
