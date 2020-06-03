@@ -38,7 +38,7 @@
   },
   "python.formatting.autopep8Args": ["--ignore E121"],
   "markdown.styles": ["markdown.css"],
-  "window.zoomLevel": -1,
+  "window.zoomLevel": 0,
   "liveServer.settings.donotVerifyTags": true,
   "liveServer.settings.donotShowInfoMsg": true,
   "explorer.confirmDragAndDrop": false,

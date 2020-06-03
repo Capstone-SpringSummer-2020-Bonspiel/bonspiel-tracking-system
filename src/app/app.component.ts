@@ -16,7 +16,7 @@ export class AppComponent {
 
   navLinks = [
     {
-      label: 'Route 1',
+      label: 'Home',
       path: '/home',
       icon: 'home',
     },
@@ -31,8 +31,8 @@ export class AppComponent {
       icon: 'add_box',
     },
     {
-      label: 'Route 4',
-      path: '/',
+      label: 'Admin',
+      path: '/admin',
       icon: 'playlist_add',
     },
     {
@@ -46,7 +46,7 @@ export class AppComponent {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) { }
 
   close(reason: string) {
     this.reason = reason;
