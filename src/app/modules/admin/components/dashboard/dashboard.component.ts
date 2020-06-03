@@ -9,9 +9,9 @@ import { DashboardService } from '../../dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ApiService } from '@app/core/api/api.service';
+import { ApiService } from '../../../../core/api/api.service';
 import { Timestamp } from 'rxjs';
-import { SpinnerService } from '@app/shared/services/spinner.service';
+import { SpinnerService } from '../../../../shared/services/spinner.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -24,7 +24,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { NotificationService } from '@app/shared/services/notification.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
 
 export interface Organization {
   id: number;
@@ -192,6 +192,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.on();
+
     this.api.fetchCurlingEvents().subscribe((data: any) => {
       if (data === null || data === undefined) {
         this.notifier.showError('Could not fetch curling events', 'ERROR');

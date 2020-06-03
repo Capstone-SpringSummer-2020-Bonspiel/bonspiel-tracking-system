@@ -25,7 +25,7 @@ export class ApiService {
   }
 
   public fetchCurlingEvents() {
-    return this.httpClient.get(`${apiURL}/api/fetch-curling-events`);
+    return this.httpClient.get(`${apiURL}/api/v1/fetch-curling-events`);
   }
 
   public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
@@ -37,6 +37,13 @@ export class ApiService {
       beginDate: beginDate,
       endDate: endDate
     }
-    return this.httpClient.post(`${apiURL}/api/create-curling-event`, body);
+    return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
+  }
+
+  public adHocQuery(query) {
+    const body = {
+      sql: query
+    }
+    return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
   }
 }
