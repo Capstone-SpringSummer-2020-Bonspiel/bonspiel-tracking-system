@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { SpinnerService } from '@app/shared/services/spinner.service';
 
 const apiURL: string = environment.apiURL;
 // const apiURL = 'http://localhost:8080';
@@ -38,6 +37,6 @@ export class ApiService {
       beginDate: beginDate,
       endDate: endDate
     }
-    return this.httpClient.post(`${apiURL}/api/create-curling-events`, body);
+    return this.httpClient.post(`${apiURL}/api/create-curling-event`, body);
   }
 }
