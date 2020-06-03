@@ -1,102 +1,30 @@
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <p class="text-center"> Bonspiel #1 </p>
-        </div>
-        <div class="col-sm-6">
-            <p class="text-center"> Saturday, 5/13/20 </p>
-            <button (click)="notifier.showSuccess('success', 'Bold')">
-        Success Toaster
-      </button>
+  <!-- Spinners -->
+  <div class="col-sm-12">
+    <button (click)="notifier.showSuccess('success', 'Bold')">
+      Success Toaster
+    </button>
 
-            <button (click)="notifier.showError('Something is wrong', 'ItSolutionStuff.com')">
-        Error Toaster
-      </button>
+    <button (click)="notifier.showError('Something is wrong', 'ItSolutionStuff.com')">
+      Error Toaster
+    </button>
 
-            <button (click)="notifier.showInfo('info', 'BOLD')">
-        Info Toaster
-      </button>
+    <button (click)="notifier.showInfo('info', 'BOLD')">
+      Info Toaster
+    </button>
 
-            <button (click)="notifier.showWarning('warning', 'BOLD')">
-        Warning Toaster
-      </button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="example-container mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" class="">
+    <button (click)="notifier.showWarning('warning', 'BOLD')">
+      Warning Toaster
+    </button>
+  </div>
+  <hr>
+  <!-- Desktop View -->
+  <div class="desktop" *ngIf="currentWindowWidth>=700">
+    <app-desktop-view></app-desktop-view>
+  </div>
 
-                    <ng-container matColumnDef="name" sticky>
-                        <th mat-header-cell *matHeaderCellDef class="m-0 p-0"> Team Name </th>
-                        <td mat-cell *matCellDef="let team" class="m-0 p-0">
-                            <button type="button" class="btn btn-light" (click)="openDialog()"> {{team.name}} </button>
-                        </td>
-                    </ng-container>
+  <!-- Mobile View -->
+  <div class="desktop" *ngIf="currentWindowWidth<700">
+  </div>
 
-                    <ng-container matColumnDef="home">
-                        <th mat-header-cell *matHeaderCellDef> H </th>
-                        <td mat-cell *matCellDef="let team"> {{team.home}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_1">
-                        <th mat-header-cell *matHeaderCellDef> 1 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_1}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_2">
-                        <th mat-header-cell *matHeaderCellDef> 2 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_2}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_3">
-                        <th mat-header-cell *matHeaderCellDef> 3 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_3}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_4">
-                        <th mat-header-cell *matHeaderCellDef> 4 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_4}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_5">
-                        <th mat-header-cell *matHeaderCellDef> 5 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_5}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_6">
-                        <th mat-header-cell *matHeaderCellDef> 6 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_6}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_7">
-                        <th mat-header-cell *matHeaderCellDef> 7 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_7}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="round_8">
-                        <th mat-header-cell *matHeaderCellDef> 8 </th>
-                        <td mat-cell *matCellDef="let team"> {{team.round_8}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="final_score">
-                        <th mat-header-cell *matHeaderCellDef> Final </th>
-                        <td mat-cell *matCellDef="let team"> {{getFinalScore(team)}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="star" stickyEnd>
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let team" class="px-2 py-1" style="justify-content: center">
-                            <button mat-icon-button matTooltip="YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog(team)">
-                <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
-              </button>
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
