@@ -19,6 +19,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { ToastrModule } from 'ngx-toastr';
+import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
+
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -40,4 +42,4 @@ import { ToastrModule } from 'ngx-toastr';
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule { }

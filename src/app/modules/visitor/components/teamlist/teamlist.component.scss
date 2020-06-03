@@ -1,0 +1,63 @@
+.mat-table{
+  width: 100%;
+  border: 1px solid black;
+  word-wrap:break-word;
+}
+/*
+.mat-column{
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+.mat-row:nth-child(even){
+  background: rgb(224, 224, 224)
+}
+.mat-row:nth-child(odd){
+  background: rgba(255,255,255)
+}
+.mat-column-draw{
+  width: 20%;
+}
+*/
+tr.detail-row {
+  height: 0;
+}
+
+tr.team-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.team-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.team-row td {
+  border-bottom-width: 0;
+}
+
+.team-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.lement-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.team-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.team-description {
+  padding: 16px;
+}
+
+.team-description-attribution {
+  opacity: 0.5;
+}
