@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { VisitorComponent } from './modules/visitor/components/visitor/visitor.component';
+import { TeamlistComponent } from './modules/visitor/components/teamlist/teamlist.component';
+import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { DashboardComponent } from './modules/admin/components/dashboard/dashboard.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
+
+
 const routes: Routes = [
   { path: '', component: VisitorComponent },
   { path: 'home', component: VisitorComponent },
+  { path: 'schedule', component: ScheduleComponent },
+  { path: 'teamlist', component: TeamlistComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -20,10 +26,11 @@ const routes: Routes = [
   },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
