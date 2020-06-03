@@ -27,6 +27,7 @@
 .team-img {
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 
 .team-title {
@@ -43,7 +44,7 @@
     -webkit-transition: all 0.2s ease-in-out;
     -moz-transition: all 0.2s ease-in-out;
     -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;    
 }
 
 .team-details {

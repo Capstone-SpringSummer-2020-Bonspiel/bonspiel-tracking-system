@@ -10,35 +10,42 @@ import { NotificationService } from '@app/shared/services/notification.service';
   styleUrls: ['./visitor.component.scss'],
 })
 export class VisitorComponent implements OnInit {
-  public currentWindowWidth: number;
 
   currentReq$ = null;
 
+  innerWidth = 0;
+  isMobileHeaderHidden = '0';
+  previousPageYOffset = 0;
+  currentPageYOffset = window.pageYOffset;
+
   constructor(
-    private apiService: ApiService,
+    private api: ApiService,
     public dialog: MatDialog,
     public spinner: SpinnerService,
     public notifier: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.currentWindowWidth = window.innerWidth;
-    const start = new Date().getTime();
+    const start = new Date().getTime(); // Set start time
     this.spinner.on();
-    this.currentReq$ = this.apiService.testAPI().subscribe((res) => {
-      setTimeout(() => {
+
+    // Make an API request
+    this.currentReq$ = this.api.testAPI().subscribe((res) => {
         this.currentReq$ = null;
         const end = new Date().getTime();
         this.notifier.showSuccess(
-          `Query took ${((end - start) / 1000).toString()} seconds.`,
+          `Query took ${((end - start) / 1000).toString()} seconds.`, // Display execution time
           ''
         );
         console.log(res);
         this.spinner.off();
-      }, 5000);
     });
+
+    // Set initial inner width
+    this.innerWidth = window.innerWidth;
   }
 
+  // Listen for key press
   @HostListener('document:keyup', ['$event'])
   onKeyupHandler(event: KeyboardEvent) {
     const ESC_KEYCODE = 27;
@@ -57,8 +64,31 @@ export class VisitorComponent implements OnInit {
     }
   }
 
-  @HostListener('window:resize')
-  onResize() {
-    this.currentWindowWidth = window.innerWidth;
+  // Watch for window resize
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    console.log(this.innerWidth);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
+      width: 'auto',
+      data: { name: this.name, animal: this.animal },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
+  }
+
+  openYoutubeDialog(team): void {
+    console.log(`team  ==>  `);
+    console.log(team);
+    const dialogRef = this.dialog.open(YoutubeDialogComponent, {
+      width: '800px',
+      data: { youtube_link: team.youtube_link },
+    });
   }
 }

@@ -1,5 +1,6 @@
 <div class="container">
   <!-- Spinners -->
+  <!--
   <div class="col-sm-12">
     <button (click)="notifier.showSuccess('success', 'Bold')">
       Success Toaster
@@ -17,14 +18,16 @@
       Warning Toaster
     </button>
   </div>
+-->
   <hr>
   <!-- Desktop View -->
-  <div class="desktop" *ngIf="currentWindowWidth>=700">
+  <div class="desktop" *ngIf="currentWindowWidth>=576">
     <app-desktop-view></app-desktop-view>
   </div>
 
   <!-- Mobile View -->
-  <div class="desktop" *ngIf="currentWindowWidth<700">
+  <div class="mobile" *ngIf="currentWindowWidth<576">
+    <app-mobile-view></app-mobile-view>
   </div>
 
 </div>

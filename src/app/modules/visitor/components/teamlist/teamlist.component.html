@@ -1,0 +1,60 @@
+<div class="conatiner">
+  <div class="row">
+    <div class="col-sm-6">
+      <h1 class="text-center"> Team List </h1>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let team"> {{team[column]}} </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let team" [attr.colspan]="displayedColumns.length">
+          <div class="team-detail" [@detailExpand]="team == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="team-member1" *ngIf="team.teamMemberNumber>0">
+              <div class="member-Image"> <img src="https://www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65" alt=""> </div>
+              <div class="member-Name"> Member: {{team.member[0].memberName}} </div>
+              <div class="member-Gender"> Gender: {{team.member[0].memberGender}} </div>
+              <div class="member-GamePlayed"> Total Game: {{team.member[0].memberTotalGame}} </div>
+              <div class="member-WinGame"> Win Game: {{team.member[0].memberWinGameTotalGame}} </div>
+              <div class="member-WinRate"> Win Rate: {{team.member[0].memberWinRate}} </div>
+            </div>
+            <div class="team-member2" *ngIf="team.teamMemberNumber>1">
+              <div class="member-Image"> <img src="https://www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65" alt=""> </div>
+              <div class="member-Name"> Member: {{team.member[1].memberName}} </div>
+              <div class="member-Gender"> Gender: {{team.member[1].memberGender}} </div>
+              <div class="member-GamePlayed"> Total Game: {{team.member[1].memberTotalGame}} </div>
+              <div class="member-WinGame"> Win Game: {{team.member[1].memberWinGameTotalGame}} </div>
+              <div class="member-WinRate"> Win Rate: {{team.member[1].memberWinRate}} </div>
+            </div>
+            <div class="team-member3" *ngIf="team.teamMemberNumber>2">
+              <div class="member-Image"> <img src="https://www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65" alt=""> </div>
+              <div class="member-Name"> Member: {{team.member[2].memberName}} </div>
+              <div class="member-Gender"> Gender: {{team.member[2].memberGender}} </div>
+              <div class="member-GamePlayed"> Total Game: {{team.member[2].memberTotalGame}} </div>
+              <div class="member-WinGame"> Win Game: {{team.member[2].memberWinGameTotalGame}} </div>
+              <div class="member-WinRate"> Win Rate: {{team.member[2].memberWinRate}} </div>
+            </div>
+            <div class="team-member4" *ngIf="team.teamMemberNumber>3">
+              <div class="member-Image"> <img src="https://www.teamusa.org/-/media/TeamUSA/Headshots/2018OlympicTeam/Curling/geving_aileen_150x250.jpg?mh=250&mw=150&hash=56175E6CD1195207C985AB62E4555246EEA50C65" alt=""> </div>
+              <div class="member-Name"> Member: {{team.member[3].memberName}} </div>
+              <div class="member-Gender"> Gender: {{team.member[3].memberGender}} </div>
+              <div class="member-GamePlayed"> Total Game: {{team.member[3].memberTotalGame}} </div>
+              <div class="member-WinGame"> Win Game: {{team.member[3].memberWinGameTotalGame}} </div>
+              <div class="member-WinRate"> Win Rate: {{team.member[3].memberWinRate}} </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let team; columns: displayedColumns;" class="team-row" [class.expanded-row]="expandedElement === team" (click)="expandedElement = expandedElement === team ? null : team">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+  </div>
+</div>

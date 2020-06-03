@@ -16,7 +16,11 @@ import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 
 import { VisitorComponent } from './components/visitor/visitor.component';
 import { TeamDialogOverviewComponent } from './components/team-dialog-overview/team-dialog-overview.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { TeamlistComponent } from './components/teamlist/teamlist.component';
 import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dialog.component';
+import { MobileViewComponent } from './components/mobile-view/mobile-view.component';
+
 import { DesktopViewComponent } from './components/desktop-view/desktop-view.component';
 
 @NgModule({
@@ -24,8 +28,12 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
     VisitorComponent,
     TeamDialogOverviewComponent,
     YoutubeDialogComponent,
+    ScheduleComponent,
+    TeamlistComponent,
+    MobileViewComponent,
     DesktopViewComponent,
   ],
+
   imports: [
     CommonModule,
     MatButtonModule,
@@ -43,4 +51,4 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
   ],
   exports: [VisitorComponent, YoutubeDialogComponent],
 })
-export class VisitorModule {}
+export class VisitorModule { }
