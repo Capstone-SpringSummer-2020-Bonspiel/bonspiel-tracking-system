@@ -28,9 +28,12 @@ export class DesktopViewComponent implements OnInit {
     'final_score',
   ];
 
+  draws = ['Draw 1', 'Draw 2', 'Draw 3', 'Draw 4', 'Draw 5'];
+
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraw = BONSPIEL_DATA_DRAW;
   dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
+  dataSourceSelect = BONSPIEL_DATA_DRAW_ARR;
 
   panelOpenState = false;
   currentReq$ = null;
@@ -84,6 +87,9 @@ export class DesktopViewComponent implements OnInit {
       Number(team.round_8)
     );
   }
+  onDrawSelected(value: string) {
+    console.log('the selected draw is ' + value);
+  }
 }
 
 export interface Game {
@@ -114,11 +120,25 @@ export interface Standing {
   losses: string;
 }
 
-// Dummy data for Games
+// Begin dummy data
 const BONSPIEL_DATA_GAME: Game[] = [];
+const BONSPIEL_DATA_GAME2: Game[] = [];
 
 for (let i = 1; i <= 2; i++) {
   BONSPIEL_DATA_GAME.push({
+    name: `team_${i}`,
+    home: i % 2 === 0 ? '*' : '',
+    round_1: Math.floor(Math.random() * 10 + 1).toString(),
+    round_2: Math.floor(Math.random() * 10 + 1).toString(),
+    round_3: Math.floor(Math.random() * 10 + 1).toString(),
+    round_4: Math.floor(Math.random() * 10 + 1).toString(),
+    round_5: Math.floor(Math.random() * 10 + 1).toString(),
+    round_6: Math.floor(Math.random() * 10 + 1).toString(),
+    round_7: Math.floor(Math.random() * 10 + 1).toString(),
+    round_8: Math.floor(Math.random() * 10 + 1).toString(),
+    final_score: '0',
+  });
+  BONSPIEL_DATA_GAME2.push({
     name: `team_${i}`,
     home: i % 2 === 0 ? '*' : '',
     round_1: Math.floor(Math.random() * 10 + 1).toString(),
@@ -142,6 +162,26 @@ const BONSPIEL_DATA_DRAW: Draw = {
   youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
 };
 
+const BONSPIEL_DATA_DRAW2: Draw = {
+  name: 'Draw 2',
+  date: new Date(),
+  game_1: BONSPIEL_DATA_GAME2,
+  game_2: BONSPIEL_DATA_GAME2,
+  game_3: BONSPIEL_DATA_GAME2,
+  youtube_link: 'https://www.youtube.com/embed/Kwz-cicOUFk',
+};
+
+const BONSPIEL_DATA_DRAW_ARR: Draw[] = [];
+for (let i = 1; i <= 5; i++) {
+  BONSPIEL_DATA_DRAW_ARR.push({
+    name: `Draw ${i}`,
+    date: new Date(),
+    game_1: BONSPIEL_DATA_GAME,
+    game_2: BONSPIEL_DATA_GAME,
+    game_3: BONSPIEL_DATA_GAME,
+    youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
+  });
+}
 // Dummy data for a standing
 const BONSPIEL_DATA_STANDING: Standing[] = [];
 
