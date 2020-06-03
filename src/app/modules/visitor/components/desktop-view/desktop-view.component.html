@@ -7,6 +7,15 @@
       <button mat-icon-button matTooltip="YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog(dataSourceDraw)">
         <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
       </button>
+      <br>
+      <mat-form-field>
+        <mat-label>Draws</mat-label>
+        <mat-select class='select-option' #drawSelect (selectionChange)="onDrawSelected(drawSelect.value)">
+          <mat-option *ngFor="let draw of dataSourceSelect" [value]=draw.name>
+            {{draw}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 

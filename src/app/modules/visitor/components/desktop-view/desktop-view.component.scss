@@ -2,6 +2,9 @@
   display: flex;
   overflow: auto;
 }
+.col-sm-12 {
+  padding: 15px;
+}
 
 table {
   width: 100%;
@@ -48,4 +51,8 @@ $accent-color-2: #13778e;
   background-color: $secondary-color;
   color: white;
   margin: 10px;
+}
+
+.mat-form-field {
+  text-align: center;
 }
