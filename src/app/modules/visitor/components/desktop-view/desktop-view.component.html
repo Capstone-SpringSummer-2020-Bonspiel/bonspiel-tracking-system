@@ -12,7 +12,7 @@
         <mat-label>Draws</mat-label>
         <mat-select class='select-option' #drawSelect (selectionChange)="onDrawSelected(drawSelect.value)">
           <mat-option *ngFor="let draw of dataSourceSelect" [value]=draw.name>
-            {{draw}}
+            {{draw.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -125,7 +125,11 @@
             </table>
           </mat-tab>
           <!-- Game Statistics Tab -->
-          <mat-tab label="Statistics">Game Statistics</mat-tab>
+          <mat-tab label="Statistics">
+            <div class="text-center">
+              <img class="rounded mx-auto d-block" src="https://imgur.com/x5QuUZ1.jpg" alt="Bonspiel Statistics">
+            </div>
+          </mat-tab>
         </mat-tab-group>
       </mat-card>
     </div>
@@ -201,7 +205,11 @@
             </table>
           </mat-tab>
           <!-- Game Statistics Tab -->
-          <mat-tab label="Statistics">Game Statistics</mat-tab>
+          <mat-tab label="Statistics">
+            <div class="text-center">
+              <img class="rounded mx-auto d-block" src="https://imgur.com/x5QuUZ1.jpg" alt="Bonspiel Statistics">
+            </div>
+          </mat-tab>
         </mat-tab-group>
       </mat-card>
     </div>
@@ -277,7 +285,11 @@
             </table>
           </mat-tab>
           <!-- Game Statistics Tab -->
-          <mat-tab label="Statistics">Game Statistics</mat-tab>
+          <mat-tab label="Statistics">
+            <div class="text-center">
+              <img class="rounded mx-auto d-block" src="https://imgur.com/x5QuUZ1.jpg" alt="Bonspiel Statistics">
+            </div>
+          </mat-tab>
         </mat-tab-group>
       </mat-card>
     </div>
