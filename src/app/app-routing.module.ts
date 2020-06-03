@@ -12,6 +12,8 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 const routes: Routes = [
   { path: '', component: VisitorComponent },
   { path: 'home', component: VisitorComponent },
+  { path: 'schedule', component: ScheduleComponent },
+  { path: 'teamlist', component: TeamlistComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -24,8 +26,7 @@ const routes: Routes = [
   },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
-  { path: 'schedule', component: ScheduleComponent },
-  { path: 'teamlist', component: TeamlistComponent },
+
 ];
 
 @NgModule({

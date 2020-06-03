@@ -45,6 +45,6 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
     MatTabsModule,
     MatSortModule,
   ],
-  exports: [VisitorComponent, YoutubeDialogComponent, ScheduleComponent, TeamlistComponent],
+  exports: [VisitorComponent, YoutubeDialogComponent],
 })
 export class VisitorModule { }

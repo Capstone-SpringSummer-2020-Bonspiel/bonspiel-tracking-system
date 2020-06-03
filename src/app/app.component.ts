@@ -32,7 +32,7 @@ export class AppComponent {
     },
     {
       label: 'Admin',
-      path: '/admin',
+      path: '/',
       icon: 'playlist_add',
     },
     {

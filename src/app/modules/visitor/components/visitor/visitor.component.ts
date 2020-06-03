@@ -19,23 +19,23 @@ export class VisitorComponent implements OnInit {
     public dialog: MatDialog,
     public spinner: SpinnerService,
     public notifier: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.currentWindowWidth = window.innerWidth;
     const start = new Date().getTime();
     this.spinner.on();
     this.currentReq$ = this.apiService.testAPI().subscribe((res) => {
-      setTimeout(() => {
-        this.currentReq$ = null;
-        const end = new Date().getTime();
-        this.notifier.showSuccess(
-          `Query took ${((end - start) / 1000).toString()} seconds.`,
-          ''
-        );
-        console.log(res);
-        this.spinner.off();
-      }, 5000);
+      //setTimeout(() => {
+      this.currentReq$ = null;
+      const end = new Date().getTime();
+      this.notifier.showSuccess(
+        `Query took ${((end - start) / 1000).toString()} seconds.`,
+        ''
+      );
+      console.log(res);
+      this.spinner.off();
+      //}, 5000);
     });
   }
 
