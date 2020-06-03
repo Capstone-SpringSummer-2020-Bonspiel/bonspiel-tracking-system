@@ -1,5 +1,7 @@
 {
-  "vscodeWorkspaceSwitcher.paths": ["/home/raven/Documents/workspaces"],
+  "vscodeWorkspaceSwitcher.paths": [
+    "/home/raven/Documents/workspaces"
+  ],
   "workbench.startupEditor": "newUntitledFile",
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
@@ -29,15 +31,19 @@
   "editor.tabSize": 2,
   "workbench.statusBar.feedback.visible": false,
   "wordcounter.count_words": true,
-  "editor.fontFamily": "'FiraCode-Retina'",
-  "editor.fontLigatures": true,
-  "editor.fontSize": 12,
+  // "editor.fontFamily": "'FiraCode-Retina'",
+  // "editor.fontLigatures": true,
+  // "editor.fontSize": 12,
   "editor.formatOnSave": true,
   "[javascriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "python.formatting.autopep8Args": ["--ignore E121"],
-  "markdown.styles": ["markdown.css"],
+  "python.formatting.autopep8Args": [
+    "--ignore E121"
+  ],
+  "markdown.styles": [
+    "markdown.css"
+  ],
   "window.zoomLevel": 0,
   "liveServer.settings.donotVerifyTags": true,
   "liveServer.settings.donotShowInfoMsg": true,
