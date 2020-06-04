@@ -38,7 +38,10 @@ export class DesktopViewComponent implements OnInit {
   panelOpenState = false;
   currentReq$ = null;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {}
+  selectedDraw = null;
+  currentDraws = null;
+
+  constructor(private api: ApiService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.dataSourceStandings.sort = this.sort;
@@ -46,8 +49,13 @@ export class DesktopViewComponent implements OnInit {
     this.sort.active = sortState.active;
     this.sort.direction = sortState.direction;
     this.sort.sortChange.emit(sortState);
-    const start = new Date().getTime();
-    this.currentReq$ = this.apiService.testAPI().subscribe((res) => {});
+
+    this.api.adHocQuery('SELECT * FROM public.draw ORDER BY id ASC').subscribe((res: any) => {
+      console.log(res);
+
+      this.selectedDraw = res.rows[res.rows.length - 1];
+      this.currentDraws = res.rows;
+    });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -87,8 +95,11 @@ export class DesktopViewComponent implements OnInit {
       Number(team.round_8)
     );
   }
-  onDrawSelected(value: string) {
-    console.log('the selected draw is ' + value);
+  onDrawSelected(value: any) {
+    console.log('the selected draw is:');
+    console.log(value.value)
+
+    this.selectedDraw = value.value;
   }
 }
 

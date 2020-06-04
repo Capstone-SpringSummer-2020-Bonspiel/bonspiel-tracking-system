@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '@app/core/api/api.service';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
   selector: 'app-header',
@@ -7,11 +9,28 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  currentEvents = [];
+
   @Output() sidenavToggle: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(public router: Router) {}
+  constructor(public router: Router,
+    private api: ApiService,
+    private spinner: SpinnerService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.spinner.on();
+
+    this.api.adHocQuery('SELECT * FROM public.curlingevent ORDER BY id ASC').subscribe((res: any) => {
+      console.log('adHocQuery in header:');
+      console.log(res);
+
+      for (const row of res.rows) {
+        this.currentEvents.push(row);
+      }
+
+      this.spinner.off();
+    });
+  }
 
   toggleSidenav(foo: string): void {
     this.sidenavToggle.emit(foo);

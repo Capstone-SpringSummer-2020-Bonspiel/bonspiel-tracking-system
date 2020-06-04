@@ -32,11 +32,8 @@ export class TeamlistComponent {
   ];
   expandedElement: Team | null;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
-    this.apiService.testAPI().subscribe((res) => {
-      console.log(res);
-    });
-  }
+  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+
   ngOnInit(): void { }
 }
 

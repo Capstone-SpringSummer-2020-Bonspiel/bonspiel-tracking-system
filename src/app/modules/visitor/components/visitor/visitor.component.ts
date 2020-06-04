@@ -26,21 +26,6 @@ export class VisitorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const start = new Date().getTime(); // Set start time
-    this.spinner.on();
-
-    // Make an API request
-    this.currentReq$ = this.api.testAPI().subscribe((res) => {
-      this.currentReq$ = null;
-      const end = new Date().getTime();
-      this.notifier.showSuccess(
-        `Query took ${((end - start) / 1000).toString()} seconds.`, // Display execution time
-        ''
-      );
-      console.log(res);
-      this.spinner.off();
-    });
-
     // Set initial inner width
     this.innerWidth = window.innerWidth;
   }

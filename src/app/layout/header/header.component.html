@@ -1,34 +1,65 @@
 <header>
-  <nav class="navbar navbar-expand-md navbar-light" id="navbar">
-    <a class="navbar-brand" href="#">
-      <img class="my-0 py-0" src="https://i.imgur.com/buDk4fV.png" height="58" alt="ECC logo">
+  <nav class="navbar navbar-expand-md navbar-light"
+    id="navbar">
+    <a class="navbar-brand"
+      href="#">
+      <img class="my-0 py-0"
+        src="https://i.imgur.com/buDk4fV.png"
+        height="58"
+        alt="ECC logo">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse"
+      id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+
+        <!-- HOME BUTTON -->
         <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Events
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Previous Bonspiels</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Future Bonspiels</a>
-          </div>
+          <a class="nav-link"
+            href="#">Home</a>
         </li>
 
+        <!-- MENU BUTTON -->
         <li class="nav-item">
-          <button class="nav-link btn btn-link" (click)="toggleSidenav('hello')">Menu</button>
+          <button class="nav-link btn btn-link"
+            (click)="toggleSidenav('hello')">Menu</button>
+        </li>
+
+        <!-- EVENTS BUTTON-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            Events
+          </a>
+          <div class="dropdown-menu"
+            aria-labelledby="navbarDropdown">
+            <div *ngFor="let event of currentEvents; last as isLast">
+              <a class="dropdown-item"
+                href="#">{{event.begin_date}} - {{event.name}}</a>
+              <div *ngIf="!isLast"
+                class="dropdown-divider"></div>
+            </div>
+          </div>
         </li>
       </ul>
       <form class="form-inline">
-        <button class="btn btn-sm btn-outline-secondary" type="button" (click)="signIn()">Sign In</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          type="button"
+          (click)="signIn()">Sign In</button>
       </form>
     </div>
   </nav>

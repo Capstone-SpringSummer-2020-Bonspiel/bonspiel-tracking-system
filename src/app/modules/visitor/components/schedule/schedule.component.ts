@@ -26,12 +26,10 @@ export class ScheduleComponent implements OnInit {
   animal: string;
   name: string;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
-    this.apiService.testAPI().subscribe((res) => {
-      console.log(res);
-    });
-  }
+  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+
   ngOnInit(): void { }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
       width: 'auto',
