@@ -33,6 +33,7 @@ export class DesktopViewComponent implements OnInit {
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraw = BONSPIEL_DATA_DRAW;
   dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
+  dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
   dataSourceSelect = BONSPIEL_DATA_DRAW_ARR;
 
   panelOpenState = false;
@@ -44,6 +45,7 @@ export class DesktopViewComponent implements OnInit {
   constructor(private api: ApiService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
+    console.log(this.dataSourceAllStandings);
     this.dataSourceStandings.sort = this.sort;
     const sortState: Sort = { active: 'wins', direction: 'desc' };
     this.sort.active = sortState.active;
@@ -196,14 +198,29 @@ for (let i = 1; i <= 5; i++) {
 }
 // Dummy data for a standing
 const BONSPIEL_DATA_STANDING: Standing[] = [];
+const BONSPIEL_DATA_STANDING2: Standing[] = [];
 
-for (let i = 1; i <= 10; i++) {
+for (let i = 1; i <= 6; i++) {
   BONSPIEL_DATA_STANDING.push({
     name: `team_${i}`,
     wins: Math.floor(Math.random() * 10 + 1).toString(),
     losses: Math.floor(Math.random() * 10 + 1).toString(),
   });
 }
+for (let i = 1; i <= 6; i++) {
+  BONSPIEL_DATA_STANDING2.push({
+    name: `team_${i}`,
+    wins: Math.floor(Math.random() * 10 + 1).toString(),
+    losses: Math.floor(Math.random() * 10 + 1).toString(),
+  });
+}
+
+const BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
+  BONSPIEL_DATA_STANDING,
+  BONSPIEL_DATA_STANDING2,
+  BONSPIEL_DATA_STANDING,
+  BONSPIEL_DATA_STANDING2,
+];
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

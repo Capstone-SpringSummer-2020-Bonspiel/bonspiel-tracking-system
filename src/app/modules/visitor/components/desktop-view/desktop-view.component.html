@@ -22,6 +22,7 @@
 
   <div class="row">
     <div class="col-lg-8">
+
       <!-- Game #1 Card -->
       <mat-card class="m-2">
         <mat-card-title>Sheet A: Team A vs Team B </mat-card-title>
@@ -250,10 +251,10 @@
     </div>
 
     <div class="col-lg-4">
-      <!-- Standings Expansion Panel-->
-      <mat-card>
-        <mat-card-title>Team Standings</mat-card-title>
-        <table mat-table [dataSource]="dataSourceStandings" matSort>
+      <!-- Standings Card -->
+      <mat-card class="m-2" *ngFor="let pool of dataSourceAllStandings; index as i">
+        <mat-card-title>Team Standings: Pool {{i+1}}</mat-card-title>
+        <table mat-table [dataSource]="dataSourceAllStandings[i]" matSort>
 
           <!-- Team Name Column -->
           <ng-container matColumnDef="name">
