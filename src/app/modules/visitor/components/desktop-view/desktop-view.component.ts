@@ -30,9 +30,11 @@ export class DesktopViewComponent implements OnInit {
 
   draws = ['Draw 1', 'Draw 2', 'Draw 3', 'Draw 4', 'Draw 5'];
 
+  BONSPIEL_DATA_ALL_STANDING: Standing[][] = [];
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraw = BONSPIEL_DATA_DRAW;
-  dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
+  dataSourceDrawGames = BONSPIEL_DATA_DRAW_GAMES;
+  //dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
   dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
   dataSourceSelect = BONSPIEL_DATA_DRAW_ARR;
 
@@ -45,8 +47,7 @@ export class DesktopViewComponent implements OnInit {
   constructor(private api: ApiService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    console.log(this.dataSourceAllStandings);
-    this.dataSourceStandings.sort = this.sort;
+    //this.dataSourceStandings.sort = this.sort;
     const sortState: Sort = { active: 'wins', direction: 'desc' };
     this.sort.active = sortState.active;
     this.sort.direction = sortState.direction;
@@ -101,6 +102,10 @@ export class DesktopViewComponent implements OnInit {
       Number(team.round_8)
     );
   }
+
+  convertToAlpha(num) {
+    return String.fromCharCode(num + 65);
+  }
   onDrawSelected(value: string) {
     console.log('the selected draw is ' + value);
   }
@@ -134,9 +139,14 @@ export interface Standing {
   losses: string;
 }
 
+export interface Draw2 {
+  name: string;
+  date: Date;
+  youtube_link: string;
+}
+
 // Begin dummy data
 const BONSPIEL_DATA_GAME: Game[] = [];
-const BONSPIEL_DATA_GAME2: Game[] = [];
 
 for (let i = 1; i <= 2; i++) {
   BONSPIEL_DATA_GAME.push({
@@ -152,19 +162,26 @@ for (let i = 1; i <= 2; i++) {
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
   });
-  BONSPIEL_DATA_GAME2.push({
-    name: `team_${i}`,
-    home: i % 2 === 0 ? '*' : '',
-    round_1: Math.floor(Math.random() * 10 + 1).toString(),
-    round_2: Math.floor(Math.random() * 10 + 1).toString(),
-    round_3: Math.floor(Math.random() * 10 + 1).toString(),
-    round_4: Math.floor(Math.random() * 10 + 1).toString(),
-    round_5: Math.floor(Math.random() * 10 + 1).toString(),
-    round_6: Math.floor(Math.random() * 10 + 1).toString(),
-    round_7: Math.floor(Math.random() * 10 + 1).toString(),
-    round_8: Math.floor(Math.random() * 10 + 1).toString(),
-    final_score: '0',
-  });
+}
+
+var BONSPIEL_DATA_DRAW_GAMES: Game[][] = [];
+for (let i = 0; i < 3; i++) {
+  BONSPIEL_DATA_DRAW_GAMES.push([]);
+  for (let j = 0; j <= 1; j++) {
+    BONSPIEL_DATA_DRAW_GAMES[i].push({
+      name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
+      home: j % 2 === 0 ? '*' : '',
+      round_1: Math.floor(Math.random() * 10 + 1).toString(),
+      round_2: Math.floor(Math.random() * 10 + 1).toString(),
+      round_3: Math.floor(Math.random() * 10 + 1).toString(),
+      round_4: Math.floor(Math.random() * 10 + 1).toString(),
+      round_5: Math.floor(Math.random() * 10 + 1).toString(),
+      round_6: Math.floor(Math.random() * 10 + 1).toString(),
+      round_7: Math.floor(Math.random() * 10 + 1).toString(),
+      round_8: Math.floor(Math.random() * 10 + 1).toString(),
+      final_score: '0',
+    });
+  }
 }
 
 const BONSPIEL_DATA_DRAW: Draw = {
@@ -174,15 +191,6 @@ const BONSPIEL_DATA_DRAW: Draw = {
   game_2: BONSPIEL_DATA_GAME,
   game_3: BONSPIEL_DATA_GAME,
   youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
-};
-
-const BONSPIEL_DATA_DRAW2: Draw = {
-  name: 'Draw 2',
-  date: new Date(),
-  game_1: BONSPIEL_DATA_GAME2,
-  game_2: BONSPIEL_DATA_GAME2,
-  game_3: BONSPIEL_DATA_GAME2,
-  youtube_link: 'https://www.youtube.com/embed/Kwz-cicOUFk',
 };
 
 const BONSPIEL_DATA_DRAW_ARR: Draw[] = [];
@@ -215,7 +223,7 @@ for (let i = 1; i <= 6; i++) {
   });
 }
 
-const BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
+var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
   BONSPIEL_DATA_STANDING,
   BONSPIEL_DATA_STANDING2,
   BONSPIEL_DATA_STANDING,
