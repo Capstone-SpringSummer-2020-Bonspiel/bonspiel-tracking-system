@@ -193,17 +193,17 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.spinner.on();
 
-    this.api.getEvents().subscribe((data: any) => {
-      if (data === null || data === undefined) {
+    this.api.getEvents().subscribe((rows: any) => {
+      if (rows === null || rows === undefined) {
         this.notifier.showError('Could not fetch curling events', 'ERROR');
         this.spinner.off();
         return;
       }
       console.log('Fetching curling events:');
-      console.log(data);
+      console.log(rows);
 
       const newData = this.dataSource.data;
-      for (let row of data.rows) {
+      for (let row of rows) {
         newData.push(row);
         console.log(row);
       }
