@@ -39,7 +39,7 @@ export class CreateOrganizationComponent implements OnInit {
       thirdCtrl: ['', Validators.required],
     });
 
-    this.api.fetchCurlingEvents().subscribe((data) => {
+    this.api.getEvents().subscribe((data) => {
       console.log('test sql:');
       console.log(data);
     });

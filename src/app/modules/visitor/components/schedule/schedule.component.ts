@@ -27,29 +27,43 @@ export class ScheduleComponent implements OnInit {
 
   selectedEvent = null;
   currentEvent = null;
-  events = ["event0", "event1", "event2", "event3", "event4", "event5"];
+  events: any = [
+    // "event0", "event1", "event2", "event3", "event4", "event5"
+  ];
   animal: string;
   name: string;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
     this.spinner.on();
-    const query1 = "SELECT * FROM public.curlingevent ORDER BY id DESC";
 
-    this.apiService.adHocQuery(query1).subscribe((res: any) => {
-      console.log(res);
+    this.api
+      .getEvents()
+      .subscribe((res) => {
+        console.log('[DEBUG] ngOnInit() in schedule component:');
+        console.log(res);
 
-      this.selectedEvent = res.rows[0];
-      // console.log(res.rows[0]);
-      this.currentEvent = res.rows;
-      // console.log("signal");
-      // console.log(this.currentEvent);
+        this.events = res;
+        this.selectedEvent = this.events[0];
 
-      this.spinner.off();
-    })
+        this.spinner.off();
+      });
+    // const query1 = "SELECT * FROM public.curlingevent ORDER BY id DESC";
 
-    const query2 = "SELECT * FROM public.curlingevent ORDER BY id DESC WHERE bracket_id = ";
+    // this.apiService.adHocQuery(query1).subscribe((res: any) => {
+    //   console.log(res);
+
+    //   this.selectedEvent = res.rows[0];
+    //   // console.log(res.rows[0]);
+    //   this.currentEvent = res.rows;
+    //   // console.log("signal");
+    //   // console.log(this.currentEvent);
+
+    //   this.spinner.off();
+    // })
+
+    // const query2 = "SELECT * FROM public.curlingevent ORDER BY id DESC WHERE bracket_id = ";
   }
 
   openDialog(): void {

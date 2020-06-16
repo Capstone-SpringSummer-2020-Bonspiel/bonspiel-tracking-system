@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SpinnerService } from '@app/shared/services/spinner.service';
-import { count } from 'console';
 //import { Address } from 'cluster';
 
 @Component({
