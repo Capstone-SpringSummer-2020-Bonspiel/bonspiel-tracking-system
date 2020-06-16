@@ -36,8 +36,9 @@ export class DesktopViewComponent implements OnInit {
 
   selectedDraw = null;
   currentDraws = null;
+  currentEventId = null;
 
-  constructor(private api: ApiService, public dialog: MatDialog) {}
+  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
     //this.dataSourceStandings.sort = this.sort;
@@ -46,14 +47,34 @@ export class DesktopViewComponent implements OnInit {
     // this.sort.direction = sortState.direction;
     // this.sort.sortChange.emit(sortState);
 
-    this.api
-      .adHocQuery('SELECT * FROM public.draw ORDER BY id ASC')
-      .subscribe((res: any) => {
-        console.log(res);
+    this.spinner.on();
 
-        this.selectedDraw = res.rows[res.rows.length - 1];
-        this.currentDraws = res.rows;
+    // Get current event ID
+    this.api
+      .currentEventId
+      .subscribe((eventId) => {
+        this.currentEventId = eventId;
+
+        this.api
+          .getDraws(this.currentEventId)
+          .subscribe((res: any) => {
+            console.log('[DEBUG] ngOnInit() in desktop-view component:');
+            console.log(res);
+
+            this.selectedDraw = res[res.length - 1];
+            this.currentDraws = res;
+
+            this.spinner.off();
+          });
       });
+
+    // .adHocQuery('SELECT * FROM public.draw ORDER BY id ASC')
+    // .subscribe((res: any) => {
+    //   console.log(res);
+
+    //   this.selectedDraw = res.rows[res.rows.length - 1];
+    //   this.currentDraws = res.rows;
+    // });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;

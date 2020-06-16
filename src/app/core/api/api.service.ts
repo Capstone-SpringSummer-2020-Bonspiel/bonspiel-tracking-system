@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 const apiURL: string = environment.apiURL;
 // const apiURL = 'http://localhost:8080';
@@ -16,8 +17,16 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
+
+  private eventIdSource = new BehaviorSubject(1);  // Default to event ID 1
+  currentEventId = this.eventIdSource.asObservable();
+
   constructor(private httpClient: HttpClient) {
     console.log(`apiURL  ==>  ${apiURL}`);
+  }
+
+  changeEventId(newEventId: number) {
+    this.eventIdSource.next(newEventId);
   }
 
   public testAPI() {
@@ -45,5 +54,9 @@ export class ApiService {
       sql: query
     }
     return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
+  }
+
+  public getDraws(eventId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/draws`);
   }
 }
