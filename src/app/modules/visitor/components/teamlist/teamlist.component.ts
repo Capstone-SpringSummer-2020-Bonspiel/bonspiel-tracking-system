@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { count } from 'console';
 //import { Address } from 'cluster';
 
 @Component({
@@ -27,10 +28,7 @@ export class TeamlistComponent {
   displayedColumns = [
     'teamId',
     'teamName',
-    'teamTotalGame',
-    'teamWinGame',
-    'teamWinRate',
-    'teamMemberNumber',
+    'teamNote',
   ];
   expandedElement: Team | null;
   curlingteam = null;
@@ -54,19 +52,14 @@ export interface Member {
   memberImage: String;
   memberName: String;
   memberGender: String;
-  memberTotalGame: Number;
-  memberWinGame: Number;
-  memberWinRate: Number;
+  memberPosition: String;
 }
 
 export interface Team {
   teamId: Number;
   teamName: String;
-  teamTotalGame: Number;
-  teamWinGame: Number;
-  teamWinRate: Number;
+  teamNote: String;
   member: Member[];
-  teamMemberNumber;
 }
 
 const TEAM_DATA: Team[] = [];
@@ -76,32 +69,26 @@ var memberData: Member[] = [];
 for (let i = 1; i < 6; i++) {
   memberData = [];
   for (let n = 1; n < 5; n++) {
-    memberData.push({ memberImage: "abc", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
+    memberData.push({ memberImage: "abc", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
   }
   TEAM_DATA.push({
     teamId: i,
     teamName: `team_${i}`,
-    teamTotalGame: 10,
-    teamWinGame: 6,
-    teamWinRate: 0.6,
+    teamNote: "Nothing Special",
     member: memberData,
-    teamMemberNumber: 4,
   })
 }
 for (let i = 6; i < 15; i++) {
   for (let n = 1; n < 3; n++) {
     memberData = [];
-    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
-    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberTotalGame: 1, memberWinGame: 5, memberWinRate: 0.5 });
+    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
+    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
   }
   TEAM_DATA.push({
     teamId: i,
     teamName: `team_${i}`,
-    teamTotalGame: 10,
-    teamWinGame: 6,
-    teamWinRate: 0.6,
+    teamNote: "Nothing Special",
     member: memberData,
-    teamMemberNumber: 2,
   })
 }
 
