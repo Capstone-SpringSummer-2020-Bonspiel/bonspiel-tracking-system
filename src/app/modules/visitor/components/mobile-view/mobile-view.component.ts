@@ -35,7 +35,6 @@ export class MobileViewComponent implements OnInit {
     this.sort.direction = sortState.direction;
     this.sort.sortChange.emit(sortState);
     const start = new Date().getTime();
-    this.currentReq$ = this.apiService.testAPI().subscribe((res) => { });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -176,9 +175,6 @@ export class MobileViewComponent implements OnInit {
 
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
-    this.apiService.testAPI().subscribe((res) => {
-      console.log(res);
-    });
   }
 
   ngOnInit(): void { }

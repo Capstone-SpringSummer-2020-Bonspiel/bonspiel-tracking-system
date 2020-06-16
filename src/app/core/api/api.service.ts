@@ -29,10 +29,6 @@ export class ApiService {
     this.eventIdSource.next(newEventId);
   }
 
-  public testAPI() {
-    return this.httpClient.get('https://restcountries.eu/rest/v2/all'); // This returns an observable
-  }
-
   public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
     const body = {
       name: name,
