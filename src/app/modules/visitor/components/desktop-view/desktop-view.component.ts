@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
@@ -28,53 +28,97 @@ export class DesktopViewComponent implements OnInit {
     'final_score',
   ];
   standingsColumns = ['name', 'wins', 'losses'];
-  dataSourceDrawGames = BONSPIEL_DATA_DRAW_GAMES;
+  dataSourceDraws = [];
+  dataSourceGames = [];
   dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
 
   panelOpenState = false;
   currentReq$ = null;
 
   selectedDraw = null;
-  currentDraws = null;
+  allDraws = [];
+  allGames = [];
+  currentGames = [];
   currentEventId = null;
 
-  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    //this.dataSourceStandings.sort = this.sort;
-    // const sortState: Sort = { active: 'wins', direction: 'desc' };
-    // this.sort.active = sortState.active;
-    // this.sort.direction = sortState.direction;
-    // this.sort.sortChange.emit(sortState);
-
     this.spinner.on();
 
     // Get current event ID
     this.api
-      .currentEventId
+      .currentEventId$
       .subscribe((eventId) => {
         this.currentEventId = eventId;
+        this.currentEventId = 5;  // DEBUGGING
 
+        // Get current draws by event ID
         this.api
           .getDraws(this.currentEventId)
           .subscribe((res: any) => {
-            console.log('[DEBUG] ngOnInit() in desktop-view component:');
+            console.log('[DEBUG] draws:');
             console.log(res);
 
             this.selectedDraw = res[res.length - 1];
-            this.currentDraws = res;
+            this.allDraws = res;
 
-            this.spinner.off();
+            // Get all games by event ID
+            this.api
+              .getGames(this.currentEventId)
+              .subscribe((res: any) => {
+                console.log('[DEBUG] games');
+                console.log(res);
+
+                this.allGames = res;
+
+                // Add dataSource key-value pair for Scores Tab
+                for (let game of this.allGames) {
+                  game.dataSource = [
+                    {
+                      name: game.team_name1,
+                      home: '*',
+                      round_1: '5',
+                      round_2: '5',
+                      round_3: '5',
+                      round_4: '5',
+                      round_5: '5',
+                      round_6: '5',
+                      round_7: '5',
+                      round_8: '5',
+                      final_score: '5',
+                    },
+                    {
+                      name: game.team_name2,
+                      home: '*',
+                      round_1: '5',
+                      round_2: '5',
+                      round_3: '5',
+                      round_4: '5',
+                      round_5: '5',
+                      round_6: '5',
+                      round_7: '5',
+                      round_8: '5',
+                      final_score: '5',
+                    },
+                  ]
+                }
+
+                this.currentGames = this.allGames.filter(x => x.draw_id === this.selectedDraw.id);
+
+                console.log(`selectedDraw:`);
+                console.log(this.selectedDraw.id);
+                console.log(`allDraws:`);
+                console.log(this.allDraws);
+                console.log(`allGames:`);
+                console.log(this.allGames);
+                console.log(`currentGames:`);
+                console.log(this.currentGames);
+
+                this.spinner.off();
+              });
           });
       });
-
-    // .adHocQuery('SELECT * FROM public.draw ORDER BY id ASC')
-    // .subscribe((res: any) => {
-    //   console.log(res);
-
-    //   this.selectedDraw = res.rows[res.rows.length - 1];
-    //   this.currentDraws = res.rows;
-    // });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -118,9 +162,25 @@ export class DesktopViewComponent implements OnInit {
   convertToAlpha(num) {
     return String.fromCharCode(num + 65);
   }
-  onDrawSelected(value: string) {
-    console.log('the selected draw is ' + value);
-    this.selectedDraw = value;
+
+  onDrawSelected(event: any) {
+    console.log('the selected draw is:');
+    console.log(event.value);
+
+    // Set the current selected draw
+    this.selectedDraw = event.value;
+
+    console.log('BEFORE');
+    console.log(this.currentGames);
+    console.log(this.selectedDraw.id);
+
+    // Load games by draw ID
+    this.currentGames = this.allGames.filter((e) => e.draw_id === this.selectedDraw.id);
+
+    console.log('AFTER');
+    console.log(this.currentGames);
+
+    // this.cd.detectChanges();
   }
 }
 

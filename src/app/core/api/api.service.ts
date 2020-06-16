@@ -19,7 +19,7 @@ const httpOptions = {
 export class ApiService {
 
   private eventIdSource = new BehaviorSubject(1);  // Default to event ID 1
-  currentEventId = this.eventIdSource.asObservable();
+  currentEventId$ = this.eventIdSource.asObservable();
 
   constructor(private httpClient: HttpClient) {
     console.log(`apiURL  ==>  ${apiURL}`);
@@ -79,4 +79,8 @@ export class ApiService {
   public getScoresByEvent(eventId) {
     return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
   }
+
+  /********************************************************************/
+
+  // public
 }
