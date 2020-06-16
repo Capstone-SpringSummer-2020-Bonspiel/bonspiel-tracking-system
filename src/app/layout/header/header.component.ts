@@ -32,8 +32,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  toggleSidenav(foo: string): void {
-    this.sidenavToggle.emit(foo);
+  toggleSidenav(): void {
+    this.sidenavToggle.emit();
   }
 
   signIn() {

@@ -67,6 +67,8 @@ export class AppComponent {
   loadNewEvent(event: any) {
     console.log('[DEBUG] loadNewEvent() in app component:');
     console.log(event);
+
+    // this.api.changeEventId(event.id);
   }
 
   close(reason: string) {
