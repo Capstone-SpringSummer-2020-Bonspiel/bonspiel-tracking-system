@@ -27,35 +27,54 @@ export class DesktopViewComponent implements OnInit {
     'round_8',
     'final_score',
   ];
-
-  draws = ['Draw 1', 'Draw 2', 'Draw 3', 'Draw 4', 'Draw 5'];
-
   standingsColumns = ['name', 'wins', 'losses'];
-  dataSourceDraw = BONSPIEL_DATA_DRAW;
-  dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
-  dataSourceSelect = BONSPIEL_DATA_DRAW_ARR;
+  dataSourceDrawGames = BONSPIEL_DATA_DRAW_GAMES;
+  dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
 
   panelOpenState = false;
   currentReq$ = null;
 
   selectedDraw = null;
   currentDraws = null;
+  currentEventId = null;
 
-  constructor(private api: ApiService, public dialog: MatDialog) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
-    this.dataSourceStandings.sort = this.sort;
-    const sortState: Sort = { active: 'wins', direction: 'desc' };
-    this.sort.active = sortState.active;
-    this.sort.direction = sortState.direction;
-    this.sort.sortChange.emit(sortState);
+    //this.dataSourceStandings.sort = this.sort;
+    // const sortState: Sort = { active: 'wins', direction: 'desc' };
+    // this.sort.active = sortState.active;
+    // this.sort.direction = sortState.direction;
+    // this.sort.sortChange.emit(sortState);
 
-    this.api.adHocQuery('SELECT * FROM public.draw ORDER BY id ASC').subscribe((res: any) => {
-      console.log(res);
+    this.spinner.on();
 
-      this.selectedDraw = res.rows[res.rows.length - 1];
-      this.currentDraws = res.rows;
-    });
+    // Get current event ID
+    this.api
+      .currentEventId
+      .subscribe((eventId) => {
+        this.currentEventId = eventId;
+
+        this.api
+          .getDraws(this.currentEventId)
+          .subscribe((res: any) => {
+            console.log('[DEBUG] ngOnInit() in desktop-view component:');
+            console.log(res);
+
+            this.selectedDraw = res[res.length - 1];
+            this.currentDraws = res;
+
+            this.spinner.off();
+          });
+      });
+
+    // .adHocQuery('SELECT * FROM public.draw ORDER BY id ASC')
+    // .subscribe((res: any) => {
+    //   console.log(res);
+
+    //   this.selectedDraw = res.rows[res.rows.length - 1];
+    //   this.currentDraws = res.rows;
+    // });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -75,7 +94,7 @@ export class DesktopViewComponent implements OnInit {
     console.log(team);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
-      data: { youtube_link: team.youtube_link },
+      data: { youtube_link: team.video_url },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -95,11 +114,13 @@ export class DesktopViewComponent implements OnInit {
       Number(team.round_8)
     );
   }
-  onDrawSelected(value: any) {
-    console.log('the selected draw is:');
-    console.log(value.value)
 
-    this.selectedDraw = value.value;
+  convertToAlpha(num) {
+    return String.fromCharCode(num + 65);
+  }
+  onDrawSelected(value: string) {
+    console.log('the selected draw is ' + value);
+    this.selectedDraw = value;
   }
 }
 
@@ -133,7 +154,6 @@ export interface Standing {
 
 // Begin dummy data
 const BONSPIEL_DATA_GAME: Game[] = [];
-const BONSPIEL_DATA_GAME2: Game[] = [];
 
 for (let i = 1; i <= 2; i++) {
   BONSPIEL_DATA_GAME.push({
@@ -149,61 +169,50 @@ for (let i = 1; i <= 2; i++) {
     round_8: Math.floor(Math.random() * 10 + 1).toString(),
     final_score: '0',
   });
-  BONSPIEL_DATA_GAME2.push({
-    name: `team_${i}`,
-    home: i % 2 === 0 ? '*' : '',
-    round_1: Math.floor(Math.random() * 10 + 1).toString(),
-    round_2: Math.floor(Math.random() * 10 + 1).toString(),
-    round_3: Math.floor(Math.random() * 10 + 1).toString(),
-    round_4: Math.floor(Math.random() * 10 + 1).toString(),
-    round_5: Math.floor(Math.random() * 10 + 1).toString(),
-    round_6: Math.floor(Math.random() * 10 + 1).toString(),
-    round_7: Math.floor(Math.random() * 10 + 1).toString(),
-    round_8: Math.floor(Math.random() * 10 + 1).toString(),
-    final_score: '0',
-  });
 }
 
-const BONSPIEL_DATA_DRAW: Draw = {
-  name: 'Draw 1',
-  date: new Date(),
-  game_1: BONSPIEL_DATA_GAME,
-  game_2: BONSPIEL_DATA_GAME,
-  game_3: BONSPIEL_DATA_GAME,
-  youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
-};
-
-const BONSPIEL_DATA_DRAW2: Draw = {
-  name: 'Draw 2',
-  date: new Date(),
-  game_1: BONSPIEL_DATA_GAME2,
-  game_2: BONSPIEL_DATA_GAME2,
-  game_3: BONSPIEL_DATA_GAME2,
-  youtube_link: 'https://www.youtube.com/embed/Kwz-cicOUFk',
-};
-
-const BONSPIEL_DATA_DRAW_ARR: Draw[] = [];
-for (let i = 1; i <= 5; i++) {
-  BONSPIEL_DATA_DRAW_ARR.push({
-    name: `Draw ${i}`,
-    date: new Date(),
-    game_1: BONSPIEL_DATA_GAME,
-    game_2: BONSPIEL_DATA_GAME,
-    game_3: BONSPIEL_DATA_GAME,
-    youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
-  });
+var BONSPIEL_DATA_DRAW_GAMES: Game[][] = [];
+for (let i = 0; i < 3; i++) {
+  BONSPIEL_DATA_DRAW_GAMES.push([]);
+  for (let j = 0; j <= 1; j++) {
+    BONSPIEL_DATA_DRAW_GAMES[i].push({
+      name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
+      home: j % 2 === 0 ? '*' : '',
+      round_1: Math.floor(Math.random() * 10 + 1).toString(),
+      round_2: Math.floor(Math.random() * 10 + 1).toString(),
+      round_3: Math.floor(Math.random() * 10 + 1).toString(),
+      round_4: Math.floor(Math.random() * 10 + 1).toString(),
+      round_5: Math.floor(Math.random() * 10 + 1).toString(),
+      round_6: Math.floor(Math.random() * 10 + 1).toString(),
+      round_7: Math.floor(Math.random() * 10 + 1).toString(),
+      round_8: Math.floor(Math.random() * 10 + 1).toString(),
+      final_score: '0',
+    });
+  }
 }
+
 // Dummy data for a standing
 const BONSPIEL_DATA_STANDING: Standing[] = [];
+const BONSPIEL_DATA_STANDING2: Standing[] = [];
 
-for (let i = 1; i <= 10; i++) {
+for (let i = 1; i <= 6; i++) {
   BONSPIEL_DATA_STANDING.push({
     name: `team_${i}`,
     wins: Math.floor(Math.random() * 10 + 1).toString(),
     losses: Math.floor(Math.random() * 10 + 1).toString(),
   });
 }
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+for (let i = 1; i <= 6; i++) {
+  BONSPIEL_DATA_STANDING2.push({
+    name: `team_${i}`,
+    wins: Math.floor(Math.random() * 10 + 1).toString(),
+    losses: Math.floor(Math.random() * 10 + 1).toString(),
+  });
 }
+
+var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
+  BONSPIEL_DATA_STANDING,
+  BONSPIEL_DATA_STANDING2,
+  BONSPIEL_DATA_STANDING,
+  BONSPIEL_DATA_STANDING2,
+];

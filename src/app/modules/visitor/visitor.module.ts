@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 import { VisitorComponent } from './components/visitor/visitor.component';
 import { TeamDialogOverviewComponent } from './components/team-dialog-overview/team-dialog-overview.component';
@@ -48,7 +49,8 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
     MatSortModule,
     MatSelectModule,
     MatFormFieldModule,
+    FormsModule,
   ],
   exports: [VisitorComponent, YoutubeDialogComponent],
 })
-export class VisitorModule { }
+export class VisitorModule {}

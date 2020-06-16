@@ -10,7 +10,6 @@ import { NotificationService } from '@app/shared/services/notification.service';
   styleUrls: ['./visitor.component.scss'],
 })
 export class VisitorComponent implements OnInit {
-
   currentReq$ = null;
 
   innerWidth = 0;
