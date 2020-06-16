@@ -48,10 +48,10 @@ export class DesktopViewComponent implements OnInit {
 
   ngOnInit(): void {
     //this.dataSourceStandings.sort = this.sort;
-    const sortState: Sort = { active: 'wins', direction: 'desc' };
-    this.sort.active = sortState.active;
-    this.sort.direction = sortState.direction;
-    this.sort.sortChange.emit(sortState);
+    // const sortState: Sort = { active: 'wins', direction: 'desc' };
+    // this.sort.active = sortState.active;
+    // this.sort.direction = sortState.direction;
+    // this.sort.sortChange.emit(sortState);
 
     this.api
       .adHocQuery('SELECT * FROM public.draw ORDER BY id ASC')
@@ -60,8 +60,6 @@ export class DesktopViewComponent implements OnInit {
 
         this.selectedDraw = res.rows[res.rows.length - 1];
         this.currentDraws = res.rows;
-        console.log('selected draw' + this.selectedDraw);
-        console.log('current draw' + this.currentDraws);
       });
   }
 
@@ -82,7 +80,7 @@ export class DesktopViewComponent implements OnInit {
     console.log(team);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
-      data: { youtube_link: team.youtube_link },
+      data: { youtube_link: team.video_url },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -108,6 +106,7 @@ export class DesktopViewComponent implements OnInit {
   }
   onDrawSelected(value: string) {
     console.log('the selected draw is ' + value);
+    this.selectedDraw = value;
   }
 }
 

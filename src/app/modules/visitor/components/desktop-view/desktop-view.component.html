@@ -3,19 +3,19 @@
   <!-- Draw Header -->
   <div class="row">
     <div class="draw-header col-lg-12 d-flex justify-content-center">
-      <h2> {{dataSourceDraw.name}}: {{dataSourceDraw.date | date :'short'}}
-        <button mat-icon-button matTooltip="YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog(dataSourceDraw)">
-          <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
-        </button>
-      </h2>
-      <mat-form-field>
-        <mat-label>Draws</mat-label>
-        <mat-select class='select-option' #drawSelect (selectionChange)="onDrawSelected(drawSelect.value)">
-          <mat-option *ngFor="let draw of dataSourceSelect" [value]=draw.name>
-            {{draw.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="auto-width">
+        <mat-form-field>
+          <mat-label>Draws</mat-label>
+          <mat-select [(value)]="selectedDraw">
+            <mat-option *ngFor="let draw of currentDraws" [value]="draw">
+              {{draw.name}}: {{draw.start | date: 'shortTime'}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <button *ngIf="selectedDraw.video_url" mat-icon-button matTooltip=" YouTube Link" aria-label="YouTube link button" (click)="openYoutubeDialog(selectedDraw.video_url)">
+        <mat-icon style="vertical-align: middle"> live_tv </mat-icon>
+      </button>
     </div>
   </div>
 

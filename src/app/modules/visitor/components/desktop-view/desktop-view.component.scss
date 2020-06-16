@@ -56,3 +56,9 @@ $accent-color-2: #13778e;
 .mat-form-field {
   text-align: center;
 }
+
+::ng-deep.auto-width {
+  .mat-form-field {
+    width: auto !important;
+  }
+}
