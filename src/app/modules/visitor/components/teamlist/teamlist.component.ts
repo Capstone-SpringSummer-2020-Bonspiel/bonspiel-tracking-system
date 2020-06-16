@@ -3,6 +3,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 //import { Address } from 'cluster';
 
 @Component({
@@ -20,6 +21,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 
 
+
 export class TeamlistComponent {
   dataSource = TEAM_DATA;
   displayedColumns = [
@@ -31,10 +33,21 @@ export class TeamlistComponent {
     'teamMemberNumber',
   ];
   expandedElement: Team | null;
+  curlingteam = null;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+  constructor(private apiService: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.spinner.on();
+    const query1 = "SELECT * FROM public.curlingteam ORDER BY id ASC";
+
+    this.apiService.adHocQuery(query1).subscribe((res: any) => {
+      console.log(res);
+      console.log(res.rows);
+      this.curlingteam = res.rows;
+      this.spinner.off();
+    })
+  }
 }
 
 export interface Member {

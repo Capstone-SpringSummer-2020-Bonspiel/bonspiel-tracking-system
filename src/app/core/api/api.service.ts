@@ -40,7 +40,7 @@ export class ApiService {
     return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
   }
 
-  public adHocQuery(query) {
+  public adHocQuery(query: string) {
     const body = {
       sql: query
     }

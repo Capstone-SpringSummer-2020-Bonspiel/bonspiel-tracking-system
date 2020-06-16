@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
-//import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
   selector: 'app-schedule',
@@ -23,12 +25,32 @@ export class ScheduleComponent implements OnInit {
   ];
   columnsToDisplay: string[] = this.displayedColumns.slice();
 
+  selectedEvent = null;
+  currentEvent = null;
+  events = ["event0", "event1", "event2", "event3", "event4", "event5"];
   animal: string;
   name: string;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+  constructor(private apiService: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.spinner.on();
+    const query1 = "SELECT * FROM public.curlingevent ORDER BY id DESC";
+
+    this.apiService.adHocQuery(query1).subscribe((res: any) => {
+      console.log(res);
+
+      this.selectedEvent = res.rows[0];
+      // console.log(res.rows[0]);
+      this.currentEvent = res.rows;
+      // console.log("signal");
+      // console.log(this.currentEvent);
+
+      this.spinner.off();
+    })
+
+    const query2 = "SELECT * FROM public.curlingevent ORDER BY id DESC WHERE bracket_id = ";
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
@@ -40,6 +62,14 @@ export class ScheduleComponent implements OnInit {
       console.log('The dialog was closed');
       this.animal = result;
     });
+
+  }
+
+  eventSelected(value: any) {
+    console.log('the selected event is:');
+    console.log(value.value)
+
+    this.selectedEvent = value.value;
   }
 }
 
