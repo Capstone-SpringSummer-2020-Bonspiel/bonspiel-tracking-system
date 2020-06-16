@@ -33,10 +33,6 @@ export class ApiService {
     return this.httpClient.get('https://restcountries.eu/rest/v2/all'); // This returns an observable
   }
 
-  public fetchCurlingEvents() {
-    return this.httpClient.get(`${apiURL}/api/v1/fetch-curling-events`);
-  }
-
   public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
     const body = {
       name: name,
@@ -49,6 +45,8 @@ export class ApiService {
     return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
   }
 
+  /********************************************************************/
+
   public adHocQuery(query) {
     const body = {
       sql: query
@@ -56,7 +54,33 @@ export class ApiService {
     return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
   }
 
+  /********************************************************************/
+
+  public getEvents() {
+    return this.httpClient.get(`${apiURL}/api/v1/events`);
+  }
+
+  public getTeams(eventId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams`);
+  }
+
+  public getGames(eventId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/games`);
+  }
+
   public getDraws(eventId) {
     return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/draws`);
+  }
+
+  public getGamesByTeam(eventId, teamId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams/${teamId}/games`);
+  }
+
+  public getScoresByTeam(eventId, teamId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams/${teamId}/scores`);
+  }
+
+  public getScoresByEvent(eventId) {
+    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
   }
 }
