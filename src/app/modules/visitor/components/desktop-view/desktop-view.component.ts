@@ -27,16 +27,9 @@ export class DesktopViewComponent implements OnInit {
     'round_8',
     'final_score',
   ];
-
-  draws = ['Draw 1', 'Draw 2', 'Draw 3', 'Draw 4', 'Draw 5'];
-
-  BONSPIEL_DATA_ALL_STANDING: Standing[][] = [];
   standingsColumns = ['name', 'wins', 'losses'];
-  dataSourceDraw = BONSPIEL_DATA_DRAW;
   dataSourceDrawGames = BONSPIEL_DATA_DRAW_GAMES;
-  //dataSourceStandings = new MatTableDataSource(BONSPIEL_DATA_STANDING);
   dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
-  dataSourceSelect = BONSPIEL_DATA_DRAW_ARR;
 
   panelOpenState = false;
   currentReq$ = null;
@@ -138,12 +131,6 @@ export interface Standing {
   losses: string;
 }
 
-export interface Draw2 {
-  name: string;
-  date: Date;
-  youtube_link: string;
-}
-
 // Begin dummy data
 const BONSPIEL_DATA_GAME: Game[] = [];
 
@@ -183,26 +170,6 @@ for (let i = 0; i < 3; i++) {
   }
 }
 
-const BONSPIEL_DATA_DRAW: Draw = {
-  name: 'Draw 1',
-  date: new Date(),
-  game_1: BONSPIEL_DATA_GAME,
-  game_2: BONSPIEL_DATA_GAME,
-  game_3: BONSPIEL_DATA_GAME,
-  youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
-};
-
-const BONSPIEL_DATA_DRAW_ARR: Draw[] = [];
-for (let i = 1; i <= 5; i++) {
-  BONSPIEL_DATA_DRAW_ARR.push({
-    name: `Draw ${i}`,
-    date: new Date(),
-    game_1: BONSPIEL_DATA_GAME,
-    game_2: BONSPIEL_DATA_GAME,
-    game_3: BONSPIEL_DATA_GAME,
-    youtube_link: 'https://www.youtube.com/embed/zesl6jZnSDM',
-  });
-}
 // Dummy data for a standing
 const BONSPIEL_DATA_STANDING: Standing[] = [];
 const BONSPIEL_DATA_STANDING2: Standing[] = [];
@@ -228,7 +195,3 @@ var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
   BONSPIEL_DATA_STANDING,
   BONSPIEL_DATA_STANDING2,
 ];
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
