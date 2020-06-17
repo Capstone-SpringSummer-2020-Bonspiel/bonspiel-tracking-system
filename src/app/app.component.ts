@@ -35,6 +35,9 @@ export class AppComponent {
         for (const event of events) {
           this.curlingEvents.push(event);
         }
+
+        console.log('[DEBUG] curlingEvents');
+        console.log(this.curlingEvents);
       });
   }
 

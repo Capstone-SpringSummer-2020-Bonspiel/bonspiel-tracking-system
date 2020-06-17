@@ -16,7 +16,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 export class DesktopViewComponent implements OnInit {
   displayedColumns = [
     'name',
-    'home',
+    // 'home',
     'round_1',
     'round_2',
     'round_3',
@@ -80,7 +80,7 @@ export class DesktopViewComponent implements OnInit {
                   game.dataSource = [
                     {
                       name: game.team_name1,
-                      home: '*',
+                      // home: '*',
                       round_1: '5',
                       round_2: '5',
                       round_3: '5',
@@ -93,7 +93,7 @@ export class DesktopViewComponent implements OnInit {
                     },
                     {
                       name: game.team_name2,
-                      home: '*',
+                      // home: '*',
                       round_1: '5',
                       round_2: '5',
                       round_3: '5',
@@ -182,14 +182,12 @@ export class DesktopViewComponent implements OnInit {
 
     console.log('AFTER');
     console.log(this.currentGames);
-
-    // this.cd.detectChanges();
   }
 }
 
 export interface Game {
   name: string;
-  home: string;
+  // home: string;
   round_1: string;
   round_2: string;
   round_3: string;
@@ -221,7 +219,7 @@ const BONSPIEL_DATA_GAME: Game[] = [];
 for (let i = 1; i <= 2; i++) {
   BONSPIEL_DATA_GAME.push({
     name: `team_${i}`,
-    home: i % 2 === 0 ? '*' : '',
+    // home: i % 2 === 0 ? '*' : '',
     round_1: Math.floor(Math.random() * 10 + 1).toString(),
     round_2: Math.floor(Math.random() * 10 + 1).toString(),
     round_3: Math.floor(Math.random() * 10 + 1).toString(),
@@ -240,7 +238,7 @@ for (let i = 0; i < 3; i++) {
   for (let j = 0; j <= 1; j++) {
     BONSPIEL_DATA_DRAW_GAMES[i].push({
       name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
-      home: j % 2 === 0 ? '*' : '',
+      // home: j % 2 === 0 ? '*' : '',
       round_1: Math.floor(Math.random() * 10 + 1).toString(),
       round_2: Math.floor(Math.random() * 10 + 1).toString(),
       round_3: Math.floor(Math.random() * 10 + 1).toString(),

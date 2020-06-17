@@ -10,7 +10,8 @@
       <!-- <button class="btn btn-link" (click)="router.navigateByUrl(link.path)" style="outline: none"> -->
       <button class="btn btn-link"
         (click)="loadNewEvent(curlingEvent)"
-        style="outline: none">
+        style="outline: none"
+        matTooltip="{{ curlingEvent.begin_date | date: 'fullDate' }}">
         <!-- <mat-icon class="pr-1"> {{ link.icon }} </mat-icon> -->
         <span> {{ curlingEvent.name }} </span>
       </button>

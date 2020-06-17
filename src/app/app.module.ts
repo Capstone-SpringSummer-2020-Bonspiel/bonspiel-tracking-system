@@ -18,6 +18,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastrModule } from 'ngx-toastr';
 import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
 
@@ -36,6 +37,7 @@ import { ScheduleComponent } from './modules/visitor/components/schedule/schedul
     SharedModule,
     MatSidenavModule,
     MatCheckboxModule,
+    MatTooltipModule,
     ToastrModule.forRoot(),
   ],
   providers: [ApiService],

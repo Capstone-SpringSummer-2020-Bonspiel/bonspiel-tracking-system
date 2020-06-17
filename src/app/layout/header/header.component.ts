@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
       for (const event of events) {
         this.currentEvents.push(event);
       }
-    })
+    });
   }
 
   signIn() {
