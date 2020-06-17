@@ -45,7 +45,7 @@ export class DesktopViewComponent implements OnInit {
   selectedPoolID = null;
   allDraws = [];
   allGames = [];
-  allStandings = [];
+  buckets = [];
   currentGames = [];
   currentStandings = [];
   currentEventId = null;
@@ -132,43 +132,48 @@ export class DesktopViewComponent implements OnInit {
                 console.log(`[DEBUG] currentGames:`);
                 console.log(this.currentGames);
 
-                let allStandings = [];
+                let buckets = {};
                 for (let game of this.allGames) {
                   if (isNaN(game.winner)) {
                     continue;
                   }
-                  if (!allStandings.hasOwnProperty(game.curlingteam1_id)) {
-                    allStandings[game.curlingteam1_id] = {
-                      pool_id: game.pool_id,
+
+                  if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
+                    buckets[game.curlingteam1_id] = {
                       name: game.team_name1,
                       wins: 0,
                       losses: 0,
+                      pool_id: game.pool_id,
                     };
                   }
-                  if (!allStandings.hasOwnProperty(game.curlingteam2_id)) {
-                    allStandings[game.curlingteam2_id] = {
-                      pool_id: game.pool_id,
+
+                  if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
+                    buckets[game.curlingteam2_id] = {
                       name: game.team_name2,
                       wins: 0,
                       losses: 0,
+                      pool_id: game.pool_id,
                     };
                   }
+
                   if (game.winner === game.curlingteam1_id) {
-                    allStandings[game.curlingteam1_id].wins++;
-                    allStandings[game.curlingteam2_id].losses++;
+                    buckets[game.curlingteam1_id].wins++;
+                    buckets[game.curlingteam2_id].losses++;
                   } else {
-                    allStandings[game.curlingteam2_id].wins++;
-                    allStandings[game.curlingteam1_id].losses++;
+                    buckets[game.curlingteam2_id].wins++;
+                    buckets[game.curlingteam1_id].losses++;
                   }
                 }
-                console.log(`allStandings:`);
-                console.log(allStandings);
 
-                this.currentStandings = this.allStandings.filter((x) => {
-                  return x.pool_id === 1;
+                console.log(`buckets:`);
+                console.log(buckets);
 
-                  this.spinner.off();
-                });
+                let arr = Object.keys(buckets).map((key) => [Number(key), buckets[key]]);
+                let arr2: Standing[] = arr.map((e) => e[1]);
+                this.dataSourceAllStandings.length = 0;  // Clear array
+                this.dataSourceAllStandings.push(arr2);  // Re-populate array
+
+                this.spinner.off();
               });
           });
       });
@@ -186,12 +191,11 @@ export class DesktopViewComponent implements OnInit {
     });
   }
 
-  openYoutubeDialog(team): void {
-    console.log(`team  ==>  `);
-    console.log(team);
+  openYoutubeDialog(video_url): void {
+    console.log(`video_url  ==>  ${video_url}`);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
-      data: { youtube_link: team.video_url },
+      data: { youtube_link: video_url },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -261,71 +265,72 @@ export interface Draw {
 }
 export interface Standing {
   name: string;
-  wins: string;
-  losses: string;
+  wins: number;
+  losses: number;
+  pool_id: number;
 }
 
-// Begin dummy data
-const BONSPIEL_DATA_GAME: Game[] = [];
+// // Begin dummy data
+// const BONSPIEL_DATA_GAME: Game[] = [];
 
-for (let i = 1; i <= 2; i++) {
-  BONSPIEL_DATA_GAME.push({
-    name: `team_${i}`,
-    // home: i % 2 === 0 ? '*' : '',
-    round_1: Math.floor(Math.random() * 10 + 1).toString(),
-    round_2: Math.floor(Math.random() * 10 + 1).toString(),
-    round_3: Math.floor(Math.random() * 10 + 1).toString(),
-    round_4: Math.floor(Math.random() * 10 + 1).toString(),
-    round_5: Math.floor(Math.random() * 10 + 1).toString(),
-    round_6: Math.floor(Math.random() * 10 + 1).toString(),
-    round_7: Math.floor(Math.random() * 10 + 1).toString(),
-    round_8: Math.floor(Math.random() * 10 + 1).toString(),
-    final_score: '0',
-  });
-}
+// for (let i = 1; i <= 2; i++) {
+//   BONSPIEL_DATA_GAME.push({
+//     name: `team_${i}`,
+//     // home: i % 2 === 0 ? '*' : '',
+//     round_1: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_2: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_3: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_4: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_5: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_6: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_7: Math.floor(Math.random() * 10 + 1).toString(),
+//     round_8: Math.floor(Math.random() * 10 + 1).toString(),
+//     final_score: '0',
+//   });
+// }
 
-var BONSPIEL_DATA_DRAW_GAMES: Game[][] = [];
-for (let i = 0; i < 3; i++) {
-  BONSPIEL_DATA_DRAW_GAMES.push([]);
-  for (let j = 0; j <= 1; j++) {
-    BONSPIEL_DATA_DRAW_GAMES[i].push({
-      name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
-      // home: j % 2 === 0 ? '*' : '',
-      round_1: Math.floor(Math.random() * 10 + 1).toString(),
-      round_2: Math.floor(Math.random() * 10 + 1).toString(),
-      round_3: Math.floor(Math.random() * 10 + 1).toString(),
-      round_4: Math.floor(Math.random() * 10 + 1).toString(),
-      round_5: Math.floor(Math.random() * 10 + 1).toString(),
-      round_6: Math.floor(Math.random() * 10 + 1).toString(),
-      round_7: Math.floor(Math.random() * 10 + 1).toString(),
-      round_8: Math.floor(Math.random() * 10 + 1).toString(),
-      final_score: '0',
-    });
-  }
-}
+// var BONSPIEL_DATA_DRAW_GAMES: Game[][] = [];
+// for (let i = 0; i < 3; i++) {
+//   BONSPIEL_DATA_DRAW_GAMES.push([]);
+//   for (let j = 0; j <= 1; j++) {
+//     BONSPIEL_DATA_DRAW_GAMES[i].push({
+//       name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
+//       // home: j % 2 === 0 ? '*' : '',
+//       round_1: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_2: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_3: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_4: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_5: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_6: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_7: Math.floor(Math.random() * 10 + 1).toString(),
+//       round_8: Math.floor(Math.random() * 10 + 1).toString(),
+//       final_score: '0',
+//     });
+//   }
+// }
 
-// Dummy data for a standing
-const BONSPIEL_DATA_STANDING: Standing[] = [];
-const BONSPIEL_DATA_STANDING2: Standing[] = [];
+// // Dummy data for a standing
+// const BONSPIEL_DATA_STANDING: Standing[] = [];
+// const BONSPIEL_DATA_STANDING2: Standing[] = [];
 
-for (let i = 1; i <= 6; i++) {
-  BONSPIEL_DATA_STANDING.push({
-    name: `team_${i}`,
-    wins: Math.floor(Math.random() * 10 + 1).toString(),
-    losses: Math.floor(Math.random() * 10 + 1).toString(),
-  });
-}
-for (let i = 1; i <= 6; i++) {
-  BONSPIEL_DATA_STANDING2.push({
-    name: `team_${i}`,
-    wins: Math.floor(Math.random() * 10 + 1).toString(),
-    losses: Math.floor(Math.random() * 10 + 1).toString(),
-  });
-}
+// for (let i = 1; i <= 6; i++) {
+//   BONSPIEL_DATA_STANDING.push({
+//     name: `team_${i}`,
+//     wins: Math.floor(Math.random() * 10 + 1).toString(),
+//     losses: Math.floor(Math.random() * 10 + 1).toString(),
+//   });
+// }
+// for (let i = 1; i <= 6; i++) {
+//   BONSPIEL_DATA_STANDING2.push({
+//     name: `team_${i}`,
+//     wins: Math.floor(Math.random() * 10 + 1).toString(),
+//     losses: Math.floor(Math.random() * 10 + 1).toString(),
+//   });
+// }
 
-var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
-  BONSPIEL_DATA_STANDING,
-  BONSPIEL_DATA_STANDING2,
-  BONSPIEL_DATA_STANDING,
-  BONSPIEL_DATA_STANDING2,
-];
+// var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
+//   BONSPIEL_DATA_STANDING,
+//   BONSPIEL_DATA_STANDING2,
+//   BONSPIEL_DATA_STANDING,
+//   BONSPIEL_DATA_STANDING2,
+// ];
