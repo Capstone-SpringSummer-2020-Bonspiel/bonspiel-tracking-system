@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
@@ -30,98 +36,151 @@ export class DesktopViewComponent implements OnInit {
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraws = [];
   dataSourceGames = [];
-  dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
+  dataSourceAllStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
 
   selectedDraw = null;
+  selectedPoolID = null;
   allDraws = [];
   allGames = [];
+  allStandings = [];
   currentGames = [];
+  currentStandings = [];
   currentEventId = null;
 
-  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private api: ApiService,
+    public dialog: MatDialog,
+    private spinner: SpinnerService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.spinner.on();
 
     // Get current event ID
-    this.api
-      .currentEventId$
-      .subscribe((eventId) => {
-        this.spinner.on();
+    this.api.currentEventId$.subscribe((eventId) => {
+      this.spinner.on();
 
-        this.currentEventId = eventId;
-        // this.currentEventId = 5;  // DEBUGGING
-        console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
+      this.currentEventId = eventId;
+      // this.currentEventId = 5;  // DEBUGGING
+      console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
 
-        // Get current draws by event ID
-        this.api
-          .getDraws(this.currentEventId)
-          .subscribe((res: any) => {
-            console.log('[DEBUG] draws:');
-            console.log(res);
+      // Get current draws by event ID
+      this.api.getDraws(this.currentEventId).subscribe((res: any) => {
+        console.log('[DEBUG] draws:');
+        console.log(res);
 
-            this.selectedDraw = res[res.length - 1];
-            this.allDraws = res;
+        this.selectedDraw = res[res.length - 1];
+        this.allDraws = res;
 
-            // Get all games by event ID
-            this.api
-              .getGames(this.currentEventId)
-              .subscribe((res: any) => {
-                console.log('[DEBUG] games');
-                console.log(res);
+        // Get all games by event ID
+        this.api.getGames(this.currentEventId).subscribe((res: any) => {
+          console.log('[DEBUG] games');
+          console.log(res);
 
-                this.allGames = res;
+          this.allGames = res;
 
-                // Add dataSource key-value pair for Scores Tab
-                for (let game of this.allGames) {
-                  game.dataSource = [
-                    {
-                      name: game.team_name1,
-                      home: '*',
-                      round_1: '5',
-                      round_2: '5',
-                      round_3: '5',
-                      round_4: '5',
-                      round_5: '5',
-                      round_6: '5',
-                      round_7: '5',
-                      round_8: '5',
-                      final_score: '5',
-                    },
-                    {
-                      name: game.team_name2,
-                      home: '*',
-                      round_1: '5',
-                      round_2: '5',
-                      round_3: '5',
-                      round_4: '5',
-                      round_5: '5',
-                      round_6: '5',
-                      round_7: '5',
-                      round_8: '5',
-                      final_score: '5',
-                    },
-                  ]
-                }
+          // Add dataSource key-value pair for Scores Tab
+          for (let game of this.allGames) {
+            game.dataSource = [
+              {
+                name: game.team_name1,
+                home: '*',
+                round_1: '5',
+                round_2: '5',
+                round_3: '5',
+                round_4: '5',
+                round_5: '5',
+                round_6: '5',
+                round_7: '5',
+                round_8: '5',
+                final_score: '5',
+              },
+              {
+                name: game.team_name2,
+                home: '*',
+                round_1: '5',
+                round_2: '5',
+                round_3: '5',
+                round_4: '5',
+                round_5: '5',
+                round_6: '5',
+                round_7: '5',
+                round_8: '5',
+                final_score: '5',
+              },
+            ];
+          }
 
-                this.currentGames = this.allGames.filter(x => x.draw_id === this.selectedDraw.id);
+          this.currentGames = this.allGames.filter(
+            (x) => x.draw_id === this.selectedDraw.id
+          );
 
-                console.log(`[DEBUG] selectedDraw:`);
-                console.log(this.selectedDraw);
-                console.log(`[DEBUG] allDraws:`);
-                console.log(this.allDraws);
-                console.log(`[DEBUG] allGames:`);
-                console.log(this.allGames);
-                console.log(`[DEBUG] currentGames:`);
-                console.log(this.currentGames);
+          console.log(`[DEBUG] selectedDraw:`);
+          console.log(this.selectedDraw);
+          console.log(`[DEBUG] allDraws:`);
+          console.log(this.allDraws);
+          console.log(`[DEBUG] allGames:`);
+          console.log(this.allGames);
+          console.log(`[DEBUG] currentGames:`);
+          console.log(this.currentGames);
 
-                this.spinner.off();
-              });
+          let allStandings = [];
+          for (let game of this.allGames) {
+            if (isNaN(game.winner)) {
+              continue;
+            }
+            if (!allStandings.hasOwnProperty(game.curlingteam1_id)) {
+              allStandings[game.curlingteam1_id] = {
+                pool_id: game.pool_id,
+                name: game.team_name1,
+                wins: 0,
+                losses: 0,
+              };
+            }
+            if (!allStandings.hasOwnProperty(game.curlingteam2_id)) {
+              allStandings[game.curlingteam2_id] = {
+                pool_id: game.pool_id,
+                name: game.team_name2,
+                wins: 0,
+                losses: 0,
+              };
+            }
+            if (game.winner === game.curlingteam1_id) {
+              allStandings[game.curlingteam1_id].wins++;
+              allStandings[game.curlingteam2_id].losses++;
+            } else {
+              allStandings[game.curlingteam2_id].wins++;
+              allStandings[game.curlingteam1_id].losses++;
+            }
+          }
+          console.log(`allStandings:`);
+          console.log(allStandings);
+
+          this.currentStandings = this.allStandings.filter(function (x) {
+            return x.pool_id === 1;
           });
+
+          console.log(`currentStandings`);
+          console.log(this.currentStandings);
+
+          let arr = Object.keys(allStandings).map((key) => [
+            Number(key),
+            allStandings[key],
+          ]);
+          let arr2: Standing[] = arr.map((e) => e[1]);
+          this.dataSourceAllStandings.push(arr2);
+
+          console.log(`dataSourceAllStandings`);
+          console.log(this.dataSourceAllStandings);
+
+          this.spinner.off();
+        });
       });
+    });
   }
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -178,7 +237,9 @@ export class DesktopViewComponent implements OnInit {
     console.log(this.selectedDraw.id);
 
     // Load games by draw ID
-    this.currentGames = this.allGames.filter((e) => e.draw_id === this.selectedDraw.id);
+    this.currentGames = this.allGames.filter(
+      (e) => e.draw_id === this.selectedDraw.id
+    );
 
     console.log('AFTER');
     console.log(this.currentGames);
