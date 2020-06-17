@@ -21,8 +21,8 @@ export class ApiService {
   private eventIdSource = new BehaviorSubject(1);  // Default to event ID 1
   currentEventId$ = this.eventIdSource.asObservable();
 
-  private eventSource = new BehaviorSubject([]);
-  currentEvents$ = this.eventSource.asObservable();
+  private eventSource = new BehaviorSubject(null);
+  currentEvent$ = this.eventSource.asObservable();
 
   constructor(private httpClient: HttpClient) {
     console.log(`apiURL  ==>  ${apiURL}`);
@@ -30,6 +30,10 @@ export class ApiService {
 
   changeEventId(newEventId: number) {
     this.eventIdSource.next(newEventId);
+  }
+
+  changeEvent(newEvent: any) {
+    this.eventSource.next(newEvent);
   }
 
   public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
@@ -85,5 +89,5 @@ export class ApiService {
 
   /********************************************************************/
 
-  // public
+
 }

@@ -24,11 +24,14 @@ export class AppComponent {
   constructor(public router: Router, private api: ApiService) { }
 
   ngOnInit() {
+
     // Get all curling events
     this.api
       .getEvents()
       .subscribe((res: any) => {
-        this.curlingEvents.length = 0;  // Clear array
+
+        // Clear array
+        this.curlingEvents.length = 0;
 
         // Re-populate the array
         const events: any = res;
@@ -36,21 +39,29 @@ export class AppComponent {
           this.curlingEvents.push(event);
         }
 
+        // Set the current event
+        this.api
+          .currentEventId$
+          .subscribe((eventId) => {
+            this.api.changeEvent(this.curlingEvents.find((e) => e.id === eventId));
+          });
+
         console.log('[DEBUG] curlingEvents');
         console.log(this.curlingEvents);
       });
   }
 
-  loadNewEvent(event: any) {
+  loadNewEvent(newEvent: any) {
     console.log('[DEBUG] loadNewEvent() in app component:');
-    console.log(event);
+    console.log(newEvent);
 
     // Redirect to Home page
     if (this.router.url !== '/') {
       this.router.navigateByUrl('/')
     }
 
-    this.api.changeEventId(event.id);
+    this.api.changeEventId(newEvent.id);
+    this.api.changeEvent(this.curlingEvents.find((e) => e.id === newEvent.id));
     this.sidenav.close();
   }
 

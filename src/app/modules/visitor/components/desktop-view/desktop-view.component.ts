@@ -49,6 +49,7 @@ export class DesktopViewComponent implements OnInit {
   currentGames = [];
   currentStandings = [];
   currentEventId = null;
+  currentEvent = null;
 
   constructor(
     private api: ApiService,
@@ -69,6 +70,13 @@ export class DesktopViewComponent implements OnInit {
         this.currentEventId = eventId;
         // this.currentEventId = 5;  // DEBUGGING
         console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
+
+        // Get current event name
+        this.api
+          .currentEvent$
+          .subscribe((currentEvent) => {
+            this.currentEvent = currentEvent;
+          });
 
         // Get current draws by event ID
         this.api
@@ -132,6 +140,7 @@ export class DesktopViewComponent implements OnInit {
                 console.log(`[DEBUG] currentGames:`);
                 console.log(this.currentGames);
 
+                // Populate all standings
                 let buckets = {};
                 for (let game of this.allGames) {
                   if (isNaN(game.winner)) {
@@ -269,68 +278,3 @@ export interface Standing {
   losses: number;
   pool_id: number;
 }
-
-// // Begin dummy data
-// const BONSPIEL_DATA_GAME: Game[] = [];
-
-// for (let i = 1; i <= 2; i++) {
-//   BONSPIEL_DATA_GAME.push({
-//     name: `team_${i}`,
-//     // home: i % 2 === 0 ? '*' : '',
-//     round_1: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_2: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_3: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_4: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_5: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_6: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_7: Math.floor(Math.random() * 10 + 1).toString(),
-//     round_8: Math.floor(Math.random() * 10 + 1).toString(),
-//     final_score: '0',
-//   });
-// }
-
-// var BONSPIEL_DATA_DRAW_GAMES: Game[][] = [];
-// for (let i = 0; i < 3; i++) {
-//   BONSPIEL_DATA_DRAW_GAMES.push([]);
-//   for (let j = 0; j <= 1; j++) {
-//     BONSPIEL_DATA_DRAW_GAMES[i].push({
-//       name: `Team ${String.fromCharCode(i * 2 + j * 1 + 65)}`,
-//       // home: j % 2 === 0 ? '*' : '',
-//       round_1: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_2: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_3: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_4: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_5: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_6: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_7: Math.floor(Math.random() * 10 + 1).toString(),
-//       round_8: Math.floor(Math.random() * 10 + 1).toString(),
-//       final_score: '0',
-//     });
-//   }
-// }
-
-// // Dummy data for a standing
-// const BONSPIEL_DATA_STANDING: Standing[] = [];
-// const BONSPIEL_DATA_STANDING2: Standing[] = [];
-
-// for (let i = 1; i <= 6; i++) {
-//   BONSPIEL_DATA_STANDING.push({
-//     name: `team_${i}`,
-//     wins: Math.floor(Math.random() * 10 + 1).toString(),
-//     losses: Math.floor(Math.random() * 10 + 1).toString(),
-//   });
-// }
-// for (let i = 1; i <= 6; i++) {
-//   BONSPIEL_DATA_STANDING2.push({
-//     name: `team_${i}`,
-//     wins: Math.floor(Math.random() * 10 + 1).toString(),
-//     losses: Math.floor(Math.random() * 10 + 1).toString(),
-//   });
-// }
-
-// var BONSPIEL_DATA_ALL_STANDING: Standing[][] = [
-//   BONSPIEL_DATA_STANDING,
-//   BONSPIEL_DATA_STANDING2,
-//   BONSPIEL_DATA_STANDING,
-//   BONSPIEL_DATA_STANDING2,
-// ];

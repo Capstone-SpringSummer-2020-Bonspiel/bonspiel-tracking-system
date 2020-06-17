@@ -1,5 +1,12 @@
 <div class="container">
 
+  <!-- Event Header -->
+  <div class="row">
+    <div class="col-lg-12 d-flex justify-content-center align-self-center my-3">
+      <h1>{{currentEvent.name}}</h1>
+    </div>
+  </div>
+
   <!-- Draw Header -->
   <div class="row">
     <div class="draw-header col-lg-3 offset-lg-3 d-flex justify-content-center">
@@ -17,7 +24,7 @@
       </div>
     </div>
     <div class="col-lg-6">
-      <button *ngIf="selectedDraw.video_url"
+      <button *ngIf="selectedDraw && selectedDraw.video_url"
         mat-icon-button
         matTooltip=" YouTube Link"
         aria-label="YouTube link button"
