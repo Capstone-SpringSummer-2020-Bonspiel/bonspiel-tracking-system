@@ -34,7 +34,7 @@ export class ScheduleComponent implements OnInit {
     console.log("ABCDEFG");
     console.log(SCHEDULE_DATA1);
     this.api
-      .currentEventId
+      .currentEventId$
       .subscribe((eventId) => {
         this.currentEventId = eventId;
 
