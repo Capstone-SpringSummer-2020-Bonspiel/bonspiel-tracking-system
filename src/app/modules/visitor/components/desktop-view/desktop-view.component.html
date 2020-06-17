@@ -4,7 +4,7 @@
   <div *ngIf="currentEvent && currentEvent.name"
     class="row">
     <div class="col-lg-12 d-flex justify-content-center align-self-center my-3">
-      <h1>{{currentEvent.name}}</h1>
+      <h1> {{currentEvent.name}} </h1>
     </div>
   </div>
 
@@ -41,7 +41,7 @@
       <!-- Game Card -->
       <mat-card class="m-2 mat-elevation-z8"
         *ngFor="let game of currentGames; index as i">
-        <mat-card-title style="text-align: center">Sheet {{convertToAlpha(i)}}: {{game.team_name1}} vs {{game.team_name2}} </mat-card-title>
+        <mat-card-title style="text-align: center"> Sheet {{convertToAlpha(i)}}: {{game.team_name1}} vs {{game.team_name2}} </mat-card-title>
 
         <!-- Tab Group -->
         <mat-tab-group mat-align-tabs="center">
@@ -163,12 +163,12 @@
 
       <!-- Standings Card -->
       <mat-card class="m-2 mat-elevation-z8">
-        <mat-card-title style="text-align: center">Team Standings</mat-card-title>
+        <mat-card-title style="text-align: center"> Team Standings </mat-card-title>
         <mat-tab-group mat-align-tabs="center">
-          <mat-tab *ngFor="let pool of dataSourceAllStandings; index as i"
-            label="Pool {{i+1}}">
+          <mat-tab *ngFor="let item of dataSourceAllStandings; index as i"
+            label="{{item.type}} {{item.id}}">
             <table mat-table
-              [dataSource]="dataSourceAllStandings[i]"
+              [dataSource]="item.teams"
               matSort>
 
               <!-- Team Name Column -->

@@ -150,18 +150,22 @@ export class DesktopViewComponent implements OnInit {
                   if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
                     buckets[game.curlingteam1_id] = {
                       name: game.team_name1,
+                      team_id: game.curlingteam1_id,
                       wins: 0,
                       losses: 0,
                       pool_id: game.pool_id,
+                      bracket_id: game.bracket_id,
                     };
                   }
 
                   if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
                     buckets[game.curlingteam2_id] = {
                       name: game.team_name2,
+                      team_id: game.curlingteam2_id,
                       wins: 0,
                       losses: 0,
                       pool_id: game.pool_id,
+                      bracket_id: game.bracket_id,
                     };
                   }
 
@@ -174,13 +178,69 @@ export class DesktopViewComponent implements OnInit {
                   }
                 }
 
-                console.log(`buckets:`);
+                console.log('[DEBUG] buckets:');
                 console.log(buckets);
 
-                let arr = Object.keys(buckets).map((key) => [Number(key), buckets[key]]);
-                let arr2: Standing[] = arr.map((e) => e[1]);
+                // Convert object to array
+                let arr = Object.keys(buckets).map((key) => buckets[key]);
+
+                console.log('[DEBUG] arr:');
+                console.log(arr);
+
+                const A = [];
+                for (const team of arr) {
+
+                  // Add a new container for each pool ID if it does not already exist
+                  if (team.pool_id !== null && A.filter(e => e.type === 'Pool' && e.id === team.pool_id).length === 0) {
+                    A.push({
+                      type: 'Pool',
+                      id: team.pool_id,
+                      teams: []
+                    });
+                  }
+
+                  // Add a a new container for each bracket ID if it does not already exist
+                  if (team.bracket_id !== null && A.filter(e => e.type === 'Bracket' && e.id === team.bracket_id).length === 0) {
+                    A.push({
+                      type: 'Bracket',
+                      id: team.bracket_id,
+                      teams: []
+                    });
+                  }
+
+                  // Add a a new, special container for games that don't have a pool_id & bracket_id
+                  if (A.filter(e => e.type === 'Other').length === 0) {
+                    A.push({
+                      type: 'Other',
+                      id: '',
+                      teams: []
+                    });
+                  }
+
+                  // Add teams to the corresponding pool container ...
+                  if (team.pool_id !== null) {
+                    A.find(e => e.type === 'Pool' && e.id === team.pool_id).teams.push(team);
+                  }
+
+                  // ... or bracket container ...
+                  else if (team.bracket_id !== null) {
+                    A.find(e => e.type === 'Bracket' && e.id === team.bracket_id).teams.push(team);
+                  }
+
+                  // ... or other container
+                  else {
+                    A.find(e => e.type === 'Other').teams.push(team);
+                  }
+                }
+
+                console.log('[DEBUG] A:');
+                console.log(A);
+
                 this.dataSourceAllStandings.length = 0;  // Clear array
-                this.dataSourceAllStandings.push(arr2);  // Re-populate array
+                this.dataSourceAllStandings = A;         // Populate array
+
+                console.log('[DEBUG] dataSourceAllStandings');
+                console.log(this.dataSourceAllStandings);
 
                 this.spinner.off();
               });
@@ -277,4 +337,5 @@ export interface Standing {
   wins: number;
   losses: number;
   pool_id: number;
+  bracket_id: number;
 }
