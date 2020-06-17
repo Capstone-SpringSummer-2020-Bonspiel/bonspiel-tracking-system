@@ -2,6 +2,8 @@ name: Deploy-dev
 
 on:
   push:
+    branches:
+      - dev
     branches-ignore:
       - master
 
