@@ -50,8 +50,11 @@ export class DesktopViewComponent implements OnInit {
     this.api
       .currentEventId$
       .subscribe((eventId) => {
+        this.spinner.on();
+
         this.currentEventId = eventId;
-        this.currentEventId = 5;  // DEBUGGING
+        // this.currentEventId = 5;  // DEBUGGING
+        console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
 
         // Get current draws by event ID
         this.api
@@ -106,13 +109,13 @@ export class DesktopViewComponent implements OnInit {
 
                 this.currentGames = this.allGames.filter(x => x.draw_id === this.selectedDraw.id);
 
-                console.log(`selectedDraw:`);
-                console.log(this.selectedDraw.id);
-                console.log(`allDraws:`);
+                console.log(`[DEBUG] selectedDraw:`);
+                console.log(this.selectedDraw);
+                console.log(`[DEBUG] allDraws:`);
                 console.log(this.allDraws);
-                console.log(`allGames:`);
+                console.log(`[DEBUG] allGames:`);
                 console.log(this.allGames);
-                console.log(`currentGames:`);
+                console.log(`[DEBUG] currentGames:`);
                 console.log(this.currentGames);
 
                 this.spinner.off();

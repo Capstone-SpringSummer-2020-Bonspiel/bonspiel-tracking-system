@@ -18,22 +18,12 @@ export class HeaderComponent implements OnInit {
     private spinner: SpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.on();
-
-    this.api.adHocQuery('SELECT * FROM public.curlingevent ORDER BY id ASC').subscribe((res: any) => {
-      console.log('adHocQuery in header:');
-      console.log(res);
-
-      for (const row of res.rows) {
-        this.currentEvents.push(row);
+    this.api.currentEvents$.subscribe(events => {
+      this.currentEvents.length = 0;
+      for (const event of events) {
+        this.currentEvents.push(event);
       }
-
-      this.spinner.off();
-    });
-  }
-
-  toggleSidenav(): void {
-    this.sidenavToggle.emit();
+    })
   }
 
   signIn() {

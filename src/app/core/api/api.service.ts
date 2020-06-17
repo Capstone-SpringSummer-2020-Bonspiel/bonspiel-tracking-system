@@ -21,6 +21,9 @@ export class ApiService {
   private eventIdSource = new BehaviorSubject(1);  // Default to event ID 1
   currentEventId$ = this.eventIdSource.asObservable();
 
+  private eventSource = new BehaviorSubject([]);
+  currentEvents$ = this.eventSource.asObservable();
+
   constructor(private httpClient: HttpClient) {
     console.log(`apiURL  ==>  ${apiURL}`);
   }

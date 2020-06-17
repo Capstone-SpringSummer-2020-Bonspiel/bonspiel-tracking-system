@@ -10,7 +10,7 @@
             (selectionChange)="onDrawSelected($event)">
             <mat-option *ngFor="let draw of allDraws"
               [value]="draw">
-              {{draw.name}}: {{draw.start | date: 'shortTime'}}
+              {{draw.name}} - {{draw.start | date: 'shortTime'}}
             </mat-option>
           </mat-select>
         </mat-form-field>

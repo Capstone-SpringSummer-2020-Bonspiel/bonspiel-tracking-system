@@ -15,33 +15,7 @@ export class AppComponent {
   events: string[] = [];
   opened: boolean;
 
-  curlingEvents = [
-    // {
-    //   label: 'Home',
-    //   path: '/home',
-    //   icon: 'home',
-    // },
-    // {
-    //   label: 'Schedule',
-    //   path: '/schedule',
-    //   icon: 'drag_handle',
-    // },
-    // {
-    //   label: 'Team',
-    //   path: '/teamlist',
-    //   icon: 'add_box',
-    // },
-    // {
-    //   label: 'Admin',
-    //   path: '/',
-    //   icon: 'playlist_add',
-    // },
-    // {
-    //   label: 'Route 5',
-    //   path: '/',
-    //   icon: 'account_tree',
-    // },
-  ];
+  curlingEvents = [];
 
   reason = '';
 
@@ -68,7 +42,8 @@ export class AppComponent {
     console.log('[DEBUG] loadNewEvent() in app component:');
     console.log(event);
 
-    // this.api.changeEventId(event.id);
+    this.api.changeEventId(event.id);
+    this.sidenav.close();
   }
 
   close(reason: string) {
