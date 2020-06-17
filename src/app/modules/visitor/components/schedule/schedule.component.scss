@@ -3,16 +3,16 @@
   border: 1px solid black;
   word-wrap:break-word;
 }
-/*
+
 .mat-column{
   border-right: 1px solid black;
   border-left: 1px solid black;
-}*/
+}
 .mat-row:nth-child(even){
-  background: rgb(224, 224, 224)
+  background: rgb(165, 233, 216)
 }
 .mat-row:nth-child(odd){
-  background: rgba(255,255,255)
+  background: rgb(206, 206, 206)
 }
 .mat-column-draw{
   width: 20%;
@@ -20,5 +20,6 @@
 .mat-form-field{
   margin-left: 8px;
   width: auto;
-  min-width: 270px;
+  min-width: 300px;
+  color: black;
 }

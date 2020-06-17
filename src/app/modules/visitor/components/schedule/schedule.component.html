@@ -3,9 +3,9 @@
     <div class="col-sm-12">
       <h1 class="text-center"> Event Draw Schedule
         <mat-form-field>
-          <mat-label> {{selectedEvent.name}} </mat-label>
+          <mat-label></mat-label>
           <mat-select class='select-option' #eventSelect (selectionChange)="eventSelected($event)">
-            <mat-option *ngFor="let event of currentEvent" [value]=event>
+            <mat-option *ngFor="let event of currentEvent" [value]="event">
               {{event.name}}
             </mat-option>
           </mat-select>
@@ -14,91 +14,83 @@
     </div>
   </div>
   <div class="col-sm-12">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
         <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-        <td mat-cell *matCellDef="let Draws"> {{Draws[column]|json}}</td>
+        <td mat-cell *matCellDef="let Draws"> {{Draws[column]}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
       <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-    </table>
-  </div>
-</div>
+    </table> -->
 
-<!--
-<div class="conatiner">
-  <div class="row">
-    <div class="col-sm-6">
-      <h1 class="text-center"> Draw Schedule </h1>
-    </div>
-  </div>
-  <div class="col-sm-12">
-    <table mat-table [dataSource]="dataSource" class="schedule-container mat-elevation-z8">
-
-      <ng-container matColumnDef="draw">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="drawinfo">
         <th mat-header-cell *matHeaderCellDef> Draw </th>
         <td mat-cell *matCellDef="let draw">
-          Draw #{{draw.drawnum}}<br>
-          Time: {{draw.drawtime}}
+          Draw id: #{{draw.drawId}}<br>
+          Draw Name: {{draw.drawName}}<br>
+          Time: {{draw.startTime}}<br>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="track_a">
         <th mat-header-cell *matHeaderCellDef> A </th>
-        <td mat-cell *matCellDef="let draw"> Game{{draw.game1[0]}} <br>
-          <td mat-cell *matCellDef="let draw"> Game{{draw.game1[0]}} <br>
-          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.game1[1]}} </button>
-          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.game1[2]}} </button>
-          <br>
-          Winner -> Game{{draw.game1[3]}} <br>
-          Loser -> Game{{draw.game1[4]}}
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[0].gameId}} - {{draw.games[0].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[0].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[0].team2}} </button>
+          <br>Winner -> Game {{draw.games[0].winnerTo}} <br>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="track_b">
         <th mat-header-cell *matHeaderCellDef> B </th>
-        <td mat-cell *matCellDef="let draw"> Game{{draw.game2[0]}} <br>
-          Team: {{draw.game2[1]}} <br>
-          Team: {{draw.game2[2]}} <br>
-          Winner -> Game{{draw.game2[3]}} <br>
-          Loser -> Game{{draw.game2[4]}}
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[1].gameId}} - {{draw.games[1].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[1].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[1].team2}} </button>
+          <br>Winner -> Game {{draw.games[1].winnerTo}} <br>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="track_c">
         <th mat-header-cell *matHeaderCellDef> C </th>
-        <td mat-cell *matCellDef="let draw"> Game{{draw.game3[0]}} <br>
-          Team: {{draw.game3[1]}} <br>
-          Team: {{draw.game3[2]}} <br>
-          Winner -> Game{{draw.game3[3]}} <br>
-          Loser -> Game{{draw.game3[4]}}
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[2].gameId}} - {{draw.games[2].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[2].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[2].team2}} </button>
+          <br>Winner -> Game {{draw.games[2].winnerTo}} <br>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="track_d">
         <th mat-header-cell *matHeaderCellDef> D </th>
-        <td mat-cell *matCellDef="let draw"> Game{{draw.game4[0]}} <br>
-          Team: {{draw.game4[1]}} <br>
-          Team: {{draw.game4[2]}} <br>
-          Winner -> Game{{draw.game4[3]}} <br>
-          Loser -> Game{{draw.game4[4]}}
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[3].gameId}} - {{draw.games[3].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[3].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[3].team2}} </button>
+          <br>Winner -> Game {{draw.games[3].winnerTo}} <br>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="track_e">
         <th mat-header-cell *matHeaderCellDef> E </th>
-        <td mat-cell *matCellDef="let draw"> Game{{draw.game5[0]}} <br>
-          Team: {{draw.game5[1]}} <br>
-          Team: {{draw.game5[2]}} <br>
-          Winner -> Game{{draw.game5[3]}} <br>
-          Loser -> Game{{draw.game5[4]}}
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[4].gameId}} - {{draw.games[4].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[4].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[4].team2}} </button>
+          <br>Winner -> Game {{draw.games[0].winnerTo}} <br>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="track_f">
+        <th mat-header-cell *matHeaderCellDef> F </th>
+        <td mat-cell *matCellDef="let draw"> Game ID: {{draw.games[5].gameId}} - {{draw.games[5].name}} <br>
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[5].team1}} </button> VS
+          <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[5].team2}} </button>
+          <br>Winner -> Game {{draw.games[5].winnerTo}} <br>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns ;" ng-repeat='x in records' ng-class-odd="'odd'"></tr>
     </table>
+
   </div>
 </div>
--->
