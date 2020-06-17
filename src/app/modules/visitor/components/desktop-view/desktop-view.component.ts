@@ -1,4 +1,10 @@
-import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
@@ -30,18 +36,26 @@ export class DesktopViewComponent implements OnInit {
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraws = [];
   dataSourceGames = [];
-  dataSourceAllStandings = BONSPIEL_DATA_ALL_STANDING;
+  dataSourceAllStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
 
   selectedDraw = null;
+  selectedPoolID = null;
   allDraws = [];
   allGames = [];
+  allStandings = [];
   currentGames = [];
+  currentStandings = [];
   currentEventId = null;
 
-  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private api: ApiService,
+    public dialog: MatDialog,
+    private spinner: SpinnerService,
+    private cd: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.spinner.on();
@@ -118,7 +132,43 @@ export class DesktopViewComponent implements OnInit {
                 console.log(`[DEBUG] currentGames:`);
                 console.log(this.currentGames);
 
-                this.spinner.off();
+                let allStandings = [];
+                for (let game of this.allGames) {
+                  if (isNaN(game.winner)) {
+                    continue;
+                  }
+                  if (!allStandings.hasOwnProperty(game.curlingteam1_id)) {
+                    allStandings[game.curlingteam1_id] = {
+                      pool_id: game.pool_id,
+                      name: game.team_name1,
+                      wins: 0,
+                      losses: 0,
+                    };
+                  }
+                  if (!allStandings.hasOwnProperty(game.curlingteam2_id)) {
+                    allStandings[game.curlingteam2_id] = {
+                      pool_id: game.pool_id,
+                      name: game.team_name2,
+                      wins: 0,
+                      losses: 0,
+                    };
+                  }
+                  if (game.winner === game.curlingteam1_id) {
+                    allStandings[game.curlingteam1_id].wins++;
+                    allStandings[game.curlingteam2_id].losses++;
+                  } else {
+                    allStandings[game.curlingteam2_id].wins++;
+                    allStandings[game.curlingteam1_id].losses++;
+                  }
+                }
+                console.log(`allStandings:`);
+                console.log(allStandings);
+
+                this.currentStandings = this.allStandings.filter((x) => {
+                  return x.pool_id === 1;
+
+                  this.spinner.off();
+                });
               });
           });
       });
@@ -178,7 +228,9 @@ export class DesktopViewComponent implements OnInit {
     console.log(this.selectedDraw.id);
 
     // Load games by draw ID
-    this.currentGames = this.allGames.filter((e) => e.draw_id === this.selectedDraw.id);
+    this.currentGames = this.allGames.filter(
+      (e) => e.draw_id === this.selectedDraw.id
+    );
 
     console.log('AFTER');
     console.log(this.currentGames);
