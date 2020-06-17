@@ -209,7 +209,7 @@ export class DesktopViewComponent implements OnInit {
                   }
 
                   // Add a a new, special container for games that don't have a pool_id & bracket_id
-                  if (A.filter(e => e.type === 'Other').length === 0) {
+                  if (team.pool_id === null && team.bracket_id === null && A.filter(e => e.type === 'Other').length === 0) {
                     A.push({
                       type: 'Other',
                       id: '',
@@ -219,17 +219,26 @@ export class DesktopViewComponent implements OnInit {
 
                   // Add teams to the corresponding pool container ...
                   if (team.pool_id !== null) {
-                    A.find(e => e.type === 'Pool' && e.id === team.pool_id).teams.push(team);
+                    const found = A.find(e => e.type === 'Pool' && e.id === team.pool_id);
+                    if (found) {
+                      found.teams.push(team);
+                    }
                   }
 
                   // ... or bracket container ...
                   else if (team.bracket_id !== null) {
-                    A.find(e => e.type === 'Bracket' && e.id === team.bracket_id).teams.push(team);
+                    const found = A.find(e => e.type === 'Bracket' && e.id === team.bracket_id);
+                    if (found) {
+                      found.teams.push(team);
+                    }
                   }
 
                   // ... or other container
                   else {
-                    A.find(e => e.type === 'Other').teams.push(team);
+                    const found = A.find(e => e.type === 'Other');
+                    if (found) {
+                      found.teams.push(team);
+                    }
                   }
                 }
 
