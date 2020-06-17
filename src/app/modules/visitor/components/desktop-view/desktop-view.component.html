@@ -10,21 +10,21 @@
 
   <!-- Draw Header -->
   <div class="row">
-    <div class="draw-header col-lg-3 offset-lg-3 d-flex justify-content-center">
-      <div class="auto-width">
-        <mat-form-field>
+    <div class="draw-header col-lg-4 offset-lg-2 d-flex justify-content-center">
+      <div style="min-width: 300px">
+        <mat-form-field style="min-width: 300px">
           <mat-label>Draws</mat-label>
           <mat-select [(value)]="selectedDraw"
             (selectionChange)="onDrawSelected($event)">
             <mat-option *ngFor="let draw of allDraws.slice().reverse()"
               [value]="draw">
-              {{draw.name}} - {{draw.start | date: 'shortTime'}}
+              {{draw.name}} - {{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 justify-content-center">
       <button *ngIf="selectedDraw && selectedDraw.video_url"
         mat-icon-button
         matTooltip=" YouTube Link"
