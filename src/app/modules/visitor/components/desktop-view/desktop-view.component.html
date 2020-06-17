@@ -11,14 +11,16 @@
   <!-- Draw Header -->
   <div class="row">
     <div class="draw-header col-lg-4 offset-lg-2 d-flex justify-content-center">
-      <div style="min-width: 300px">
-        <mat-form-field style="min-width: 300px">
+      <div style="min-width: 220px">
+        <mat-form-field style="min-width: 220px">
           <mat-label>Draws</mat-label>
           <mat-select [(value)]="selectedDraw"
             (selectionChange)="onDrawSelected($event)">
             <mat-option *ngFor="let draw of allDraws.slice().reverse()"
-              [value]="draw">
-              {{draw.name}} - {{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}
+              [value]="draw"
+              matTooltip="{{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+              [matTooltipPosition]="'right'">
+              {{draw.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
