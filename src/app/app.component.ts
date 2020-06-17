@@ -45,6 +45,11 @@ export class AppComponent {
     console.log('[DEBUG] loadNewEvent() in app component:');
     console.log(event);
 
+    // Redirect to Home page
+    if (this.router.url !== '/') {
+      this.router.navigateByUrl('/')
+    }
+
     this.api.changeEventId(event.id);
     this.sidenav.close();
   }
