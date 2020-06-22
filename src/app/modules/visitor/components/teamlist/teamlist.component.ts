@@ -31,19 +31,39 @@ export class TeamlistComponent {
   ];
   expandedElement: Team | null;
   curlingteam = null;
+  currentEventId = null;
+  selectedEvent = null;
+  currentEvent = null;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
     this.spinner.on();
     const query1 = "SELECT * FROM public.curlingteam ORDER BY id ASC";
 
-    this.apiService.adHocQuery(query1).subscribe((res: any) => {
+    this.api.adHocQuery(query1).subscribe((res: any) => {
       console.log(res);
       console.log(res.rows);
       this.curlingteam = res.rows;
       this.spinner.off();
     })
+    this.api
+      .currentEventId
+      .subscribe((eventId) => {
+        this.currentEventId = eventId;
+
+        this.api
+          .getTeams(this.currentEventId)
+          .subscribe((res: any) => {
+            console.log('[DEBUG] ngOnInit() in schedule component:');
+            console.log(res);
+
+            this.selectedEvent = res[res.length - 1];
+            this.currentEvent = res;
+
+            this.spinner.off();
+          });
+      });
   }
 }
 
