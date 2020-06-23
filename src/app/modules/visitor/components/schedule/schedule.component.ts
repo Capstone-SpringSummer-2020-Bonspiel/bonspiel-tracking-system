@@ -33,35 +33,23 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.on();
-    this.api
-      .currentEventId
-      .subscribe((eventId) => {
-        this.currentEventId = eventId;
-        console.log(this.currentEventId);
 
-        this.api
-          .getEvents()
-          .subscribe((res: any) => {
-            console.log('[DEBUG] ngOnInit() in schedule component:');
-            console.log(res);
-
-            this.selectedEvent = res[res.length - 1];
-            this.currentEvent = res;
-            // console.log("This currentEvent Below:");
-            // console.log(this.currentEvent);
-            // console.log("This selectedEvent Below:")
-            // console.log(this.selectedEvent);
-
-            this.spinner.off();
-            this.eventObtain(this.selectedEvent.id);
-
-            // this.dataProcess();
-            // console.log("FINAL DATA SET BELOW:");
-            // console.log(this.finalEventData);
-          });
-      });
-
-
+    // var one = new Promise((resolve, reject) => {
+    //   this.eventBegin();
+    // })
+    console.log("Test Part1");
+    this.eventBegin()
+    // .then((res) => { this.eventObtain(this.selectedEvent.id) })
+    // .then((res) => { this.dataProcess() })
+    // .catch((err) => { console.error(err) }
+    // )
+    console.log("Test Part2");
+    // this.eventObtain(this.selectedEvent.id)
+    //   .then((res) => { console.info(res) })
+    //   .catch((err) => { console.error(err) }
+    //   )
+    console.log("Test Part3");
+    // this.dataProcess
   }
 
   // dataSource = this.finalEventData;
@@ -84,31 +72,70 @@ export class ScheduleComponent implements OnInit {
       this.animal = result;
     });
   }
+  eventBegin() {
+    console.log("Test Part4");
+    // return new Promise((resolve, reject) => {
+    this.api
+      .currentEventId
+      .subscribe((eventId) => {
+        this.currentEventId = eventId;
+        console.log(this.currentEventId);
 
-  eventSelected(value: any) {
-    console.log('the selected event is:');
-    console.log(value.value);
-    console.log(value.value.id);
+        this.api
+          .getEvents()
+          .subscribe((res: any) => {
+            console.log('[DEBUG] ngOnInit() in schedule component:');
+            console.log(res);
 
-    this.eventObtain(value.value.id);
+            this.selectedEvent = res[res.length - 1];
+            this.currentEvent = res;
+            // console.log("This currentEvent Below:");
+            // console.log(this.currentEvent);
+            // console.log("This selectedEvent Below:")
+            // console.log(this.selectedEvent);
+            this.spinner.off();
+            this.eventObtain(this.selectedEvent.id);
+            // this.dataProcess();
+            // console.log("FINAL DATA SET BELOW:");
+            // console.log(this.finalEventData);
+          });
+      });
+    // })
+    // let promise1 = new Promise((resolve, reject) => {
+    //   this.api
+    //     .currentEventId
+    //     .subscribe((eventId) => {
+    //       this.currentEventId = eventId;
+    //       console.log(this.currentEventId);
+
+    //       this.api
+    //         .getEvents()
+    //         .subscribe((res: any) => {
+    //           console.log('[DEBUG] ngOnInit() in schedule component:');
+    //           console.log(res);
+
+    //           this.selectedEvent = res[res.length - 1];
+    //           this.currentEvent = res;
+    //           // console.log("This currentEvent Below:");
+    //           // console.log(this.currentEvent);
+    //           // console.log("This selectedEvent Below:")
+    //           // console.log(this.selectedEvent);
+    //           this.spinner.off();
+    //           this.eventObtain(this.selectedEvent.id);
+    //           // this.dataProcess();
+    //           // console.log("FINAL DATA SET BELOW:");
+    //           // console.log(this.finalEventData);
+    //         });
+    //     });
+    // })
+    // return promise1;
   }
 
+
   eventObtain(targetNum: Number) {
+    // return new Promise((resolve, reject) => {
     console.log("Obtain Data From Database");
-    this.spinner.on();
-    this.api
-      .getGames(targetNum)
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.eventGameData = res;
-        this.totalGame = res.length;
-        this.eventGameData.sort(this.eventGameData.draw_id, this.eventGameData.id);
-        // console.log("ThisEventGameDataBelow:");
-        // console.log(this.eventGameData);
-        // test passed, data here
-        this.spinner.off();
-      });
+
     this.spinner.on();
     this.api
       .getDraws(targetNum)
@@ -121,19 +148,60 @@ export class ScheduleComponent implements OnInit {
         // console.log("ThisEventDrawDataBelow:");
         // console.log(this.eventDrawData);
         // test parseHostBindings, data here
+      });
+    this.api
+      .getGames(targetNum)
+      .subscribe((res: any) => {
+        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log(res);
+        this.eventGameData = res;
+        this.totalGame = res.length;
+        // this.eventGameData.sort(this.eventGameData.team_name1, this.eventGameData.id);
+        console.log("ThisEventGameDataBelow:");
+        console.log(this.eventGameData);
+        // test passed, data here
         this.spinner.off();
         this.dataProcess();
-      });
+      })
+    // })
+    // let promise2 = new Promise((resolve, reject) => {
+    //   console.log("Obtain Data From Database");
+
+    //   this.spinner.on();
+    //   this.api
+    //     .getDraws(targetNum)
+    //     .subscribe((res: any) => {
+    //       console.log('[DEBUG] eventObtain() in schedule component:');
+    //       console.log(res);
+    //       this.eventDrawData = res;
+    //       this.totalDraw = res.length;
+    //       this.eventDrawData.sort(this.eventDrawData.startTime);
+    //       // console.log("ThisEventDrawDataBelow:");
+    //       // console.log(this.eventDrawData);
+    //       // test parseHostBindings, data here
+
+    //     });
+    //   this.api
+    //     .getGames(targetNum)
+    //     .subscribe((res: any) => {
+    //       console.log('[DEBUG] eventObtain() in schedule component:');
+    //       console.log(res);
+    //       this.eventGameData = res;
+    //       this.totalGame = res.length;
+    //       this.eventGameData.sort(this.eventGameData.draw_id, this.eventGameData.id);
+    //       // console.log("ThisEventGameDataBelow:");
+    //       // console.log(this.eventGameData);
+    //       // test passed, data here
+    //       this.spinner.off();
+    //       this.dataProcess();
+    //     });
+
+    // })
+    // return promise2;
   }
 
+  //Data Process function, which classify the data from database
   dataProcess(): void {
-    // console.log("-----------------------");
-    // console.log("ThisEventGameDataBelow:");
-    // console.log(this.eventGameData);
-    // console.log("ThisEventDrawDataBelow:");
-    // console.log(this.eventDrawData);
-    // console.log("-----------------------");
-
     this.finalEventData = [];
     this.p = 0;
     this.i = 0;
@@ -175,6 +243,22 @@ export class ScheduleComponent implements OnInit {
     }
     console.log("Final Dataset Below:");
     console.log(this.finalEventData);
+
+    // console.log("-----------------------");
+    // console.log("ThisEventGameDataBelow:");
+    // console.log(this.eventGameData);
+    // console.log("ThisEventDrawDataBelow:");
+    // console.log(this.eventDrawData);
+    // console.log("-----------------------");
+  }
+
+  //Control pannel of select event, will call to reload data
+  eventSelected(value: any) {
+    console.log('the selected event is:');
+    console.log(value.value);
+    console.log(value.value.id);
+
+    this.eventObtain(value.value.id);
   }
 
   dataSource = this.finalEventData;

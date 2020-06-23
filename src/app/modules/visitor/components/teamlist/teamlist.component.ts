@@ -23,17 +23,12 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 
 
 export class TeamlistComponent {
-  dataSource = TEAM_DATA;
-  displayedColumns = [
-    'teamId',
-    'teamName',
-    'teamNote',
-  ];
   expandedElement: Team | null;
   curlingteam = null;
   currentEventId = null;
   selectedEvent = null;
   currentEvent = null;
+  allTeamData = null;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
@@ -41,44 +36,42 @@ export class TeamlistComponent {
     this.spinner.on();
     const query1 = "SELECT * FROM public.curlingteam ORDER BY id ASC";
 
-    this.api.adHocQuery(query1).subscribe((res: any) => {
-      console.log(res);
-      console.log(res.rows);
-      this.curlingteam = res.rows;
-      this.spinner.off();
-    })
+    this.spinner.on();
     this.api
-      .currentEventId
-      .subscribe((eventId) => {
-        this.currentEventId = eventId;
-
-        this.api
-          .getTeams(this.currentEventId)
-          .subscribe((res: any) => {
-            console.log('[DEBUG] ngOnInit() in schedule component:');
-            console.log(res);
-
-            this.selectedEvent = res[res.length - 1];
-            this.currentEvent = res;
-
-            this.spinner.off();
-          });
+      .getAllTeams()
+      .subscribe((res: any) => {
+        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log(res);
+        this.allTeamData = res;
+        this.allTeamData.sort(this.allTeamData.id);
+        console.log(this.allTeamData);
+        // console.log("ThisEventDrawDataBelow:");
+        // console.log(this.eventDrawData);
+        this.spinner.off();
       });
   }
+
+  // dataSource = TEAM_DATA;
+  dataSource = this.allTeamData;
+  displayedColumns = [
+    'id',
+    'team_name',
+  ];
 }
 
 export interface Member {
+  curler_id: Number;
   memberImage: String;
-  memberName: String;
-  memberGender: String;
-  memberPosition: String;
+  curler_name: String;
+  curler_gender: String;
+  curler_position: String;
+  curler_note: String;
 }
 
 export interface Team {
-  teamId: Number;
-  teamName: String;
-  teamNote: String;
-  member: Member[];
+  id: Number;
+  team_name: String;
+  curlers: Member[];
 }
 
 const TEAM_DATA: Team[] = [];
@@ -88,26 +81,24 @@ var memberData: Member[] = [];
 for (let i = 1; i < 6; i++) {
   memberData = [];
   for (let n = 1; n < 5; n++) {
-    memberData.push({ memberImage: "abc", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
+    memberData.push({ curler_id: i, memberImage: "abc", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
   }
   TEAM_DATA.push({
-    teamId: i,
-    teamName: `team_${i}`,
-    teamNote: "Nothing Special",
-    member: memberData,
+    id: i,
+    team_name: `team_${i}`,
+    curlers: memberData,
   })
 }
 for (let i = 6; i < 15; i++) {
   for (let n = 1; n < 3; n++) {
     memberData = [];
-    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
-    memberData.push({ memberImage: "123123", memberName: `member_${i}`, memberGender: 'male', memberPosition: "A" });
+    memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
+    memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
   }
   TEAM_DATA.push({
-    teamId: i,
-    teamName: `team_${i}`,
-    teamNote: "Nothing Special",
-    member: memberData,
+    id: i,
+    team_name: `team_${i}`,
+    curlers: memberData,
   })
 }
 

@@ -79,4 +79,8 @@ export class ApiService {
   public getScoresByEvent(eventId) {
     return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
   }
+
+  public getAllTeams() {
+    return this.httpClient.get(`${apiURL}/api/v1/teams`);
+  }
 }
