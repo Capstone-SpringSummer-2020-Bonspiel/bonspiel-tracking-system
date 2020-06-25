@@ -25,30 +25,35 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 export class TeamlistComponent {
   expandedElement: Team | null;
   curlingteam = null;
-  currentEventId = null;
-  selectedEvent = null;
-  currentEvent = null;
+  selectedEventId = null;
   allTeamData = null;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
     this.spinner.on();
-    const query1 = "SELECT * FROM public.curlingteam ORDER BY id ASC";
 
-    this.spinner.on();
     this.api
-      .getAllTeams()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allTeamData = res;
-        this.allTeamData.sort(this.allTeamData.id);
-        console.log(this.allTeamData);
-        // console.log("ThisEventDrawDataBelow:");
-        // console.log(this.eventDrawData);
-        this.spinner.off();
-      });
+      .currentEventId
+      .subscribe((eventId) => {
+        this.selectedEventId = eventId;
+        console.log(this.selectedEventId);
+
+        this.api
+          .getTeams(this.selectedEventId)
+          .subscribe((res: any) => {
+            console.log('[DEBUG] eventObtain() in schedule component:');
+            console.log(res);
+            this.allTeamData = res;
+            this.allTeamData.sort(this.allTeamData.id);
+            console.log(this.allTeamData);
+            // console.log("ThisEventDrawDataBelow:");
+            // console.log(this.eventDrawData);
+            this.spinner.off();
+          });
+      })
+
+
   }
 
   // dataSource = TEAM_DATA;

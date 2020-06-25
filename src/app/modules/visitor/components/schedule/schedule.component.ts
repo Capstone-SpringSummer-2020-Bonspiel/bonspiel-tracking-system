@@ -25,41 +25,18 @@ export class ScheduleComponent implements OnInit {
   finalDrawData: gameData[] = [];
   finalEventData: drawData[] = [];
   sheetSize = 0;
-  i = 0;
-  p = 0;
-
+  selectedEventId = null;
+  drawSizeNumber = null;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.on();
-
-    // var one = new Promise((resolve, reject) => {
-    //   this.eventBegin();
-    // })
-    console.log("Test Part1");
-    this.eventBegin()
-    // .then((res) => { this.eventObtain(this.selectedEvent.id) })
-    // .then((res) => { this.dataProcess() })
-    // .catch((err) => { console.error(err) }
-    // )
-    console.log("Test Part2");
-    // this.eventObtain(this.selectedEvent.id)
-    //   .then((res) => { console.info(res) })
-    //   .catch((err) => { console.error(err) }
-    //   )
-    console.log("Test Part3");
-    // this.dataProcess
+    this.eventBegin();
+    // console.log("Test Part1");
+    // console.log("Test Part2");
+    // console.log("Test Part3");
   }
 
-  // dataSource = this.finalEventData;
-  // displayedColumns: String[] = [
-  //   'drawinfo',
-  //   'track_a',
-  //   'track_b',
-  //   'track_c',
-  //   'track_d'
-  // ];
 
   openDialog(): void {
     const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
@@ -72,170 +49,207 @@ export class ScheduleComponent implements OnInit {
       this.animal = result;
     });
   }
+
+
   eventBegin() {
-    console.log("Test Part4");
-    // return new Promise((resolve, reject) => {
+    this.spinner.on();
+
     this.api
       .currentEventId
       .subscribe((eventId) => {
-        this.currentEventId = eventId;
-        console.log(this.currentEventId);
+        this.selectedEventId = eventId;
+        console.log(this.selectedEventId);
 
         this.api
-          .getEvents()
+          .getDraws(this.selectedEventId)
           .subscribe((res: any) => {
-            console.log('[DEBUG] ngOnInit() in schedule component:');
+            console.log('[DEBUG] eventObtain() in schedule component:');
             console.log(res);
+            this.eventDrawData = res;
+            this.totalDraw = res.length;
+            // this.eventDrawData.sort(this.eventDrawData.eventDrawId);
+            // console.log("ThisEventDrawDataBelow:");
+            // console.log(this.eventDrawData);
+            // test parseHostBindings, data here
 
-            this.selectedEvent = res[res.length - 1];
-            this.currentEvent = res;
-            // console.log("This currentEvent Below:");
-            // console.log(this.currentEvent);
-            // console.log("This selectedEvent Below:")
-            // console.log(this.selectedEvent);
-            this.spinner.off();
-            this.eventObtain(this.selectedEvent.id);
-            // this.dataProcess();
-            // console.log("FINAL DATA SET BELOW:");
-            // console.log(this.finalEventData);
+            this.api
+              .getGames(this.selectedEventId)
+              .subscribe((res: any) => {
+                console.log('[DEBUG] eventObtain() in schedule component:');
+                console.log(res);
+                this.eventGameData = res;
+                this.totalGame = res.length;
+                // this.eventGameData.sort(this.eventGameData.eventDrawId);
+                console.log("ThisEventGameDataBelow:");
+                console.log(this.eventGameData);
+                // test passed, data here
+
+                this.dataProcess();
+
+                this.spinner.off();
+              })
           });
-      });
-    // })
-    // let promise1 = new Promise((resolve, reject) => {
-    //   this.api
-    //     .currentEventId
-    //     .subscribe((eventId) => {
-    //       this.currentEventId = eventId;
-    //       console.log(this.currentEventId);
-
-    //       this.api
-    //         .getEvents()
-    //         .subscribe((res: any) => {
-    //           console.log('[DEBUG] ngOnInit() in schedule component:');
-    //           console.log(res);
-
-    //           this.selectedEvent = res[res.length - 1];
-    //           this.currentEvent = res;
-    //           // console.log("This currentEvent Below:");
-    //           // console.log(this.currentEvent);
-    //           // console.log("This selectedEvent Below:")
-    //           // console.log(this.selectedEvent);
-    //           this.spinner.off();
-    //           this.eventObtain(this.selectedEvent.id);
-    //           // this.dataProcess();
-    //           // console.log("FINAL DATA SET BELOW:");
-    //           // console.log(this.finalEventData);
-    //         });
-    //     });
-    // })
-    // return promise1;
-  }
-
-
-  eventObtain(targetNum: Number) {
-    // return new Promise((resolve, reject) => {
-    console.log("Obtain Data From Database");
-
-    this.spinner.on();
-    this.api
-      .getDraws(targetNum)
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.eventDrawData = res;
-        this.totalDraw = res.length;
-        this.eventDrawData.sort(this.eventDrawData.startTime);
-        // console.log("ThisEventDrawDataBelow:");
-        // console.log(this.eventDrawData);
-        // test parseHostBindings, data here
-      });
-    this.api
-      .getGames(targetNum)
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.eventGameData = res;
-        this.totalGame = res.length;
-        // this.eventGameData.sort(this.eventGameData.team_name1, this.eventGameData.id);
-        console.log("ThisEventGameDataBelow:");
-        console.log(this.eventGameData);
-        // test passed, data here
-        this.spinner.off();
-        this.dataProcess();
       })
-    // })
-    // let promise2 = new Promise((resolve, reject) => {
-    //   console.log("Obtain Data From Database");
-
-    //   this.spinner.on();
-    //   this.api
-    //     .getDraws(targetNum)
-    //     .subscribe((res: any) => {
-    //       console.log('[DEBUG] eventObtain() in schedule component:');
-    //       console.log(res);
-    //       this.eventDrawData = res;
-    //       this.totalDraw = res.length;
-    //       this.eventDrawData.sort(this.eventDrawData.startTime);
-    //       // console.log("ThisEventDrawDataBelow:");
-    //       // console.log(this.eventDrawData);
-    //       // test parseHostBindings, data here
-
-    //     });
-    //   this.api
-    //     .getGames(targetNum)
-    //     .subscribe((res: any) => {
-    //       console.log('[DEBUG] eventObtain() in schedule component:');
-    //       console.log(res);
-    //       this.eventGameData = res;
-    //       this.totalGame = res.length;
-    //       this.eventGameData.sort(this.eventGameData.draw_id, this.eventGameData.id);
-    //       // console.log("ThisEventGameDataBelow:");
-    //       // console.log(this.eventGameData);
-    //       // test passed, data here
-    //       this.spinner.off();
-    //       this.dataProcess();
-    //     });
-
-    // })
-    // return promise2;
   }
+
+
+  // eventObtain(targetNum: Number) {
+  //   // return new Promise((resolve, reject) => {
+  //   console.log("Obtain Data From Database");
+
+  //   this.spinner.on();
+  //   this.api
+  //     .getDraws(targetNum)
+  //     .subscribe((res: any) => {
+  //       console.log('[DEBUG] eventObtain() in schedule component:');
+  //       console.log(res);
+  //       this.eventDrawData = res;
+  //       this.totalDraw = res.length;
+  //       this.eventDrawData.sort(this.eventDrawData.startTime);
+  //       // console.log("ThisEventDrawDataBelow:");
+  //       // console.log(this.eventDrawData);
+  //       // test parseHostBindings, data here
+  //     });
+  //   this.api
+  //     .getGames(targetNum)
+  //     .subscribe((res: any) => {
+  //       console.log('[DEBUG] eventObtain() in schedule component:');
+  //       console.log(res);
+  //       this.eventGameData = res;
+  //       this.totalGame = res.length;
+  //       // this.eventGameData.sort(this.eventGameData.videoUrl, this.eventGameData.id);
+  //       console.log("ThisEventGameDataBelow:");
+  //       console.log(this.eventGameData);
+  //       // test passed, data here
+  //       this.spinner.off();
+  //       this.dataProcess();
+  //     })
+  // }
 
   //Data Process function, which classify the data from database
   dataProcess(): void {
     this.finalEventData = [];
-    this.p = 0;
-    this.i = 0;
+    // var p = 0;
+    // var i = 0;
+    // var z = 0;
+    var s = 0;
 
-    for (this.p = 0; this.p < this.totalDraw; this.p++) {
+    //initialize number array to count size of each draw
+    for (let i = 0; i < this.totalGame; i++) {
+      if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
+        s = 1
+      } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
+        s = 2
+      } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
+        s = 3
+      } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
+        s = 4
+      } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
+        s = 5
+      } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
+        s = 6
+      }
+      if (this.drawSizeNumber < s) {
+        this.drawSizeNumber = s;
+      }
+    }
+
+
+    // //count the size of each draw, and update maxium number
+    // for (let p = 0; p < this.totalDraw; p++) {
+    //   drawSizeCount[p] = 0;
+    //   for (let i = 0; i < this.totalGame; i++) {
+    //     if (this.eventDrawData[p].id == this.eventGameData[i].draw_id) {
+    //       drawSizeCount[p] += 1;
+    //     }
+    //     if (drawSizeCount[p] > this.drawSizeNumber) {
+    //       this.drawSizeNumber = drawSizeCount[p]
+    //     }
+    //   }
+    // }
+
+    console.log("this.drawSizeCount Data BELOW");
+    console.log(this.drawSizeNumber);
+
+
+    for (let p = 0; p < this.totalDraw; p++) {
       this.finalEventData.push({
-        drawId: this.p + 1,
-        eventDrawId: this.eventDrawData[this.p].id,
-        drawName: this.eventDrawData[this.p].name,
-        startTime: this.eventDrawData[this.p].start,
-        videoUrl: this.eventDrawData[this.p].video_url,
-        games: [],
+        drawId: p + 1,
+        eventDrawId: this.eventDrawData[p].id,
+        drawName: this.eventDrawData[p].name,
+        startTime: this.eventDrawData[p].start,
+        videoUrl: this.eventDrawData[p].video_url,
+        games: []
       });
+      for (let z = 0; z < this.drawSizeNumber; z++) {
+        this.finalEventData[p].games.push({
+          gameId: 0,
+          eventGameId: 0,
+          name: null,
+          team1: null,
+          team1Id: 0,
+          team2: null,
+          team2Id: 0,
+          finished: null,
+          winnerId: 0,
+          winnerTo: 0
+        })
+      }
       // console.log(this.p + " Draw Data Has been Added. -----------+");
       // console.log(this.finalEventData[this.p]);
     }
+    console.log("Empty Data Here");
+    console.log(this.finalEventData);
+    console.log(this.eventGameData);
 
-    this.p = 0;
-    this.i = 0;
-    for (this.p = 0; this.p < this.totalDraw; this.p++) {
-      for (this.i = 0; this.i < this.totalGame; this.i++) {
-        if (this.finalEventData[this.p].eventDrawId == this.eventGameData[this.i].draw_id) {
-          this.finalEventData[this.p].games.push({
-            gameId: this.i + 1,
-            eventGameId: this.eventGameData[this.i].id,
-            name: this.eventGameData[this.i].notes,
-            team1: this.eventGameData[this.i].team_name1,
-            team1Id: this.eventGameData[this.i].curlingteam1_id,
-            team2: this.eventGameData[this.i].team_name2,
-            team2Id: this.eventGameData[this.i].curlingteam2_id,
-            finished: this.eventGameData[this.i].finished,
-            winnerId: this.eventGameData[this.i].null,
-            winnerTo: this.eventGameData[this.i].winner,
-          });
+
+    for (let p = 0; p < this.totalDraw; p++) {
+      for (let i = 0; i < this.totalGame; i++) {
+        if (this.finalEventData[p].eventDrawId == this.eventGameData[i].draw_id) {
+          console.log("this.finalEventData[p].eventDrawId" + this.finalEventData[p].eventDrawId);
+          console.log("this.eventGameData[i].draw_id" + this.eventGameData[i].draw_id);
+
+          console.log("this.finalEventData[p].games[s]" + this.finalEventData[p].games[s]);
+          console.log('P' + p);
+          console.log('S' + s);
+          console.log('I' + i);
+          if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
+            s = 0
+          } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
+            s = 1
+          } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
+            s = 2
+          } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
+            s = 3
+          } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
+            s = 4
+          } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
+            s = 5
+          }
+
+          this.finalEventData[p].games[s].gameId = i + 1;
+          this.finalEventData[p].games[s].eventGameId = this.eventGameData[i].id;
+          this.finalEventData[p].games[s].name = this.eventGameData[i].notes;
+          this.finalEventData[p].games[s].team1 = this.eventGameData[i].team_name1;
+          this.finalEventData[p].games[s].team1Id = this.eventGameData[i].curlingteam1_id;
+          this.finalEventData[p].games[s].team2 = this.eventGameData[i].team_name2;
+          this.finalEventData[p].games[s].team2Id = this.eventGameData[i].curlingteam2_id;
+          this.finalEventData[p].games[s].finished = this.eventGameData[i].finished;
+          this.finalEventData[p].games[s].winnerId = this.eventGameData[i].null;
+          this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner;
+          console.log(this.finalEventData[p]);
+          // {
+          //   gameId: i + 1,
+          //   eventGameId: this.eventGameData[i].id,
+          //   name: this.eventGameData[i].notes,
+          //   team1: this.eventGameData[i].team_name1,
+          //   team1Id: this.eventGameData[i].curlingteam1_id,
+          //   team2: this.eventGameData[i].team_name2,
+          //   team2Id: this.eventGameData[i].curlingteam2_id,
+          //   finished: this.eventGameData[i].finished,
+          //   winnerId: this.eventGameData[i].null,
+          //   winnerTo: this.eventGameData[i].winner,
+          // };
           // console.log(this.p + " Game Data Has Been Updated. ---------------++");
           // console.log(this.finalEventData[this.p]);
         }
@@ -243,13 +257,6 @@ export class ScheduleComponent implements OnInit {
     }
     console.log("Final Dataset Below:");
     console.log(this.finalEventData);
-
-    // console.log("-----------------------");
-    // console.log("ThisEventGameDataBelow:");
-    // console.log(this.eventGameData);
-    // console.log("ThisEventDrawDataBelow:");
-    // console.log(this.eventDrawData);
-    // console.log("-----------------------");
   }
 
   //Control pannel of select event, will call to reload data
@@ -258,10 +265,10 @@ export class ScheduleComponent implements OnInit {
     console.log(value.value);
     console.log(value.value.id);
 
-    this.eventObtain(value.value.id);
+    this.eventBegin();
   }
 
-  dataSource = this.finalEventData;
+  //dataSource = this.finalEventData;
   displayedColumns: String[] = [
     'drawinfo',
     'track_a',
