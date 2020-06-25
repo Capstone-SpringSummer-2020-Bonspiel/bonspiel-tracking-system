@@ -12,21 +12,22 @@ import { parseHostBindings } from '@angular/compiler';
 })
 
 export class ScheduleComponent implements OnInit {
-  //columnsToDisplay: string[] = this.displayedColumns.slice();
   animal: string;
   name: string;
-  selectedEvent = null;
-  currentEvent = null;
-  currentEventId = null;
+  // selectedEvent = null;
+  // currentEvent = null;
+  // currentEventId = null;
   eventGameData = null;
   eventDrawData = null;
   totalGame = 0;
   totalDraw = 0;
-  finalDrawData: gameData[] = [];
+  // finalDrawData: gameData[] = [];
   finalEventData: drawData[] = [];
-  sheetSize = 0;
+  // sheetSize = 0;
   selectedEventId = null;
   drawSizeNumber = null;
+  displayedColumns: String[]
+
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
@@ -129,9 +130,6 @@ export class ScheduleComponent implements OnInit {
   //Data Process function, which classify the data from database
   dataProcess(): void {
     this.finalEventData = [];
-    // var p = 0;
-    // var i = 0;
-    // var z = 0;
     var s = 0;
 
     //initialize number array to count size of each draw
@@ -238,6 +236,13 @@ export class ScheduleComponent implements OnInit {
           this.finalEventData[p].games[s].winnerId = this.eventGameData[i].null;
           this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner;
           console.log(this.finalEventData[p]);
+
+
+          this.displayedColumns = []
+          this.displayedColumns.push('drawinfo')
+          for (let p = 0; p < this.drawSizeNumber; p++) {
+            this.displayedColumns.push('track_' + String.fromCharCode(97 + p))
+          }
           // {
           //   gameId: i + 1,
           //   eventGameId: this.eventGameData[i].id,
@@ -269,13 +274,15 @@ export class ScheduleComponent implements OnInit {
   }
 
   //dataSource = this.finalEventData;
-  displayedColumns: String[] = [
-    'drawinfo',
-    'track_a',
-    'track_b',
-    'track_c',
-    'track_d'
-  ];
+  // displayedColumns: String[] = [
+  //   'drawinfo',
+  //   'track_a',
+  //   'track_b',
+  //   'track_c',
+  //   'track_d',
+  //   'track_e',
+  //   'track_f'
+  // ];
 }
 
 // export interface DialogData {
