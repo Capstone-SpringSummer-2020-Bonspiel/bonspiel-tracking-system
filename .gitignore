@@ -87,3 +87,4 @@ temp/
 # System Files
 .DS_Store
 Thumbs.db
+src/app/modules/visitor/components/teamlist/teamlist.component.ts
