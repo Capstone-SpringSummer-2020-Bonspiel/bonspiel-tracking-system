@@ -34,7 +34,7 @@ export class TeamlistComponent {
     this.spinner.on();
 
     this.api
-      .currentEventId
+      .currentEventId$
       .subscribe((eventId) => {
         this.selectedEventId = eventId;
         console.log(this.selectedEventId);
