@@ -1,0 +1,58 @@
+<p>manage-curling-event works!</p>
+<form class="edit-event-form">
+
+  <mat-form-field class="edit-name">
+    <mat-label>New Event Name</mat-label>
+    <input type="text" matInput>
+  </mat-form-field>
+
+  <mat-form-field class="edit-notes">
+    <mat-label>New Notes</mat-label>
+    <input type="text" matInput>
+  </mat-form-field>
+
+  <table class="start-date">
+    <mat-form-field class="edit-start-date">
+      <mat-label>Month</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+    <mat-form-field class="edit-start-date">
+      <mat-label>Day</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+    <mat-form-field class="edit-start-date">
+      <mat-label>Year</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+  </table>
+
+  <table class="end-date">
+    <mat-form-field class="edit-end-date">
+      <mat-label>Month</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+    <mat-form-field class="edit-start-date">
+      <mat-label>Day</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+    <mat-form-field class="edit-start-date">
+      <mat-label>Year</mat-label>
+      <input type="Number" matInput>
+    </mat-form-field>
+  </table>
+
+  <mat-form-field class="edit-eventtype">
+    <mat-select required>
+      <mat-option>-- None --</mat-option>
+      <mat-option value="pools">pools</mat-option>
+      <mat-option value="Champion">Champion</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="button-menu">
+    <button mat-button color="primary">Submit</button>
+    <button mat-button color="primary">Cancel</button>
+    <br>
+    <button mat-button color="primary">Delete Event</button>
+  </div>
+</form>

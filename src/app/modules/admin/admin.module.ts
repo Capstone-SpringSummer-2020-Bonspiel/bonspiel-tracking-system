@@ -37,6 +37,7 @@ import { CreateCurlingTeamComponent } from './components/create-curling-team/cre
 import { CreateCurlingEventComponent } from './components/create-curling-event/create-curling-event.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { MatSelectModule } from '@angular/material/select';
     CreateOrganizationComponent,
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
+    ManageCurlingEventComponent,
   ],
   imports: [
     CommonModule,
