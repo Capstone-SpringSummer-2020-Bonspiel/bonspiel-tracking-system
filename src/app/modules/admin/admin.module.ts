@@ -22,6 +22,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AdminComponent } from './components/admin/admin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -37,6 +38,8 @@ import { CreateCurlingTeamComponent } from './components/create-curling-team/cre
 import { CreateCurlingEventComponent } from './components/create-curling-event/create-curling-event.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { AddDrawComponent } from './components/add-draw/add-draw.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,7 @@ import { MatSelectModule } from '@angular/material/select';
     CreateOrganizationComponent,
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
+    AddDrawComponent,
   ],
   imports: [
     CommonModule,
@@ -78,6 +82,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatCheckboxModule,
     MatMenuModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatDatepickerModule,
   ],
   providers: [DashboardService],
 })

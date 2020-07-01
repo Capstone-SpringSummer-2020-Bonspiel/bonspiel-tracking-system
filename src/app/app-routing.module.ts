@@ -8,9 +8,8 @@ import { DashboardComponent } from './modules/admin/components/dashboard/dashboa
 import { CreateOrganizationComponent } from './modules/admin/components/create-organization/create-organization.component';
 import { CreateCurlingEventComponent } from './modules/admin/components/create-curling-event/create-curling-event.component';
 import { CreateCurlingTeamComponent } from './modules/admin/components/create-curling-team/create-curling-team.component';
+import { AddDrawComponent } from './modules/admin/components/add-draw/add-draw.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-
-
 
 const routes: Routes = [
   { path: '', component: VisitorComponent },
@@ -37,15 +36,18 @@ const routes: Routes = [
         path: 'create-team',
         component: CreateCurlingTeamComponent,
       },
+      {
+        path: 'add-draw',
+        component: AddDrawComponent,
+      },
     ],
   },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
