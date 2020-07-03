@@ -115,10 +115,4 @@ export class DeleteDrawComponent implements OnInit {
       console.log(res);
     });
   }
-
-  // onClickSubmit(stepper: MatStepper) {
-  //   const payload = {
-  //     drawID: this.secondFormGroup.value.secondCtrl,
-  //   };
-  // }
 }
