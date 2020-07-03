@@ -37,12 +37,13 @@ import { PieComponent } from './components/widgets/pie/pie.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CreateOrganizationComponent } from './components/create-organization/create-organization.component';
 import { CreateCurlingTeamComponent } from './components/create-curling-team/create-curling-team.component';
-import { CreateCurlingEventComponent } from './components/create-curling-event/create-curling-event.component';
+import { CreateCurlingEventComponent, createCurlingEventDialog } from './components/create-curling-event/create-curling-event.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
 import { DeleteCurlingEventComponent } from './components/delete-curling-event/delete-curling-event.component';
-import { EditCurlingEventComponent } from './components/edit-curling-event/edit-curling-event.component';
+import { EditCurlingEventComponent, editCurlingEventDialog } from './components/edit-curling-event/edit-curling-event.component';
+
 
 @NgModule({
   declarations: [
@@ -57,9 +58,12 @@ import { EditCurlingEventComponent } from './components/edit-curling-event/edit-
     CreateOrganizationComponent,
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
+    createCurlingEventDialog,
     ManageCurlingEventComponent,
     DeleteCurlingEventComponent,
     EditCurlingEventComponent,
+    editCurlingEventDialog,
+
   ],
   imports: [
     CommonModule,

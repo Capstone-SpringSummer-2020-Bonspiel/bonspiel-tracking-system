@@ -1,1 +1,12 @@
-<p>delete-curling-event works!</p>
+<!-- <p>delete-curling-event works!</p> -->
+<mat-form-field>
+  <mat-label>Select Event to Delete</mat-label>
+  <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
+    <mat-option *ngFor="let event of this.allEventData" [value]="event">
+      {{event.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<div>
+  <button mat-button (click)="onEventDelete()">Delete Event</button>
+</div>

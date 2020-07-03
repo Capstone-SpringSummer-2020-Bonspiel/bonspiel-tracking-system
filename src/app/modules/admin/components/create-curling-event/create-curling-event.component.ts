@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class CreateCurlingEventComponent implements OnInit {
     { value: true, viewValue: 'Finished' },
   ];
 
-  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService) { }
+  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService, public dialog: MatDialog,) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -68,5 +68,46 @@ export class CreateCurlingEventComponent implements OnInit {
     console.log(`End-date: ${end_date}`);
     console.log(`event type: ${event_type}`);
     console.log(`complete: ${completed}`);
+
+    // this.spinner.on();
+    // this.api
+    //   .createEvent(name, begin_date, end_date, completed, info, event_type)
+    //   .subscribe((res: any) => {
+    //     this.spinner.off();
+    //   })
+
+    const dialogRef = this.dialog.open(createCurlingEventDialog, {
+      data: {
+        signal: '200',
+        name: name,
+        info: info,
+        begin_date: begin_date,
+        end_date: end_date,
+        event_type: event_type,
+        completed: completed,
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("something happened.")
+    })
+
   }
+}
+export interface DialogData {
+  signal: String,
+  name: String,
+  info: String,
+  begin_date: String,
+  end_date: String,
+  event_type: String,
+  completed: String,
+}
+
+@Component({
+  selector: 'create-curling-event-dialog',
+  templateUrl: 'create-curling-event-dialog.html',
+})
+
+export class createCurlingEventDialog {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 }

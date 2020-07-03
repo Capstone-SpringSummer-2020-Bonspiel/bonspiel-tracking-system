@@ -1,23 +1,4 @@
 <mat-vertical-stepper linear #stepper>
-  <!-- name, begin_date, end_date, completed, info, event_type -->
-  <!-- <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Event Name </ng-template>
-      <mat-form-field>
-        <mat-label> Event Name </mat-label>
-        <input type='text' matInput placeholder="Evergreen Curling Club" formControlName="firstOneCtrl">
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label> Event Note </mat-label>
-        <input type='text' matInput placeholder="Event Detail Info" formControlName="firstTwoCtrl">
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step> -->
-
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Event Name </ng-template>
@@ -50,7 +31,7 @@
       <ng-template matStepLabel> New Event Type </ng-template>
       <mat-form-field>
         <mat-label> Event Type </mat-label>
-        <mat-select formControlName="thirdCtrl" name="eventType">
+        <mat-select formControlName="thirdCtrl" name="eventType" required>
           <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.value"> {{eventType.viewValue}} </mat-option>
         </mat-select>
       </mat-form-field>
@@ -66,7 +47,7 @@
       <ng-template matStepLabel> New Event Condition </ng-template>
       <mat-form-field>
         <mat-label>Event Condition</mat-label>
-        <mat-select formControlName="fouthCtrl" name="eventType">
+        <mat-select formControlName="fouthCtrl" name="eventCondition" required>
           <mat-option *ngFor="let statusTypes of statusTypes" [value]="statusTypes.value"> {{statusTypes.viewValue}} </mat-option>
         </mat-select>
         <!-- 

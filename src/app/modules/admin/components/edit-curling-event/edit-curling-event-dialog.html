@@ -1,0 +1,15 @@
+<div mat-dialog-content>
+  <div class="successform" *ngIf="data.signal.valueOf() == '200'">
+    <p>Edit Data Successful </p>
+    <br>
+    <li>Name: {{data.name}}</li>
+    <li>Info: {{data.info}}</li>
+    <li>Type: {{data.event_type}}</li>
+    <li>Completed: {{data.completed}}</li>
+    <li>Begin_Date: {{data.begin_date}}</li>
+    <li>End_Date: {{data.end_date}}</li>
+  </div>
+  <div class="failform" *ngIf="data.signal.valueOf() == '400'">
+    <p>Edit Data Failed </p>
+  </div>
+</div>
