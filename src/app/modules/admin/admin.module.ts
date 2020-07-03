@@ -41,6 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AddDrawComponent } from './components/add-draw/add-draw.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DeleteDrawComponent } from './components/delete-draw/delete-draw.component';
+import { EditDrawComponent } from './components/edit-draw/edit-draw.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { DeleteDrawComponent } from './components/delete-draw/delete-draw.compon
     CreateCurlingEventComponent,
     AddDrawComponent,
     DeleteDrawComponent,
+    EditDrawComponent,
   ],
   imports: [
     CommonModule,
