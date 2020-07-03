@@ -11,6 +11,10 @@ import { CreateCurlingTeamComponent } from './modules/admin/components/create-cu
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 
+import { DeleteCurlingEventComponent } from './modules/admin/components/delete-curling-event/delete-curling-event.component';
+import { EditCurlingEventComponent } from './modules/admin/components/edit-curling-event/edit-curling-event.component';
+
+
 
 const routes: Routes = [
   { path: '', component: VisitorComponent },
@@ -36,6 +40,14 @@ const routes: Routes = [
       {
         path: 'create-team',
         component: CreateCurlingTeamComponent,
+      },
+      {
+        path: 'delete-event',
+        component: DeleteCurlingEventComponent,
+      },
+      {
+        path: 'edit-event',
+        component: EditCurlingEventComponent,
       },
     ],
   },

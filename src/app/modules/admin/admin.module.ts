@@ -6,12 +6,15 @@ import { DashboardService } from './dashboard.service';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -38,6 +41,8 @@ import { CreateCurlingEventComponent } from './components/create-curling-event/c
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
+import { DeleteCurlingEventComponent } from './components/delete-curling-event/delete-curling-event.component';
+import { EditCurlingEventComponent } from './components/edit-curling-event/edit-curling-event.component';
 
 @NgModule({
   declarations: [
@@ -53,11 +58,17 @@ import { ManageCurlingEventComponent } from './components/manage-curling-event/m
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
     ManageCurlingEventComponent,
+    DeleteCurlingEventComponent,
+    EditCurlingEventComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatRippleModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -83,4 +94,4 @@ import { ManageCurlingEventComponent } from './components/manage-curling-event/m
   ],
   providers: [DashboardService],
 })
-export class AdminModule {}
+export class AdminModule { }
