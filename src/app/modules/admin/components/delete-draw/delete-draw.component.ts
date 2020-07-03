@@ -58,8 +58,8 @@ export class DeleteDrawComponent implements OnInit {
     });
   }
 
-  selectEvent() {
-    console.log('selectEvent()');
+  getEvent() {
+    console.log('getEvent()');
     const selectedEventID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedEventID= ${selectedEventID}`);
     this.selectedEvent = this.eventNames.filter(

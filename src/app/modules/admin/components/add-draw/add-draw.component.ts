@@ -64,8 +64,8 @@ export class AddDrawComponent implements OnInit {
     });
   }
 
-  selectEvent() {
-    console.log('selectEvent()');
+  getEvent() {
+    console.log('getEvent()');
     const selectedEventID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedEventID= ${selectedEventID}`);
     this.selectedEvent = this.eventNames.filter(
@@ -75,7 +75,7 @@ export class AddDrawComponent implements OnInit {
     console.log(this.selectedEvent);
   }
 
-  loadDrawInfo() {
+  getDrawInfo() {
     const newDrawName = this.secondFormGroup.value.secondCtrlName;
     const newDrawStart = this.secondFormGroup.value.secondCtrlDate;
     const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
