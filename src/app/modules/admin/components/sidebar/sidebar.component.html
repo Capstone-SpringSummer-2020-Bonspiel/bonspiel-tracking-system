@@ -4,46 +4,53 @@
       <h2> Jane Doe </h2>
       <h4> jane.doe@email.com </h4>
     </div>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQp1Wog7_-TU4ZhMZTWrLPMDfpVQa1DIGdsR6xazUVo3VrWDE46&usqp=CAU" alt="Emoji">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQp1Wog7_-TU4ZhMZTWrLPMDfpVQa1DIGdsR6xazUVo3VrWDE46&usqp=CAU"
+      alt="Emoji">
   </div>
 
   <mat-divider></mat-divider>
 
-  <h2 matSubheader> Pages </h2>
-
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin">
+  <a mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="/admin">
     <mat-icon> dashboard </mat-icon>
     Dashboard
-  </a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-organization">
-    <mat-icon> device_hub </mat-icon>
-    Create a new Organization
-  </a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-team">
-    <mat-icon> group_add </mat-icon>
-    Create a new Curling Team
-  </a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/create-event">
-    <mat-icon> event </mat-icon>
-    Create a new Curling Event
-  </a>
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/admin/edit-event">
-    <mat-icon> event </mat-icon>
-    Edit an exist Curling Event
   </a>
 
   <mat-divider></mat-divider>
 
-  <h2 matSubheader> Tools </h2>
+  <h2 matSubheader> Add Functionality </h2>
 
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/contacts">
-    <mat-icon> import_contacts </mat-icon>
-    Contacts
+  <a *ngFor="let route of addRoutes"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="{{route.path}}">
+    <mat-icon> {{route.icon}} </mat-icon>
+    {{route.label}}
   </a>
 
-  <a mat-list-item routerLinkActive="list-item-active" routerLink="/contacts">
-    <mat-icon> contact_phone </mat-icon>
-    Leads
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader> Edit Functionality </h2>
+
+  <a *ngFor="let route of editRoutes"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="{{route.path}}">
+    <mat-icon> {{route.icon}} </mat-icon>
+    {{route.label}}
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader> Remove Functionality </h2>
+
+  <a *ngFor="let route of removeRoutes"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="{{route.path}}">
+    <mat-icon> {{route.icon}} </mat-icon>
+    {{route.label}}
   </a>
 
 </mat-nav-list>

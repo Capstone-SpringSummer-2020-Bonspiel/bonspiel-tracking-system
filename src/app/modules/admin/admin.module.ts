@@ -38,6 +38,34 @@ import { CreateCurlingEventComponent } from './components/create-curling-event/c
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
+import { CreateBracketComponent } from './components/create-bracket/create-bracket.component';
+import { CreatePoolComponent } from './components/create-pool/create-pool.component';
+import { CreateDrawComponent } from './components/create-draw/create-draw.component';
+import { CreateCurlerComponent } from './components/create-curler/create-curler.component';
+import { CreateEndscoreComponent } from './components/create-endscore/create-endscore.component';
+import { AddTeamToEventComponent } from './components/add-team-to-event/add-team-to-event.component';
+import { EditGameComponent } from './components/edit-game/edit-game.component';
+import { EditEventComponent } from './components/edit-event/edit-event.component';
+import { EditBracketComponent } from './components/edit-bracket/edit-bracket.component';
+import { EditPoolComponent } from './components/edit-pool/edit-pool.component';
+import { EditDrawComponent } from './components/edit-draw/edit-draw.component';
+import { EditEndscoreComponent } from './components/edit-endscore/edit-endscore.component';
+import { EditTeamComponent } from './components/edit-team/edit-team.component';
+import { EditOrganizationComponent } from './components/edit-organization/edit-organization.component';
+import { EditCurlerComponent } from './components/edit-curler/edit-curler.component';
+import { RemoveTeamFromEventComponent } from './components/remove-team-from-event/remove-team-from-event.component';
+import { RemoveTeamComponent } from './components/remove-team/remove-team.component';
+import { RemoveCurlerComponent } from './components/remove-curler/remove-curler.component';
+import { RemoveOrganizationComponent } from './components/remove-organization/remove-organization.component';
+import { RemoveGameComponent } from './components/remove-game/remove-game.component';
+import { RemoveEndscoreComponent } from './components/remove-endscore/remove-endscore.component';
+import { RemoveDrawComponent } from './components/remove-draw/remove-draw.component';
+import { RemovePoolComponent } from './components/remove-pool/remove-pool.component';
+import { RemoveBracketComponent } from './components/remove-bracket/remove-bracket.component';
+import { RemoveEventComponent } from './components/remove-event/remove-event.component';
+import { CreateEventComponent } from './components/create-event/create-event.component';
+import { CreateGameComponent } from './components/create-game/create-game.component';
+import { CreateTeamComponent } from './components/create-team/create-team.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +81,34 @@ import { ManageCurlingEventComponent } from './components/manage-curling-event/m
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
     ManageCurlingEventComponent,
+    CreateBracketComponent,
+    CreatePoolComponent,
+    CreateDrawComponent,
+    CreateCurlerComponent,
+    CreateEndscoreComponent,
+    AddTeamToEventComponent,
+    EditGameComponent,
+    EditEventComponent,
+    EditBracketComponent,
+    EditPoolComponent,
+    EditDrawComponent,
+    EditEndscoreComponent,
+    EditTeamComponent,
+    EditOrganizationComponent,
+    EditCurlerComponent,
+    RemoveTeamFromEventComponent,
+    RemoveTeamComponent,
+    RemoveCurlerComponent,
+    RemoveOrganizationComponent,
+    RemoveGameComponent,
+    RemoveEndscoreComponent,
+    RemoveDrawComponent,
+    RemovePoolComponent,
+    RemoveBracketComponent,
+    RemoveEventComponent,
+    CreateEventComponent,
+    CreateGameComponent,
+    CreateTeamComponent,
   ],
   imports: [
     CommonModule,
