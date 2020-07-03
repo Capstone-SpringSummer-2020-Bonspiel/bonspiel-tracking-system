@@ -9,6 +9,7 @@ import { CreateOrganizationComponent } from './modules/admin/components/create-o
 import { CreateCurlingEventComponent } from './modules/admin/components/create-curling-event/create-curling-event.component';
 import { CreateCurlingTeamComponent } from './modules/admin/components/create-curling-team/create-curling-team.component';
 import { AddDrawComponent } from './modules/admin/components/add-draw/add-draw.component';
+import { DeleteDrawComponent } from './modules/admin/components/delete-draw/delete-draw.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -39,6 +40,10 @@ const routes: Routes = [
       {
         path: 'add-draw',
         component: AddDrawComponent,
+      },
+      {
+        path: 'delete-draw',
+        component: DeleteDrawComponent,
       },
     ],
   },

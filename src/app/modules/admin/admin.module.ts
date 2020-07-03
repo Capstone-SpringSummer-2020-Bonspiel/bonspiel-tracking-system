@@ -40,6 +40,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { AddDrawComponent } from './components/add-draw/add-draw.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DeleteDrawComponent } from './components/delete-draw/delete-draw.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
     AddDrawComponent,
+    DeleteDrawComponent,
   ],
   imports: [
     CommonModule,
