@@ -12,11 +12,11 @@ import { NotificationService } from '@app/shared/services/notification.service';
 import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 @Component({
-  selector: 'app-remove-draw',
-  templateUrl: './remove-draw.component.html',
-  styleUrls: ['./remove-draw.component.scss']
+  selector: 'app-delete-draw',
+  templateUrl: './delete-draw.component.html',
+  styleUrls: ['./delete-draw.component.scss'],
 })
-export class RemoveDrawComponent implements OnInit {
+export class DeleteDrawComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
@@ -34,7 +34,7 @@ export class RemoveDrawComponent implements OnInit {
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({

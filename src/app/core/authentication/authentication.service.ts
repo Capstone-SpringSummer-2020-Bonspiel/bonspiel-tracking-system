@@ -13,8 +13,8 @@ export class AuthenticationService {
   // and we are passing it directly to the setSession method
   login(email: string, password: string) {
     return this.http.post<any>('/api/login', { email, password })
-      .do(res => this.setSession)
-      .shareReplay();
+    // .do(res => this.setSession)
+    // .shareReplay();
   }
 
   // Inside setSession, we are storing the JWT directly in Local Storage in the id_token key entry

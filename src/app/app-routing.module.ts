@@ -38,8 +38,6 @@ import { RemovePoolComponent } from './modules/admin/components/remove-pool/remo
 import { RemoveTeamComponent } from './modules/admin/components/remove-team/remove-team.component';
 import { RemoveTeamFromEventComponent } from './modules/admin/components/remove-team-from-event/remove-team-from-event.component';
 
-
-
 const routes: Routes = [
   { path: '', component: VisitorComponent },
   { path: 'home', component: VisitorComponent },
@@ -169,7 +167,6 @@ const routes: Routes = [
   },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
-
 ];
 
 @NgModule({

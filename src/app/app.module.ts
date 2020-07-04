@@ -21,7 +21,12 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastrModule } from 'ngx-toastr';
 import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -39,9 +44,13 @@ import { ScheduleComponent } from './modules/visitor/components/schedule/schedul
     MatCheckboxModule,
     MatTooltipModule,
     ToastrModule.forRoot(),
+    MatNativeDateModule,
+    MatDatepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}

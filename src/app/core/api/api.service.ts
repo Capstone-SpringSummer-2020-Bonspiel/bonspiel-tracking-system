@@ -17,8 +17,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
-
-  private eventIdSource = new BehaviorSubject(1);  // Default to event ID 1
+  private eventIdSource = new BehaviorSubject(1); // Default to event ID 1
   currentEventId$ = this.eventIdSource.asObservable();
 
   private eventSource = new BehaviorSubject(null);
@@ -36,15 +35,22 @@ export class ApiService {
     this.eventSource.next(newEvent);
   }
 
-  public createCurlingEvent(name, eventType, info, completed, beginDate, endDate) {
+  public createCurlingEvent(
+    name,
+    eventType,
+    info,
+    completed,
+    beginDate,
+    endDate
+  ) {
     const body = {
       name: name,
       eventType: eventType,
       info: info,
       completed: completed,
       beginDate: beginDate,
-      endDate: endDate
-    }
+      endDate: endDate,
+    };
     return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
   }
 
@@ -52,8 +58,8 @@ export class ApiService {
 
   public adHocQuery(query) {
     const body = {
-      sql: query
-    }
+      sql: query,
+    };
     return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
   }
 
@@ -76,11 +82,15 @@ export class ApiService {
   }
 
   public getGamesByTeam(eventId, teamId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams/${teamId}/games`);
+    return this.httpClient.get(
+      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/games`
+    );
   }
 
   public getScoresByTeam(eventId, teamId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams/${teamId}/scores`);
+    return this.httpClient.get(
+      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/scores`
+    );
   }
 
   public getScoresByEvent(eventId) {
@@ -89,5 +99,13 @@ export class ApiService {
 
   /********************************************************************/
 
-
+  public addDraw(eventId, name, start, video_url) {
+    const body = {
+      eventId: eventId,
+      name: name,
+      start: start,
+      video_url: video_url,
+    };
+    return this.httpClient.post(`${apiURL}/api/v1/add-draw`, body);
+  }
 }

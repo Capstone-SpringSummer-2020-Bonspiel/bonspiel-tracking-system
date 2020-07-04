@@ -22,6 +22,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AdminComponent } from './components/admin/admin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -37,6 +38,7 @@ import { CreateCurlingTeamComponent } from './components/create-curling-team/cre
 import { CreateCurlingEventComponent } from './components/create-curling-event/create-curling-event.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
 import { CreateBracketComponent } from './components/create-bracket/create-bracket.component';
 import { CreatePoolComponent } from './components/create-pool/create-pool.component';
@@ -138,7 +140,9 @@ import { LoginComponent } from './components/login/login.component';
     MatCheckboxModule,
     MatMenuModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatDatepickerModule,
   ],
   providers: [DashboardService],
 })
-export class AdminModule {}
+export class AdminModule { }

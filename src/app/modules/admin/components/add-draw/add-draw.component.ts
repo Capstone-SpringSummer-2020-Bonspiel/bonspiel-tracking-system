@@ -12,11 +12,11 @@ import { NotificationService } from '@app/shared/services/notification.service';
 import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 @Component({
-  selector: 'app-create-draw',
-  templateUrl: './create-draw.component.html',
-  styleUrls: ['./create-draw.component.scss']
+  selector: 'app-add-draw',
+  templateUrl: './add-draw.component.html',
+  styleUrls: ['./add-draw.component.scss'],
 })
-export class CreateDrawComponent implements OnInit {
+export class AddDrawComponent implements OnInit {
   dateFilter;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -38,7 +38,7 @@ export class CreateDrawComponent implements OnInit {
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -47,7 +47,7 @@ export class CreateDrawComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrlName: ['', Validators.required],
       secondCtrlDate: ['', Validators.required],
-      secondCtrlUrl: [''],
+      secondCtrlUrl: ['', Validators.required],
     });
 
     this.spinner.on();
