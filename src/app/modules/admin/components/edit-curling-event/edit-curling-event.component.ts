@@ -6,11 +6,11 @@ import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-edit-event',
-  templateUrl: './edit-event.component.html',
-  styleUrls: ['./edit-event.component.scss']
+  selector: 'app-edit-curling-event',
+  templateUrl: './edit-curling-event.component.html',
+  styleUrls: ['./edit-curling-event.component.scss']
 })
-export class EditEventComponent implements OnInit {
+export class EditCurlingEventComponent implements OnInit {
   zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -172,9 +172,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'edit-event-dialog',
-  templateUrl: 'edit-event-dialog.html',
+  selector: 'edit-curling-event-dialog',
+  templateUrl: 'edit-curling-event-dialog.html',
 })
+
 export class EditEventDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 }

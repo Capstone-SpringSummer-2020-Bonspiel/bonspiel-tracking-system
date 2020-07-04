@@ -4,11 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
-  selector: 'app-remove-event',
-  templateUrl: './remove-event.component.html',
-  styleUrls: ['./remove-event.component.scss']
+  selector: 'app-delete-curling-event',
+  templateUrl: './delete-curling-event.component.html',
+  styleUrls: ['./delete-curling-event.component.scss']
 })
-export class RemoveEventComponent implements OnInit {
+export class DeleteCurlingEventComponent implements OnInit {
   allEventData: null;
   selectedEvent: null;
   submitResult: Number;

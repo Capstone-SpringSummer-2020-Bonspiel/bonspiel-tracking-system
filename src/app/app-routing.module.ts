@@ -6,8 +6,6 @@ import { ScheduleComponent } from './modules/visitor/components/schedule/schedul
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { DashboardComponent } from './modules/admin/components/dashboard/dashboard.component';
 import { CreateOrganizationComponent } from './modules/admin/components/create-organization/create-organization.component';
-import { CreateCurlingEventComponent } from './modules/admin/components/create-curling-event/create-curling-event.component';
-import { CreateCurlingTeamComponent } from './modules/admin/components/create-curling-team/create-curling-team.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { AddTeamToEventComponent } from './modules/admin/components/add-team-to-event/add-team-to-event.component';
 import { CreateBracketComponent } from './modules/admin/components/create-bracket/create-bracket.component';

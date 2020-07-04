@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageCurlingEventComponent } from './manage-curling-event.component';
+import { DeleteCurlingEventComponent } from './delete-curling-event.component';
 
-describe('ManageCurlingEventComponent', () => {
-  let component: ManageCurlingEventComponent;
-  let fixture: ComponentFixture<ManageCurlingEventComponent>;
+describe('DeleteCurlingEventComponent', () => {
+  let component: DeleteCurlingEventComponent;
+  let fixture: ComponentFixture<DeleteCurlingEventComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManageCurlingEventComponent ]
+      declarations: [ DeleteCurlingEventComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ManageCurlingEventComponent);
+    fixture = TestBed.createComponent(DeleteCurlingEventComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
