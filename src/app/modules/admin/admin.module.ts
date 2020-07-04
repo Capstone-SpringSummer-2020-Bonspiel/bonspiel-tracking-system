@@ -40,7 +40,6 @@ import { CreateCurlingTeamComponent } from './components/create-curling-team/cre
 import { CreateCurlingEventComponent, createCurlingEventDialog } from './components/create-curling-event/create-curling-event.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { ManageCurlingEventComponent } from './components/manage-curling-event/manage-curling-event.component';
 import { DeleteCurlingEventComponent } from './components/delete-curling-event/delete-curling-event.component';
 import { EditCurlingEventComponent, editCurlingEventDialog } from './components/edit-curling-event/edit-curling-event.component';
 
@@ -59,7 +58,6 @@ import { EditCurlingEventComponent, editCurlingEventDialog } from './components/
     CreateCurlingTeamComponent,
     CreateCurlingEventComponent,
     createCurlingEventDialog,
-    ManageCurlingEventComponent,
     DeleteCurlingEventComponent,
     EditCurlingEventComponent,
     editCurlingEventDialog,
