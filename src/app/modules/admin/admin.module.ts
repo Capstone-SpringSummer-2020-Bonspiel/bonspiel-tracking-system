@@ -66,6 +66,7 @@ import { RemoveEventComponent } from './components/remove-event/remove-event.com
 import { CreateEventComponent } from './components/create-event/create-event.component';
 import { CreateGameComponent } from './components/create-game/create-game.component';
 import { CreateTeamComponent } from './components/create-team/create-team.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { CreateTeamComponent } from './components/create-team/create-team.compon
     CreateEventComponent,
     CreateGameComponent,
     CreateTeamComponent,
+    LoginComponent,
   ],
   imports: [
     CommonModule,
