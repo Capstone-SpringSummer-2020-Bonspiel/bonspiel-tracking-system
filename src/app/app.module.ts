@@ -27,6 +27,7 @@ import {
   NgxMatDatetimePickerModule,
   NgxMatTimepickerModule,
 } from '@angular-material-components/datetime-picker';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -48,9 +49,10 @@ import {
     MatDatepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
+    MatListModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule { }

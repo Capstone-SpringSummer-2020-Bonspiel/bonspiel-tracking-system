@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 const apiURL: string = environment.apiURL;
 // const apiURL = 'http://localhost:8080';
@@ -99,13 +100,28 @@ export class ApiService {
 
   /********************************************************************/
 
-  public addDraw(eventId, name, start, video_url) {
+  public addDraw(eventId, name, start, videoUrl) {
     const body = {
-      eventId: eventId,
       name: name,
       start: start,
-      video_url: video_url,
+      videoUrl: videoUrl,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/add-draw`, body);
+    return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
   }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
 }
