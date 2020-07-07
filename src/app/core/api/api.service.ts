@@ -110,6 +110,6 @@ export class ApiService {
   }
 
   public deleteDraw(drawId) {
-    return this.httpClient.delete(`${apiURL}/api/v1/draw/${drawId}`);
+    return this.httpClient.delete(`${apiURL}/api/v1/admin/draw/${drawId}`);
   }
 }

@@ -110,8 +110,7 @@ export class DeleteDrawComponent implements OnInit {
   deleteDraw() {
     console.log('deleteDraw()');
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    const query: string = `DELETE FROM draw WHERE id = ${selectedDrawID}`;
-    this.api.adHocQuery(query).subscribe((res: any) => {
+    this.api.deleteDraw(selectedDrawID).subscribe((res: any) => {
       console.log(res);
     });
   }
