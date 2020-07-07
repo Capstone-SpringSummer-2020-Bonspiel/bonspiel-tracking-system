@@ -110,8 +110,13 @@ export class RemoveDrawComponent implements OnInit {
   deleteDraw() {
     console.log('deleteDraw()');
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    this.api.deleteDraw(selectedDrawID).subscribe((res: any) => {
-      console.log(res);
-    });
+    try {
+      this.api.deleteDraw(selectedDrawID).subscribe((res: any) => {
+        console.log(res);
+        this.notifier.showSuccess('Draw has been deleted!', '');
+      });
+    } catch {
+      this.notifier.showError('Somethine went wrong!', '');
+    }
   }
 }
