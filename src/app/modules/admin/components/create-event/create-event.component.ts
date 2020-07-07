@@ -17,6 +17,7 @@ export class CreateEventComponent implements OnInit {
   fouthFormGroup: FormGroup;
   fifthFormGroup: FormGroup;
   sixthFormGroup: FormGroup;
+  feedBackData: null;
 
   eventTypes: any[] = [
     { value: 'pool', viewValue: 'Pool' },
@@ -66,12 +67,17 @@ export class CreateEventComponent implements OnInit {
     console.log(`event type: ${event_type}`);
     console.log(`complete: ${completed}`);
 
-    // this.spinner.on();
-    // this.api
-    //   .createEvent(name, begin_date, end_date, completed, info, event_type)
-    //   .subscribe((res: any) => {
-    //     this.spinner.off();
-    //   })
+    this.spinner.on();
+    this.api
+      .createEvent(name, begin_date, end_date, completed, info, event_type)
+      .subscribe((res: any) => {
+        this.feedBackData = res;
+        console.log(res);
+        dialogRef.afterClosed().subscribe(result => {
+          console.log("something happened.")
+        })
+        this.spinner.off();
+      })
 
     const dialogRef = this.dialog.open(CreateEventDialog, {
       data: {
@@ -84,9 +90,9 @@ export class CreateEventComponent implements OnInit {
         completed: completed,
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("something happened.")
-    })
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log("something happened.")
+    // })
 
   }
 }

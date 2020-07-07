@@ -27,12 +27,27 @@ export class ScheduleComponent implements OnInit {
   selectedEventId = null;
   drawSizeNumber = null;
   displayedColumns: String[]
+  allEventData: null;
+  selectedEvent: drawData;
 
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
-    this.eventBegin();
+    this.spinner.on()
+
+    this.api
+      .getEvents()
+      .subscribe((res: any) => {
+        this.allEventData = res;
+        this.selectedEvent = res[0];
+        this.selectedEventId = res[0].id;
+        console.log(this.selectedEventId);
+
+        this.eventBegin();
+        this.spinner.off()
+      })
+
     // console.log("Test Part1");
     // console.log("Test Part2");
     // console.log("Test Part3");
@@ -51,46 +66,47 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
+  onEventSelected(event: any) {
+    console.log(this.allEventData);
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
+    this.selectedEventId = this.selectedEvent.id;
+    // this.selectedEvent = event.value;
+    this.eventBegin();
+  }
 
   eventBegin() {
     this.spinner.on();
 
     this.api
-      .currentEventId$
-      .subscribe((eventId) => {
-        this.selectedEventId = eventId;
-        console.log(this.selectedEventId);
+      .getDraws(this.selectedEventId)
+      .subscribe((res: any) => {
+        // console.log('[DEBUG] eventObtain() in schedule component:');
+        // console.log(res);
+        this.eventDrawData = res;
+        this.totalDraw = res.length;
+        // this.eventDrawData.sort(this.eventDrawData.eventDrawId);
+        // console.log("ThisEventDrawDataBelow:");
+        // console.log(this.eventDrawData);
+        // test parseHostBindings, data here
 
         this.api
-          .getDraws(this.selectedEventId)
+          .getGames(this.selectedEventId)
           .subscribe((res: any) => {
-            console.log('[DEBUG] eventObtain() in schedule component:');
-            console.log(res);
-            this.eventDrawData = res;
-            this.totalDraw = res.length;
-            // this.eventDrawData.sort(this.eventDrawData.eventDrawId);
-            // console.log("ThisEventDrawDataBelow:");
-            // console.log(this.eventDrawData);
-            // test parseHostBindings, data here
+            // console.log('[DEBUG] eventObtain() in schedule component:');
+            // console.log(res);
+            this.eventGameData = res;
+            this.totalGame = res.length;
+            // this.eventGameData.sort(this.eventGameData.eventDrawId);
+            // console.log("ThisEventGameDataBelow:");
+            // console.log(this.eventGameData);
+            // test passed, data here
 
-            this.api
-              .getGames(this.selectedEventId)
-              .subscribe((res: any) => {
-                console.log('[DEBUG] eventObtain() in schedule component:');
-                console.log(res);
-                this.eventGameData = res;
-                this.totalGame = res.length;
-                // this.eventGameData.sort(this.eventGameData.eventDrawId);
-                console.log("ThisEventGameDataBelow:");
-                console.log(this.eventGameData);
-                // test passed, data here
+            this.dataProcess();
+            this.spinner.off();
+          })
+      });
 
-                this.dataProcess();
-
-                this.spinner.off();
-              })
-          });
-      })
   }
 
 
@@ -166,13 +182,13 @@ export class ScheduleComponent implements OnInit {
     //   }
     // }
 
-    console.log("this.drawSizeCount Data BELOW");
-    console.log(this.drawSizeNumber);
+    // console.log("this.drawSizeCount Data BELOW");
+    // console.log(this.drawSizeNumber);
 
 
     for (let p = 0; p < this.totalDraw; p++) {
       this.finalEventData.push({
-        drawId: p + 1,
+        id: p + 1,
         eventDrawId: this.eventDrawData[p].id,
         drawName: this.eventDrawData[p].name,
         startTime: this.eventDrawData[p].start,
@@ -204,13 +220,13 @@ export class ScheduleComponent implements OnInit {
     for (let p = 0; p < this.totalDraw; p++) {
       for (let i = 0; i < this.totalGame; i++) {
         if (this.finalEventData[p].eventDrawId == this.eventGameData[i].draw_id) {
-          console.log("this.finalEventData[p].eventDrawId" + this.finalEventData[p].eventDrawId);
-          console.log("this.eventGameData[i].draw_id" + this.eventGameData[i].draw_id);
+          // console.log("this.finalEventData[p].eventDrawId" + this.finalEventData[p].eventDrawId);
+          // console.log("this.eventGameData[i].draw_id" + this.eventGameData[i].draw_id);
 
-          console.log("this.finalEventData[p].games[s]" + this.finalEventData[p].games[s]);
-          console.log('P' + p);
-          console.log('S' + s);
-          console.log('I' + i);
+          // console.log("this.finalEventData[p].games[s]" + this.finalEventData[p].games[s]);
+          // console.log('P' + p);
+          // console.log('S' + s);
+          // console.log('I' + i);
           if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
             s = 0
           } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
@@ -235,7 +251,7 @@ export class ScheduleComponent implements OnInit {
           this.finalEventData[p].games[s].finished = this.eventGameData[i].finished;
           this.finalEventData[p].games[s].winnerId = this.eventGameData[i].null;
           this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner;
-          console.log(this.finalEventData[p]);
+          // console.log(this.finalEventData[p]);
 
 
           this.displayedColumns = []
@@ -265,13 +281,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   //Control pannel of select event, will call to reload data
-  eventSelected(value: any) {
-    console.log('the selected event is:');
-    console.log(value.value);
-    console.log(value.value.id);
+  // eventSelected(value: any) {
+  //   console.log('the selected event is:');
+  //   console.log(value.value);
+  //   console.log(value.value.id);
 
-    this.eventBegin();
-  }
+  //   this.eventBegin();
+  // }
 
   //dataSource = this.finalEventData;
   // displayedColumns: String[] = [
@@ -304,7 +320,7 @@ export interface gameData {
   winnerTo: Number;
 }
 export interface drawData {
-  drawId: Number; // the id of draw in this event
+  id: Number; // the id of draw in this event
   eventDrawId: Number // the id of draw in the databse
   drawName: String;
   startTime: String;
@@ -319,5 +335,5 @@ for (let i = 1; i < 10; i++) {
   for (let n = 1; n < 5; n++) {
     GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20 });
   }
-  SCHEDULE_DATA1.push({ drawId: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
+  SCHEDULE_DATA1.push({ id: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
 }

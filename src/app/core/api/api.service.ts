@@ -108,4 +108,30 @@ export class ApiService {
     };
     return this.httpClient.post(`${apiURL}/api/v1/add-draw`, body);
   }
+
+  public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
+    const data = {
+      name: nameData,
+      eventType: eventTypeData,
+      info: infoData,
+      completed: completedData,
+      beginDate: beginDateData,
+      endDate: endDateData,
+    };
+    return this.httpClient.post(`${apiURL}/api/v1/admin/event`, data);
+  }
+  public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId) {
+    const data = {
+      name: nameData,
+      eventType: eventTypeData,
+      info: infoData,
+      completed: completedData,
+      beginDate: beginDateData,
+      endDate: endDateData,
+    };
+    return this.httpClient.put(`${apiURL}/api/v1/admin/event/${eventId}`, data);
+  }
+  public deleteEvent(eventId) {
+    return this.httpClient.delete(`${apiURL}/api/v1/admin/event/${eventId}`);
+  }
 }

@@ -2,6 +2,14 @@
   <div class="row">
     <div class="col-sm-12">
       <h1 class="text-center"> Event Draw Schedule </h1>
+      <mat-form-field>
+        <mat-label>Select Eventt</mat-label>
+        <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
   <div class="col-sm-12">
