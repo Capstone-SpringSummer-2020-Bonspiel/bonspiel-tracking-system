@@ -14,7 +14,7 @@ import { NgxMatNativeDateModule } from '@angular-material-components/datetime-pi
 @Component({
   selector: 'app-remove-draw',
   templateUrl: './remove-draw.component.html',
-  styleUrls: ['./remove-draw.component.scss']
+  styleUrls: ['./remove-draw.component.scss'],
 })
 export class RemoveDrawComponent implements OnInit {
   firstFormGroup: FormGroup;
@@ -34,7 +34,7 @@ export class RemoveDrawComponent implements OnInit {
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -110,8 +110,7 @@ export class RemoveDrawComponent implements OnInit {
   deleteDraw() {
     console.log('deleteDraw()');
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    const query: string = `DELETE FROM draw WHERE id = ${selectedDrawID}`;
-    this.api.adHocQuery(query).subscribe((res: any) => {
+    this.api.deleteDraw(selectedDrawID).subscribe((res: any) => {
       console.log(res);
     });
   }
