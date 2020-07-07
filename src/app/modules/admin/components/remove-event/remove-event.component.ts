@@ -12,6 +12,7 @@ export class RemoveEventComponent implements OnInit {
   allEventData: null;
   selectedEvent: null;
   submitResult: Number;
+  selectedEventId: Number;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService,) { }
 
@@ -34,16 +35,16 @@ export class RemoveEventComponent implements OnInit {
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEvent = event.value;
+    this.selectedEventId = event.value;
   }
   onEventDelete() {
     console.log("Event Delete: ")
-    console.log(this.selectedEvent)
+    console.log(this.selectedEventId)
     this.submitResult = 200;
 
     // this.spinner.on();
     // this.api
-    //   .deleteEvent(this.selectedEvent.id)
+    //   .deleteEvent(this.selectedEventId)
     //   .subscribe((res: any) => {
     //     this.spinner.off();
     //   })
