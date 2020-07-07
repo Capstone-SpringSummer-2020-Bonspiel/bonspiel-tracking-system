@@ -1,19 +1,12 @@
-<mat-vertical-stepper linear
-  #stepper>
+<mat-vertical-stepper linear #stepper>
   <!-- Stepper: Select Event Name-->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select Curling Event </ng-template>
       <mat-form-field>
         <mat-label> Select Curling Event... </mat-label>
-        <mat-select formControlName="firstCtrl"
-          name="eventName"
-          (selectionChange)="getEvent(); stepper.next()"
-          required>
-          <mat-option *ngFor="let eventName of eventNames"
-            [value]="eventName.id"
-            matTooltip="{{eventName.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
-            [matTooltipPosition]="'right'">
+        <mat-select formControlName="firstCtrl" name="eventName" (selectionChange)="getEvent(); stepper.next()" required>
+          <mat-option *ngFor="let eventName of eventNames" [value]="eventName.id" matTooltip="{{eventName.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}" [matTooltipPosition]="'right'">
             {{eventName.name}}
           </mat-option>
         </mat-select>
@@ -27,13 +20,10 @@
       <ng-template matStepLabel> Add Draw Information </ng-template>
       <mat-form-field>
         <mat-label>Name</mat-label>
-        <input matInput
-          formControlName="secondCtrlName"
-          placeholder="Ex. Draw #1"
-          required>
+        <input matInput formControlName="secondCtrlName" placeholder="Ex. Draw #1" required>
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width"
+      <!-- <mat-form-field class="example-full-width"
         appearance="fill">
         <mat-label>Choose a date</mat-label>
         <input matInput
@@ -43,22 +33,24 @@
         <mat-datepicker-toggle matSuffix
           [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field> -->
+
+      <mat-form-field>
+        <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="secondCtrlDate">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
       </mat-form-field>
 
       <br>
       <mat-form-field>
         <mat-label>Video URL</mat-label>
-        <input matInput
-          formControlName="secondCtrlUrl"
-          placeholder="Ex. https://www.youtube.com/embed/zesl6jZnSDM">
+        <input matInput formControlName="secondCtrlUrl" placeholder="Ex. https://www.youtube.com/embed/zesl6jZnSDM">
       </mat-form-field>
 
 
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext (click)="getDrawInfo()">Next</button>
       </div>
 
     </form>
@@ -67,11 +59,9 @@
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        (click)="stepper.reset()">Reset</button>
-      <button mat-button>Submit</button>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onClickSubmit()">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

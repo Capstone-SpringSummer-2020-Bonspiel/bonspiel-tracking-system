@@ -99,13 +99,14 @@ export class ApiService {
 
   /********************************************************************/
 
-  public addDraw(eventId, name, start, video_url) {
+  public createDraw(eventId, name, start, video_url) {
     const body = {
       eventId: eventId,
       name: name,
       start: start,
       video_url: video_url,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/add-draw`, body);
+    console.log(body);
+    return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
   }
 }

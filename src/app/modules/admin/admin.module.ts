@@ -26,6 +26,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 import { AdminComponent } from './components/admin/admin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -38,7 +43,10 @@ import { PieComponent } from './components/widgets/pie/pie.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { CreateEventComponent, CreateEventDialog } from './components/create-event/create-event.component';
+import {
+  CreateEventComponent,
+  CreateEventDialog,
+} from './components/create-event/create-event.component';
 import { CreateDrawComponent } from './components/create-draw/create-draw.component';
 import { CreateGameComponent } from './components/create-game/create-game.component';
 import { CreateTeamComponent } from './components/create-team/create-team.component';
@@ -47,7 +55,10 @@ import { CreatePoolComponent } from './components/create-pool/create-pool.compon
 import { CreateCurlerComponent } from './components/create-curler/create-curler.component';
 import { CreateEndscoreComponent } from './components/create-endscore/create-endscore.component';
 import { AddTeamToEventComponent } from './components/add-team-to-event/add-team-to-event.component';
-import { EditEventComponent, EditEventDialog } from './components/edit-event/edit-event.component';
+import {
+  EditEventComponent,
+  EditEventDialog,
+} from './components/edit-event/edit-event.component';
 import { EditDrawComponent } from './components/edit-draw/edit-draw.component';
 import { EditGameComponent } from './components/edit-game/edit-game.component';
 import { EditBracketComponent } from './components/edit-bracket/edit-bracket.component';
@@ -142,7 +153,12 @@ import { LoginComponent } from './components/login/login.component';
     MatSelectModule,
     MatTooltipModule,
     MatDatepickerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
+    NgxMatTimepickerModule,
   ],
   providers: [DashboardService],
 })
-export class AdminModule { }
+export class AdminModule {}

@@ -11,10 +11,12 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-create-draw',
   templateUrl: './create-draw.component.html',
-  styleUrls: ['./create-draw.component.scss']
+  styleUrls: ['./create-draw.component.scss'],
 })
 export class CreateDrawComponent implements OnInit {
   dateFilter;
@@ -23,6 +25,7 @@ export class CreateDrawComponent implements OnInit {
 
   eventNames: any[] = [];
   eventDraws: any[] = [];
+  selectedEventId;
   selectedDraw;
   selectedEvent;
   drawDisplayedColumns: string[] = [
@@ -33,14 +36,26 @@ export class CreateDrawComponent implements OnInit {
     'actions',
   ];
 
+  //datetimepicker stuff
+  public date: Date;
+  public disabled = false;
+  public showSpinners = true;
+
+  public formGroup = new FormGroup({
+    date: new FormControl(null, [Validators.required]),
+  });
+  public dateControl = new FormControl(new Date());
+  //end datetimepicker
+
   constructor(
     private _formBuilder: FormBuilder,
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    this.date = new Date();
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
     });
@@ -66,10 +81,10 @@ export class CreateDrawComponent implements OnInit {
 
   getEvent() {
     console.log('getEvent()');
-    const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventID= ${selectedEventID}`);
+    this.selectedEventId = this.firstFormGroup.value.firstCtrl;
+    console.log(`selectedEventID= ${this.selectedEventId}`);
     this.selectedEvent = this.eventNames.filter(
-      (x) => x.id === selectedEventID
+      (x) => x.id === this.selectedEventId
     );
     console.log('selectedEvent');
     console.log(this.selectedEvent);
@@ -77,10 +92,32 @@ export class CreateDrawComponent implements OnInit {
 
   getDrawInfo() {
     const newDrawName = this.secondFormGroup.value.secondCtrlName;
-    const newDrawStart = this.secondFormGroup.value.secondCtrlDate;
+    // const newDrawStart = this.secondFormGroup.value.secondCtrlDate;
+    const newDrawStart = this.secondFormGroup
+      .get('secondCtrlDate')
+      .value?.toLocaleString();
     const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
     console.log(`newDrawName= ${newDrawName}`);
     console.log(`newDrawStart= ${newDrawStart}`);
     console.log(`newDrawUrl= ${newDrawUrl}`);
+  }
+
+  onClickSubmit() {
+    const newDrawName = this.secondFormGroup.value.secondCtrlName;
+    const newDrawStart = this.secondFormGroup
+      .get('secondCtrlDate')
+      .value?.toLocaleString();
+    const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
+
+    this.api
+      .createDraw(
+        this.selectedEventId.toString(),
+        newDrawName,
+        newDrawStart,
+        newDrawUrl
+      )
+      .subscribe((res: any) => {
+        console.log(res);
+      });
   }
 }
