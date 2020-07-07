@@ -116,8 +116,12 @@ export class CreateDrawComponent implements OnInit {
         newDrawStart,
         newDrawUrl
       )
-      .subscribe((res: any) => {
-        console.log(res);
-      });
+      .subscribe(
+        (res: any) => this.notifier.showSuccess('Draw has been created', ''),
+        (error) => {
+          console.log(error);
+          this.notifier.showError('Something went wrong', '');
+        }
+      );
   }
 }

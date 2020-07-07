@@ -101,7 +101,6 @@ export class ApiService {
 
   public createDraw(eventId, name, start, video_url) {
     const body = {
-      eventId: eventId,
       name: name,
       start: start,
       video_url: video_url,
