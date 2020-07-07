@@ -108,4 +108,8 @@ export class ApiService {
     };
     return this.httpClient.post(`${apiURL}/api/v1/add-draw`, body);
   }
+
+  public deleteDraw(drawId) {
+    return this.httpClient.delete(`${apiURL}/api/v1/draw/${drawId}`);
+  }
 }
