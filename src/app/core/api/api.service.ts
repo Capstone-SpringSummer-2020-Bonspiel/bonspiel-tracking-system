@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@app/../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
-const apiURL: string = environment.apiURL;
-// const apiURL = 'http://localhost:8080';
+const apiUrl: string = environment.apiUrl;
+// const apiUrl = 'http://localhost:8080';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -23,8 +24,39 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpClient: HttpClient) {
-    console.log(`apiURL  ==>  ${apiURL}`);
+  constructor(private httpClient: HttpClient) { }
+
+  /********************************************************************/
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
+
+  /********************************************************************/
+
+  public adHocQuery(query) {
+    const body = {
+      sql: query,
+    };
+    return this.httpClient.post(`${apiUrl}/api/v1/DANGEROUSADHOC`, body);
+  }
+
+  /********************************************************************/
+
+  public getEvents() {
+    return this.httpClient.get(`${apiUrl}/api/v1/events`);
   }
 
   changeEventId(newEventId: number) {
@@ -51,62 +83,49 @@ export class ApiService {
       beginDate: beginDate,
       endDate: endDate,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/create-curling-event`, body);
   }
 
   /********************************************************************/
-
-  public adHocQuery(query) {
-    const body = {
-      sql: query,
-    };
-    return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
-  }
-
-  /********************************************************************/
-
-  public getEvents() {
-    return this.httpClient.get(`${apiURL}/api/v1/events`);
-  }
 
   public getTeams(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/teams`);
   }
 
   public getGames(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/games`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/games`);
   }
 
   public getDraws(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/draws`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/draws`);
   }
 
   public getGamesByTeam(eventId, teamId) {
     return this.httpClient.get(
-      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/games`
+      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
     );
   }
 
   public getScoresByTeam(eventId, teamId) {
     return this.httpClient.get(
-      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/scores`
+      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/scores`
     );
   }
 
   public getScoresByEvent(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/scores`);
   }
 
   public getTeam(teamId) {
-    return this.httpClient.get(`${apiURL}/api/v1/teams/${teamId}`);
+    return this.httpClient.get(`${apiUrl}/api/v1/teams/${teamId}`);
   }
 
   public getAllOrgs() {
-    return this.httpClient.get(`${apiURL}/api/v1/orgs`);
+    return this.httpClient.get(`${apiUrl}/api/v1/orgs`);
   }
 
   public getOrgs(orgId) {
-    return this.httpClient.get(`${apiURL}/api/v1/orgs/${orgId}`);
+    return this.httpClient.get(`${apiUrl}/api/v1/orgs/${orgId}`);
   }
 
   /********************************************************************/
@@ -117,7 +136,7 @@ export class ApiService {
       start: start,
       videoUrl: videoUrl,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/draw`, body);
   }
 
   public editDraw(drawId, name, start, videoUrl) {
@@ -126,11 +145,11 @@ export class ApiService {
       start: start,
       videoUrl: videoUrl,
     };
-    return this.httpClient.put(`${apiURL}/api/v1/admin/draw/${drawId}`, body);
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/draw/${drawId}`, body);
   }
 
   public deleteDraw(drawId) {
-    return this.httpClient.delete(`${apiURL}/api/v1/admin/draw/${drawId}`);
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/draw/${drawId}`);
   }
 
   public createCurler(name, position, affiliation, curlingTeamId) {
@@ -140,7 +159,7 @@ export class ApiService {
       affiliation: affiliation,
       curlingTeamId: curlingTeamId,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/admin/curler`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/curler`, body);
   }
 
   public editCurler(name, position, affiliation, curlingTeamId, curlerId) {
@@ -151,12 +170,12 @@ export class ApiService {
       curlingTeamId: curlingTeamId,
     };
     return this.httpClient.put(
-      `${apiURL}/api/v1/admin/curler/${curlerId}`,
+      `${apiUrl}/api/v1/admin/curler/${curlerId}`,
       body
     );
   }
 
   public removeCurler(curlerId) {
-    return this.httpClient.delete(`${apiURL}/api/v1/admin/curler/${curlerId}`);
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/curler/${curlerId}`);
   }
 }

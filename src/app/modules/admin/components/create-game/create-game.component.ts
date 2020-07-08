@@ -85,6 +85,7 @@ export class CreateGameComponent implements OnInit {
       iceSheet: ['', Validators.required],
       finished: [false, Validators.required],
       winnerId: [''],
+      notes: [''],
     });
 
     // Get list of existing events

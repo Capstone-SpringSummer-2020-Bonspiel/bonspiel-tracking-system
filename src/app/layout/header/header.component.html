@@ -46,35 +46,19 @@
             href="/teamlist">Teams</a>
         </li>
 
-        <!-- SOMETHING ELSE BUTTON-->
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            Something Else
-          </a>
-          <div class="dropdown-menu"
-            aria-labelledby="navbarDropdown">
-            <div *ngFor="let event of currentEvents; last as isLast">
-              <a class="dropdown-item"
-                href="#">{{event.begin_date}} - {{event.name}}</a>
-              <div *ngIf="!isLast"
-                class="dropdown-divider"></div>
-            </div>
-          </div>
-        </li> -->
       </ul>
 
-      <!-- SIGN IN BUTTON -->
-      <!-- <form class="form-inline">
-        <button class="btn btn-sm btn-outline-secondary"
+      <!-- SIGN IN/OUT BUTTON -->
+      <form class="form-inline">
+        <button *ngIf="!user"
+          class="btn btn-sm btn-outline-secondary"
           type="button"
           (click)="signIn()">Sign In</button>
-      </form> -->
+        <button *ngIf="user"
+          class="btn btn-sm btn-outline-secondary"
+          type="button"
+          (click)="signOut()">Sign Out</button>
+      </form>
     </div>
   </nav>
 </header>

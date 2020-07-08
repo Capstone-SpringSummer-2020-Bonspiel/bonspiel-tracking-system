@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '@core/_models';
+import { AccountService } from '@app/core/_services';
 
 @Component({
   selector: 'app-sidebar',
@@ -31,6 +33,11 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Add a new Team',
       path: '/admin/create-team',
+      icon: 'group_add'
+    },
+    {
+      label: 'Add a Team to an Event',
+      path: '/admin/add-team-to-event',
       icon: 'group_add'
     },
     {
@@ -151,8 +158,14 @@ export class SidebarComponent implements OnInit {
     }
   ]
 
+  user: User;
 
-  constructor() { }
+  constructor(private accountService: AccountService) {
+    this.accountService.user.subscribe(user => {
+      this.user = user;
+      console.log(this.user);
+    });
+  }
 
   ngOnInit(): void {
   }

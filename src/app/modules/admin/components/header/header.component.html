@@ -1,8 +1,8 @@
 <mat-toolbar color="primary"
-             style="background-color: #004712">
+  style="background-color: #004712">
   <mat-toolbar-row>
     <button mat-icon-button
-            (click)="toggleSideBar()">
+      (click)="toggleSideBar()">
       <mat-icon *ngIf="isSidebarOpen"> arrow_back_ios </mat-icon>
       <mat-icon *ngIf="!isSidebarOpen"> arrow_forward_ios </mat-icon>
     </button>
@@ -10,14 +10,14 @@
     <!-- <span> APP LOGO </span> -->
 
     <div fxFlex
-         fxLayout="row"
-         fxLayoutAlign="end center">
+      fxLayout="row"
+      fxLayoutAlign="end center">
       <ul fxLayout="row"
-          fxLayoutGap="20px"
-          style="margin-bottom: 0">
+        fxLayoutGap="20px"
+        style="margin-bottom: 0">
         <li>
           <button mat-button
-                  [matMenuTriggerFor]="menu">
+            [matMenuTriggerFor]="menu">
             <mat-icon>settings</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
@@ -41,7 +41,7 @@
         </li>
         <li>
           <button mat-button
-                  [matMenuTriggerFor]="helpMenu">
+            [matMenuTriggerFor]="helpMenu">
             <mat-icon>help_outline</mat-icon>
           </button>
           <mat-menu #helpMenu="matMenu">
@@ -65,8 +65,8 @@
         </li>
         <li>
           <button mat-button
-                  [matMenuTriggerFor]="loginMenu">
-            <mat-icon>person_outline</mat-icon>
+            (click)="manageUsers()">
+            <mat-icon> supervisor_account </mat-icon>
           </button>
           <mat-menu #loginMenu="matMenu">
             <button mat-menu-item>

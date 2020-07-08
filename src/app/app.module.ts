@@ -4,8 +4,9 @@ import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ApiService } from '@app/core/api/api.service';
+import { CookieService } from 'ngx-cookie-service';
 
 import { VisitorModule } from '@app/modules/visitor/visitor.module';
 import { AdminModule } from '@app/modules/admin/admin.module';
@@ -27,9 +28,15 @@ import {
   NgxMatDatetimePickerModule,
   NgxMatTimepickerModule,
 } from '@angular-material-components/datetime-picker';
+import { MatListModule } from '@angular/material/list';
+import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_helpers';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -48,9 +55,19 @@ import {
     MatDatepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
+    MatListModule,
   ],
-  providers: [ApiService],
+  providers: [
+    CookieService,
+    ApiService,
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
+    // provider used to create fake backend
+    fakeBackendProvider,
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule { }
