@@ -41,7 +41,7 @@
       <br>
 
       <mat-form-field>
-        <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="thirdCtrlDate">
+        <input matInput [min]="minDate" [max]="maxDate" [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="thirdCtrlDate">
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
       </mat-form-field>

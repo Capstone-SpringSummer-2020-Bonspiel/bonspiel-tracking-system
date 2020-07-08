@@ -26,6 +26,9 @@ export class EditDrawComponent implements OnInit {
   selectedEvent;
   selectedDrawId;
 
+  minDate;
+  maxDate;
+
   constructor(
     private _formBuilder: FormBuilder,
     private api: ApiService,
@@ -85,6 +88,10 @@ export class EditDrawComponent implements OnInit {
     console.log('getDraw()');
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedDrawID: ${this.selectedDrawId}`);
+    this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
+    this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
+    console.log(this.minDate);
+    console.log(this.maxDate);
   }
 
   onClickSubmit() {
