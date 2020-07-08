@@ -51,7 +51,7 @@
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button (click)="onClickSubmit()">Submit</button>
+        <button mat-button (click)="onClickSubmit(); stepper.reset()">Submit</button>
       </div>
     </form>
   </mat-step>
