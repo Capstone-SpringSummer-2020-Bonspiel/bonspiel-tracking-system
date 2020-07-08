@@ -36,16 +36,10 @@ export class CreateDrawComponent implements OnInit {
     'actions',
   ];
 
-  //datetimepicker stuff
-  public date: Date;
-  public disabled = false;
-  public showSpinners = true;
-
-  public formGroup = new FormGroup({
-    date: new FormControl(null, [Validators.required]),
-  });
-  public dateControl = new FormControl(new Date());
-  //end datetimepicker
+  date: Date;
+  showSpinners = true;
+  minDate;
+  maxDate;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -88,6 +82,10 @@ export class CreateDrawComponent implements OnInit {
     );
     console.log('selectedEvent');
     console.log(this.selectedEvent);
+    this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
+    this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
+    console.log(this.minDate);
+    console.log(this.maxDate);
   }
 
   onClickSubmit() {
