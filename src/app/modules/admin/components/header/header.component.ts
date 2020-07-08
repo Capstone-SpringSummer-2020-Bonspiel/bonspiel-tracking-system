@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,9 +10,9 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
   isSidebarOpen = true;
 
-  constructor() {}
+  constructor(private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   toggleSideBar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -19,5 +20,9 @@ export class HeaderComponent implements OnInit {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 300);
+  }
+
+  manageUsers() {
+    this.router.navigate(['/admin/users']);
   }
 }

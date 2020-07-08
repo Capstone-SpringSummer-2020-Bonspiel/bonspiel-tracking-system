@@ -5,8 +5,8 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-const apiURL: string = environment.apiURL;
-// const apiURL = 'http://localhost:8080';
+const apiUrl: string = environment.apiUrl;
+// const apiUrl = 'http://localhost:8080';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -24,9 +24,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpClient: HttpClient) {
-    console.log(`apiURL  ==>  ${apiURL}`);
-  }
+  constructor(private httpClient: HttpClient) { }
 
   changeEventId(newEventId: number) {
     this.eventIdSource.next(newEventId);
@@ -52,7 +50,7 @@ export class ApiService {
       beginDate: beginDate,
       endDate: endDate,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/create-curling-event`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/create-curling-event`, body);
   }
 
   /********************************************************************/
@@ -61,41 +59,41 @@ export class ApiService {
     const body = {
       sql: query,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/DANGEROUSADHOC`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/DANGEROUSADHOC`, body);
   }
 
   /********************************************************************/
 
   public getEvents() {
-    return this.httpClient.get(`${apiURL}/api/v1/events`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events`);
   }
 
   public getTeams(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/teams`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/teams`);
   }
 
   public getGames(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/games`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/games`);
   }
 
   public getDraws(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/draws`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/draws`);
   }
 
   public getGamesByTeam(eventId, teamId) {
     return this.httpClient.get(
-      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/games`
+      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
     );
   }
 
   public getScoresByTeam(eventId, teamId) {
     return this.httpClient.get(
-      `${apiURL}/api/v1/events/${eventId}/teams/${teamId}/scores`
+      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/scores`
     );
   }
 
   public getScoresByEvent(eventId) {
-    return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/scores`);
   }
 
   /********************************************************************/
@@ -106,7 +104,7 @@ export class ApiService {
       start: start,
       videoUrl: videoUrl,
     };
-    return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/draw`, body);
   }
 
   private handleError(error: HttpErrorResponse) {

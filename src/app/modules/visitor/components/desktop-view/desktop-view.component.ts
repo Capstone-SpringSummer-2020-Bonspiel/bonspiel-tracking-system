@@ -69,7 +69,7 @@ export class DesktopViewComponent implements OnInit {
 
         this.currentEventId = eventId;
         // this.currentEventId = 5;  // DEBUGGING
-        console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
+        // console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
 
         // Get current event name
         this.api
@@ -82,8 +82,8 @@ export class DesktopViewComponent implements OnInit {
         this.api
           .getDraws(this.currentEventId)
           .subscribe((res: any) => {
-            console.log('[DEBUG] draws:');
-            console.log(res);
+            // console.log('[DEBUG] draws:');
+            // console.log(res);
 
             this.selectedDraw = res[res.length - 1];
             this.allDraws = res;
@@ -92,8 +92,8 @@ export class DesktopViewComponent implements OnInit {
             this.api
               .getGames(this.currentEventId)
               .subscribe((res: any) => {
-                console.log('[DEBUG] games');
-                console.log(res);
+                // console.log('[DEBUG] games');
+                // console.log(res);
 
                 this.allGames = res;
 
@@ -131,14 +131,14 @@ export class DesktopViewComponent implements OnInit {
 
                 this.currentGames = this.allGames.filter(x => x.draw_id === this.selectedDraw.id);
 
-                console.log(`[DEBUG] selectedDraw:`);
-                console.log(this.selectedDraw);
-                console.log(`[DEBUG] allDraws:`);
-                console.log(this.allDraws);
-                console.log(`[DEBUG] allGames:`);
-                console.log(this.allGames);
-                console.log(`[DEBUG] currentGames:`);
-                console.log(this.currentGames);
+                // console.log(`[DEBUG] selectedDraw:`);
+                // console.log(this.selectedDraw);
+                // console.log(`[DEBUG] allDraws:`);
+                // console.log(this.allDraws);
+                // console.log(`[DEBUG] allGames:`);
+                // console.log(this.allGames);
+                // console.log(`[DEBUG] currentGames:`);
+                // console.log(this.currentGames);
 
                 // Populate all standings
                 let buckets = {};
@@ -178,14 +178,14 @@ export class DesktopViewComponent implements OnInit {
                   }
                 }
 
-                console.log('[DEBUG] buckets:');
-                console.log(buckets);
+                // console.log('[DEBUG] buckets:');
+                // console.log(buckets);
 
                 // Convert object to array
                 let arr = Object.keys(buckets).map((key) => buckets[key]);
 
-                console.log('[DEBUG] arr:');
-                console.log(arr);
+                // console.log('[DEBUG] arr:');
+                // console.log(arr);
 
                 const A = [];
                 for (const team of arr) {
@@ -242,14 +242,14 @@ export class DesktopViewComponent implements OnInit {
                   }
                 }
 
-                console.log('[DEBUG] A:');
-                console.log(A);
+                // console.log('[DEBUG] A:');
+                // console.log(A);
 
                 this.dataSourceAllStandings.length = 0;  // Clear array
                 this.dataSourceAllStandings = A;         // Populate array
 
-                console.log('[DEBUG] dataSourceAllStandings');
-                console.log(this.dataSourceAllStandings);
+                // console.log('[DEBUG] dataSourceAllStandings');
+                // console.log(this.dataSourceAllStandings);
 
                 this.spinner.off();
               });
@@ -265,19 +265,19 @@ export class DesktopViewComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
     });
   }
 
   openYoutubeDialog(video_url): void {
-    console.log(`video_url  ==>  ${video_url}`);
+    // console.log(`video_url  ==>  ${video_url}`);
     const dialogRef = this.dialog.open(YoutubeDialogComponent, {
       width: '800px',
       data: { youtube_link: video_url },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Youtube dialog was closed');
+      // console.log('Youtube dialog was closed');
     });
   }
 
@@ -299,23 +299,23 @@ export class DesktopViewComponent implements OnInit {
   }
 
   onDrawSelected(event: any) {
-    console.log('the selected draw is:');
-    console.log(event.value);
+    // console.log('the selected draw is:');
+    // console.log(event.value);
 
     // Set the current selected draw
     this.selectedDraw = event.value;
 
-    console.log('BEFORE');
-    console.log(this.currentGames);
-    console.log(this.selectedDraw.id);
+    // console.log('BEFORE');
+    // console.log(this.currentGames);
+    // console.log(this.selectedDraw.id);
 
     // Load games by draw ID
     this.currentGames = this.allGames.filter(
       (e) => e.draw_id === this.selectedDraw.id
     );
 
-    console.log('AFTER');
-    console.log(this.currentGames);
+    // console.log('AFTER');
+    // console.log(this.currentGames);
   }
 }
 

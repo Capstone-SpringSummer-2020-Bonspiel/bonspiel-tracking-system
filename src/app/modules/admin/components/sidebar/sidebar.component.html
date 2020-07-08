@@ -1,10 +1,10 @@
 <mat-nav-list>
   <div class="profile-card">
     <div class="header">
-      <h2> Jane Doe </h2>
-      <h4> jane.doe@email.com </h4>
+      <h2 *ngIf="user"> {{ user.firstName }} {{ user.lastName }} </h2>
+      <h4 *ngIf="user"> {{ user.firstName }}.{{ user.lastName }}@email.com </h4>
     </div>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQp1Wog7_-TU4ZhMZTWrLPMDfpVQa1DIGdsR6xazUVo3VrWDE46&usqp=CAU"
+    <img src="https://img.bleacherreport.net/img/images/photos/002/759/669/3285d97ba0a774103d07f9257dd0a13c_crop_north.jpg?h=533&w=800&q=70&crop_x=center&crop_y=top"
       alt="Emoji">
   </div>
 

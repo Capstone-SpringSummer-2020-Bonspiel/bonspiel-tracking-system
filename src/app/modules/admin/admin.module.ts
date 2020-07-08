@@ -66,7 +66,8 @@ import { RemoveOrganizationComponent } from './components/remove-organization/re
 import { RemoveEndscoreComponent } from './components/remove-endscore/remove-endscore.component';
 import { RemovePoolComponent } from './components/remove-pool/remove-pool.component';
 import { RemoveBracketComponent } from './components/remove-bracket/remove-bracket.component';
-import { LoginComponent } from './components/login/login.component';
+
+import { AdminRoutingModule } from './admin-routing.module';
 
 @NgModule({
   declarations: [
@@ -106,12 +107,12 @@ import { LoginComponent } from './components/login/login.component';
     CreateEventComponent,
     CreateGameComponent,
     CreateTeamComponent,
-    LoginComponent,
     CreateEventDialog,
     EditEventDialog,
   ],
   imports: [
     CommonModule,
+    AdminRoutingModule,
     RouterModule,
     MatDividerModule,
     MatDatepickerModule,
@@ -131,7 +132,6 @@ import { LoginComponent } from './components/login/login.component';
     HighchartsChartModule,
     MatStepperModule,
     MatFormFieldModule,
-    BrowserModule,
     FormsModule,
     MatInputModule,
     ReactiveFormsModule,

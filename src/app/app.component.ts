@@ -46,8 +46,8 @@ export class AppComponent {
             this.api.changeEvent(this.curlingEvents.find((e) => e.id === eventId));
           });
 
-        console.log('[DEBUG] curlingEvents');
-        console.log(this.curlingEvents);
+        // console.log('[DEBUG] curlingEvents');
+        // console.log(this.curlingEvents);
       });
   }
 
