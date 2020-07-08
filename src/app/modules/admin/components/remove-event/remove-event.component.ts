@@ -18,17 +18,17 @@ export class RemoveEventComponent implements OnInit {
 
   ngOnInit(): void {
     this.spinner.on();
-    this.api
-      .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
+    // this.api
+    //   .getEvents()
+    //   .subscribe((res: any) => {
+    //     console.log('[DEBUG] eventObtain() in schedule component:');
+    //     console.log(res);
+    //     this.allEventData = res;
+    //     console.log("ThisEventDataBelow:");
+    //     console.log(this.allEventData);
 
-        this.spinner.off();
-      })
+    //     this.spinner.off();
+    //   })
   }
   onEventSelected(event: any) {
     console.log(this.allEventData);
