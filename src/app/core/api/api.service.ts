@@ -108,4 +108,14 @@ export class ApiService {
     console.log(body);
     return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
   }
+
+  public createCurler(name, position, affiliation, curlingTeamId) {
+    const body = {
+      name: name,
+      position: position,
+      affiliation: affiliation,
+      curlingTeamId: curlingTeamId,
+    };
+    return this.httpClient.post(`${apiURL}/api/v1/admin/curler`, body);
+  }
 }
