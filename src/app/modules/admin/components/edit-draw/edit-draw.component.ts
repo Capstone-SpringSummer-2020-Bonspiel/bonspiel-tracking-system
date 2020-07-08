@@ -19,20 +19,19 @@ import { NgxMatNativeDateModule } from '@angular-material-components/datetime-pi
 export class EditDrawComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
 
   eventNames: any[] = [];
   eventDraws: any[] = [];
   selectedEvent;
-  selectedDraw;
-
-  drawDisplayedColumns: string[] = ['event_id', 'name', 'start', 'video_url'];
+  selectedDrawId;
 
   constructor(
     private _formBuilder: FormBuilder,
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -40,6 +39,11 @@ export class EditDrawComponent implements OnInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrlName: ['', Validators.required],
+      thirdCtrlDate: ['', Validators.required],
+      thirdCtrlUrl: [''],
     });
 
     this.spinner.on();
@@ -79,11 +83,25 @@ export class EditDrawComponent implements OnInit {
 
   getDraw() {
     console.log('getDraw()');
-    const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedDrawID: ${selectedDrawID}`);
-    this.selectedDraw = this.eventDraws.filter((x) => x.id === selectedDrawID);
-    console.log('selectedDraw:');
-    console.log(this.selectedDraw);
+    this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
+    console.log(`selectedDrawID: ${this.selectedDrawId}`);
+  }
+
+  onClickSubmit() {
+    const newDrawName = this.thirdFormGroup.value.thirdCtrlName;
+    const newDrawStart = this.thirdFormGroup
+      .get('thirdCtrlDate')
+      .value?.toLocaleString();
+    const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
+
+    this.api
+      .editDraw(this.selectedDrawId, newDrawStart, newDrawStart, newDrawUrl)
+      .subscribe(
+        (res: any) => this.notifier.showSuccess('Draw has been modified', ''),
+        (error) => {
+          console.log(error);
+          this.notifier.showError('Something went wrong', '');
+        }
+      );
   }
 }

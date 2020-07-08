@@ -99,13 +99,21 @@ export class ApiService {
 
   /********************************************************************/
 
-  public createDraw(eventId, name, start, video_url) {
+  public createDraw(eventId, name, start, videoUrl) {
     const body = {
       name: name,
       start: start,
-      video_url: video_url,
+      videoUrl: videoUrl,
     };
-    console.log(body);
     return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
+  }
+
+  public editDraw(drawId, name, start, videoUrl) {
+    const body = {
+      name: name,
+      start: start,
+      videoUrl: videoUrl,
+    };
+    return this.httpClient.put(`${apiURL}/api/v1/admin/draw/${drawId}`, body);
   }
 }

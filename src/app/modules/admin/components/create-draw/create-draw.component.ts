@@ -90,18 +90,6 @@ export class CreateDrawComponent implements OnInit {
     console.log(this.selectedEvent);
   }
 
-  getDrawInfo() {
-    const newDrawName = this.secondFormGroup.value.secondCtrlName;
-    // const newDrawStart = this.secondFormGroup.value.secondCtrlDate;
-    const newDrawStart = this.secondFormGroup
-      .get('secondCtrlDate')
-      .value?.toLocaleString();
-    const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
-    console.log(`newDrawName= ${newDrawName}`);
-    console.log(`newDrawStart= ${newDrawStart}`);
-    console.log(`newDrawUrl= ${newDrawUrl}`);
-  }
-
   onClickSubmit() {
     const newDrawName = this.secondFormGroup.value.secondCtrlName;
     const newDrawStart = this.secondFormGroup
