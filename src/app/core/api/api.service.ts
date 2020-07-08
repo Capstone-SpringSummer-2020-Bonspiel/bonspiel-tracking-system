@@ -109,7 +109,6 @@ export class ApiService {
       start: start,
       video_url: video_url,
     };
-    console.log(body);
     return this.httpClient.post(`${apiURL}/api/v1/admin/${eventId}/draw`, body);
   }
 
@@ -134,5 +133,9 @@ export class ApiService {
       `${apiURL}/api/v1/admin/curler/${curlerId}`,
       body
     );
+  }
+
+  public removeCurler(curlerId) {
+    return this.httpClient.delete(`${apiURL}/api/v1/admin/curler/${curlerId}`);
   }
 }
