@@ -97,6 +97,10 @@ export class ApiService {
     return this.httpClient.get(`${apiURL}/api/v1/events/${eventId}/scores`);
   }
 
+  public getTeam(teamId) {
+    return this.httpClient.get(`${apiURL}/api/v1/teams/${teamId}`);
+  }
+
   /********************************************************************/
 
   public createDraw(eventId, name, start, video_url) {
@@ -117,5 +121,18 @@ export class ApiService {
       curlingTeamId: curlingTeamId,
     };
     return this.httpClient.post(`${apiURL}/api/v1/admin/curler`, body);
+  }
+
+  public editCurler(name, position, affiliation, curlingTeamId, curlerId) {
+    const body = {
+      name: name,
+      position: position,
+      affiliation: affiliation,
+      curlingTeamId: curlingTeamId,
+    };
+    return this.httpClient.put(
+      `${apiURL}/api/v1/admin/curler/${curlerId}`,
+      body
+    );
   }
 }

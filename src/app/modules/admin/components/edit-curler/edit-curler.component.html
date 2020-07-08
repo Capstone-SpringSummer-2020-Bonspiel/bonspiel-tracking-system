@@ -1,1 +1,73 @@
-<p>edit-curler works!</p>
+<mat-vertical-stepper linear #stepper>
+  <!-- Stepper: Select Affiliation -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select an Organization</ng-template>
+      <mat-form-field>
+        <mat-label> Select Organization... </mat-label>
+        <mat-select formControlName="firstCtrl" name="organizations" (selectionChange)="getOrgTeams(); stepper.next()" required>
+          <mat-option *ngFor="let organization of organizations" [value]="organization.id">
+            {{organization.full_name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <!-- Stepper: Select Team -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel> Select a Team</ng-template>
+      <mat-form-field>
+        <mat-label> Select Team... </mat-label>
+        <mat-select formControlName="secondCtrl" name="teams" (selectionChange)="getTeamId(); stepper.next()" required>
+          <mat-option *ngFor="let team of teams" [value]="team.id">
+            {{team.team_name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <!-- Stepper: Select Curler -->
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel> Select a Curler</ng-template>
+      <mat-form-field>
+        <mat-label> Select Curler... </mat-label>
+        <mat-select formControlName="thirdCtrl" name="selectedTeam" (selectionChange)="getCurlerId(); stepper.next()" required>
+          <mat-option *ngFor="let curler of selectedTeam" [value]="curler.curler_id">
+            {{curler.curler_name}}, {{curler.curler_position}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+
+  <!-- Stepper: Curler Information-->
+  <mat-step [stepControl]="fourthFormGroup">
+    <form [formGroup]="fourthFormGroup">
+      <ng-template matStepLabel> Edit Curler Information </ng-template>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="fourthCtrlName" required>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Position</mat-label>
+        <mat-select formControlName="fourthCtrlPosition" name="positions" (selectionChange)="stepper.next()" required>
+          <mat-option *ngFor="let position of positions" [value]="position.value">
+            {{position.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="onClickSubmit()">Submit</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-vertical-stepper>
