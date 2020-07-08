@@ -49,12 +49,12 @@
     <form [formGroup]="fourthFormGroup">
       <ng-template matStepLabel> Edit Curler Information </ng-template>
       <mat-form-field>
-        <mat-label>Name</mat-label>
+        <mat-label>New Name</mat-label>
         <input matInput formControlName="fourthCtrlName" required>
       </mat-form-field>
       <br>
       <mat-form-field>
-        <mat-label>Position</mat-label>
+        <mat-label>New Position</mat-label>
         <mat-select formControlName="fourthCtrlPosition" name="positions" (selectionChange)="stepper.next()" required>
           <mat-option *ngFor="let position of positions" [value]="position.value">
             {{position.viewValue}}

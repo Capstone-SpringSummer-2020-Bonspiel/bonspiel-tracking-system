@@ -101,6 +101,14 @@ export class ApiService {
     return this.httpClient.get(`${apiURL}/api/v1/teams/${teamId}`);
   }
 
+  public getAllOrgs() {
+    return this.httpClient.get(`${apiURL}/api/v1/orgs`);
+  }
+
+  public getOrgs(orgId) {
+    return this.httpClient.get(`${apiURL}/api/v1/orgs/${orgId}`);
+  }
+
   /********************************************************************/
 
   public createDraw(eventId, name, start, video_url) {

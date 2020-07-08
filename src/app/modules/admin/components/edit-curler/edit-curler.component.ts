@@ -57,9 +57,8 @@ export class EditCurlerComponent implements OnInit {
     });
 
     this.spinner.on();
-    const query = 'SELECT * from organization';
-    this.api.adHocQuery(query).subscribe((res: any) => {
-      this.organizations = res.rows;
+    this.api.getAllOrgs().subscribe((res: any) => {
+      this.organizations = res;
       this.spinner.off();
       console.log('organizations:');
       console.log(this.organizations);
