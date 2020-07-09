@@ -27,6 +27,8 @@ export class TeamlistComponent {
   curlingteam = null;
   selectedEventId = null;
   allTeamData = null;
+  allEventData = null;
+  selectedEvent = null;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
@@ -34,26 +36,16 @@ export class TeamlistComponent {
     this.spinner.on();
 
     this.api
-      .currentEventId$
-      .subscribe((eventId) => {
-        this.selectedEventId = eventId;
+      .getEvents()
+      .subscribe((res: any) => {
+        this.allEventData = res;
+        this.selectedEvent = res[0];
+        this.selectedEventId = res[0].id;
         console.log(this.selectedEventId);
 
-        this.api
-          .getTeams(this.selectedEventId)
-          .subscribe((res: any) => {
-            console.log('[DEBUG] eventObtain() in schedule component:');
-            console.log(res);
-            this.allTeamData = res;
-            this.allTeamData.sort(this.allTeamData.id);
-            console.log(this.allTeamData);
-            // console.log("ThisEventDrawDataBelow:");
-            // console.log(this.eventDrawData);
-            this.spinner.off();
-          });
+        this.eventBegin();
+        this.spinner.off();
       })
-
-
   }
 
   // dataSource = TEAM_DATA;
@@ -62,6 +54,30 @@ export class TeamlistComponent {
     'id',
     'team_name',
   ];
+
+  onEventSelected(event: any) {
+    console.log(this.allEventData);
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
+    this.selectedEventId = this.selectedEvent.id;
+    // this.selectedEvent = event.value;
+    this.eventBegin();
+  }
+
+  eventBegin() {
+    this.api
+      .getTeams(this.selectedEventId)
+      .subscribe((res: any) => {
+        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log(res);
+        this.allTeamData = res;
+        this.allTeamData.sort(this.allTeamData.id);
+        console.log(this.allTeamData);
+        // console.log("ThisEventDrawDataBelow:");
+        // console.log(this.eventDrawData);
+        this.spinner.off();
+      });
+  }
 }
 
 export interface Member {

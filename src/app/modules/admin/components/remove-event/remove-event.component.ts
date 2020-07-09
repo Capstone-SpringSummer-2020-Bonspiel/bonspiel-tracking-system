@@ -12,38 +12,39 @@ export class RemoveEventComponent implements OnInit {
   allEventData: null;
   selectedEvent: null;
   submitResult: Number;
+  selectedEventId: Number;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService,) { }
 
   ngOnInit(): void {
     this.spinner.on();
-    this.api
-      .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
+    // this.api
+    //   .getEvents()
+    //   .subscribe((res: any) => {
+    //     console.log('[DEBUG] eventObtain() in schedule component:');
+    //     console.log(res);
+    //     this.allEventData = res;
+    //     console.log("ThisEventDataBelow:");
+    //     console.log(this.allEventData);
 
-        this.spinner.off();
-      })
+    //     this.spinner.off();
+    //   })
   }
   onEventSelected(event: any) {
     console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEvent = event.value;
+    this.selectedEventId = event.value;
   }
   onEventDelete() {
     console.log("Event Delete: ")
-    console.log(this.selectedEvent)
+    console.log(this.selectedEventId)
     this.submitResult = 200;
 
     // this.spinner.on();
     // this.api
-    //   .deleteEvent(this.selectedEvent.id)
+    //   .deleteEvent(this.selectedEventId)
     //   .subscribe((res: any) => {
     //     this.spinner.off();
     //   })

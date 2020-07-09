@@ -28,6 +28,7 @@ export class EditEventComponent implements OnInit {
   }
   feedBackData: any;
   allEventData: null;
+  selectedEventId: Number;
 
   eventTypes: any[] = [
     { value: 'pool', viewValue: 'Pool' },
@@ -89,7 +90,7 @@ export class EditEventComponent implements OnInit {
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEvent = event.value;
+    this.selectedEventId = event.value;
   }
 
   editCurlingEvent() {
@@ -137,8 +138,8 @@ export class EditEventComponent implements OnInit {
 
     // this.spinner.on();
     // this.api
-    //   .createEvent(name, begin_date, end_date, completed, info, event_type)
-    //   .subscribe((res: any) => {
+    //   .editEvent(name, begin_date, end_date, completed, info, event_type, this.selectedEvent)
+    //   .subscribe((res: any) => {  
     //     this.spinner.off();
     //     this.feedBackData = res;
     //   })

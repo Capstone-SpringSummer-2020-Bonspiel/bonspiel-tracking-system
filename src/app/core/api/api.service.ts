@@ -86,19 +86,75 @@ export class ApiService {
     return this.httpClient.post(`${apiUrl}/api/v1/create-curling-event`, body);
   }
 
+  public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
+    const data = {
+      name: nameData,
+      eventType: eventTypeData,
+      info: infoData,
+      completed: completedData,
+      beginDate: beginDateData,
+      endDate: endDateData,
+    };
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/event`, data);
+  }
+
+  public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId) {
+    const data = {
+      name: nameData,
+      eventType: eventTypeData,
+      info: infoData,
+      completed: completedData,
+      beginDate: beginDateData,
+      endDate: endDateData,
+    };
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/event/${eventId}`, data);
+  }
+
+  public deleteEvent(eventId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/event/${eventId}`);
+  }
+
+  /********************************************************************/
+
+  public getDraws(eventId) {
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/draws`);
+  }
+
+  public createDraw(eventId, name, start, videoUrl) {
+    const body = {
+      name: name,
+      start: start,
+      videoUrl: videoUrl,
+    };
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/draw`, body);
+  }
+
+  public editDraw(drawId, name, start, videoUrl) {
+    const body = {
+      name: name,
+      start: start,
+      videoUrl: videoUrl,
+    };
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/draw/${drawId}`, body);
+  }
+
+  public deleteDraw(drawId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/draw/${drawId}`);
+  }
+
+  /********************************************************************/
+
+  public getGames(eventId) {
+    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/games`);
+  }
+
   /********************************************************************/
 
   public getTeams(eventId) {
     return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/teams`);
   }
 
-  public getGames(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/games`);
-  }
 
-  public getDraws(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/draws`);
-  }
 
   public getGamesByTeam(eventId, teamId) {
     return this.httpClient.get(
@@ -129,28 +185,6 @@ export class ApiService {
   }
 
   /********************************************************************/
-
-  public createDraw(eventId, name, start, videoUrl) {
-    const body = {
-      name: name,
-      start: start,
-      videoUrl: videoUrl,
-    };
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/draw`, body);
-  }
-
-  public editDraw(drawId, name, start, videoUrl) {
-    const body = {
-      name: name,
-      start: start,
-      videoUrl: videoUrl,
-    };
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/draw/${drawId}`, body);
-  }
-
-  public deleteDraw(drawId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/draw/${drawId}`);
-  }
 
   public createCurler(name, position, affiliation, curlingTeamId) {
     const body = {
