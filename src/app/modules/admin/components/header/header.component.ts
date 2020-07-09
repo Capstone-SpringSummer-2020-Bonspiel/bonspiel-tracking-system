@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   }
 
   manageUsers() {
+    // this.router.navigateByUrl('/admin/users');
     this.router.navigate(['/admin/users']);
   }
 }

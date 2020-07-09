@@ -16,16 +16,11 @@ export class AdminComponent implements OnInit {
   constructor(private api: ApiService,
     private accountService: AccountService) {
     this.user = this.accountService.userValue;
-    console.log('user:');
-    console.log(this.user);
+    // console.log('user:');
+    // console.log(this.user);
   }
 
-  ngOnInit(): void {
-    const payload = 'SELECT * FROM public.curlingevent ORDER BY id ASC';
-    this.api.adHocQuery(payload).subscribe((res) => {
-      console.log(res);
-    });
-  }
+  ngOnInit(): void { }
 
   sideBarToggler() {
     this.sideBarOpen = !this.sideBarOpen;

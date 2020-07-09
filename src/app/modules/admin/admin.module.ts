@@ -161,4 +161,4 @@ import { AdminRoutingModule } from './admin-routing.module';
   ],
   providers: [DashboardService],
 })
-export class AdminModule {}
+export class AdminModule { }

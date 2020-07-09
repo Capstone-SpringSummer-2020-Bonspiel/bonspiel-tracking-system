@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@core/_services';
+import { User } from '@app/core/_models';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          console.log('LOGIN SUCCESSFULL!!!!!!!');
+          console.log('LOGIN SUCCESSFUL!!!!!!!');
           console.log(this.returnUrl);
 
           if (this.returnUrl.includes('admin')) {
@@ -60,7 +61,8 @@ export class LoginComponent implements OnInit {
         },
         error => {
           console.log('LOGIN UNSUCCESSFUL......');
-          this.alertService.error(error);
+          // this.alertService.error(error);
+          this.alertService.error('Unable to sign in.  Invalid username/password combination.');
           this.loading = false;
         });
   }

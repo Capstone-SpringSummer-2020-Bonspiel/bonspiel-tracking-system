@@ -1,10 +1,9 @@
 <mat-nav-list>
   <div class="profile-card">
     <div class="header">
-      <h2 *ngIf="user"> {{ user.firstName }} {{ user.lastName }} </h2>
-      <h4 *ngIf="user"> {{ user.firstName }}.{{ user.lastName }}@email.com </h4>
+      <h2 *ngIf="user"> {{ user.username }} </h2>
     </div>
-    <img src="https://img.bleacherreport.net/img/images/photos/002/759/669/3285d97ba0a774103d07f9257dd0a13c_crop_north.jpg?h=533&w=800&q=70&crop_x=center&crop_y=top"
+    <img src="{{randomElement}}"
       alt="Emoji">
   </div>
 
@@ -27,12 +26,6 @@
     routerLink="{{route.path}}">
     <mat-icon> {{route.icon}} </mat-icon>
     {{route.label}}
-  </a>
-  <a mat-list-item
-    routerLinkActive="list-item-active"
-    routerLink="/admin/delete-event">
-    <mat-icon> event </mat-icon>
-    Delete an exist Curling Event
   </a>
 
   <mat-divider></mat-divider>

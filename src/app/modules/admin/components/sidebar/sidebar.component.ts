@@ -9,6 +9,14 @@ import { AccountService } from '@app/core/_services';
 })
 export class SidebarComponent implements OnInit {
 
+  images = [
+    'https://img.bleacherreport.net/img/images/photos/002/759/669/3285d97ba0a774103d07f9257dd0a13c_crop_north.jpg?h=533&w=800&q=70&crop_x=center&crop_y=top',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQDFl2Z9jenmkayVhWMmUSBzYjIk7nyemhm0A&usqp=CAU',
+    'https://www.sportsdestinations.com/files/sports_destination_management/nodes/2018/15024/USAC2_0.jpg'
+  ];
+
+  randomElement = this.images[Math.floor(Math.random() * this.images.length)];
+
   addRoutes = [
     {
       label: 'Add a new Event',
@@ -163,11 +171,9 @@ export class SidebarComponent implements OnInit {
   constructor(private accountService: AccountService) {
     this.accountService.user.subscribe(user => {
       this.user = user;
-      console.log(this.user);
+      // console.log(this.user);
     });
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void { }
 }

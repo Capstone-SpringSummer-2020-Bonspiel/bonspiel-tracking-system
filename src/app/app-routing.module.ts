@@ -15,13 +15,9 @@ const routes: Routes = [
   { path: '', component: VisitorComponent },
   { path: 'schedule', component: ScheduleComponent },
   { path: 'teamlist', component: TeamlistComponent },
-
   { path: 'admin', loadChildren: AdminModule, canActivate: [AuthGuard] },
-  // { path: 'admin', loadChildren: AdminModule },
-
   { path: 'account', loadChildren: AccountModule },
   { path: 'page-not-found', component: PageNotFoundComponent },
-  // { path: '**', redirectTo: '' },
   { path: '**', component: PageNotFoundComponent },
 ];
 

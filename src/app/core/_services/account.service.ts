@@ -25,13 +25,19 @@ export class AccountService {
   }
 
   login(username, password) {
+    // return this.http.post<User>(`https://bonspiel-server-devl.herokuapp.com/api/v1/admin/signin`, { username, password })
     return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
-      .pipe(map(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('user', JSON.stringify(user));
-        this.userSubject.next(user);
-        return user;
-      }));
+      .pipe(
+        map(user => {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user);
+
+          // refresh JWT in 9:45 minutes (9:30 - 10 min refresh window)
+          this.refreshJWT();
+          // }, (parseInt(user.maxAge) - 60) * 1000);
+          return user;
+        }));
   }
 
   logout() {
@@ -39,6 +45,18 @@ export class AccountService {
     localStorage.removeItem('user');
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
+  }
+
+  refreshJWT() {
+    setInterval(() => {
+      console.log('refreshing JWT')
+      this.http.post(`${environment.apiUrl}/users/authenticate`, {})
+        .toPromise()
+        .then(res => {
+          console.log('refreshing JWT');
+          console.log(res);
+        });
+    }, 585000);
   }
 
   register(user: User) {
@@ -53,11 +71,11 @@ export class AccountService {
     return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
   }
 
-  update(id, params) {
-    return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+  update(username, params) {
+    return this.http.put(`${environment.apiUrl}/users/${username}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
-        if (id == this.userValue.id) {
+        if (username == this.userValue.username) {
           // update local storage
           const user = { ...this.userValue, ...params };
           localStorage.setItem('user', JSON.stringify(user));
@@ -69,11 +87,11 @@ export class AccountService {
       }));
   }
 
-  delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/users/${id}`)
+  delete(username: string) {
+    return this.http.delete(`${environment.apiUrl}/users/${username}`)
       .pipe(map(x => {
         // auto logout if the logged in user deleted their own record
-        if (id == this.userValue.id) {
+        if (username == this.userValue.username) {
           this.logout();
         }
         return x;

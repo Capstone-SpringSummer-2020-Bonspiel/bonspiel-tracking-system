@@ -199,13 +199,13 @@ export class DashboardComponent implements OnInit {
         this.spinner.off();
         return;
       }
-      console.log('Fetching curling events:');
-      console.log(rows);
+      // console.log('Fetching curling events:');
+      // console.log(rows);
 
       const newData = this.dataSource.data;
       for (let row of rows) {
         newData.push(row);
-        console.log(row);
+        // console.log(row);
       }
       this.dataSource.data = newData;
       this.spinner.off();

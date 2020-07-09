@@ -22,12 +22,6 @@
       id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
 
-        <!-- HOME BUTTON -->
-        <!-- <li class="nav-item">
-          <a class="nav-link"
-            href="#">Home</a>
-        </li> -->
-
         <!-- EVENTS BUTTON -->
         <li class="nav-item">
           <button class="nav-link btn btn-link"
@@ -47,6 +41,14 @@
         </li>
 
       </ul>
+
+      <!-- ADMIN BUTTON -->
+      <form class="form-inline mr-4">
+        <button *ngIf="user"
+          class="btn btn-sm btn-outline-secondary"
+          type="button"
+          (click)="managerView()">Manager View</button>
+      </form>
 
       <!-- SIGN IN/OUT BUTTON -->
       <form class="form-inline">

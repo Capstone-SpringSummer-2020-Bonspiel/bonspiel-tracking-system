@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
     private accountService: AccountService) {
     this.accountService.user.subscribe(user => {
       this.user = user;
-      console.log(this.user);
+      // console.log(this.user);
     });
   }
 
@@ -29,6 +29,10 @@ export class HeaderComponent implements OnInit {
 
   signIn() {
     this.router.navigateByUrl('/account/login');
+  }
+
+  managerView() {
+    this.router.navigateByUrl('/admin');
   }
 
   signOut() {
