@@ -30,7 +30,7 @@ export class CreateEventComponent implements OnInit {
     { value: true, viewValue: 'Finished' },
   ];
 
-  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService, public dialog: MatDialog,) { }
+  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -67,7 +67,7 @@ export class CreateEventComponent implements OnInit {
     console.log(`event type: ${event_type}`);
     console.log(`complete: ${completed}`);
 
-    this.spinner.on();
+    // this.spinner.on();
     // this.api
     //   .createEvent(name, begin_date, end_date, completed, info, event_type)
     //   .subscribe((res: any) => {

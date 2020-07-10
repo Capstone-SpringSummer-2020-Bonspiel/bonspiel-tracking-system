@@ -1,1 +1,12 @@
-<p>remove-organization works!</p>
+<!-- <p>remove-organization works!</p> -->
+<mat-form-field>
+  <mat-label>Select Organization to Delete</mat-label>
+  <mat-select [(value)]="selectedOrganization" (selectionChange)="onOrganizationSelected($event)">
+    <mat-option *ngFor="let event of this.allOrganizationData" [value]="event">
+      {{event.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<div>
+  <button mat-button (click)="onOrganizationDelete()">Delete Event</button>
+</div>

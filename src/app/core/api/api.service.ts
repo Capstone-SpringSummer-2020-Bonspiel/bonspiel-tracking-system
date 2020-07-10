@@ -87,7 +87,7 @@ export class ApiService {
   }
 
   public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
-    const data = {
+    const body = {
       name: nameData,
       eventType: eventTypeData,
       info: infoData,
@@ -95,11 +95,11 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/event`, data);
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/event`, body);
   }
 
   public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId) {
-    const data = {
+    const body = {
       name: nameData,
       eventType: eventTypeData,
       info: infoData,
@@ -107,12 +107,14 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/event/${eventId}`, data);
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/event/${eventId}`, body);
   }
 
   public deleteEvent(eventId) {
     return this.httpClient.delete(`${apiUrl}/api/v1/admin/event/${eventId}`);
   }
+  // CASCADE DELETE will be setup on event_id in draw table, event_id in pool, and event_id in bracket. 
+  // All information from all tables related to the event will be deleted cleanly. 
 
   /********************************************************************/
 
@@ -212,4 +214,84 @@ export class ApiService {
   public removeCurler(curlerId) {
     return this.httpClient.delete(`${apiUrl}/api/v1/admin/curler/${curlerId}`);
   }
+
+  /********************************************************************* */
+
+  public createOrganization(fullNameData, shortNameData) {
+    const body = {
+      fullName: fullNameData,
+      shortName: shortNameData,
+    }
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/org`, body)
+  }
+
+  public editOrganization(fullNameData, shortNameData, orgId) {
+    const body = {
+      fullName: fullNameData,
+      shortName: shortNameData,
+    }
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/org/${orgId}`, body)
+  }
+
+  public removeOrganization(orgId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/org/${orgId}`)
+  }
+  // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error 
+
+  /********************************************************************* */
+
+  public createBracket(nameData, eventId) {
+    const body = {
+      name: nameData
+    }
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/bracket`, body)
+  }
+
+  public editBracket(nameData, eventIdData, bracketId) {
+    const body = {
+      name: nameData,
+      eventId: eventIdData,
+    }
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/bracket/${bracketId}`, body)
+  }
+
+  public removeBracket(bracketId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/bracket/${bracketId}`)
+  }
+  // CASCADE DELETE will NOT be setup. If any games exist in bracket, then delete will error out.
+
+  /********************************************************************* */
+
+  public createPool(nameData, eventId) {
+    const body = {
+      name: nameData,
+    }
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/pool`, body)
+  }
+
+  public editPool(nameData, eventIdData, poolId) {
+    const body = {
+      name: nameData,
+      eventId: eventIdData
+    }
+    return this.httpClient.put(`${apiUrl}/api/v1/admin/pool/${poolId}`, body)
+  }
+
+  public removePool(poolId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/pool/${poolId}`)
+  }
+  // CASCADE DELETE will NOT be setup. If any games exist in pool, then delete will error out.
+
+  /********************************************************************* */
+
+  public insertTeamEvent(eventId, teamId) {
+    const body = {}
+    return this.httpClient.post(`${apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`, body)
+  }
+
+  public removeTeamEvent(eventId, teamId) {
+    return this.httpClient.delete(`${apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`)
+  }
+  // CASCADE DELETE will NOT be setup. 
+  // Manual check - If the team has played a game in the curling event, they must be removed before the team can be removed from the curling event
 }
