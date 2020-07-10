@@ -4,8 +4,15 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NotificationService } from './shared/services/notification.service';
 import { ApiService } from '@core/api/api.service';
 import { AccountService } from './core/_services';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+  }),
+  withCredentials: true,
+};
 
 @Component({
   selector: 'app-root',
@@ -153,7 +160,7 @@ export class AppComponent {
 
   refreshToken() {
     // Reload the cookie in the browser
-    this.http.post(`${environment.apiUrl}/api/v1/admin/refresh`, {})
+    this.http.post(`${environment.apiUrl}/api/v1/admin/refresh`, {}, httpOptions)
       .subscribe(
         (user: any) => {
           console.log('JWT was refreshed');

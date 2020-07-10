@@ -1,11 +1,19 @@
 ﻿import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@core/_models';
+import { clearInterval } from 'timers';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+  }),
+  withCredentials: true,
+};
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -28,10 +36,15 @@ export class AccountService {
   login(username, password) {
     return this.http.post<User>(`${environment.apiUrl}/api/v1/admin/signin`, { username, password })
       .pipe(
-        map(user => {
+        map((user: any) => {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
+
+          setInterval(() => {
+            this.refreshToken();  // then, refresh every 9.75 minutes
+          }, user.maxAge - 15000);
+          
           return user;
         }));
   }
@@ -41,6 +54,11 @@ export class AccountService {
     localStorage.removeItem('user');
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
+
+    let highestTimeoutId = setTimeout(() => {});
+    for (let i = 0 ; i < highestTimeoutId ; i++) {
+      clearTimeout(i);
+    }
   }
 
   register(user: User) {
@@ -80,5 +98,23 @@ export class AccountService {
         }
         return x;
       }));
+  }
+
+  refreshToken() {
+    // Reload the cookie in the browser
+    this.http.post(`${environment.apiUrl}/api/v1/admin/refresh`, {}, httpOptions)
+      .subscribe(
+        (user: any) => {
+          console.log('JWT was refreshed');
+          console.log(user);
+
+          // refresh user details and jwt token in local storage to keep user logged in between page refreshes
+          const newUser = JSON.parse(localStorage.getItem('user'));
+          newUser.token = user.token;
+          newUser.maxAge = user.maxAge;
+          newUser.expiryAt = user.expiryAt;
+          localStorage.setItem('user', JSON.stringify(newUser));
+          this.userSubject.next(newUser);
+        });
   }
 }
