@@ -25,6 +25,7 @@
         "@angular/platform-browser-dynamic": "~9.1.4",
         "@angular/router": "~9.1.4",
         "@angular/youtube-player": "^9.2.4",
+        "@swimlane/ngx-graph": "^7.0.1",
         "angular-pipes": "^10.0.0",
         "config": "^3.3.1",
         "express": "^4.17.1",

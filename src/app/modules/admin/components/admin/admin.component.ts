@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../../core/api/api.service';
+import { ApiService } from '@core/api/api.service';
 
-import { User } from './../../../../core/_models';
+import { User } from '@core/_models';
 import { AccountService } from '@app/core/_services';
 
 @Component({
@@ -13,8 +13,10 @@ export class AdminComponent implements OnInit {
   user: User;
   sideBarOpen = true;
 
-  constructor(private api: ApiService,
-    private accountService: AccountService) {
+  constructor(
+    private apiService: ApiService,
+    private accountService: AccountService
+  ) {
     this.user = this.accountService.userValue;
     // console.log('user:');
     // console.log(this.user);

@@ -6,5 +6,6 @@
   lastName?: string;
   token: string;
   maxAge: string;
+  expiryAt?: string;
   // isSuperAdmin: string;
 }

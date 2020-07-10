@@ -20,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTreeModule } from '@angular/material/tree';
 import { ToastrModule } from 'ngx-toastr';
 import { ScheduleComponent } from './modules/visitor/components/schedule/schedule.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -30,6 +31,7 @@ import {
 } from '@angular-material-components/datetime-picker';
 import { MatListModule } from '@angular/material/list';
 import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_helpers';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_h
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     MatListModule,
+    NgxGraphModule,
+    MatTreeModule,
   ],
   providers: [
     CookieService,
@@ -65,7 +69,7 @@ import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_h
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
     // provider used to create fake backend
-    fakeBackendProvider,
+    // fakeBackendProvider,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

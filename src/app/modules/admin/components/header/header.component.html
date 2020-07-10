@@ -25,19 +25,19 @@
           <mat-menu #menu="matMenu">
             <button mat-menu-item>
               <mat-icon>sentiment_very_satisfied</mat-icon>
-              Bliss
+              Very Satisfied
             </button>
             <button mat-menu-item>
               <mat-icon>sentiment_satisfied</mat-icon>
-              Happy
+              Satisfied
             </button>
             <button mat-menu-item>
               <mat-icon>sentiment_dissatisfied</mat-icon>
-              Sad
+              Dissatisfied
             </button>
             <button mat-menu-item>
               <mat-icon>sentiment_very_dissatisfied</mat-icon>
-              Pissed Off
+              Very Dissatisfied
             </button>
           </mat-menu>
         </li>
@@ -78,14 +78,20 @@
           </button>
           <mat-menu #loginMenu="matMenu">
             <button mat-menu-item
+              (click)="changePassword()">
+              <mat-icon>supervisor_account</mat-icon>
+              Change Password
+            </button>
+            <button mat-menu-item
               (click)="manageUsers()">
               <mat-icon>supervisor_account</mat-icon>
               Manage Users
             </button>
-            <button mat-menu-item>
+            <!-- <button mat-menu-item
+              (click)="logout()">
               <mat-icon>exit_to_app</mat-icon>
               Sign out
-            </button>
+            </button> -->
           </mat-menu>
         </li>
       </ul>

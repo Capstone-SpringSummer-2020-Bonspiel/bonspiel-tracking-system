@@ -5,8 +5,6 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-const apiUrl: string = environment.apiUrl;
-// const apiUrl = 'http://localhost:8080';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -24,7 +22,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   /********************************************************************/
 
@@ -44,19 +42,33 @@ export class ApiService {
       'Something bad happened; please try again later.');
   };
 
+  // refreshJWT() {
+  //   console.log('refreshing JWT')
+  //   this.http.post(`${environment.apiUrl}/api/v1/admin/refresh`, {})
+  //     .subscribe(
+  //       res => {
+  //         // console.log('refreshed JWT');
+  //         // console.log(res);
+  //       },
+  //       err => {
+  //         // console.log('JWT refresh error!');
+  //         // console.log(err);
+  //       });
+  // }
+
   /********************************************************************/
 
   public adHocQuery(query) {
     const body = {
       sql: query,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/DANGEROUSADHOC`, body);
+    return this.http.post(`${environment.apiUrl}/api/v1/DANGEROUSADHOC`, body);
   }
 
   /********************************************************************/
 
   public getEvents() {
-    return this.httpClient.get(`${apiUrl}/api/v1/events`);
+    return this.http.get(`${environment.apiUrl}/api/v1/events`);
   }
 
   changeEventId(newEventId: number) {
@@ -83,7 +95,7 @@ export class ApiService {
       beginDate: beginDate,
       endDate: endDate,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/create-curling-event`, body);
+    return this.http.post(`${environment.apiUrl}/api/v1/create-curling-event`, body);
   }
 
   public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
@@ -95,7 +107,7 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/event`, data);
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/event`, data);
   }
 
   public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId) {
@@ -107,17 +119,17 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/event/${eventId}`, data);
+    return this.http.put(`${environment.apiUrl}/api/v1/admin/event/${eventId}`, data);
   }
 
   public deleteEvent(eventId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/event/${eventId}`);
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/event/${eventId}`);
   }
 
   /********************************************************************/
 
   public getDraws(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/draws`);
+    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/draws`);
   }
 
   public createDraw(eventId, name, start, videoUrl) {
@@ -126,7 +138,7 @@ export class ApiService {
       start: start,
       videoUrl: videoUrl,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/draw`, body);
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/${eventId}/draw`, body);
   }
 
   public editDraw(drawId, name, start, videoUrl) {
@@ -135,53 +147,53 @@ export class ApiService {
       start: start,
       videoUrl: videoUrl,
     };
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/draw/${drawId}`, body);
+    return this.http.put(`${environment.apiUrl}/api/v1/admin/draw/${drawId}`, body);
   }
 
   public deleteDraw(drawId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/draw/${drawId}`);
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/draw/${drawId}`);
   }
 
   /********************************************************************/
 
   public getGames(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/games`);
+    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/games`);
   }
 
   /********************************************************************/
 
   public getTeams(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/teams`);
+    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/teams`);
   }
 
 
 
   public getGamesByTeam(eventId, teamId) {
-    return this.httpClient.get(
-      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
+    return this.http.get(
+      `${environment.apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
     );
   }
 
   public getScoresByTeam(eventId, teamId) {
-    return this.httpClient.get(
-      `${apiUrl}/api/v1/events/${eventId}/teams/${teamId}/scores`
+    return this.http.get(
+      `${environment.apiUrl}/api/v1/events/${eventId}/teams/${teamId}/scores`
     );
   }
 
   public getScoresByEvent(eventId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/events/${eventId}/scores`);
+    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/scores`);
   }
 
   public getTeam(teamId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/teams/${teamId}`);
+    return this.http.get(`${environment.apiUrl}/api/v1/teams/${teamId}`);
   }
 
   public getAllOrgs() {
-    return this.httpClient.get(`${apiUrl}/api/v1/orgs`);
+    return this.http.get(`${environment.apiUrl}/api/v1/orgs`);
   }
 
   public getOrgs(orgId) {
-    return this.httpClient.get(`${apiUrl}/api/v1/orgs/${orgId}`);
+    return this.http.get(`${environment.apiUrl}/api/v1/orgs/${orgId}`);
   }
 
   /********************************************************************/
@@ -193,7 +205,7 @@ export class ApiService {
       affiliation: affiliation,
       curlingTeamId: curlingTeamId,
     };
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/curler`, body);
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/curler`, body);
   }
 
   public editCurler(name, position, affiliation, curlingTeamId, curlerId) {
@@ -203,13 +215,13 @@ export class ApiService {
       affiliation: affiliation,
       curlingTeamId: curlingTeamId,
     };
-    return this.httpClient.put(
-      `${apiUrl}/api/v1/admin/curler/${curlerId}`,
+    return this.http.put(
+      `${environment.apiUrl}/api/v1/admin/curler/${curlerId}`,
       body
     );
   }
 
   public removeCurler(curlerId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/curler/${curlerId}`);
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/curler/${curlerId}`);
   }
 }

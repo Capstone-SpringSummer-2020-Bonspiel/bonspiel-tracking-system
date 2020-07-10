@@ -52,6 +52,6 @@ export class VisitorComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;
-    console.log(this.innerWidth);
+    // console.log(this.innerWidth);
   }
 }

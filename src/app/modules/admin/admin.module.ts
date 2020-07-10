@@ -80,6 +80,12 @@ import { RemoveBracketComponent } from './components/remove-bracket/remove-brack
 
 import { AdminRoutingModule } from './admin-routing.module';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { TournamentBracketComponent } from './components/tournament-bracket/tournament-bracket.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { PasswordComponent } from './components/password/password.component';
+
 @NgModule({
   declarations: [
     AdminComponent,
@@ -120,6 +126,8 @@ import { AdminRoutingModule } from './admin-routing.module';
     CreateTeamComponent,
     CreateEventDialog,
     EditEventDialog,
+    TournamentBracketComponent,
+    PasswordComponent,
   ],
   imports: [
     CommonModule,
@@ -136,6 +144,7 @@ import { AdminRoutingModule } from './admin-routing.module';
     MatMenuModule,
     MatListModule,
     MatSidenavModule,
+    MatExpansionModule,
     FlexLayoutModule,
     MatCardModule,
     MatPaginatorModule,
@@ -158,6 +167,8 @@ import { AdminRoutingModule } from './admin-routing.module';
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
+    NgxChartsModule,
+    NgxGraphModule
   ],
   providers: [DashboardService],
 })

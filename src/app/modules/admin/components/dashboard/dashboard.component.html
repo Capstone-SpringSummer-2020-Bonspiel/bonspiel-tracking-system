@@ -158,8 +158,15 @@
               <th mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header> {{columnsTable[column]}} </th>
-              <td mat-cell
-                *matCellDef="let sample"> {{sample[column]}} </td>
+              <div *ngIf="column === 'begin_date' || column === 'end_date'; then content else other_content"></div>
+              <ng-template #content>
+                <td mat-cell
+                  *matCellDef="let sample"> {{sample[column] | date: 'fullDate'}} </td>
+              </ng-template>
+              <ng-template #other_content>
+                <td mat-cell
+                  *matCellDef="let sample"> {{sample[column]}} </td>
+              </ng-template>
             </ng-container>
           </div>
         </ng-container>
@@ -207,8 +214,9 @@
                   <ng-template matTabContent>
                     <div class="container-fluid example-large-box start mat-elevation-z4">
 
-                      <img src="https://bozemancurlingclub.com/images/2018_2019_Schedules/Bracket-2019-_1_complete.png"
-                        class="w-100">
+                      <app-tournament-bracket></app-tournament-bracket>
+                      <!-- <img src="https://bozemancurlingclub.com/images/2018_2019_Schedules/Bracket-2019-_1_complete.png"
+                        class="w-100"> -->
 
                     </div>
                   </ng-template>
@@ -224,11 +232,104 @@
                   <ng-template matTabContent>
                     <div class="container-fluid example-large-box start mat-elevation-z4">
 
-                      <ng-container *ngFor="let key of objectKeys(sample); let i = index">
-                        <p *ngIf="!['lab_notes_rich_txt', 'step_history', 'shmoos'].includes(key)">
-                          <b> {{key}}: </b> {{sample[key]}}
-                        </p>
-                      </ng-container>
+                      <div class="example-action-buttons">
+                        <button mat-button
+                          (click)="accordion.openAll()">Expand All</button>
+                        <button mat-button
+                          (click)="accordion.closeAll()">Collapse All</button>
+                      </div>
+                      <mat-accordion class="example-headers-align"
+                        multi>
+
+                        <!-- EXPANSION PANEL -->
+                        <mat-expansion-panel *ngFor="let draw of draws">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              {{draw.name}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              {{draw.start | date: 'fullDate'}}
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+
+                          <!-- EXPANSION PANEL DRAW CONTENT -->
+                          <mat-expansion-panel *ngFor="let game of filterGames(draw.id)">
+                            <mat-expansion-panel-header>
+                              <mat-panel-title>
+                                Game ID: {{game.game_id}}
+                              </mat-panel-title>
+                              <mat-panel-description>
+                                {{game.team_name1}} vs. {{game.team_name2}}
+                              </mat-panel-description>
+                              <p class="mr-5">Ice Sheet: {{game.ice_sheet}}</p>
+                            </mat-expansion-panel-header>
+
+                            <!-- EXPANSION PANEL GAME CONTENT -->
+                            <p>{{game.notes}}</p>
+                            <!-- <mat-form-field>
+                              <mat-label>First name</mat-label>
+                              <input matInput>
+                            </mat-form-field>
+  
+                            <mat-form-field>
+                              <mat-label>Age</mat-label>
+                              <input matInput
+                                type="number"
+                                min="1">
+                            </mat-form-field> -->
+                          </mat-expansion-panel>
+
+                          <!-- <mat-form-field>
+                            <mat-label>First name</mat-label>
+                            <input matInput>
+                          </mat-form-field>
+
+                          <mat-form-field>
+                            <mat-label>Age</mat-label>
+                            <input matInput
+                              type="number"
+                              min="1">
+                          </mat-form-field> -->
+                        </mat-expansion-panel>
+
+                        <!-- <mat-expansion-panel disabled>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              Destination
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              Type the country name
+                              <mat-icon>map</mat-icon>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+
+                          <mat-form-field>
+                            <mat-label>Country</mat-label>
+                            <input matInput>
+                          </mat-form-field>
+                        </mat-expansion-panel>
+                        
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              Day of the trip
+                            </mat-panel-title>
+                            <mat-panel-description>
+                              Inform the date you wish to travel
+                              <mat-icon>date_range</mat-icon>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+
+                          <mat-form-field>
+                            <mat-label>Date</mat-label>
+                            <input matInput
+                              [matDatepicker]="picker"
+                              (focus)="picker.open()"
+                              readonly>
+                          </mat-form-field>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-expansion-panel> -->
+                      </mat-accordion>
 
                     </div>
                   </ng-template>

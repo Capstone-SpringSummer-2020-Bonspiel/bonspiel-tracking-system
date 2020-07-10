@@ -9,8 +9,9 @@ import { User } from '@core/_models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private userSubject: BehaviorSubject<User>;
-  public user: Observable<User>;
+  // private userSubject: BehaviorSubject<User>;  // input
+  public userSubject: BehaviorSubject<User>;  // input
+  public user: Observable<User>;               // output
 
   constructor(
     private router: Router,
@@ -25,17 +26,12 @@ export class AccountService {
   }
 
   login(username, password) {
-    // return this.http.post<User>(`https://bonspiel-server-devl.herokuapp.com/api/v1/admin/signin`, { username, password })
-    return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
+    return this.http.post<User>(`${environment.apiUrl}/api/v1/admin/signin`, { username, password })
       .pipe(
         map(user => {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
-
-          // refresh JWT in 9:45 minutes (9:30 - 10 min refresh window)
-          this.refreshJWT();
-          // }, (parseInt(user.maxAge) - 60) * 1000);
           return user;
         }));
   }
@@ -45,18 +41,6 @@ export class AccountService {
     localStorage.removeItem('user');
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
-  }
-
-  refreshJWT() {
-    setInterval(() => {
-      console.log('refreshing JWT')
-      this.http.post(`${environment.apiUrl}/users/authenticate`, {})
-        .toPromise()
-        .then(res => {
-          console.log('refreshing JWT');
-          console.log(res);
-        });
-    }, 585000);
   }
 
   register(user: User) {

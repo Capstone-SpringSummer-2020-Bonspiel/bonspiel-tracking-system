@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccountService } from '@app/core/_services';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,10 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
   isSidebarOpen = true;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private accountService: AccountService
+  ) { }
 
   ngOnInit() { }
 
@@ -22,8 +26,15 @@ export class HeaderComponent implements OnInit {
     }, 300);
   }
 
+  changePassword() {
+    this.router.navigate(['/admin/password']);
+  }
+
   manageUsers() {
-    // this.router.navigateByUrl('/admin/users');
     this.router.navigate(['/admin/users']);
+  }
+
+  logout() {
+    this.accountService.logout();
   }
 }

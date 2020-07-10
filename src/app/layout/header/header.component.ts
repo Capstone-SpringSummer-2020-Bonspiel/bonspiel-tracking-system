@@ -13,14 +13,15 @@ import { User } from '@app/core/_models';
 export class HeaderComponent implements OnInit {
   @Output() sidenavToggle: EventEmitter<any> = new EventEmitter<any>();
 
-  user: User;
+  isSignedIn: User;
 
-  constructor(public router: Router,
-    private api: ApiService,
+  constructor(
+    public router: Router,
     private spinner: SpinnerService,
-    private accountService: AccountService) {
+    private accountService: AccountService
+  ) {
     this.accountService.user.subscribe(user => {
-      this.user = user;
+      this.isSignedIn = user;
       // console.log(this.user);
     });
   }

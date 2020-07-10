@@ -44,7 +44,7 @@
 
       <!-- ADMIN BUTTON -->
       <form class="form-inline mr-4">
-        <button *ngIf="user"
+        <button *ngIf="isSignedIn"
           class="btn btn-sm btn-outline-secondary"
           type="button"
           (click)="managerView()">Manager View</button>
@@ -52,11 +52,11 @@
 
       <!-- SIGN IN/OUT BUTTON -->
       <form class="form-inline">
-        <button *ngIf="!user"
+        <button *ngIf="!isSignedIn"
           class="btn btn-sm btn-outline-secondary"
           type="button"
           (click)="signIn()">Sign In</button>
-        <button *ngIf="user"
+        <button *ngIf="isSignedIn"
           class="btn btn-sm btn-outline-secondary"
           type="button"
           (click)="signOut()">Sign Out</button>

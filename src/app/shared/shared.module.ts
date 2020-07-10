@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SpinnerService } from './services/spinner.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FormatDatePipe } from './pipes/format-date.pipe';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ControlMessagesComponent,
     SpinnerComponent,
     PageNotFoundComponent,
+    FormatDatePipe,
   ],
   exports: [ControlMessagesComponent, PageNotFoundComponent, SpinnerComponent],
   providers: [SpinnerService],

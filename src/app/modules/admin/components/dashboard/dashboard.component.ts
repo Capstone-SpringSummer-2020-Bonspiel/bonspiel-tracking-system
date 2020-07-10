@@ -5,13 +5,13 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from './../../dashboard.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { ApiService } from '../../../../core/api/api.service';
+import { ApiService } from '@core/api/api.service';
 import { Timestamp } from 'rxjs';
-import { SpinnerService } from '../../../../shared/services/spinner.service';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -24,7 +24,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { NotificationService } from '../../../../shared/services/notification.service';
+import { NotificationService } from '@app/shared/services/notification.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 export interface Organization {
   id: number;
@@ -62,12 +63,16 @@ export class DashboardComponent implements OnInit {
   @ViewChild('paginatorBottom', { static: false })
   paginatorBottom: MatPaginator;
   @ViewChild('mainTableSort', { static: false }) mainTableSort: MatSort;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
 
   selection = new SelectionModel<any>(true, []);
   expandedElement: any;
   objectKeys = Object.keys;
   selectedColumn = 'all';
   defaultFilterPredicate: any;
+
+  draws: any;
+  games: any;
 
   filterColumns = [
     {
@@ -193,6 +198,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.spinner.on();
 
+    // Get all events
     this.api.getEvents().subscribe((rows: any) => {
       if (rows === null || rows === undefined) {
         this.notifier.showError('Could not fetch curling events', 'ERROR');
@@ -252,6 +258,22 @@ export class DashboardComponent implements OnInit {
     console.log('index => ', event.index);
     console.log('tab => ', event.tab);
     console.log('sample => ', sample);
+
+    // Draws tab
+    if (event.index === 2) {
+      this.spinner.on();
+      // Get all draws + games
+      this.api.getDraws(sample.id).subscribe(rows => {
+        this.draws = rows;
+        console.log(this.draws);
+        this.api.getGames(sample.id).subscribe((rows: any[]) => {
+          // Convert integer to alpha
+          this.games = rows;
+          console.log(this.games);
+          this.spinner.off();
+        });
+      });
+    }
   }
 
   applyFilter(filterValue: string) {
@@ -304,5 +326,10 @@ export class DashboardComponent implements OnInit {
     }, 2000);
   }
 
-  /**************************************************************************/
+  filterGames(draw_id) {
+    if (!this.games) {
+      return [];
+    }
+    return this.games.filter(e => e.draw_id === draw_id);
+  }
 }
