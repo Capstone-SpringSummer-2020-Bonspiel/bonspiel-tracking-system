@@ -10,7 +10,8 @@ import { User } from '@core/_models';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-  })
+  }),
+  withCredentials: true
 };
 
 @Injectable({ providedIn: 'root' })
