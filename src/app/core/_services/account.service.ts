@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@core/_models';
-import { clearInterval } from 'timers';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -41,10 +40,21 @@ export class AccountService {
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
 
+          console.log('hello');
+
+          // Countdown to refresh
           setInterval(() => {
-            this.refreshToken();  // then, refresh every 9.75 minutes
+            let token = JSON.parse(localStorage.getItem('user'));
+            if (token) {
+              console.log(`execute setTimeout() in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
+            }
+          }, 1000);
+
+          // Refresh every 9.75 minutes
+          setInterval(() => {
+            this.refreshToken();
           }, user.maxAge - 15000);
-          
+
           return user;
         }));
   }
@@ -55,8 +65,8 @@ export class AccountService {
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
 
-    let highestTimeoutId = setTimeout(() => {});
-    for (let i = 0 ; i < highestTimeoutId ; i++) {
+    let highestTimeoutId = setTimeout(() => { });
+    for (let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
     }
   }

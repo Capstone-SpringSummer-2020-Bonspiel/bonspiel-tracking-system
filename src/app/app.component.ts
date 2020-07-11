@@ -64,7 +64,7 @@ export class AppComponent {
         setInterval(() => {
           let token = JSON.parse(localStorage.getItem('user'));
           if (token) {
-            console.log(`execute setTimeout() in ${(token.expiryAt - new Date().getTime() - 15000) / 1000} secs`);
+            console.log(`execute setTimeout() in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
           }
         }, 1000);
 
@@ -77,44 +77,6 @@ export class AppComponent {
         }, (expiryAt - new Date().getTime() - 15000));  // try to refresh within the window (between 9:30 & 10 minutes)
       }
     }
-
-    // let token = localStorage.getItem('user');
-    // let dateNow = new Date().getTime();  // epoch in milliseconds
-
-    // console.log(token);
-
-    // if (!token) {
-    //   // do nothing
-    // } else {                                            // Case 2: token exists
-
-    //   let myToken = JSON.parse(token);
-    //   let expiryAt = new Date(myToken.expiryAt).getTime();
-
-    //   console.log(dateNow);
-    //   console.log(expiryAt);
-
-    //   // now, we want to find out if token has expired
-    //   // Case 3: token has expired, logout...
-    //   if (dateNow > expiryAt || expiryAt === NaN) {
-    //     this.accountService.logout();
-    //   }
-
-    //   // Case 4: token is still valid, refresh & start loop...
-    //   else {
-    //     // Refresh JWT
-    //     setInterval(() => {
-
-    //       console.log('refreshing JWT')
-    //       this.http.post(`${environment.apiUrl}/admin/refresh`, {})
-    //         .subscribe(
-    //           res => {
-    //             console.log('JWT was refreshed');
-    //             console.log(res);
-    //           });
-
-    //     }, (expiryAt - dateNow - 15000));  // 9.75 minutes
-    //   }
-    // }
 
     // Get all curling events
     this.apiService
