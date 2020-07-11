@@ -24,7 +24,12 @@ export class CreateEndscoreComponent implements OnInit {
 
   eventNames: any[] = [];
   games: any[] = [];
+  endScores: any[] = [];
   selectedEventId;
+  selectedGameId;
+  team1;
+  team2;
+  displayedColumns = ['endNumber', 'team1Score', 'team2Score'];
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -56,18 +61,41 @@ export class CreateEndscoreComponent implements OnInit {
   }
 
   getEventGames() {
-    // this.selectedEventId = this.firstFormGroup.value.firstCtrl;
-    // console.log(`selectedEventId= ${this.selectedEventId}`);
-    // this.spinner.on();
-    // this.api.getGames(this.selectedEventId).subscribe((res: any) => {
-    //   this.games = res;
-    //   this.spinner.off();
-    //   console.log(`games`);
-    //   console.log(this.games);
-    // });
+    this.selectedEventId = this.firstFormGroup.value.firstCtrl;
+    console.log(`selectedEventId= ${this.selectedEventId}`);
+    this.spinner.on();
+    this.api.getGames(this.selectedEventId).subscribe((res: any) => {
+      this.games = res;
+      this.spinner.off();
+      console.log(`games`);
+      console.log(this.games);
+    });
   }
 
-  getGame() {}
+  getEndScores() {
+    this.selectedGameId = this.secondFormGroup.value.secondCtrl;
+    console.log(`selectedGameId= ${this.selectedGameId}`);
+    this.spinner.on();
+    this.api.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
+      const eventScores = res;
+      this.endScores = eventScores.filter(
+        (x) => x.game_id === this.selectedGameId
+      );
+      this.spinner.off();
+      this.endScores.sort(compare);
+      this.team1 = this.endScores[0].team_name1;
+      this.team2 = this.endScores[0].team_name2;
+      console.log('endScores= ');
+      console.log(this.endScores);
+    });
+  }
 
   onClickSubmit() {}
+}
+
+function compare(a, b) {
+  const endA = a.end_number;
+  const endB = b.end_number;
+
+  return endA > endB ? 1 : -1;
 }
