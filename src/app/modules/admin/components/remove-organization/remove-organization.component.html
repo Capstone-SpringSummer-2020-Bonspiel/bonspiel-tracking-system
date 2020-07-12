@@ -2,8 +2,8 @@
 <mat-form-field>
   <mat-label>Select Organization to Delete</mat-label>
   <mat-select [(value)]="selectedOrganization" (selectionChange)="onOrganizationSelected($event)">
-    <mat-option *ngFor="let event of this.allOrganizationData" [value]="event">
-      {{event.name}}
+    <mat-option *ngFor="let Organization of this.allOrganizationData" [value]="Organization">
+      {{Organization.name}}
     </mat-option>
   </mat-select>
 </mat-form-field>

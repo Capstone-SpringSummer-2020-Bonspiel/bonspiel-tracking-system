@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -17,18 +16,13 @@ export class CreateOrganizationComponent implements OnInit {
 
   feedBackData: null;
 
-  eventTypes: any[] = [
-    { value: 'pool', viewValue: 'Pool' },
-    { value: 'bracket', viewValue: 'Bracket' },
-    { value: 'championship', viewValue: 'Championship' },
-    { value: 'friendly', viewValue: 'Friendly' },
-  ];
-  statusTypes: any[] = [
-    { value: false, viewValue: 'In Progress' },
-    { value: true, viewValue: 'Finished' },
-  ];
-
-  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService, public dialog: MatDialog) { }
+  constructor(
+    private _formBuilder: FormBuilder,
+    private api: ApiService,
+    private spinner: SpinnerService,
+    private notifier: NotificationService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -40,7 +34,7 @@ export class CreateOrganizationComponent implements OnInit {
 
   }
 
-  createOrginization() {
+  createOrganization() {
     const fullName = this.firstFormGroup.value.firstCtrl;
     const shortName = this.secondFormGroup.value.secondCtrl;
 

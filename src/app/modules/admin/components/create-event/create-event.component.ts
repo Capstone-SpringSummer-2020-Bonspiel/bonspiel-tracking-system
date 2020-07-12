@@ -30,7 +30,13 @@ export class CreateEventComponent implements OnInit {
     { value: true, viewValue: 'Finished' },
   ];
 
-  constructor(private _formBuilder: FormBuilder, private api: ApiService, private spinner: SpinnerService, private notifier: NotificationService, public dialog: MatDialog) { }
+  constructor(
+    private _formBuilder: FormBuilder,
+    private api: ApiService,
+    private spinner: SpinnerService,
+    private notifier: NotificationService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
