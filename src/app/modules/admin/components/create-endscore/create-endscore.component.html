@@ -90,8 +90,8 @@
     <form [formGroup]="fourthFormGroup" class="mt-5">
       <ng-template matStepLabel> Next End </ng-template>
       <mat-form-field>
-        <mat-label>Next End: {{nextEndNumber}}</mat-label>
-        <input matInput [disabled]="true" required>
+        <mat-label>End Number</mat-label>
+        <input matInput type="number" min="0" formControlName="fourthCtrlEndNumber" required>
       </mat-form-field>
 
       <br>

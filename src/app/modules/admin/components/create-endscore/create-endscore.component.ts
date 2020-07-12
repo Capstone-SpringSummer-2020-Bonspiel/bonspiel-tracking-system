@@ -31,7 +31,6 @@ export class CreateEndscoreComponent implements OnInit {
   team1;
   team2;
   displayedColumns = ['endNumber', 'team1Score', 'team2Score'];
-  nextEndNumber;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -51,6 +50,7 @@ export class CreateEndscoreComponent implements OnInit {
       thirdCtrl: ['', Validators.required],
     });
     this.fourthFormGroup = this._formBuilder.group({
+      fourthCtrlEndNumber: ['', Validators.required],
       fourthCtrlTeam1Score: ['', Validators.required],
       fourthCtrlTeam2Score: ['', Validators.required],
     });
@@ -111,8 +111,6 @@ export class CreateEndscoreComponent implements OnInit {
       this.team2 = selectedGame[0].team_name2;
       console.log('endScores= ');
       console.log(this.endScores);
-      this.nextEndNumber = this.endScores.length + 1;
-      console.log(`nextEndNumber= ${this.nextEndNumber}`);
     });
   }
 
@@ -120,6 +118,7 @@ export class CreateEndscoreComponent implements OnInit {
     var blank = false;
     var curlingTeam1Scored;
     var score;
+    const endNumber = this.fourthFormGroup.value.fourthCtrlEndNumber;
     const team1Score = this.fourthFormGroup.value.fourthCtrlTeam1Score;
     const team2Score = this.fourthFormGroup.value.fourthCtrlTeam2Score;
     if (team2Score < 0 || team1Score < 0) {
@@ -139,14 +138,14 @@ export class CreateEndscoreComponent implements OnInit {
       score = team2Score;
     }
     console.log(`gameId= ${this.selectedGameId}`);
-    console.log(`endNumber = ${this.nextEndNumber}`);
+    console.log(`endNumber = ${endNumber}`);
     console.log(`blank= ${blank}`);
     console.log(`curlingTeam1Scored= ${curlingTeam1Scored}`);
     console.log(`score= ${score}`);
     this.api
       .createEndScore(
         this.selectedGameId,
-        this.nextEndNumber,
+        endNumber,
         blank,
         curlingTeam1Scored,
         score
