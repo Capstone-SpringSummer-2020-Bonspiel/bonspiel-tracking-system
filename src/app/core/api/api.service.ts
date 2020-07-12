@@ -288,4 +288,8 @@ export class ApiService {
       body
     );
   }
+
+  public removeEndScore(endId) {
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/end/${endId}`);
+  }
 }
