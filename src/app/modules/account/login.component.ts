@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     this.accountService.login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
-        data => {
+        (data) => {
           console.log('LOGIN SUCCESSFUL!!!!!!!');
           console.log(this.returnUrl);
 
@@ -59,8 +59,9 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('/admin');
           }
         },
-        error => {
+        (err) => {
           console.log('LOGIN UNSUCCESSFUL......');
+          console.log(err);
           // this.alertService.error(error);
           this.alertService.error('Unable to sign in.  Invalid username/password combination.');
           this.loading = false;
