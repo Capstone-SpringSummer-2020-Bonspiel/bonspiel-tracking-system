@@ -9,9 +9,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
-
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-endscore',

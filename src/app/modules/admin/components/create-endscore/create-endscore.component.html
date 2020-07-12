@@ -17,7 +17,7 @@
   <!-- Stepper 2: Select Draw -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> Select Curling Event </ng-template>
+      <ng-template matStepLabel> Select Draw</ng-template>
       <mat-form-field>
         <mat-label> Select Draw... </mat-label>
         <mat-select formControlName="secondCtrl" name="draws" (selectionChange)="getDrawGames(); stepper.next()" required>
@@ -58,7 +58,7 @@
 
       <!-- Team 1 Score  Column -->
       <ng-container matColumnDef="team1Score">
-        <th mat-header-cell *matHeaderCellDef> {{team1}} </th>
+        <th mat-header-cell *matHeaderCellDef> Team: {{team1}} </th>
         <td mat-cell *matCellDef="let game">
           <div *ngIf="game.curlingteam1_scored !==null">
             <div *ngIf="game.curlingteam1_scored; else score0">{{game.score}}</div>
@@ -71,7 +71,7 @@
 
       <!-- Team 2 Score  Column -->
       <ng-container matColumnDef="team2Score">
-        <th mat-header-cell *matHeaderCellDef> {{team2}}</th>
+        <th mat-header-cell *matHeaderCellDef> Team: {{team2}}</th>
         <td mat-cell *matCellDef="let game">
           <div *ngIf="game.curlingteam1_scored !==null">
             <div *ngIf="!game.curlingteam1_scored; else score0">{{game.score}}</div>
@@ -87,7 +87,7 @@
     </table>
 
     <!-- Adding End Information -->
-    <form [formGroup]="fourthFormGroup" class="mt-2">
+    <form [formGroup]="fourthFormGroup" class="mt-5">
       <ng-template matStepLabel> Next End </ng-template>
       <mat-form-field>
         <mat-label>Next End: {{nextEndNumber}}</mat-label>
@@ -96,13 +96,13 @@
 
       <br>
       <mat-form-field>
-        <mat-label>Team 1 ({{team1}})</mat-label>
+        <mat-label>Team: ({{team1}})</mat-label>
         <input matInput type="number" min="0" formControlName="fourthCtrlTeam1Score" required>
       </mat-form-field>
 
       <br>
       <mat-form-field>
-        <mat-label>Team 2 ({{team2}})</mat-label>
+        <mat-label>Team: ({{team2}})</mat-label>
         <input matInput type="number" min="0" formControlName="fourthCtrlTeam2Score" required>
       </mat-form-field>
     </form>

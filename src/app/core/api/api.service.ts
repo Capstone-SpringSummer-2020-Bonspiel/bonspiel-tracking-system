@@ -271,7 +271,20 @@ export class ApiService {
       score: score,
     };
     return this.http.post(
-      `${environment.apiUrl}/api/v1/admin//${gameId}/end`,
+      `${environment.apiUrl}/api/v1/admin/${gameId}/end`,
+      body
+    );
+  }
+
+  public editEndScore(endId, endNumber, blank, curlingTeam1Scored, score) {
+    const body = {
+      endNumber: endNumber,
+      blank: blank,
+      curlingTeam1Scored: curlingTeam1Scored,
+      score: score,
+    };
+    return this.http.put(
+      `${environment.apiUrl}/api/v1/admin/end/${endId}`,
       body
     );
   }
