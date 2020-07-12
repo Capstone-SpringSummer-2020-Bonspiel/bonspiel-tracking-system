@@ -52,7 +52,6 @@ export class EditEndscoreComponent implements OnInit {
     });
     this.fourthFormGroup = this._formBuilder.group({
       fourthCtrlEndId: ['', Validators.required],
-      fourthCtrlEndNumber: ['', Validators.required],
       fourthCtrlTeam1Score: ['', Validators.required],
       fourthCtrlTeam2Score: ['', Validators.required],
     });
@@ -118,7 +117,6 @@ export class EditEndscoreComponent implements OnInit {
 
   onClickSubmit() {
     var blank = false;
-    const newEndNumber = this.fourthFormGroup.value.fourthCtrlEndNumber;
     var curlingTeam1Scored;
     var score;
     this.selectedEndNumberId = this.fourthFormGroup.value.fourthCtrlEndId;
@@ -142,18 +140,11 @@ export class EditEndscoreComponent implements OnInit {
     }
     console.log(`gameId= ${this.selectedGameId}`);
     console.log(`endID = ${this.selectedEndNumberId}`);
-    console.log(`newEndNumber = ${newEndNumber}`);
     console.log(`blank= ${blank}`);
     console.log(`curlingTeam1Scored= ${curlingTeam1Scored}`);
     console.log(`score= ${score}`);
     this.api
-      .editEndScore(
-        this.selectedEndNumberId,
-        newEndNumber,
-        blank,
-        curlingTeam1Scored,
-        score
-      )
+      .editEndScore(this.selectedEndNumberId, blank, curlingTeam1Scored, score)
       .subscribe(
         (res: any) =>
           this.notifier.showSuccess('End Score has been modified', ''),

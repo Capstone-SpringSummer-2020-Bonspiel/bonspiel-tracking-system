@@ -276,9 +276,8 @@ export class ApiService {
     );
   }
 
-  public editEndScore(endId, endNumber, blank, curlingTeam1Scored, score) {
+  public editEndScore(endId, blank, curlingTeam1Scored, score) {
     const body = {
-      endNumber: endNumber,
       blank: blank,
       curlingTeam1Scored: curlingTeam1Scored,
       score: score,
