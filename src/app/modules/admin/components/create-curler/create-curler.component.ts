@@ -37,7 +37,7 @@ export class CreateCurlerComponent implements OnInit {
     private api: ApiService,
     private spinner: SpinnerService,
     private notifier: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -65,7 +65,7 @@ export class CreateCurlerComponent implements OnInit {
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
     this.spinner.on();
-    this.api.getTeams(this.selectedOrganizationID).subscribe((res: any) => {
+    this.api.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
       this.teams = res;
       this.spinner.off();
       console.log('teams:');

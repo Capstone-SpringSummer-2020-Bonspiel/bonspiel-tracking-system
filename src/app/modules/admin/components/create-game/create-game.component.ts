@@ -88,6 +88,10 @@ export class CreateGameComponent implements OnInit {
       notes: [''],
     });
 
+    this.getEvents();
+  }
+
+  getEvents() {
     // Get list of existing events
     this.api.getEvents().subscribe((res) => {
       this.events = res;
@@ -122,7 +126,7 @@ export class CreateGameComponent implements OnInit {
 
   getTeamsByEventId() {
     // Get teams
-    this.api.getTeams(this.selectedEventId).subscribe((res) => {
+    this.api.getTeamsByEventId(this.selectedEventId).subscribe((res) => {
       this.teams = res;
       console.log('teams:');
       console.log(this.teams);

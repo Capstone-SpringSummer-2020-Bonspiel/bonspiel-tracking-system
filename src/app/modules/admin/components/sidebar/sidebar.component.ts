@@ -145,6 +145,11 @@ export class SidebarComponent implements OnInit {
       icon: 'group_add'
     },
     {
+      label: 'Remove a Team from an Event',
+      path: '/admin/remove-team-from-event',
+      icon: 'group_add'
+    },
+    {
       label: 'Remove a Curler',
       path: '/admin/remove-curler',
       icon: 'person_add'

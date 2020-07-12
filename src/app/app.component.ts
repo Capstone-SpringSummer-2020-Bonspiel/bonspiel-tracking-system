@@ -61,12 +61,13 @@ export class AppComponent {
 
       // Case: token exists, token is valid, we want to refresh token
       else {
-        setInterval(() => {
-          let token = JSON.parse(localStorage.getItem('user'));
-          if (token) {
-            console.log(`execute setTimeout() in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
-          }
-        }, 1000);
+        // // Countdown timer
+        // setInterval(() => {
+        //   let token = JSON.parse(localStorage.getItem('user'));
+        //   if (token) {
+        //     console.log(`refresh token in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
+        //   }
+        // }, 1000);
 
         setTimeout(() => {
           this.refreshToken();  // do an initial refresh

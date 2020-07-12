@@ -1,1 +1,61 @@
-<p>remove-team-from-event works!</p>
+<mat-vertical-stepper linear
+  #stepper>
+
+  <!-- SELECT EVENT -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select an Event </ng-template>
+      <mat-form-field>
+        <mat-label> Choose an Event </mat-label>
+        <mat-select formControlName="eventCtrl"
+          (selectionChange)="getTeamsByEventId(eventCtrl); stepper.next()"
+          required>
+          <mat-option> -- </mat-option>
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"> {{event.name}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- <div>
+            <button mat-button
+              matStepperNext>Next</button>
+          </div> -->
+    </form>
+  </mat-step>
+
+  <!-- SELECT TEAM -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel> Select a Team </ng-template>
+      <mat-form-field>
+        <mat-label> Choose a Team </mat-label>
+        <mat-select formControlName="teamCtrl"
+          (selectionChange)="setSelections(); stepper.next()"
+          required>
+          <mat-option> -- </mat-option>
+          <mat-option *ngFor="let team of teams"
+            [value]="team.id"> {{team.team_name}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div> -->
+    </form>
+  </mat-step>
+
+  <!-- COMPLETED -->
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Selected Event: <b>{{selectedEvent}}</b></p>
+    <p>Selected Team: <b>{{selectedTeam}}</b></p>
+    <p>Click Submit when ready to remove.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="onClickSubmit()">Submit</button>
+      <button mat-button
+        (click)="resetStepper(stepper)">Reset</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

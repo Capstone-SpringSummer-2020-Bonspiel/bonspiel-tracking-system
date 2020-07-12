@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { ApiService } from '@app/core/api/api.service';
 
 @Component({
   selector: 'app-add-team-to-event',
@@ -6,10 +8,47 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-team-to-event.component.scss']
 })
 export class AddTeamToEventComponent implements OnInit {
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
-  constructor() { }
+  events: any = [];
+  teams: any = [];
+
+  constructor(private formBuilder: FormBuilder,
+    private apiService: ApiService,) { }
 
   ngOnInit(): void {
+    this.firstFormGroup = this.formBuilder.group({
+      teamCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
+
+    this.getAllTeams();
+    this.getEvents();
   }
 
+  getEvents() {
+    // Get list of existing events
+    this.apiService.getEvents().subscribe((res) => {
+      this.events = res;
+      // console.log('events:');
+      // console.log(this.events);
+    });
+  }
+
+  getAllTeams() {
+    // Get teams
+    this.apiService.getAllTeams().subscribe((res) => {
+      this.teams = res;
+      this.teams.sort((a, b) => (a.team_name > b.team_name) ? 1 : -1);
+      // console.log('teams:');
+      // console.log(this.teams);
+    });
+  }
+
+  onClickSubmit() {
+
+  }
 }

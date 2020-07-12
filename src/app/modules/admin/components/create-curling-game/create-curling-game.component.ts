@@ -121,7 +121,7 @@ export class CreateCurlingGameComponent implements OnInit {
 
   getTeamsByEventId() {
     // Get teams
-    this.api.getTeams(this.selectedEventId).subscribe((res) => {
+    this.api.getTeamsByEventId(this.selectedEventId).subscribe((res) => {
       this.teams = res;
       console.log('teams:');
       console.log(this.teams);

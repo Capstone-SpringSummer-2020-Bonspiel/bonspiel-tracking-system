@@ -42,20 +42,6 @@ export class ApiService {
       'Something bad happened; please try again later.');
   };
 
-  // refreshJWT() {
-  //   console.log('refreshing JWT')
-  //   this.http.post(`${environment.apiUrl}/api/v1/admin/refresh`, {})
-  //     .subscribe(
-  //       res => {
-  //         // console.log('refreshed JWT');
-  //         // console.log(res);
-  //       },
-  //       err => {
-  //         // console.log('JWT refresh error!');
-  //         // console.log(err);
-  //       });
-  // }
-
   /********************************************************************/
 
   public adHocQuery(query) {
@@ -162,10 +148,13 @@ export class ApiService {
 
   /********************************************************************/
 
-  public getTeams(eventId) {
-    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/teams`);
+  public getAllTeams() {
+    return this.http.get(`${environment.apiUrl}/api/v1/teams`);
   }
 
+  public getTeamsByEventId(eventId) {
+    return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/teams`);
+  }
 
 
   public getGamesByTeam(eventId, teamId) {

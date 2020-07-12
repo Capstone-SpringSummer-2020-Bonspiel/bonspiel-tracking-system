@@ -42,13 +42,13 @@ export class AccountService {
 
           console.log('hello');
 
-          // Countdown to refresh
-          setInterval(() => {
-            let token = JSON.parse(localStorage.getItem('user'));
-            if (token) {
-              console.log(`execute setTimeout() in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
-            }
-          }, 1000);
+          // // Countdown timer
+          // setInterval(() => {
+          //   let token = JSON.parse(localStorage.getItem('user'));
+          //   if (token) {
+          //     console.log(`refresh token in ${(new Date(token.expiryAt).getTime() - new Date().getTime() - 15000) / 1000} secs`);
+          //   }
+          // }, 1000);
 
           // Refresh every 9.75 minutes
           setInterval(() => {
