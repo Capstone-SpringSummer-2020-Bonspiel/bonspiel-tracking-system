@@ -66,25 +66,6 @@ export class ApiService {
     this.eventSource.next(newEvent);
   }
 
-  public createCurlingEvent(
-    name,
-    eventType,
-    info,
-    completed,
-    beginDate,
-    endDate
-  ) {
-    const body = {
-      name: name,
-      eventType: eventType,
-      info: info,
-      completed: completed,
-      beginDate: beginDate,
-      endDate: endDate,
-    };
-    return this.httpService.post(`${environment.apiUrl}/api/v1/create-curling-event`, body);
-  }
-
   public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
     const body = {
       name: nameData,
@@ -94,6 +75,8 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
+    console.log('sending body:');
+    console.log(body);
     return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event`, body);
   }
 
