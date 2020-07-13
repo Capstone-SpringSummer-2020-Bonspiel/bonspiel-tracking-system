@@ -11,7 +11,8 @@
 
   <a mat-list-item
     routerLinkActive="list-item-active"
-    routerLink="/admin">
+    routerLink="/admin"
+    class="d-none d-sm-block">
     <mat-icon> dashboard </mat-icon>
     Dashboard
   </a>
@@ -23,7 +24,8 @@
   <a *ngFor="let route of addRoutes"
     mat-list-item
     routerLinkActive="list-item-active"
-    routerLink="{{route.path}}">
+    routerLink="{{route.path}}"
+    [ngClass]="route.class">
     <mat-icon> {{route.icon}} </mat-icon>
     {{route.label}}
   </a>
@@ -35,7 +37,8 @@
   <a *ngFor="let route of editRoutes"
     mat-list-item
     routerLinkActive="list-item-active"
-    routerLink="{{route.path}}">
+    routerLink="{{route.path}}"
+    [ngClass]="route.class">
     <mat-icon> {{route.icon}} </mat-icon>
     {{route.label}}
   </a>
@@ -47,7 +50,8 @@
   <a *ngFor="let route of removeRoutes"
     mat-list-item
     routerLinkActive="list-item-active"
-    routerLink="{{route.path}}">
+    routerLink="{{route.path}}"
+    [ngClass]="route.class">
     <mat-icon> {{route.icon}} </mat-icon>
     {{route.label}}
   </a>

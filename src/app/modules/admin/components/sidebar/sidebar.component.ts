@@ -21,52 +21,62 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Add an Event',
       path: '/admin/create-event',
-      icon: 'calendar_today'
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Draw',
       path: '/admin/create-draw',
-      icon: 'date_range'
+      icon: 'date_range',
+      class: ''
     },
     {
       label: 'Add a Game',
       path: '/admin/create-game',
-      icon: 'event'
+      icon: 'event',
+      class: ''
     },
     {
       label: 'Add a Organization',
       path: '/admin/create-organization',
-      icon: 'add_box'
+      icon: 'add_box',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Team',
       path: '/admin/create-team',
-      icon: 'group_add'
+      icon: 'group_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Team to an Event',
       path: '/admin/add-team-to-event',
-      icon: 'group_add'
+      icon: 'group_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Curler',
       path: '/admin/create-curler',
-      icon: 'person_add'
+      icon: 'person_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Pool',
       path: '/admin/create-pool',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add a Bracket',
       path: '/admin/create-bracket',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Add an End Score',
       path: '/admin/create-endscore',
-      icon: 'plus_one'
+      icon: 'plus_one',
+      class: ''
     }
   ]
 
@@ -74,47 +84,56 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Edit an Event',
       path: '/admin/edit-event',
-      icon: 'calendar_today'
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit a Draw',
       path: '/admin/edit-draw',
-      icon: 'date_range'
+      icon: 'date_range',
+      class: ''
     },
     {
       label: 'Edit a Game',
       path: '/admin/edit-game',
-      icon: 'event'
+      icon: 'event',
+      class: ''
     },
     {
       label: 'Edit an Organization',
       path: '/admin/edit-organization',
-      icon: 'add_box'
+      icon: 'add_box',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit a Team',
       path: '/admin/edit-team',
-      icon: 'group_add'
+      icon: 'group_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit a Curler',
       path: '/admin/edit-curler',
-      icon: 'person_add'
+      icon: 'person_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit a Pool',
       path: '/admin/edit-pool',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit a Bracket',
       path: '/admin/edit-bracket',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Edit an End Score',
       path: '/admin/edit-endscore',
-      icon: 'plus_one'
+      icon: 'plus_one',
+      class: ''
     }
   ]
 
@@ -122,52 +141,62 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Remove an Event',
       path: '/admin/remove-event',
-      icon: 'calendar_today'
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Draw',
       path: '/admin/remove-draw',
-      icon: 'date_range'
+      icon: 'date_range',
+      class: ''
     },
     {
       label: 'Remove a Game',
       path: '/admin/remove-game',
-      icon: 'event'
+      icon: 'event',
+      class: ''
     },
     {
       label: 'Remove an Organization',
       path: '/admin/remove-organization',
-      icon: 'add_box'
+      icon: 'add_box',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Team',
       path: '/admin/remove-team',
-      icon: 'group_add'
+      icon: 'group_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Team from an Event',
       path: '/admin/remove-team-from-event',
-      icon: 'group_add'
+      icon: 'group_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Curler',
       path: '/admin/remove-curler',
-      icon: 'person_add'
+      icon: 'person_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Pool',
       path: '/admin/remove-pool',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove a Bracket',
       path: '/admin/remove-bracket',
-      icon: 'library_add'
+      icon: 'library_add',
+      class: 'd-none d-sm-block'
     },
     {
       label: 'Remove an End Score',
       path: '/admin/remove-endscore',
-      icon: 'plus_one'
+      icon: 'plus_one',
+      class: ''
     }
   ]
 
