@@ -75,7 +75,17 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/users/register`, user);
   }
 
-  changePassword(username, password, isSuperAdmin) {
+  createAdmin(username, password, isSuperAdmin) {
+    const body = {
+      username,
+      password,
+      isSuperAdmin
+    }
+    console.log(body);
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/createAdmin`, body);
+  }
+
+  editAdmin(username, password, isSuperAdmin) {
     const body = {
       username,
       password,
@@ -85,14 +95,15 @@ export class AccountService {
     return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);
   }
 
-  createAdmin(username, password, isSuperAdmin) {
-    const body = {
-      username,
-      password,
-      isSuperAdmin
-    }
-    console.log(body);
-    return this.http.post(`${environment.apiUrl}/api/v1/admin/createAdmin`, body);
+  removeAdmin(username: string) {
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/deleteAdmin/${username}`)
+      .pipe(map(x => {
+        // // auto logout if the logged in user deleted their own record
+        // if (username == this.userValue.username) {
+        //   this.logout();
+        // }
+        return x;
+      }));
   }
 
   getAll() {
@@ -118,17 +129,6 @@ export class AccountService {
 
           // publish updated user to subscribers
           this.userSubject.next(user);
-        }
-        return x;
-      }));
-  }
-
-  delete(username: string) {
-    return this.http.delete(`${environment.apiUrl}/users/${username}`)
-      .pipe(map(x => {
-        // auto logout if the logged in user deleted their own record
-        if (username == this.userValue.username) {
-          this.logout();
         }
         return x;
       }));
