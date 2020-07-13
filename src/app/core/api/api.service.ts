@@ -22,7 +22,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpService: HttpClient) { }
+  constructor(private httpService: HttpClient) {}
 
   /********************************************************************/
 
@@ -69,7 +69,14 @@ export class ApiService {
     this.eventSource.next(newEvent);
   }
 
-  public createEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData) {
+  public createEvent(
+    nameData,
+    beginDateData,
+    endDateData,
+    completedData,
+    infoData,
+    eventTypeData
+  ) {
     const body = {
       name: nameData,
       eventType: eventTypeData,
@@ -80,7 +87,10 @@ export class ApiService {
     };
     console.log('sending body:');
     console.log(body);
-    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event`, body);
+    return this.httpService.post(
+      `${environment.apiUrl}/api/v1/admin/event`,
+      body
+    );
   }
 
   public editEvent(
@@ -251,6 +261,12 @@ export class ApiService {
   /********************************************************************/
 
   // Curler
+
+  public getCurlersByOrganization(orgId) {
+    return this.httpService.get(
+      `${environment.apiUrl}/api/v1/orgs/${orgId}/curlers`
+    );
+  }
 
   public createCurler(name, position, affiliation, curlingTeamId) {
     const body = {

@@ -20,10 +20,8 @@ export class RemoveCurlerComponent implements OnInit {
   thirdFormGroup: FormGroup;
 
   organizations: any[] = [];
-  teams: any[] = [];
+  curlers: any[] = [];
   selectedOrganizationID;
-  selectedTeamID;
-  selectedTeam;
   selectedCurlerID;
   positions = [
     { value: 'skip', viewValue: 'Skip' },
@@ -38,7 +36,7 @@ export class RemoveCurlerComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -48,58 +46,40 @@ export class RemoveCurlerComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required],
+      thirdCtrlName: ['', Validators.required],
+      thirdCtrlPosition: ['', Validators.required],
+      thirdCtrlTeam: ['', Validators.required],
+      thirdCtrlOrg: ['', Validators.required],
     });
 
     this.spinnerService.on();
-    const query = 'SELECT * from organization';
-    this.apiService.adHocQuery(query).subscribe((res: any) => {
-      this.organizations = res.rows;
+    this.apiService.getAllOrganizations().subscribe((res: any) => {
+      this.organizations = res;
+      this.organizations.sort((a, b) => (a.name > b.name ? 1 : -1));
       this.spinnerService.off();
-      console.log('organizations:');
-      console.log(this.organizations);
     });
   }
-  getOrgTeams() {
-    console.log('getOrgTeams()');
+  getOrgCurlers() {
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
     this.spinnerService.on();
-    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
-      this.teams = res;
-      this.spinnerService.off();
-      console.log('teams:');
-      console.log(this.teams);
-    });
-  }
-
-  getTeamId() {
-    console.log('getTeamId()');
-    this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    this.spinnerService.on();
-    this.apiService.getTeams(this.selectedTeamID).subscribe((res: any) => {
-      this.selectedTeam = res;
-      this.spinnerService.off();
-      console.log('selectedTeam: ');
-      console.log(this.selectedTeam);
-    });
+    this.apiService
+      .getCurlersByOrganization(this.selectedOrganizationID)
+      .subscribe((res: any) => {
+        this.curlers = res;
+        this.curlers.sort((a, b) => (a.name > b.name ? 1 : -1));
+        this.spinnerService.off();
+      });
   }
 
   getCurlerId() {
-    console.log('getCurlerId()');
-    this.selectedCurlerID = this.thirdFormGroup.value.thirdCtrl;
-    console.log(`selectedCurlerID= ${this.selectedCurlerID}`);
+    this.selectedCurlerID = this.secondFormGroup.value.secondCtrl;
   }
 
   onClickSubmit() {
-    console.log('onClickSubmit()');
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
     this.apiService.removeCurler(this.selectedCurlerID).subscribe(
-      (res: any) => this.notificationService.showSuccess('Curler has been removed', ''),
+      (res: any) =>
+        this.notificationService.showSuccess('Curler has been removed', ''),
       (error) => {
-        console.log(error);
         this.notificationService.showError('Something went wrong', '');
       }
     );
