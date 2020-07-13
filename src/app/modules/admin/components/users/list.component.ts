@@ -10,9 +10,13 @@ export class ListComponent implements OnInit {
   constructor(private accountService: AccountService) { }
 
   ngOnInit() {
-    this.accountService.getAll()
+    this.accountService.getAllAdmins()
       .pipe(first())
-      .subscribe(users => this.users = users);
+      .subscribe(users => {
+        this.users = users;
+        this.users.sort((a, b) => (a.username > b.username) ? 1 : -1);
+        console.log(this.users);
+      });
   }
 
   deleteUser(id: string) {

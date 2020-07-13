@@ -84,8 +84,22 @@ export class AccountService {
     return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);
   }
 
+  createAdmin(username, password, isSuperAdmin) {
+    const body = {
+      username,
+      password,
+      isSuperAdmin
+    }
+    console.log(body);
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/createAdmin`, body);
+  }
+
   getAll() {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
+  }
+
+  getAllAdmins() {
+    return this.http.get(`${environment.apiUrl}/api/v1/admin/admins`);
   }
 
   getById(id: string) {

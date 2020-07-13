@@ -12,6 +12,6 @@ EXPOSE $PORT
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
-RUN if [ "x$NODE_ENV" = "prd" ] ; then ng build --prod ; else ng build ; fi
+RUN if [ "$NODE_ENV" = "prd" ] ; then ng build --prod ; else ng build ; fi
 
 CMD ["node", "./server/server.js"]
