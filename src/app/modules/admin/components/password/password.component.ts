@@ -17,8 +17,8 @@ export class PasswordComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
-  currentUsername = null;
-  currentIsSuperAdmin = null;
+  username = null;
+  isSuperAdmin = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,8 +40,8 @@ export class PasswordComponent implements OnInit {
 
     // Get current user
     this.accountService.user$.subscribe((user) => {
-      this.currentUsername = user.username;
-      this.currentIsSuperAdmin = user.isSuperAdmin;
+      this.username = user.username;
+      this.isSuperAdmin = user.isSuperAdmin;
     });
   }
 
@@ -49,7 +49,7 @@ export class PasswordComponent implements OnInit {
   get f() { return this.form.controls; }
 
   onSubmit() {
-    if (!this.currentUsername) {
+    if (!this.username) {
       return;
     }
 
@@ -67,7 +67,7 @@ export class PasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.changePassword(this.currentUsername, this.f.password.value, this.currentIsSuperAdmin)
+    this.accountService.changePassword(this.username, this.f.password.value, String(this.isSuperAdmin))
       .subscribe(
         data => {
           console.log('PASSWORD CHANGED');
@@ -76,7 +76,7 @@ export class PasswordComponent implements OnInit {
         },
         error => {
           console.log('PASSWORD NOT CHANGED');
-          this.notificationService.showSuccess('Unable to sign in.  Invalid username/password combination.', ''),
+          this.notificationService.showError('Something went wrong', ''),
             this.loading = false;
         });
   }

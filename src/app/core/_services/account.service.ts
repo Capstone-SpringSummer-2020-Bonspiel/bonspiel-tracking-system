@@ -81,6 +81,7 @@ export class AccountService {
       password,
       isSuperAdmin
     };
+    console.log(body);
     return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);
   }
 
