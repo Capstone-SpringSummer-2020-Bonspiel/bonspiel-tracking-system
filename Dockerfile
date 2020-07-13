@@ -2,16 +2,16 @@ FROM node:12.16.3
 WORKDIR /usr/src/
 COPY package*.json ./
 
-RUN npm install -g @angular/cli@9.1.4
-RUN npm install
+#RUN npm install -g @angular/cli@9.1.4
+#RUN npm install
 
-RUN cd ../
-COPY . .
-EXPOSE $PORT 
+#RUN cd ../
+#COPY . .
+#EXPOSE $PORT 
 
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
-RUN ng build --prod
+RUN if [ "$NODE_ENV" = "prd" ] ; then echo one ; else echo two ; fi
 
-CMD ["node", "./server/server.js"]
+#CMD ["node", "./server/server.js"]
