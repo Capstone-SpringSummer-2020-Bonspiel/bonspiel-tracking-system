@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@core/_services';
@@ -32,8 +32,8 @@ export class PasswordComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       password: ['', Validators.required],
-      password2: ['', Validators.required]
-    });
+      confirmPassword: ['', Validators.required]
+    }, { validator: this.passwordConfirming });
 
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -79,5 +79,11 @@ export class PasswordComponent implements OnInit {
           this.notificationService.showSuccess('Unable to sign in.  Invalid username/password combination.', ''),
             this.loading = false;
         });
+  }
+
+  passwordConfirming(c: AbstractControl): { invalid: boolean } {
+    if (c.get('password').value !== c.get('confirmPassword').value) {
+      return { invalid: true };
+    }
   }
 }
