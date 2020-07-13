@@ -23,20 +23,26 @@
       <ul class="navbar-nav mr-auto">
 
         <!-- EVENTS BUTTON -->
-        <li class="nav-item">
+        <li class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
           <a button
             class="nav-link btn btn-link"
             (click)="sidenavToggle.emit()">Events</a>
         </li>
 
         <!-- SCHEDULE BUTTON -->
-        <li class="nav-item">
+        <li class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
           <a class="nav-link btn btn-link"
             href="/schedule">Schedule</a>
         </li>
 
         <!-- TEAMS BUTTON -->
-        <li class="nav-item">
+        <li class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
           <a class="nav-link btn btn-link"
             href="/teamlist">Teams</a>
         </li>
@@ -46,7 +52,9 @@
       <ul class="navbar-nav ml-auto">
 
         <!-- ADMIN BUTTON -->
-        <li class="nav-item">
+        <li class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
           <a form
             class="nav-link btn btn-link form-inline">
             <button *ngIf="isSignedIn"
@@ -57,15 +65,26 @@
         </li>
 
         <!-- SIGN IN/OUT BUTTON -->
-        <li class="nav-item">
+        <li *ngIf="!isSignedIn"
+          class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
           <a form
             class="nav-link btn btn-link form-inline">
             <button *ngIf="!isSignedIn"
               class="btn btn-sm btn-outline-secondary"
               type="button"
               (click)="signIn()">Sign In</button>
-            <button *ngIf="isSignedIn"
-              class="btn btn-sm btn-outline-secondary"
+          </a>
+        </li>
+
+        <li *ngIf="isSignedIn"
+          class="nav-item"
+          data-toggle="collapse"
+          data-target=".navbar-collapse.show">
+          <a form
+            class="nav-link btn btn-link form-inline">
+            <button class="btn btn-sm btn-outline-secondary"
               type="button"
               (click)="signOut()">Sign Out</button>
           </a>
