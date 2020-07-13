@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@app/core/_services';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -10,13 +11,17 @@ import { AccountService } from '@app/core/_services';
 export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
   isSidebarOpen = true;
+  currentUser = null;
 
   constructor(
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private notificationService: NotificationService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.accountService.user$.subscribe(user => this.currentUser = user);
+  }
 
   toggleSideBar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -31,7 +36,12 @@ export class HeaderComponent implements OnInit {
   }
 
   manageUsers() {
-    this.router.navigate(['/admin/users']);
+    if (this.currentUser.isSuperAdmin) {
+      this.router.navigate(['/admin/users']);
+    } else {
+      console.log('ACCESS DENIED');
+      this.notificationService.showError('Access Denied', '');
+    }
   }
 
   logout() {

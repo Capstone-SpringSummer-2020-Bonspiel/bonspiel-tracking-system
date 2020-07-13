@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@core/_services';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
@@ -18,7 +19,8 @@ export class AddEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
@@ -32,21 +34,20 @@ export class AddEditComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
       username: ['', Validators.required],
-      password: ['', passwordValidators]
+      password: ['', passwordValidators],
+      isSuperAdmin: [false, Validators.required],
     });
 
-    if (!this.isAddMode) {
-      this.accountService.getById(this.id)
-        .pipe(first())
-        .subscribe(x => {
-          this.f.firstName.setValue(x.firstName);
-          this.f.lastName.setValue(x.lastName);
-          this.f.username.setValue(x.username);
-        });
-    }
+    // if (!this.isAddMode) {
+    //   this.accountService.getById(this.id)
+    //     .pipe(first())
+    //     .subscribe(x => {
+    //       this.f.firstName.setValue(x.firstName);
+    //       this.f.lastName.setValue(x.lastName);
+    //       this.f.username.setValue(x.username);
+    //     });
+    // }
   }
 
   // convenience getter for easy access to form fields
@@ -72,15 +73,17 @@ export class AddEditComponent implements OnInit {
   }
 
   private createUser() {
-    this.accountService.register(this.form.value)
-      .pipe(first())
+    const username = this.form.value.username;
+    const password = this.form.value.password;
+    const isSuperAdmin = String(this.form.value.isSuperAdmin);
+    this.accountService.createAdmin(username, password, isSuperAdmin)
       .subscribe(
         data => {
-          this.alertService.success('User added successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['.', { relativeTo: this.route }]);
+          this.notificationService.showSuccess('User added successfully', '');
+          this.router.navigate(['/admin/users']);
         },
         error => {
-          this.alertService.error(error);
+          this.notificationService.showError('Something went wrong', '');
           this.loading = false;
         });
   }

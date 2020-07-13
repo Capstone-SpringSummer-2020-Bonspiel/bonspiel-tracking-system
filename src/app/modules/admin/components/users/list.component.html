@@ -4,19 +4,29 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th style="width: 30%">First Name</th>
-      <th style="width: 30%">Last Name</th>
+      <th style="width: 30%">Username</th>
+      <th style="width: 30%">Super Admin?</th>
       <th style="width: 30%">Username</th>
       <th style="width: 10%"></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let user of users">
-      <td>{{user.firstName}}</td>
-      <td>{{user.lastName}}</td>
+      <td>{{user.username}}</td>
+      <!-- <td>{{user.issuperadmin}}</td> -->
+      <td>
+        <ng-container *ngIf="user.issuperadmin; else elseTemplate">
+          <mat-icon class="ml-5"
+            style="color: green"> done </mat-icon>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <mat-icon class="ml-5"
+            style="color: orangered"> highlight_off </mat-icon>
+        </ng-template>
+      </td>
       <td>{{user.username}}</td>
       <td style="white-space: nowrap">
-        <a routerLink="edit/{{user.id}}"
+        <!-- <a routerLink="edit/{{user.id}}"
           class="btn btn-sm btn-primary mr-1">Edit</a>
         <button (click)="deleteUser(user.id)"
           class="btn btn-sm btn-danger btn-delete-user"
@@ -24,7 +34,7 @@
           <span *ngIf="user.isDeleting"
             class="spinner-border spinner-border-sm"></span>
           <span *ngIf="!user.isDeleting">Delete</span>
-        </button>
+        </button> -->
       </td>
     </tr>
     <tr *ngIf="!users">
