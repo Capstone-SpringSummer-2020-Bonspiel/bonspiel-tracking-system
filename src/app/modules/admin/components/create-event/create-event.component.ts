@@ -12,11 +12,11 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateEventComponent implements OnInit {
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  // secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
-  fouthFormGroup: FormGroup;
+  // fouthFormGroup: FormGroup;
   fifthFormGroup: FormGroup;
-  sixthFormGroup: FormGroup;
+  // sixthFormGroup: FormGroup;
   feedBackData: null;
 
   eventTypes: any[] = [
@@ -41,31 +41,34 @@ export class CreateEventComponent implements OnInit {
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
+      firstCtrlInfo: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required],
-    });
+    // this.secondFormGroup = this._formBuilder.group({
+    //   secondCtrl: ['', Validators.required],
+    // });
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrl: ['', Validators.required],
+      thirdCtrlCond: ['', Validators.required],
     });
-    this.fouthFormGroup = this._formBuilder.group({
-      fouthCtrl: ['', Validators.required],
-    });
+    // this.fouthFormGroup = this._formBuilder.group({
+    //   fouthCtrl: ['', Validators.required],
+    // });
     this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrl: ['', Validators.required],
+      fifthCtrlBeg: ['', Validators.required],
+      fifthCtrlEnd: ['', Validators.required],
     });
-    this.sixthFormGroup = this._formBuilder.group({
-      sixthCtrl: ['', Validators.required],
-    });
+    // this.sixthFormGroup = this._formBuilder.group({
+    //   sixthCtrl: ['', Validators.required],
+    // });
   }
 
   onCreateCurlingEvent() {
     const name = this.firstFormGroup.value.firstCtrl;
-    const info = this.secondFormGroup.value.secondCtrl;
+    const info = this.firstFormGroup.value.firstCtrlInfo;
     const event_type = this.thirdFormGroup.value.thirdCtrl;
-    const completed = this.fouthFormGroup.value.fouthCtrl;
-    const begin_date = this.fifthFormGroup.value.fifthCtrl;
-    const end_date = this.sixthFormGroup.value.sixthCtrl;
+    const completed = this.thirdFormGroup.value.thirdCtrlCond;
+    const begin_date = this.fifthFormGroup.value.fifthCtrlBeg;
+    const end_date = this.fifthFormGroup.value.fifthCtrlEnd;
     console.log(`full name: ${name}`);
     console.log(`detail info: ${info}`);
     console.log(`begin-date: ${begin_date}`);
@@ -76,26 +79,33 @@ export class CreateEventComponent implements OnInit {
     this.spinnerService.on();
 
     this.apiService.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
-      .subscribe((res: any) => {
-        this.feedBackData = res;
-        console.log(res);
-        dialogRef.afterClosed().subscribe(result => {
-          console.log("something happened.")
-        })
-        this.spinnerService.off();
-      })
+      .subscribe(
+        (res: any) => {
+          // this.feedBackData = res;
+          console.log(res);
+          // dialogRef.afterClosed().subscribe(result => {
+          //   console.log("something happened.")
+          // })
+          this.notificationService.showSuccess('Event has been created', '')
+          this.spinnerService.off()
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong', '');
+        }
+      )
 
-    const dialogRef = this.dialog.open(CreateEventDialog, {
-      data: {
-        signal: '200',
-        name: name,
-        info: info,
-        begin_date: begin_date,
-        end_date: end_date,
-        event_type: event_type,
-        completed: completed,
-      }
-    });
+    // const dialogRef = this.dialog.open(CreateEventDialog, {
+    //   data: {
+    //     signal: '200',
+    //     name: name,
+    //     info: info,
+    //     begin_date: begin_date,
+    //     end_date: end_date,
+    //     event_type: event_type,
+    //     completed: completed,
+    //   }
+    // });
     // dialogRef.afterClosed().subscribe(result => {
     //   console.log("something happened.")
     // })

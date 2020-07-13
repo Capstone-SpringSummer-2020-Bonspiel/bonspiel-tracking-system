@@ -12,7 +12,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  // secondFormGroup: FormGroup;
 
   feedBackData: null;
 
@@ -27,31 +27,33 @@ export class CreateOrganizationComponent implements OnInit {
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
-    });
-    this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
     });
+    // this.secondFormGroup = this._formBuilder.group({
+    //   secondCtrl: ['', Validators.required],
+    // });
 
   }
 
   createOrganization() {
     const fullName = this.firstFormGroup.value.firstCtrl;
-    const shortName = this.secondFormGroup.value.secondCtrl;
+    const shortName = this.firstFormGroup.value.secondCtrl;
 
     console.log(`full name: ${fullName}`);
     console.log(`detail info: ${shortName}`);
 
-    // this.spinnerService.on();
-    // this.apiService
-    //   .createEvent(name, begin_date, end_date, completed, info, event_type)
-    //   .subscribe((res: any) => {
-    //     this.feedBackData = res;
-    //     console.log(res);
-    //     dialogRef.afterClosed().subscribe(result => {
-    //       console.log("something happened.")
-    //     })
-    //     this.spinnerService.off();
-    //   })
+    this.spinnerService.on();
+    this.apiService
+      .createOrganization(fullName, shortName)
+      .subscribe((res: any) => {
+        this.feedBackData = res;
+        console.log(res);
+
+        this.apiService.getAllOrganizations().subscribe((res: any) => {
+          console.log(res)
+        })
+        this.spinnerService.off();
+      })
 
     // const dialogRef = this.dialog.open(Create, {
     //   data: {
