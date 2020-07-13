@@ -27,7 +27,7 @@ import {
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatAccordion } from '@angular/material/expansion';
 
-export interface Organization {
+export interface Event {
   id: number;
   name: string;
   event_type: string;
@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
     end_date: 'End Date',
   };
   displayedColumns: string[] = this.columns.map((e) => e.name);
-  dataSource = new MatTableDataSource<Organization>([]);
+  dataSource = new MatTableDataSource<Event>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -209,6 +209,8 @@ export class DashboardComponent implements OnInit {
       // console.log(rows);
 
       const newData = this.dataSource.data;
+      this.dataSource.sort = this.mainTableSort;
+
       for (let row of rows) {
         newData.push(row);
         // console.log(row);
