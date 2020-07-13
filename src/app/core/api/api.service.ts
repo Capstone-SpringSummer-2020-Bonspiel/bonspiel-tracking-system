@@ -26,6 +26,8 @@ export class ApiService {
 
   /********************************************************************/
 
+  // Miscellaneous
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -34,15 +36,12 @@ export class ApiService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+        `Backend returned code ${error.status}, ` + `body was: ${error.error}`
+      );
     }
     // return an observable with a user-facing error message
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
-
-  /********************************************************************/
+    return throwError('Something bad happened; please try again later.');
+  }
 
   public adHocQuery(query) {
     const body = {
@@ -52,6 +51,8 @@ export class ApiService {
   }
 
   /********************************************************************/
+
+  // Events
 
   public getEvents() {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events`);
@@ -116,6 +117,8 @@ export class ApiService {
 
   /********************************************************************/
 
+  // Draws
+
   public getDraws(eventId) {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/draws`);
   }
@@ -144,6 +147,8 @@ export class ApiService {
 
   /********************************************************************/
 
+  // Games
+
   public getGames(eventId) {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/games`);
   }
@@ -162,7 +167,42 @@ export class ApiService {
     return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/game/${gameId}`);
   }
 
+  /********************************************************************* */
+
+  // Organization
+
+  public getAllOrganizations() {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/orgs`);
+  }
+
+  public getOrganizationByOrganizationId(orgId) {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/orgs/${orgId}`);
+  }
+
+  public createOrganization(fullNameData, shortNameData) {
+    const body = {
+      fullName: fullNameData,
+      shortName: shortNameData,
+    }
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/org`, body)
+  }
+
+  public editOrganization(fullNameData, shortNameData, orgId) {
+    const body = {
+      fullName: fullNameData,
+      shortName: shortNameData,
+    }
+    return this.httpService.put(`${environment.apiUrl}/api/v1/admin/org/${orgId}`, body)
+  }
+
+  public removeOrganization(orgId) {
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/org/${orgId}`)
+  }
+  // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error 
+
   /********************************************************************/
+
+  // Teams
 
   public getAllTeams() {
     return this.httpService.get(`${environment.apiUrl}/api/v1/teams`);
@@ -170,6 +210,10 @@ export class ApiService {
 
   public getTeamsByEventId(eventId) {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/teams`);
+  }
+
+  public getTeams(teamId) {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/teams/${teamId}`);
   }
 
   public getScoresByTeam(eventId, teamId) {
@@ -180,23 +224,7 @@ export class ApiService {
 
   /********************************************************************/
 
-  public getScoresByEvent(eventId) {
-    return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/scores`);
-  }
-
-  public getTeams(teamId) {
-    return this.httpService.get(`${environment.apiUrl}/api/v1/teams/${teamId}`);
-  }
-
-  public getAllOrgs() {
-    return this.httpService.get(`${environment.apiUrl}/api/v1/orgs`);
-  }
-
-  public getOrgs(orgId) {
-    return this.httpService.get(`${environment.apiUrl}/api/v1/orgs/${orgId}`);
-  }
-
-  /********************************************************************/
+  // Curler
 
   public createCurler(name, position, affiliation, curlingTeamId) {
     const body = {
@@ -227,34 +255,13 @@ export class ApiService {
 
   /********************************************************************* */
 
-  public createOrganization(fullNameData, shortNameData) {
-    const body = {
-      fullName: fullNameData,
-      shortName: shortNameData,
-    }
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/org`, body)
-  }
-
-  public editOrganization(fullNameData, shortNameData, orgId) {
-    const body = {
-      fullName: fullNameData,
-      shortName: shortNameData,
-    }
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/org/${orgId}`, body)
-  }
-
-  public removeOrganization(orgId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/org/${orgId}`)
-  }
-  // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error 
-
-  /********************************************************************* */
+  // Bracket
 
   public createBracket(nameData, eventId) {
     const body = {
       name: nameData
     }
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/bracket`, body)
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/${eventId}/bracket`, body)
   }
 
   public editBracket(nameData, eventIdData, bracketId) {
@@ -262,21 +269,23 @@ export class ApiService {
       name: nameData,
       eventId: eventIdData,
     }
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/bracket/${bracketId}`, body)
+    return this.httpService.put(`${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`, body)
   }
 
   public removeBracket(bracketId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/bracket/${bracketId}`)
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`)
   }
   // CASCADE DELETE will NOT be setup. If any games exist in bracket, then delete will error out.
 
   /********************************************************************* */
 
+  // Pool
+
   public createPool(nameData, eventId) {
     const body = {
       name: nameData,
     }
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/${eventId}/pool`, body)
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/${eventId}/pool`, body)
   }
 
   public editPool(nameData, eventIdData, poolId) {
@@ -284,11 +293,11 @@ export class ApiService {
       name: nameData,
       eventId: eventIdData
     }
-    return this.httpClient.put(`${apiUrl}/api/v1/admin/pool/${poolId}`, body)
+    return this.httpService.put(`${environment.apiUrl}/api/v1/admin/pool/${poolId}`, body)
   }
 
   public removePool(poolId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/pool/${poolId}`)
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/pool/${poolId}`)
   }
   // CASCADE DELETE will NOT be setup. If any games exist in pool, then delete will error out.
 
@@ -296,12 +305,50 @@ export class ApiService {
 
   public insertTeamEvent(eventId, teamId) {
     const body = {}
-    return this.httpClient.post(`${apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`, body)
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`, body)
   }
 
   public removeTeamEvent(eventId, teamId) {
-    return this.httpClient.delete(`${apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`)
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`)
   }
   // CASCADE DELETE will NOT be setup. 
   // Manual check - If the team has played a game in the curling event, they must be removed before the team can be removed from the curling event
+
+  /**********************************************************************/
+
+  // Scores
+
+  public createEndScore(gameId, endNumber, blank, curlingTeam1Scored, score) {
+    const body = {
+      endNumber: endNumber,
+      blank: blank,
+      curlingTeam1Scored: curlingTeam1Scored,
+      score: score,
+    };
+    return this.httpService.post(
+      `${environment.apiUrl}/api/v1/admin/${gameId}/end`,
+      body
+    );
+  }
+
+  public editEndScore(endId, blank, curlingTeam1Scored, score) {
+    const body = {
+      blank: blank,
+      curlingTeam1Scored: curlingTeam1Scored,
+      score: score,
+    };
+    return this.httpService.put(
+      `${environment.apiUrl}/api/v1/admin/end/${endId}`,
+      body
+    );
+  }
+
+  public removeEndScore(endId) {
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/end/${endId}`);
+  }
+
+
+  public getScoresByEvent(eventId) {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/scores`);
+  }
 }

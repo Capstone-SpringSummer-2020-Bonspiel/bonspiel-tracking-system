@@ -33,7 +33,7 @@ export class EditOrganizationComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.on();
     this.api
-      .getAllOrgs()
+      .getAllOrganizations()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
@@ -102,4 +102,4 @@ export class EditOrganizationComponent implements OnInit {
   }
 }
 
-//getAllOrgs()
+//getAllOrganizations()

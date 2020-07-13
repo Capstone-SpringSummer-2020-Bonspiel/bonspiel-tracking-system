@@ -57,7 +57,7 @@ export class EditCurlerComponent implements OnInit {
     });
 
     this.spinner.on();
-    this.api.getAllOrgs().subscribe((res: any) => {
+    this.api.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
       this.spinner.off();
       console.log('organizations:');
