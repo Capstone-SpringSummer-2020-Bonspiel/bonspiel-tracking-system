@@ -26,7 +26,6 @@ export class CreateDrawComponent implements OnInit {
   eventNames: any[] = [];
   eventDraws: any[] = [];
   selectedEventId;
-  selectedDraw;
   selectedEvent;
   drawDisplayedColumns: string[] = [
     'event_id',
@@ -38,8 +37,8 @@ export class CreateDrawComponent implements OnInit {
 
   date: Date;
   showSpinners = true;
-  minDate;
-  maxDate;
+  minDate: Date;
+  maxDate: Date;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -71,25 +70,16 @@ export class CreateDrawComponent implements OnInit {
       }
       this.spinnerService.off();
       this.eventNames = res;
-      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
-      console.log('eventNames:');
-      console.log(this.eventNames);
     });
   }
 
   getEvent() {
-    console.log('getEvent()');
     this.selectedEventId = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventID= ${this.selectedEventId}`);
     this.selectedEvent = this.eventNames.filter(
       (x) => x.id === this.selectedEventId
     );
-    console.log('selectedEvent');
-    console.log(this.selectedEvent);
     this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
-    console.log(this.minDate);
-    console.log(this.maxDate);
   }
 
   onClickSubmit() {
@@ -110,7 +100,6 @@ export class CreateDrawComponent implements OnInit {
         (res: any) =>
           this.notificationService.showSuccess('Draw has been created', ''),
         (error) => {
-          console.log(error);
           this.notificationService.showError('Something went wrong', '');
         }
       );
