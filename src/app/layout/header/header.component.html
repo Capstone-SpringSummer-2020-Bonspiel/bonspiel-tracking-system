@@ -24,8 +24,9 @@
 
         <!-- EVENTS BUTTON -->
         <li class="nav-item">
-          <button class="nav-link btn btn-link"
-            (click)="sidenavToggle.emit()">Events</button>
+          <a button
+            class="nav-link btn btn-link"
+            (click)="sidenavToggle.emit()">Events</a>
         </li>
 
         <!-- SCHEDULE BUTTON -->
@@ -42,25 +43,35 @@
 
       </ul>
 
-      <!-- ADMIN BUTTON -->
-      <form class="form-inline mr-4">
-        <button *ngIf="isSignedIn"
-          class="btn btn-sm btn-outline-secondary"
-          type="button"
-          (click)="managerView()">Manager View</button>
-      </form>
+      <ul class="navbar-nav ml-auto">
 
-      <!-- SIGN IN/OUT BUTTON -->
-      <form class="form-inline">
-        <button *ngIf="!isSignedIn"
-          class="btn btn-sm btn-outline-secondary"
-          type="button"
-          (click)="signIn()">Sign In</button>
-        <button *ngIf="isSignedIn"
-          class="btn btn-sm btn-outline-secondary"
-          type="button"
-          (click)="signOut()">Sign Out</button>
-      </form>
+        <!-- ADMIN BUTTON -->
+        <li class="nav-item">
+          <a form
+            class="nav-link btn btn-link form-inline">
+            <button *ngIf="isSignedIn"
+              class="btn btn-sm btn-outline-secondary"
+              type="button"
+              (click)="managerView()">Manager View</button>
+          </a>
+        </li>
+
+        <!-- SIGN IN/OUT BUTTON -->
+        <li class="nav-item">
+          <a form
+            class="nav-link btn btn-link form-inline">
+            <button *ngIf="!isSignedIn"
+              class="btn btn-sm btn-outline-secondary"
+              type="button"
+              (click)="signIn()">Sign In</button>
+            <button *ngIf="isSignedIn"
+              class="btn btn-sm btn-outline-secondary"
+              type="button"
+              (click)="signOut()">Sign Out</button>
+          </a>
+        </li>
+
+      </ul>
     </div>
   </nav>
 </header>
