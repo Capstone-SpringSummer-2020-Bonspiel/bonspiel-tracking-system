@@ -75,6 +75,15 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/users/register`, user);
   }
 
+  changePassword(username, password, isSuperAdmin) {
+    const body = {
+      username,
+      password,
+      isSuperAdmin
+    };
+    return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);
+  }
+
   getAll() {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
