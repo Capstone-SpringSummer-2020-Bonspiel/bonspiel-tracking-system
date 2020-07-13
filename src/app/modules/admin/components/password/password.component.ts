@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@core/_services';
 import { User } from '@app/core/_models';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-password',
@@ -16,6 +17,8 @@ export class PasswordComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
+  currentUsername = null;
+  currentIsSuperAdmin = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,22 +26,36 @@ export class PasswordComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private alertService: AlertService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      password2: ['', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    // Get current user
+    this.accountService.user$.subscribe((user) => {
+      this.currentUsername = user.username;
+      this.currentIsSuperAdmin = user.isSuperAdmin;
+    });
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
   onSubmit() {
+    if (!this.currentUsername) {
+      return;
+    }
+
+    console.log();
+
+
     this.submitted = true;
 
     // reset alerts on submit
@@ -50,24 +67,17 @@ export class PasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.login(this.f.username.value, this.f.password.value)
-      .pipe(first())
+    this.accountService.changePassword(this.currentUsername, this.f.password.value, this.currentIsSuperAdmin)
       .subscribe(
         data => {
-          console.log('LOGIN SUCCESSFUL!!!!!!!');
-          console.log(this.returnUrl);
-
-          if (this.returnUrl.includes('admin')) {
-            this.router.navigate([this.returnUrl]);
-          } else {
-            this.router.navigateByUrl('/admin');
-          }
+          console.log('PASSWORD CHANGED');
+          this.notificationService.showSuccess('Your password was successfully changed', '');
+          this.loading = false;
         },
         error => {
-          console.log('LOGIN UNSUCCESSFUL......');
-          // this.alertService.error(error);
-          this.alertService.error('Unable to sign in.  Invalid username/password combination.');
-          this.loading = false;
+          console.log('PASSWORD NOT CHANGED');
+          this.notificationService.showSuccess('Unable to sign in.  Invalid username/password combination.', ''),
+            this.loading = false;
         });
   }
 }
