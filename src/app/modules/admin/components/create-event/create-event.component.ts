@@ -59,7 +59,7 @@ export class CreateEventComponent implements OnInit {
     });
   }
 
-  createCurlingEvent() {
+  onCreateCurlingEvent() {
     const name = this.firstFormGroup.value.firstCtrl;
     const info = this.secondFormGroup.value.secondCtrl;
     const event_type = this.thirdFormGroup.value.thirdCtrl;

@@ -14,12 +14,8 @@ export class EditOrganizationComponent implements OnInit {
   zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
-  fouthFormGroup: FormGroup;
-  fifthFormGroup: FormGroup;
-  sixthFormGroup: FormGroup;
   feedBackData: any;
-  allEventData: null;
+  allOrganizationData: null;
   selectedEventId: Number;
   selectedOrganization: any = {
     shortName: 'shortname',
@@ -41,10 +37,10 @@ export class EditOrganizationComponent implements OnInit {
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
-        this.allEventData = res;
+        this.allOrganizationData = res;
         this.selectedOrganization = res[0];
         console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
+        console.log(this.allOrganizationData);
 
         this.spinner.off();
       })
@@ -55,22 +51,10 @@ export class EditOrganizationComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: [''],
     });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: [''],
-    });
-    this.fouthFormGroup = this._formBuilder.group({
-      fouthCtrl: [''],
-    });
-    this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrl: [''],
-    });
-    this.sixthFormGroup = this._formBuilder.group({
-      sixthCtrl: [''],
-    });
   }
 
   onEventSelected(event: any) {
-    console.log(this.allEventData);
+    console.log(this.allOrganizationData);
     console.log('the selected event is:');
     console.log(this.selectedOrganization);
 
@@ -98,7 +82,7 @@ export class EditOrganizationComponent implements OnInit {
 
     // this.spinner.on();
     // this.api
-    //   .editOrganization(fullName, shortName, this.selectedEvent)
+    //   .editOrganization(fullName, shortName, this.selectedOrganization.id)
     //   .subscribe((res: any) => {  
     //     this.spinner.off();
     //     this.feedBackData = res;
