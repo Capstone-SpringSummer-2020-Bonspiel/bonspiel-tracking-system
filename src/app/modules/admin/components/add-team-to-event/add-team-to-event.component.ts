@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-add-team-to-event',
@@ -50,5 +51,12 @@ export class AddTeamToEventComponent implements OnInit {
 
   onClickSubmit() {
 
+  }
+
+  resetStepper(stepper: MatStepper) {
+    stepper.reset();
+
+    this.firstFormGroup.reset();
+    this.secondFormGroup.reset();
   }
 }

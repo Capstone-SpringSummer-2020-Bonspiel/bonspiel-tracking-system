@@ -8,7 +8,7 @@
       <mat-form-field>
         <mat-label> Choose an Event </mat-label>
         <mat-select formControlName="eventCtrl"
-          (selectionChange)="getTeamsByEventId(eventCtrl); stepper.next()"
+          (selectionChange)="getTeamsByEventId(); stepper.next()"
           required>
           <mat-option> -- </mat-option>
           <mat-option *ngFor="let event of events"

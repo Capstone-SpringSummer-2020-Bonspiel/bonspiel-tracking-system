@@ -21,25 +21,9 @@ export class CreateGameComponent implements OnInit {
   selectedDrawId = null;
   selectedTeam1Id = undefined;
   selectedTeam2Id = undefined;
-  selectedTeam1StoneColor = 'Red';
-  selectedTeam2StoneColor = 'Yellow';
+  selectedTeam1StoneColor = 'red';
+  selectedTeam2StoneColor = 'yellow';
   finished = false;
-  payload = {
-    eventType: '', // eventType,
-    notes: '', // notes,
-    bracketId: '', // bracketId,
-    poolId: '', // poolId,
-    drawId: '', // drawId,
-    curlingTeam1Id: '', // curlingTeam1Id (nullable),
-    curlingTeam2Id: '', // curlingTeam2Id (nullable),
-    stoneColor1: '', // stoneColor1,
-    stoneColor2: '', // stoneColor2,
-    winnerFromGame: '', // winnerFromGame (nullable),
-    loserFromGame: '', // loserFromGame (nullable),
-    iceSheet: '', // iceSheet,
-    finished: '', // Finished,
-    winnerId: '', // WinnerId (nullable)
-  }
 
   events: any = [];
   optionGroups: any = [
@@ -56,35 +40,39 @@ export class CreateGameComponent implements OnInit {
   games: any = [];
   teams: any = [];
 
-  colors = ['Red', 'Yellow'];
+  colors = ['red', 'yellow'];
   iceSheets = ['A', 'B', 'C'];
+  eventTypes = ['friendly', 'pools', 'brackets', 'championship'];
 
   console = console;
 
   constructor(private formBuilder: FormBuilder,
-    private api: ApiService,
+    private apiService: ApiService,
     private spinner: SpinnerService) { }
 
   ngOnInit() {
     this.firstFormGroup = this.formBuilder.group({
-      eventTypeCtrl: ['', Validators.required],
+      eventId: ['', Validators.required],
+      eventType: ['', Validators.required],
     });
     this.secondFormGroup = this.formBuilder.group({
-      poolBracketCtrl: ['', Validators.required],
+      poolId: [''],
+      bracketId: [null],
     });
     this.thirdFormGroup = this.formBuilder.group({
-      drawCtrl: ['', Validators.required],
+      drawId: ['', Validators.required],
     });
     this.fourthFormGroup = this.formBuilder.group({
+      gameName: [''],
       team1Id: [''],
-      team1StoneColor: ['Red', Validators.required],
+      team1StoneColor: ['red', Validators.required],
       team2Id: [''],
-      team2StoneColor: ['Yellow', Validators.required],
-      winnerFromGame: [''],
-      loserFromGame: [''],
+      team2StoneColor: ['yellow', Validators.required],
+      destWinner: [null],
+      destLoser: [null],
       iceSheet: ['', Validators.required],
       finished: [false, Validators.required],
-      winnerId: [''],
+      winner: [null],
       notes: [''],
     });
 
@@ -93,7 +81,7 @@ export class CreateGameComponent implements OnInit {
 
   getEvents() {
     // Get list of existing events
-    this.api.getEvents().subscribe((res) => {
+    this.apiService.getEvents().subscribe((res) => {
       this.events = res;
       console.log('events:');
       console.log(this.events);
@@ -101,7 +89,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   setEventId() {
-    this.selectedEventId = this.firstFormGroup.value.eventTypeCtrl;  // eventId
+    this.selectedEventId = this.firstFormGroup.value.eventId;  // eventId
     console.log('selectedEventId:');
     console.log(this.selectedEventId);
   }
@@ -109,15 +97,15 @@ export class CreateGameComponent implements OnInit {
   getPoolsBracketsByEventId() {
     // Get pools/brackets
     forkJoin({
-      pools: this.api.adHocQuery(`SELECT * FROM pool WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
-      brackets: this.api.adHocQuery(`SELECT * FROM bracket WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
+      pools: this.apiService.adHocQuery(`SELECT * FROM pool WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
+      brackets: this.apiService.adHocQuery(`SELECT * FROM bracket WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
     }).subscribe((res: any) => {
       this.optionGroups[0].list = res.pools.rows;     // pools
       this.optionGroups[1].list = res.brackets.rows;  // brackets
     });
 
     // Get games
-    this.api.getGames(this.selectedEventId).subscribe((res) => {
+    this.apiService.getGames(this.selectedEventId).subscribe((res) => {
       this.games = res;
       console.log('games:');
       console.log(this.games);
@@ -126,7 +114,7 @@ export class CreateGameComponent implements OnInit {
 
   getTeamsByEventId() {
     // Get teams
-    this.api.getTeamsByEventId(this.selectedEventId).subscribe((res) => {
+    this.apiService.getTeamsByEventId(this.selectedEventId).subscribe((res) => {
       this.teams = res;
       console.log('teams:');
       console.log(this.teams);
@@ -134,7 +122,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   getDrawsByEventId() {
-    this.api.getDraws(this.selectedEventId).subscribe((res: any) => {
+    this.apiService.getDraws(this.selectedEventId).subscribe((res: any) => {
       this.draws = res.sort((a, b) => a.start > b.start);
       console.log('draws:');
       console.log(this.draws);
@@ -142,7 +130,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   setDrawId() {
-    this.selectedDrawId = this.thirdFormGroup.value.drawCtrl;  // drawId
+    this.selectedDrawId = this.thirdFormGroup.value.draw;  // drawId
     console.log('selectedDrawId:');
     console.log(this.selectedDrawId);
   }
@@ -153,24 +141,45 @@ export class CreateGameComponent implements OnInit {
   }
 
   onClickSubmit(stepper: MatStepper) {
-    const payload = {
-      eventType: this.firstFormGroup.controls.eventTypeCtrl, // eventType,
-      notes: '', // notes,
-      bracketId: '', // bracketId,
-      poolId: '', // poolId,
-      drawId: '', // drawId,
-      curlingTeam1Id: '', // curlingTeam1Id (nullable),
-      curlingTeam2Id: '', // curlingTeam2Id (nullable),
-      stoneColor1: '', // stoneColor1,
-      stoneColor2: '', // stoneColor2,
-      winnerFromGame: '', // winnerFromGame (nullable),
-      loserFromGame: '', // loserFromGame (nullable),
-      iceSheet: '', // iceSheet,
-      finished: '', // Finished,
-      winnerId: '', // WinnerId (nullable)
+    let body = {
+      bracketId: this.secondFormGroup.controls.bracketId.value || null,          // bracketId
+      curlingTeam1Id: this.fourthFormGroup.controls.team1Id.value || null,       // curlingTeam1Id (nullable)
+      curlingTeam2Id: this.fourthFormGroup.controls.team2Id.value || null,       // curlingTeam2Id (nullable)
+      destLoser: this.fourthFormGroup.controls.destLoser.value || null,          // destLoser (nullable)
+      destWinner: this.fourthFormGroup.controls.destWinner.value || null,        // destWinner (nullable)
+      drawId: this.thirdFormGroup.controls.drawId.value,                         // drawId
+      eventType: this.firstFormGroup.controls.eventType.value,                   // eventType
+      finished: this.fourthFormGroup.controls.finished.value,                    // Finished
+      gameName: this.fourthFormGroup.controls.gameName.value,                    // gameName
+      iceSheet: this.fourthFormGroup.controls.iceSheet.value,                    // iceSheet
+      notes: this.fourthFormGroup.controls.notes.value,                          // notes
+      poolId: this.secondFormGroup.controls.poolId.value || null,                // poolId
+      stoneColor1: this.fourthFormGroup.controls.team1StoneColor.value || null,  // stoneColor1
+      stoneColor2: this.fourthFormGroup.controls.team2StoneColor.value || null,  // stoneColor2
+      winner: this.fourthFormGroup.controls.winner.value || null,                // WinnerId (nullable)
     }
 
-    stepper.next();
+    console.log(body);
+
+    // Convert all values to string
+    for (var k in body) {
+      // if (body[k] === "null") {
+      //   body[k] = null;
+      // } else {
+      if (Number.isInteger(body[k] || typeof body[k] === 'boolean')) {
+        body[k] = String(body[k]);
+      }
+    }
+
+    console.log(body);
+
+    this.spinner.on();
+
+    this.apiService.createGame(this.selectedEventId, body).subscribe((res) => {
+      console.log(res);
+      this.spinner.off();
+      stepper.next();
+    });
   }
 
   updateTeams(teamNum) {
@@ -185,28 +194,20 @@ export class CreateGameComponent implements OnInit {
   }
 
   filterTeams() {
-    return this.teams.filter(e => e.team_id !== this.selectedTeam1Id).filter(e => e.team_id !== this.selectedTeam2Id);
+    return this.teams.filter(e => e.id !== this.selectedTeam1Id).filter(e => e.id !== this.selectedTeam2Id);
   }
 
   selectedTeams() {
-    return this.teams.filter(e => e.team_id === this.selectedTeam1Id || e.team_id === this.selectedTeam2Id);
+    return this.teams.filter(e => e.id === this.selectedTeam1Id || e.id === this.selectedTeam2Id);
   }
 
   resetStepper(stepper: MatStepper) {
     stepper.reset();
 
-    // Reset stone colors
-    this.fourthFormGroup = this.formBuilder.group({
-      team1Id: [''],
-      team1StoneColor: ['Red', Validators.required],
-      team2Id: [''],
-      team2StoneColor: ['Yellow', Validators.required],
-      winnerFromGame: [''],
-      loserFromGame: [''],
-      iceSheet: ['', Validators.required],
-      finished: [true, Validators.required],
-      winnerId: [''],
-    });
+    this.firstFormGroup.reset();
+    this.secondFormGroup.reset();
+    this.thirdFormGroup.reset();
+    this.fourthFormGroup.reset();
   }
 }
 

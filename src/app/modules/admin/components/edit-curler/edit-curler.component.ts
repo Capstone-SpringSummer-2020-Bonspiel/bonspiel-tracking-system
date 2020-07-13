@@ -82,7 +82,7 @@ export class EditCurlerComponent implements OnInit {
     this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedTeamID= ${this.selectedTeamID}`);
     this.spinner.on();
-    this.api.getTeam(this.selectedTeamID).subscribe((res: any) => {
+    this.api.getTeams(this.selectedTeamID).subscribe((res: any) => {
       this.selectedTeam = res;
       this.spinner.off();
       console.log('selectedTeam: ');

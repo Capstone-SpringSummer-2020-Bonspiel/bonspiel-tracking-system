@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-remove-team-from-event',
@@ -57,5 +58,12 @@ export class RemoveTeamFromEventComponent implements OnInit {
 
   onClickSubmit() {
 
+  }
+
+  resetStepper(stepper: MatStepper) {
+    stepper.reset();
+
+    this.firstFormGroup.reset();
+    this.secondFormGroup.reset();
   }
 }

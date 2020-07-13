@@ -1,1 +1,61 @@
-<p>remove-game works!</p>
+<mat-vertical-stepper linear
+  #stepper>
+
+  <!-- SELECT EVENT -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select an Event & Type </ng-template>
+      <mat-form-field>
+        <mat-label> Choose an Event </mat-label>
+        <mat-select formControlName="eventId"
+          (selectionChange)="setEventId(); getGamesByEventId(); stepper.next()"
+          required>
+          <mat-option> -- </mat-option>
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"> {{event.name}} </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- SELECT GAME -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel> Select a Game </ng-template>
+
+      <mat-form-field>
+        <mat-label> Choose Game </mat-label>
+        <mat-select formControlName="gameId">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let game of games"
+            [value]="game.game_id">
+            {{game.notes}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="onClickSubmit(stepper)">Submit</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- COMPLETED -->
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="resetStepper(stepper)">Reset</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

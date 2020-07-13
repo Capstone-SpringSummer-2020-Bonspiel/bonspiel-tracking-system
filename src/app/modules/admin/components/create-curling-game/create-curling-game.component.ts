@@ -197,17 +197,9 @@ export class CreateCurlingGameComponent implements OnInit {
   resetStepper(stepper: MatStepper) {
     stepper.reset();
 
-    // Reset stone colors
-    this.fourthFormGroup = this.formBuilder.group({
-      team1Id: [''],
-      team1StoneColor: ['Red', Validators.required],
-      team2Id: [''],
-      team2StoneColor: ['Yellow', Validators.required],
-      winnerFromGame: [''],
-      loserFromGame: [''],
-      iceSheet: ['', Validators.required],
-      finished: [true, Validators.required],
-      winnerId: [''],
-    });
+    this.firstFormGroup.reset();
+    this.secondFormGroup.reset();
+    this.thirdFormGroup.reset();
+    this.fourthFormGroup.reset();
   }
 }

@@ -146,6 +146,20 @@ export class ApiService {
     return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/games`);
   }
 
+  public getGamesByTeam(eventId, teamId) {
+    return this.http.get(
+      `${environment.apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
+    );
+  }
+
+  public createGame(eventId, body) {
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/${eventId}/game`, body);
+  }
+
+  public removeGame(gameId) {
+    return this.http.delete(`${environment.apiUrl}/api/v1/admin/game/${gameId}`);
+  }
+
   /********************************************************************/
 
   public getAllTeams() {
@@ -156,24 +170,19 @@ export class ApiService {
     return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/teams`);
   }
 
-
-  public getGamesByTeam(eventId, teamId) {
-    return this.http.get(
-      `${environment.apiUrl}/api/v1/events/${eventId}/teams/${teamId}/games`
-    );
-  }
-
   public getScoresByTeam(eventId, teamId) {
     return this.http.get(
       `${environment.apiUrl}/api/v1/events/${eventId}/teams/${teamId}/scores`
     );
   }
 
+  /********************************************************************/
+
   public getScoresByEvent(eventId) {
     return this.http.get(`${environment.apiUrl}/api/v1/events/${eventId}/scores`);
   }
 
-  public getTeam(teamId) {
+  public getTeams(teamId) {
     return this.http.get(`${environment.apiUrl}/api/v1/teams/${teamId}`);
   }
 
