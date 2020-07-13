@@ -26,15 +26,15 @@
       </td>
       <td>{{user.username}}</td>
       <td style="white-space: nowrap">
-        <!-- <a routerLink="edit/{{user.id}}"
+        <a [routerLink]="[ 'edit/', user.username, user.issuperadmin ]"
           class="btn btn-sm btn-primary mr-1">Edit</a>
-        <button (click)="deleteUser(user.id)"
+        <button (click)="deleteUser(user.username)"
           class="btn btn-sm btn-danger btn-delete-user"
           [disabled]="user.isDeleting">
           <span *ngIf="user.isDeleting"
             class="spinner-border spinner-border-sm"></span>
           <span *ngIf="!user.isDeleting">Delete</span>
-        </button> -->
+        </button>
       </td>
     </tr>
     <tr *ngIf="!users">

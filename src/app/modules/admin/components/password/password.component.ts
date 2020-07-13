@@ -67,7 +67,7 @@ export class PasswordComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.changePassword(this.username, this.f.password.value, String(this.isSuperAdmin))
+    this.accountService.editAdmin(this.username, this.f.password.value, String(this.isSuperAdmin))
       .subscribe(
         data => {
           console.log('PASSWORD CHANGED');

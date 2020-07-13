@@ -12,6 +12,6 @@ EXPOSE $PORT
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
-RUN ng build --prod
+RUN {{ NG_BUILD_VERSION }}
 
 CMD ["node", "./server/server.js"]

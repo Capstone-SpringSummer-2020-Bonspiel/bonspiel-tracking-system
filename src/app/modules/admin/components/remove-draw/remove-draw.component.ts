@@ -34,7 +34,7 @@ export class RemoveDrawComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -47,12 +47,16 @@ export class RemoveDrawComponent implements OnInit {
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.notificationService.showError(
+          'Could not fetch curling events',
+          'ERROR'
+        );
         this.spinnerService.off();
         return;
       }
       this.spinnerService.off();
       this.eventNames = res;
+      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
       console.log('eventNames:');
       console.log(this.eventNames);
     });
