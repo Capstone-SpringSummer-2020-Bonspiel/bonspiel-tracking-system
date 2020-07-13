@@ -1,1 +1,24 @@
-<p>remove-team works!</p>
+<mat-vertical-stepper linear #stepper>
+
+  <!-- Stepper 1: Select team -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select A Team </ng-template>
+      <mat-form-field>
+        <mat-label> Team Name </mat-label>
+        <mat-select formControlName="firstFormCtrl" name="teams" required>
+          <mat-option *ngFor="let team of teams" [value]="team.id">
+            {{team.team_name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onClickSubmit(); stepper.reset()">Submit</button>
+    </div>
+  </mat-step>
+
+</mat-vertical-stepper>
