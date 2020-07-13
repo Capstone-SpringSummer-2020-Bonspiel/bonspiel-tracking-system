@@ -190,19 +190,19 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
-    this.spinner.on();
+    this.spinnerService.on();
 
     // Get all events
-    this.api.getEvents().subscribe((rows: any) => {
+    this.apiService.getEvents().subscribe((rows: any) => {
       if (rows === null || rows === undefined) {
-        this.notifier.showError('Could not fetch curling events', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.spinnerService.off();
         return;
       }
       // console.log('Fetching curling events:');
@@ -214,7 +214,7 @@ export class DashboardComponent implements OnInit {
         // console.log(row);
       }
       this.dataSource.data = newData;
-      this.spinner.off();
+      this.spinnerService.off();
     });
 
     this.dataSource.paginator = this.paginator;
@@ -261,16 +261,16 @@ export class DashboardComponent implements OnInit {
 
     // Draws tab
     if (event.index === 2) {
-      this.spinner.on();
+      this.spinnerService.on();
       // Get all draws + games
-      this.api.getDraws(sample.id).subscribe(rows => {
+      this.apiService.getDraws(sample.id).subscribe(rows => {
         this.draws = rows;
         console.log(this.draws);
-        this.api.getGames(sample.id).subscribe((rows: any[]) => {
+        this.apiService.getGames(sample.id).subscribe((rows: any[]) => {
           // Convert integer to alpha
           this.games = rows;
           console.log(this.games);
-          this.spinner.off();
+          this.spinnerService.off();
         });
       });
     }
@@ -307,22 +307,22 @@ export class DashboardComponent implements OnInit {
   }
 
   exportCSV() {
-    this.notifier.showSuccess('Exported CSV', '');
+    this.notificationService.showSuccess('Exported CSV', '');
   }
 
   someBatchFunction() {
-    this.notifier.showWarning('Some batch function...', '');
+    this.notificationService.showWarning('Some batch function...', '');
   }
 
   deleteEvents() {
-    this.notifier.showError('Event deleted!', '');
+    this.notificationService.showError('Event deleted!', '');
   }
 
   refreshData() {
-    this.spinner.on();
+    this.spinnerService.on();
     setTimeout(() => {
-      this.notifier.showInfo('Refreshed data', '');
-      this.spinner.off();
+      this.notificationService.showInfo('Refreshed data', '');
+      this.spinnerService.off();
     }, 2000);
   }
 

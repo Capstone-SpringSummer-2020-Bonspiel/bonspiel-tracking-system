@@ -32,9 +32,9 @@ export class CreateEventComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
     public dialog: MatDialog
   ) { }
 
@@ -73,16 +73,16 @@ export class CreateEventComponent implements OnInit {
     console.log(`event type: ${event_type}`);
     console.log(`complete: ${completed}`);
 
-    this.spinner.on();
+    this.spinnerService.on();
 
-    this.api.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
+    this.apiService.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
       .subscribe((res: any) => {
         this.feedBackData = res;
         console.log(res);
         dialogRef.afterClosed().subscribe(result => {
           console.log("something happened.")
         })
-        this.spinner.off();
+        this.spinnerService.off();
       })
 
     const dialogRef = this.dialog.open(CreateEventDialog, {

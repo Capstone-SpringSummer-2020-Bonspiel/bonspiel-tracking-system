@@ -15,14 +15,14 @@ export class RemoveEventComponent implements OnInit {
   selectedEventId: Number;
 
   constructor(
-    private api: ApiService,
+    private apiService: ApiService,
     public dialog: MatDialog,
-    private spinner: SpinnerService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit(): void {
-    this.spinner.on();
-    this.api
+    this.spinnerService.on();
+    this.apiService
       .getEvents()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
@@ -31,7 +31,7 @@ export class RemoveEventComponent implements OnInit {
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.spinner.off();
+        this.spinnerService.off();
       })
   }
   onEventSelected(event: any) {
@@ -46,11 +46,11 @@ export class RemoveEventComponent implements OnInit {
     console.log(this.selectedEventId)
     this.submitResult = 200;
 
-    // this.spinner.on();
-    // this.api
+    // this.spinnerService.on();
+    // this.apiService
     //   .deleteEvent(this.selectedEventId)
     //   .subscribe((res: any) => {
-    //     this.spinner.off();
+    //     this.spinnerService.off();
     //   })
   }
   // onClickConfirm(){

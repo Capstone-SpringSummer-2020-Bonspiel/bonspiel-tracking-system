@@ -31,10 +31,10 @@ export class EditDrawComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
-  ) {}
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -49,14 +49,14 @@ export class EditDrawComponent implements OnInit {
       thirdCtrlUrl: [''],
     });
 
-    this.spinner.on();
-    this.api.getEvents().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch curling events', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.spinnerService.off();
         return;
       }
-      this.spinner.off();
+      this.spinnerService.off();
       this.eventNames = res;
       console.log('eventNames:');
       console.log(this.eventNames);
@@ -70,17 +70,17 @@ export class EditDrawComponent implements OnInit {
     this.selectedEvent = this.eventNames.filter(
       (x) => x.id === selectedEventID
     );
-    this.spinner.on();
-    this.api.getDraws(selectedEventID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getDraws(selectedEventID).subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch draws', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch draws', 'ERROR');
+        this.spinnerService.off();
         return;
       }
       this.eventDraws = res;
       console.log('eventDraws:');
       console.log(this.eventDraws);
-      this.spinner.off();
+      this.spinnerService.off();
     });
   }
 
@@ -101,13 +101,13 @@ export class EditDrawComponent implements OnInit {
       .value?.toLocaleString();
     const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
 
-    this.api
+    this.apiService
       .editDraw(this.selectedDrawId, newDrawStart, newDrawStart, newDrawUrl)
       .subscribe(
-        (res: any) => this.notifier.showSuccess('Draw has been modified', ''),
+        (res: any) => this.notificationService.showSuccess('Draw has been modified', ''),
         (error) => {
           console.log(error);
-          this.notifier.showError('Something went wrong', '');
+          this.notificationService.showError('Something went wrong', '');
         }
       );
   }

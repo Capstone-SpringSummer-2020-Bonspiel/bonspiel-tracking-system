@@ -12,9 +12,9 @@ export class SpinnerComponent implements OnInit {
   loadingText = 'Loading...';
 
   constructor(
-    private spinner: NgxSpinnerService,
+    private ngxSpinnerService: NgxSpinnerService,
     private spinnerService: SpinnerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.spinnerService.spinner$.subscribe((data) => {
@@ -24,13 +24,13 @@ export class SpinnerComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   toggleSpinner(state) {
     if (state === true) {
-      this.spinner.show();
+      this.ngxSpinnerService.show();
     } else if (state === false) {
-      this.spinner.hide();
+      this.ngxSpinnerService.hide();
     }
   }
 }

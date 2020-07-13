@@ -7,7 +7,7 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
   styleUrls: ['./team-dialog-overview.component.scss'],
 })
 export class TeamDialogOverviewComponent implements OnInit {
-  constructor(private spinner: SpinnerService) {}
+  constructor(private spinnerService: SpinnerService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

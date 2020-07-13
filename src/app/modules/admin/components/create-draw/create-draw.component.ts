@@ -43,10 +43,10 @@ export class CreateDrawComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
-  ) {}
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.date = new Date();
@@ -59,14 +59,14 @@ export class CreateDrawComponent implements OnInit {
       secondCtrlUrl: [''],
     });
 
-    this.spinner.on();
-    this.api.getEvents().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch curling events', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.spinnerService.off();
         return;
       }
-      this.spinner.off();
+      this.spinnerService.off();
       this.eventNames = res;
       console.log('eventNames:');
       console.log(this.eventNames);
@@ -95,7 +95,7 @@ export class CreateDrawComponent implements OnInit {
       .value?.toLocaleString();
     const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
 
-    this.api
+    this.apiService
       .createDraw(
         this.selectedEventId.toString(),
         newDrawName,
@@ -103,10 +103,10 @@ export class CreateDrawComponent implements OnInit {
         newDrawUrl
       )
       .subscribe(
-        (res: any) => this.notifier.showSuccess('Draw has been created', ''),
+        (res: any) => this.notificationService.showSuccess('Draw has been created', ''),
         (error) => {
           console.log(error);
-          this.notifier.showError('Something went wrong', '');
+          this.notificationService.showError('Something went wrong', '');
         }
       );
   }

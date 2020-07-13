@@ -47,7 +47,7 @@ export class RemoveGameComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private spinner: SpinnerService) { }
+    private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     this.firstFormGroup = this.formBuilder.group({
@@ -84,11 +84,11 @@ export class RemoveGameComponent implements OnInit {
   }
 
   onClickSubmit(stepper: MatStepper) {
-    this.spinner.on();
+    this.spinnerService.on();
 
     this.apiService.removeGame(this.secondFormGroup.controls.gameId.value).subscribe((res) => {
       console.log(res);
-      this.spinner.off();
+      this.spinnerService.off();
       stepper.next();
     });
   }

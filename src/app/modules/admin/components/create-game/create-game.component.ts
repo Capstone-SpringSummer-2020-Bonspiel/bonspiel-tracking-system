@@ -48,7 +48,7 @@ export class CreateGameComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private spinner: SpinnerService) { }
+    private spinnerService: SpinnerService) { }
 
   ngOnInit() {
     this.firstFormGroup = this.formBuilder.group({
@@ -173,11 +173,11 @@ export class CreateGameComponent implements OnInit {
 
     console.log(body);
 
-    this.spinner.on();
+    this.spinnerService.on();
 
     this.apiService.createGame(this.selectedEventId, body).subscribe((res) => {
       console.log(res);
-      this.spinner.off();
+      this.spinnerService.off();
       stepper.next();
     });
   }

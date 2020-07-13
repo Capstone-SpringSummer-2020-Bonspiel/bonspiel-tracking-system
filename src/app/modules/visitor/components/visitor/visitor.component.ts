@@ -18,10 +18,10 @@ export class VisitorComponent implements OnInit {
   currentPageYOffset = window.pageYOffset;
 
   constructor(
-    private api: ApiService,
+    private apiService: ApiService,
     public dialog: MatDialog,
-    public spinner: SpinnerService,
-    public notifier: NotificationService
+    public spinnerService: SpinnerService,
+    public notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -39,11 +39,11 @@ export class VisitorComponent implements OnInit {
       // Cancel current HTTP request
       this.currentReq$.unsubscribe();
       this.currentReq$ = null;
-      this.spinner.off();
-      this.notifier.showWarning('Request Cancelled!', '');
-      // this.notifier.showSuccess('', '');
-      // this.notifier.showError('', '');
-      // this.notifier.showInfo('', '');
+      this.spinnerService.off();
+      this.notificationService.showWarning('Request Cancelled!', '');
+      // this.notificationService.showSuccess('', '');
+      // this.notificationService.showError('', '');
+      // this.notificationService.showInfo('', '');
       console.log('Request cancelled!');
     }
   }

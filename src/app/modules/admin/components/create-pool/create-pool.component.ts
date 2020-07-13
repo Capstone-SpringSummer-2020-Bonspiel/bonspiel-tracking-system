@@ -25,15 +25,15 @@ export class CreatePoolComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.spinner.on();
-    this.api
+    this.spinnerService.on();
+    this.apiService
       .getEvents()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
@@ -43,7 +43,7 @@ export class CreatePoolComponent implements OnInit {
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.spinner.off();
+        this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
@@ -63,11 +63,11 @@ export class CreatePoolComponent implements OnInit {
     const bracketName = this.firstFormGroup.value.firstCtrl;
     console.log(`full name: ${bracketName}`);
 
-    // this.spinner.on();
-    // this.api
+    // this.spinnerService.on();
+    // this.apiService
     //   .createPool(bracketName, this.selectedEvent.id)
     //   .subscribe((res: any) => {  
-    //     this.spinner.off();
+    //     this.spinnerService.off();
     //     this.feedBackData = res;
     //   })
   }

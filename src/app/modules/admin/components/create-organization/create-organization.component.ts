@@ -18,9 +18,9 @@ export class CreateOrganizationComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
     public dialog: MatDialog
   ) { }
 
@@ -41,8 +41,8 @@ export class CreateOrganizationComponent implements OnInit {
     console.log(`full name: ${fullName}`);
     console.log(`detail info: ${shortName}`);
 
-    // this.spinner.on();
-    // this.api
+    // this.spinnerService.on();
+    // this.apiService
     //   .createEvent(name, begin_date, end_date, completed, info, event_type)
     //   .subscribe((res: any) => {
     //     this.feedBackData = res;
@@ -50,7 +50,7 @@ export class CreateOrganizationComponent implements OnInit {
     //     dialogRef.afterClosed().subscribe(result => {
     //       console.log("something happened.")
     //     })
-    //     this.spinner.off();
+    //     this.spinnerService.off();
     //   })
 
     // const dialogRef = this.dialog.open(Create, {

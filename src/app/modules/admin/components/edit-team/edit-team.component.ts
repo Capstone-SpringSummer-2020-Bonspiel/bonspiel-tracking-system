@@ -19,10 +19,10 @@ export class EditTeamComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
-  ) {}
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -36,16 +36,16 @@ export class EditTeamComponent implements OnInit {
       thirdCtrlOrg: [null],
     });
 
-    this.spinner.on();
-    this.api.getAllTeams().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
       this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
       console.log(`teams=`);
       console.log(this.teams);
-      this.api.getAllOrganizations().subscribe((res: any) => {
+      this.apiService.getAllOrganizations().subscribe((res: any) => {
         this.organizations = res;
         this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
-        this.spinner.off();
+        this.spinnerService.off();
         console.log('organizations=');
         console.log(this.organizations);
       });
@@ -64,11 +64,11 @@ export class EditTeamComponent implements OnInit {
     console.log(`name= ${name}`);
     console.log(`note= ${note}`);
     console.log(`org= ${org}`);
-    this.api.editTeam(this.selectedTeamId, name, note, org).subscribe(
-      (res: any) => this.notifier.showSuccess('Team has been created', ''),
+    this.apiService.editTeam(this.selectedTeamId, name, note, org).subscribe(
+      (res: any) => this.notificationService.showSuccess('Team has been created', ''),
       (error) => {
         console.log(error);
-        this.notifier.showError('Something went wrong', '');
+        this.notificationService.showError('Something went wrong', '');
       }
     );
   }

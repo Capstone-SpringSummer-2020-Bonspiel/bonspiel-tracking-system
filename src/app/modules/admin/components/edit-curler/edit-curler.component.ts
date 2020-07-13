@@ -36,9 +36,9 @@ export class EditCurlerComponent implements OnInit {
   ];
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -56,10 +56,10 @@ export class EditCurlerComponent implements OnInit {
       fourthCtrlPosition: ['', Validators.required],
     });
 
-    this.spinner.on();
-    this.api.getAllOrganizations().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('organizations:');
       console.log(this.organizations);
     });
@@ -68,10 +68,10 @@ export class EditCurlerComponent implements OnInit {
     console.log('getOrgTeams()');
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    this.spinner.on();
-    this.api.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
       this.teams = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('teams:');
       console.log(this.teams);
     });
@@ -81,10 +81,10 @@ export class EditCurlerComponent implements OnInit {
     console.log('getTeamId()');
     this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    this.spinner.on();
-    this.api.getTeams(this.selectedTeamID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getTeams(this.selectedTeamID).subscribe((res: any) => {
       this.selectedTeam = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('selectedTeam: ');
       console.log(this.selectedTeam);
     });
@@ -104,7 +104,7 @@ export class EditCurlerComponent implements OnInit {
     const position = this.fourthFormGroup.value.fourthCtrlPosition;
     console.log(`name= ${name}`);
     console.log(`position= ${position}`);
-    this.api
+    this.apiService
       .editCurler(
         name,
         position,
@@ -113,10 +113,10 @@ export class EditCurlerComponent implements OnInit {
         this.selectedCurlerID
       )
       .subscribe(
-        (res: any) => this.notifier.showSuccess('Curler has been modified', ''),
+        (res: any) => this.notificationService.showSuccess('Curler has been modified', ''),
         (error) => {
           console.log(error);
-          this.notifier.showError('Something went wrong', '');
+          this.notificationService.showError('Something went wrong', '');
         }
       );
   }

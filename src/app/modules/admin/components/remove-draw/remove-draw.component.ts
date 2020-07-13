@@ -31,10 +31,10 @@ export class RemoveDrawComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
-  ) {}
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -44,14 +44,14 @@ export class RemoveDrawComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
 
-    this.spinner.on();
-    this.api.getEvents().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch curling events', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.spinnerService.off();
         return;
       }
-      this.spinner.off();
+      this.spinnerService.off();
       this.eventNames = res;
       console.log('eventNames:');
       console.log(this.eventNames);
@@ -65,17 +65,17 @@ export class RemoveDrawComponent implements OnInit {
     this.selectedEvent = this.eventNames.filter(
       (x) => x.id === selectedEventID
     );
-    this.spinner.on();
-    this.api.getDraws(selectedEventID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getDraws(selectedEventID).subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch draws', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch draws', 'ERROR');
+        this.spinnerService.off();
         return;
       }
       this.eventDraws = res;
       console.log('eventDraws:');
       console.log(this.eventDraws);
-      this.spinner.off();
+      this.spinnerService.off();
     });
   }
 
@@ -87,19 +87,19 @@ export class RemoveDrawComponent implements OnInit {
     this.selectedDraw = this.eventDraws.filter((x) => x.id === selectedDrawID);
     console.log('selectedDraw:');
     console.log(this.selectedDraw);
-    this.spinner.on();
-    this.api.getGames(selectedEventID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getGames(selectedEventID).subscribe((res: any) => {
       this.allGames = res;
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch games', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch games', 'ERROR');
+        this.spinnerService.off();
         return;
       }
       this.selectedDrawGames = this.allGames.filter(
         (x) => x.draw_id === selectedDrawID
       );
 
-      this.spinner.off();
+      this.spinnerService.off();
       console.log(
         `selectedDrawGames for event: ${selectedEventID}, draw: ${selectedDrawID}`
       );
@@ -111,14 +111,14 @@ export class RemoveDrawComponent implements OnInit {
     console.log('deleteDraw()');
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
 
-    this.api.deleteDraw(selectedDrawID).subscribe(
+    this.apiService.deleteDraw(selectedDrawID).subscribe(
       (res: any) => {
         console.log(res);
-        this.notifier.showSuccess('Draw has been deleted!', '');
+        this.notificationService.showSuccess('Draw has been deleted!', '');
       },
       (error) => {
         console.log(error);
-        this.notifier.showError('Something went wrong', '');
+        this.notificationService.showError('Something went wrong', '');
       }
     );
   }

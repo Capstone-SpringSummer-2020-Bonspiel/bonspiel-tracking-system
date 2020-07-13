@@ -18,14 +18,14 @@ const httpOptions = {
 export class AccountService {
   // private userSubject: BehaviorSubject<User>;  // input
   public userSubject: BehaviorSubject<User>;  // input
-  public user: Observable<User>;               // output
+  public user$: Observable<User>;               // output
 
   constructor(
     private router: Router,
     private http: HttpClient
   ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
-    this.user = this.userSubject.asObservable();
+    this.user$ = this.userSubject.asObservable();
   }
 
   public get userValue(): User {

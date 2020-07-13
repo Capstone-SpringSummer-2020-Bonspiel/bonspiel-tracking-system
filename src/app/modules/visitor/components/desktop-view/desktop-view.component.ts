@@ -52,34 +52,34 @@ export class DesktopViewComponent implements OnInit {
   currentEvent = null;
 
   constructor(
-    private api: ApiService,
+    private apiService: ApiService,
     public dialog: MatDialog,
-    private spinner: SpinnerService,
+    private spinnerService: SpinnerService,
     private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.spinner.on();
+    this.spinnerService.on();
 
     // Get current event ID
-    this.api
+    this.apiService
       .currentEventId$
       .subscribe((eventId) => {
-        this.spinner.on();
+        this.spinnerService.on();
 
         this.currentEventId = eventId;
         // this.currentEventId = 5;  // DEBUGGING
         // console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
 
         // Get current event name
-        this.api
+        this.apiService
           .currentEvent$
           .subscribe((currentEvent) => {
             this.currentEvent = currentEvent;
           });
 
         // Get current draws by event ID
-        this.api
+        this.apiService
           .getDraws(this.currentEventId)
           .subscribe((res: any) => {
             // console.log('[DEBUG] draws:');
@@ -89,7 +89,7 @@ export class DesktopViewComponent implements OnInit {
             this.allDraws = res;
 
             // Get all games by event ID
-            this.api
+            this.apiService
               .getGames(this.currentEventId)
               .subscribe((res: any) => {
                 // console.log('[DEBUG] games');
@@ -251,7 +251,7 @@ export class DesktopViewComponent implements OnInit {
                 // console.log('[DEBUG] dataSourceAllStandings');
                 // console.log(this.dataSourceAllStandings);
 
-                this.spinner.off();
+                this.spinnerService.off();
               });
           });
       });

@@ -43,16 +43,16 @@ export class EditEventComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
 
-    this.spinner.on();
-    this.api
+    this.spinnerService.on();
+    this.apiService
       .getEvents()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
@@ -62,7 +62,7 @@ export class EditEventComponent implements OnInit {
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.spinner.off();
+        this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
@@ -136,11 +136,11 @@ export class EditEventComponent implements OnInit {
       completed: completed,
     }
 
-    // this.spinner.on();
-    // this.api
+    // this.spinnerService.on();
+    // this.apiService
     //   .editEvent(name, begin_date, end_date, completed, info, event_type, this.selectedEvent)
     //   .subscribe((res: any) => {  
-    //     this.spinner.off();
+    //     this.spinnerService.off();
     //     this.feedBackData = res;
     //   })
 

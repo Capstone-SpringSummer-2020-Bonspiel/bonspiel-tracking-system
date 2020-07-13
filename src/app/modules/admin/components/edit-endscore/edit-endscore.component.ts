@@ -35,10 +35,10 @@ export class EditEndscoreComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
-  ) {}
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -56,14 +56,14 @@ export class EditEndscoreComponent implements OnInit {
       fourthCtrlTeam2Score: ['', Validators.required],
     });
 
-    this.spinner.on();
-    this.api.getEvents().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notifier.showError('Could not fetch curling events', 'ERROR');
-        this.spinner.off();
+        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.spinnerService.off();
         return;
       }
-      this.spinner.off();
+      this.spinnerService.off();
       this.eventNames = res;
       console.log('eventNames:');
       console.log(this.eventNames);
@@ -73,10 +73,10 @@ export class EditEndscoreComponent implements OnInit {
   getEventDraws() {
     this.selectedEventId = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedEventId= ${this.selectedEventId}`);
-    this.spinner.on();
-    this.api.getDraws(this.selectedEventId).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getDraws(this.selectedEventId).subscribe((res: any) => {
       this.draws = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('draws');
       console.log(this.draws);
     });
@@ -85,10 +85,10 @@ export class EditEndscoreComponent implements OnInit {
   getDrawGames() {
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedDrawId= ${this.selectedDrawId}`);
-    this.spinner.on();
-    this.api.getGames(this.selectedEventId).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getGames(this.selectedEventId).subscribe((res: any) => {
       this.games = res.filter((x) => x.draw_id === this.selectedDrawId);
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('games');
       console.log(this.games);
     });
@@ -97,13 +97,13 @@ export class EditEndscoreComponent implements OnInit {
   getEndScores() {
     this.selectedGameId = this.thirdFormGroup.value.thirdCtrl;
     console.log(`selectedGameId= ${this.selectedGameId}`);
-    this.spinner.on();
-    this.api.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
       const eventScores = res;
       this.endScores = eventScores.filter(
         (x) => x.game_id === this.selectedGameId && x.endscore_id != null
       );
-      this.spinner.off();
+      this.spinnerService.off();
       this.endScores.sort(compare);
       const selectedGame = this.games.filter(
         (x) => x.game_id === this.selectedGameId
@@ -123,10 +123,10 @@ export class EditEndscoreComponent implements OnInit {
     const team1Score = this.fourthFormGroup.value.fourthCtrlTeam1Score;
     const team2Score = this.fourthFormGroup.value.fourthCtrlTeam2Score;
     if (team2Score < 0 || team1Score < 0) {
-      this.notifier.showError('Scores must be positive values', '');
+      this.notificationService.showError('Scores must be positive values', '');
       return;
     } else if (team1Score > 0 && team2Score > 0) {
-      this.notifier.showError('Only one positive score allowed', '');
+      this.notificationService.showError('Only one positive score allowed', '');
       return;
     } else if (team1Score === 0 && team2Score === 0) {
       curlingTeam1Scored = false;
@@ -143,14 +143,14 @@ export class EditEndscoreComponent implements OnInit {
     console.log(`blank= ${blank}`);
     console.log(`curlingTeam1Scored= ${curlingTeam1Scored}`);
     console.log(`score= ${score}`);
-    this.api
+    this.apiService
       .editEndScore(this.selectedEndNumberId, blank, curlingTeam1Scored, score)
       .subscribe(
         (res: any) =>
-          this.notifier.showSuccess('End Score has been modified', ''),
+          this.notificationService.showSuccess('End Score has been modified', ''),
         (error) => {
           console.log(error);
-          this.notifier.showError('Something went wrong', '');
+          this.notificationService.showError('Something went wrong', '');
         }
       );
   }

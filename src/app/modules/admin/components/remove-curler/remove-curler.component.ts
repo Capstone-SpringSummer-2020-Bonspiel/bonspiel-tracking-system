@@ -35,9 +35,9 @@ export class RemoveCurlerComponent implements OnInit {
   ];
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -51,11 +51,11 @@ export class RemoveCurlerComponent implements OnInit {
       thirdCtrl: ['', Validators.required],
     });
 
-    this.spinner.on();
+    this.spinnerService.on();
     const query = 'SELECT * from organization';
-    this.api.adHocQuery(query).subscribe((res: any) => {
+    this.apiService.adHocQuery(query).subscribe((res: any) => {
       this.organizations = res.rows;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('organizations:');
       console.log(this.organizations);
     });
@@ -64,10 +64,10 @@ export class RemoveCurlerComponent implements OnInit {
     console.log('getOrgTeams()');
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    this.spinner.on();
-    this.api.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
       this.teams = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('teams:');
       console.log(this.teams);
     });
@@ -77,10 +77,10 @@ export class RemoveCurlerComponent implements OnInit {
     console.log('getTeamId()');
     this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    this.spinner.on();
-    this.api.getTeams(this.selectedTeamID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getTeams(this.selectedTeamID).subscribe((res: any) => {
       this.selectedTeam = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('selectedTeam: ');
       console.log(this.selectedTeam);
     });
@@ -96,11 +96,11 @@ export class RemoveCurlerComponent implements OnInit {
     console.log('onClickSubmit()');
     console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
     console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    this.api.removeCurler(this.selectedCurlerID).subscribe(
-      (res: any) => this.notifier.showSuccess('Curler has been removed', ''),
+    this.apiService.removeCurler(this.selectedCurlerID).subscribe(
+      (res: any) => this.notificationService.showSuccess('Curler has been removed', ''),
       (error) => {
         console.log(error);
-        this.notifier.showError('Something went wrong', '');
+        this.notificationService.showError('Something went wrong', '');
       }
     );
   }

@@ -31,12 +31,12 @@ export class ScheduleComponent implements OnInit {
   selectedEvent: drawData;
 
 
-  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
+  constructor(private apiService: ApiService, public dialog: MatDialog, private spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.on()
+    this.spinnerService.on()
 
-    this.api
+    this.apiService
       .getEvents()
       .subscribe((res: any) => {
         this.allEventData = res;
@@ -45,7 +45,7 @@ export class ScheduleComponent implements OnInit {
         console.log(this.selectedEventId);
 
         this.eventBegin();
-        this.spinner.off()
+        this.spinnerService.off()
       })
 
     // console.log("Test Part1");
@@ -76,9 +76,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   eventBegin() {
-    this.spinner.on();
+    this.spinnerService.on();
 
-    this.api
+    this.apiService
       .getDraws(this.selectedEventId)
       .subscribe((res: any) => {
         // console.log('[DEBUG] eventObtain() in schedule component:');
@@ -90,7 +90,7 @@ export class ScheduleComponent implements OnInit {
         // console.log(this.eventDrawData);
         // test parseHostBindings, data here
 
-        this.api
+        this.apiService
           .getGames(this.selectedEventId)
           .subscribe((res: any) => {
             // console.log('[DEBUG] eventObtain() in schedule component:');
@@ -103,7 +103,7 @@ export class ScheduleComponent implements OnInit {
             // test passed, data here
 
             this.dataProcess();
-            this.spinner.off();
+            this.spinnerService.off();
           })
       });
 
@@ -114,8 +114,8 @@ export class ScheduleComponent implements OnInit {
   //   // return new Promise((resolve, reject) => {
   //   console.log("Obtain Data From Database");
 
-  //   this.spinner.on();
-  //   this.api
+  //   this.spinnerService.on();
+  //   this.apiService
   //     .getDraws(targetNum)
   //     .subscribe((res: any) => {
   //       console.log('[DEBUG] eventObtain() in schedule component:');
@@ -127,7 +127,7 @@ export class ScheduleComponent implements OnInit {
   //       // console.log(this.eventDrawData);
   //       // test parseHostBindings, data here
   //     });
-  //   this.api
+  //   this.apiService
   //     .getGames(targetNum)
   //     .subscribe((res: any) => {
   //       console.log('[DEBUG] eventObtain() in schedule component:');
@@ -138,7 +138,7 @@ export class ScheduleComponent implements OnInit {
   //       console.log("ThisEventGameDataBelow:");
   //       console.log(this.eventGameData);
   //       // test passed, data here
-  //       this.spinner.off();
+  //       this.spinnerService.off();
   //       this.dataProcess();
   //     })
   // }

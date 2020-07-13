@@ -53,4 +53,4 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
   ],
   exports: [VisitorComponent, YoutubeDialogComponent],
 })
-export class VisitorModule {}
+export class VisitorModule { }

@@ -17,10 +17,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private spinner: SpinnerService,
+    private spinnerService: SpinnerService,
     private accountService: AccountService
   ) {
-    this.accountService.user.subscribe(user => {
+    this.accountService.user$.subscribe(user => {
       this.isSignedIn = user;
       // console.log(this.user);
     });

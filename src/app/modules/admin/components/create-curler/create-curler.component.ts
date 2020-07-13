@@ -34,9 +34,9 @@ export class CreateCurlerComponent implements OnInit {
   ];
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -51,10 +51,10 @@ export class CreateCurlerComponent implements OnInit {
       thirdCtrlPosition: ['', Validators.required],
     });
 
-    this.spinner.on();
-    this.api.getAllOrganizations().subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('organizations:');
       console.log(this.organizations);
     });
@@ -64,10 +64,10 @@ export class CreateCurlerComponent implements OnInit {
     console.log('getOrgTeams()');
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    this.spinner.on();
-    this.api.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
+    this.spinnerService.on();
+    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
       this.teams = res;
-      this.spinner.off();
+      this.spinnerService.off();
       console.log('teams:');
       console.log(this.teams);
     });
@@ -87,7 +87,7 @@ export class CreateCurlerComponent implements OnInit {
     const position = this.thirdFormGroup.value.thirdCtrlPosition;
     console.log(`name= ${name}`);
     console.log(`position= ${position}`);
-    this.api
+    this.apiService
       .createCurler(
         name,
         position,
@@ -95,10 +95,10 @@ export class CreateCurlerComponent implements OnInit {
         this.selectedTeamID.toString()
       )
       .subscribe(
-        (res: any) => this.notifier.showSuccess('Curler has been created', ''),
+        (res: any) => this.notificationService.showSuccess('Curler has been created', ''),
         (error) => {
           console.log(error);
-          this.notifier.showError('Something went wrong', '');
+          this.notificationService.showError('Something went wrong', '');
         }
       );
   }

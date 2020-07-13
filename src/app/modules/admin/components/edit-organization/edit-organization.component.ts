@@ -24,15 +24,15 @@ export class EditOrganizationComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private api: ApiService,
-    private spinner: SpinnerService,
-    private notifier: NotificationService,
+    private apiService: ApiService,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.spinner.on();
-    this.api
+    this.spinnerService.on();
+    this.apiService
       .getAllOrganizations()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
@@ -42,7 +42,7 @@ export class EditOrganizationComponent implements OnInit {
         console.log("ThisEventDataBelow:");
         console.log(this.allOrganizationData);
 
-        this.spinner.off();
+        this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
@@ -80,11 +80,11 @@ export class EditOrganizationComponent implements OnInit {
       info: info,
     }
 
-    // this.spinner.on();
-    // this.api
+    // this.spinnerService.on();
+    // this.apiService
     //   .editOrganization(fullName, shortName, this.selectedOrganization.id)
     //   .subscribe((res: any) => {  
-    //     this.spinner.off();
+    //     this.spinnerService.off();
     //     this.feedBackData = res;
     //   })
 

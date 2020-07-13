@@ -1,5 +1,6 @@
-<h1> Curling Events </h1>
-
+<div class="slide-in-text">
+  <h1> Dashboard - Curling Events </h1>
+</div>
 
 <mat-divider></mat-divider>
 
@@ -27,23 +28,6 @@
               placeholder="e.g. Bonspiel PDX, pools, 2020-01-25">
           </mat-form-field>
         </div>
-
-        <!-- SELECT COLUMN FILTER DROPDOWN -->
-        <!-- <div class="col-2"
-             style="padding-top: 15px">
-          <mat-form-field class="no-padding"
-                          appearance="outline">
-            <mat-label> Select Column Filter </mat-label>
-            <mat-select placeholder=""
-                        [(value)]="selectedColumn"
-                        (selectionChange)="updFilterPredicate()">
-              <mat-option *ngFor="let column of filterColumns"
-                          [value]="column.name">
-                {{ column.header }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div> -->
 
         <!-- MENU BUTTON -->
         <div class="col-1"
@@ -79,7 +63,6 @@
 
         </div>
       </div>
-
 
       <!-- TABLE -->
       <table mat-table

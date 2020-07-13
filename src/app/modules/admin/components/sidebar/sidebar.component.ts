@@ -19,27 +19,27 @@ export class SidebarComponent implements OnInit {
 
   addRoutes = [
     {
-      label: 'Add a new Event',
+      label: 'Add an Event',
       path: '/admin/create-event',
       icon: 'calendar_today'
     },
     {
-      label: 'Add a new Draw',
+      label: 'Add a Draw',
       path: '/admin/create-draw',
       icon: 'date_range'
     },
     {
-      label: 'Add a new Game',
+      label: 'Add a Game',
       path: '/admin/create-game',
       icon: 'event'
     },
     {
-      label: 'Add a new Organization',
+      label: 'Add a Organization',
       path: '/admin/create-organization',
       icon: 'add_box'
     },
     {
-      label: 'Add a new Team',
+      label: 'Add a Team',
       path: '/admin/create-team',
       icon: 'group_add'
     },
@@ -49,22 +49,22 @@ export class SidebarComponent implements OnInit {
       icon: 'group_add'
     },
     {
-      label: 'Add a new Curler',
+      label: 'Add a Curler',
       path: '/admin/create-curler',
       icon: 'person_add'
     },
     {
-      label: 'Add a new Pool',
+      label: 'Add a Pool',
       path: '/admin/create-pool',
       icon: 'library_add'
     },
     {
-      label: 'Add a new Bracket',
+      label: 'Add a Bracket',
       path: '/admin/create-bracket',
       icon: 'library_add'
     },
     {
-      label: 'Add an Endscore',
+      label: 'Add an End Score',
       path: '/admin/create-endscore',
       icon: 'plus_one'
     }
@@ -112,7 +112,7 @@ export class SidebarComponent implements OnInit {
       icon: 'library_add'
     },
     {
-      label: 'Edit an Endscore',
+      label: 'Edit an End Score',
       path: '/admin/edit-endscore',
       icon: 'plus_one'
     }
@@ -165,7 +165,7 @@ export class SidebarComponent implements OnInit {
       icon: 'library_add'
     },
     {
-      label: 'Remove an Endscore',
+      label: 'Remove an End Score',
       path: '/admin/remove-endscore',
       icon: 'plus_one'
     }
@@ -174,7 +174,7 @@ export class SidebarComponent implements OnInit {
   user: User;
 
   constructor(private accountService: AccountService) {
-    this.accountService.user.subscribe(user => {
+    this.accountService.user$.subscribe(user => {
       this.user = user;
       // console.log(this.user);
     });
