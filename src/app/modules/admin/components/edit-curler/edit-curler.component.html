@@ -1,12 +1,21 @@
-<mat-vertical-stepper linear #stepper>
+<div class="slide-in-text">
+  <h1> Edit Curler </h1>
+</div>
+
+<mat-vertical-stepper linear
+  #stepper>
   <!-- Stepper: Select Affiliation -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select an Organization</ng-template>
       <mat-form-field>
         <mat-label> Select Organization... </mat-label>
-        <mat-select formControlName="firstCtrl" name="organizations" (selectionChange)="getOrgTeams(); stepper.next()" required>
-          <mat-option *ngFor="let organization of organizations" [value]="organization.id">
+        <mat-select formControlName="firstCtrl"
+          name="organizations"
+          (selectionChange)="getOrgTeams(); stepper.next()"
+          required>
+          <mat-option *ngFor="let organization of organizations"
+            [value]="organization.id">
             {{organization.full_name}}
           </mat-option>
         </mat-select>
@@ -20,8 +29,12 @@
       <ng-template matStepLabel> Select a Team</ng-template>
       <mat-form-field>
         <mat-label> Select Team... </mat-label>
-        <mat-select formControlName="secondCtrl" name="teams" (selectionChange)="getTeamId(); stepper.next()" required>
-          <mat-option *ngFor="let team of teams" [value]="team.id">
+        <mat-select formControlName="secondCtrl"
+          name="teams"
+          (selectionChange)="getTeamId(); stepper.next()"
+          required>
+          <mat-option *ngFor="let team of teams"
+            [value]="team.id">
             {{team.team_name}}
           </mat-option>
         </mat-select>
@@ -35,8 +48,12 @@
       <ng-template matStepLabel> Select a Curler</ng-template>
       <mat-form-field>
         <mat-label> Select Curler... </mat-label>
-        <mat-select formControlName="thirdCtrl" name="selectedTeam" (selectionChange)="getCurlerId(); stepper.next()" required>
-          <mat-option *ngFor="let curler of selectedTeam" [value]="curler.curler_id">
+        <mat-select formControlName="thirdCtrl"
+          name="selectedTeam"
+          (selectionChange)="getCurlerId(); stepper.next()"
+          required>
+          <mat-option *ngFor="let curler of selectedTeam"
+            [value]="curler.curler_id">
             {{curler.curler_name}}, {{curler.curler_position}}
           </mat-option>
         </mat-select>
@@ -50,13 +67,19 @@
       <ng-template matStepLabel> Edit Curler Information </ng-template>
       <mat-form-field>
         <mat-label>New Name</mat-label>
-        <input matInput formControlName="fourthCtrlName" required>
+        <input matInput
+          formControlName="fourthCtrlName"
+          required>
       </mat-form-field>
       <br>
       <mat-form-field>
         <mat-label>New Position</mat-label>
-        <mat-select formControlName="fourthCtrlPosition" name="positions" (selectionChange)="stepper.next()" required>
-          <mat-option *ngFor="let position of positions" [value]="position.value">
+        <mat-select formControlName="fourthCtrlPosition"
+          name="positions"
+          (selectionChange)="stepper.next()"
+          required>
+          <mat-option *ngFor="let position of positions"
+            [value]="position.value">
             {{position.viewValue}}
           </mat-option>
         </mat-select>
@@ -64,9 +87,12 @@
 
 
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button (click)="onClickSubmit(); stepper.reset()">Submit</button>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="stepper.reset()">Reset</button>
+        <button mat-button
+          (click)="onClickSubmit(); stepper.reset()">Submit</button>
       </div>
     </form>
   </mat-step>

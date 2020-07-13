@@ -64,3 +64,22 @@ pre {
 .mat-drawer-container {
   background-color: white;
 }
+
+.slide-in-text {
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide-in-text h1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  text-align: left;
+  /* Apply animation to this element */
+  -moz-animation: slide-in-text 1s ease-out;
+  -webkit-animation: slide-in-text 1s ease-out;
+  animation: slide-in-text 1s ease-out;
+}

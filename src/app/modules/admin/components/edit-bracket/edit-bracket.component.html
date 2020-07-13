@@ -1,4 +1,7 @@
-<!-- <p>edit-bracket works!</p> -->
+<div class="slide-in-text">
+  <h1> Edit Bracket </h1>
+</div>
+
 <!-- 
 Edit a bracket
 Route
@@ -13,19 +16,23 @@ Output
   400 (Bad Request) - If any of the ids don’t exist or validation fails - return message 
 -->
 
-<mat-vertical-stepper linear #stepper>
+<mat-vertical-stepper linear
+  #stepper>
   <mat-step [stepControl]="zeroFormGroup">
     <ng-template matStepLabel> Select Edited Event </ng-template>
     <mat-form-field>
       <mat-label>Select Event to Edit</mat-label>
-      <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
-        <mat-option *ngFor="let event of this.allEventData" [value]="event">
+      <mat-select [(value)]="selectedEvent"
+        (selectionChange)="onEventSelected($event)">
+        <mat-option *ngFor="let event of this.allEventData"
+          [value]="event">
           {{event.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <div>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-button
+        matStepperNext>Next</button>
     </div>
   </mat-step>
 
@@ -34,11 +41,16 @@ Output
       <ng-template matStepLabel> New Bracket Name </ng-template>
       <mat-form-field>
         <mat-label> New Bracket Name </mat-label>
-        <input matInput type='text' placeholder="New Bracket Name" formControlName="firstCtrl">
+        <input matInput
+          type='text'
+          placeholder="New Bracket Name"
+          formControlName="firstCtrl">
       </mat-form-field>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
@@ -47,9 +59,12 @@ Output
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onEditBracket()">Submit</button>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onEditBracket()">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>
