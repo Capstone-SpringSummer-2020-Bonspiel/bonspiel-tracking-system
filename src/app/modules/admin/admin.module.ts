@@ -47,6 +47,7 @@ import {
   CreateEventComponent,
   CreateEventDialog,
 } from './components/create-event/create-event.component';
+import { CreateOrganizationComponent } from './components/create-organization/create-organization.component'
 import { CreateDrawComponent } from './components/create-draw/create-draw.component';
 import { CreateGameComponent } from './components/create-game/create-game.component';
 import { CreateTeamComponent } from './components/create-team/create-team.component';
@@ -101,6 +102,7 @@ import { PasswordComponent } from './components/password/password.component';
     CreateDrawComponent,
     CreateCurlerComponent,
     CreateEndscoreComponent,
+    CreateOrganizationComponent,
     AddTeamToEventComponent,
     EditGameComponent,
     EditEventComponent,

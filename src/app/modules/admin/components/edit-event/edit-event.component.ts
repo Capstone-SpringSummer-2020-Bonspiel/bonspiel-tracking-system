@@ -93,7 +93,7 @@ export class EditEventComponent implements OnInit {
     this.selectedEventId = event.value;
   }
 
-  editCurlingEvent() {
+  onEditCurlingEvent() {
     var name = this.selectedEvent.name;
     if (this.firstFormGroup.value.firstCtrl != '') {
       name = this.firstFormGroup.value.firstCtrl;

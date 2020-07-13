@@ -1,1 +1,60 @@
-<p>edit-organization works!</p>
+<!-- <p>edit-organization works!</p> -->
+<mat-vertical-stepper linear #stepper>
+  <mat-step [stepControl]="zeroFormGroup">
+    <ng-template matStepLabel> Select Edited Organization </ng-template>
+    <mat-form-field>
+      <mat-label>Select Event to Edit</mat-label>
+      <mat-select [(value)]="selectedOrganization" (selectionChange)="onEventSelected($event)">
+        <mat-option *ngFor="let event of this.allOrganizationData" [value]="event">
+          {{event.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> New Organization Name </ng-template>
+      <p>Enter New Info or Leave Blank to Keep Previous Info</p>
+      <p>Previous Event Name: {{this.selectedOrganization.name}} </p>
+      <mat-form-field>
+        <mat-label> New Event Name </mat-label>
+        <input matInput type='text' placeholder="New Event Name" formControlName="firstCtrl">
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel> New Organization Short Name </ng-template>
+      <p>Enter New Info or Leave Blank to Keep Previous Info</p>
+      <p>Previous Event Info: {{this.selectedOrganization.info}} </p>
+      <mat-form-field>
+        <mat-label> Event Detail </mat-label>
+        <input matInput type='text' placeholder="New Event Explaination" formControlName="secondCtrl">
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="editOrganization()">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>
