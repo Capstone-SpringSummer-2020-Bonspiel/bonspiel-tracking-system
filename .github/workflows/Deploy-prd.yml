@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Find and Replace
-      uses: jacobtomlinson/gha-find-replace@master
-      with:
-        find: "{{ NG_BUILD_VERSION }}"
-        replace: "ng build --prod"
+      - uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "{{ NG_BUILD_VERSION }}"
+          replace: "ng build --prod"
       - uses: akhileshns/heroku-deploy@v3.0.4 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
