@@ -22,7 +22,6 @@ export class RemoveDrawComponent implements OnInit {
 
   eventNames: any[] = [];
   eventDraws: any[] = [];
-  selectedEvent;
   selectedDraw;
   allGames: any[] = [];
   selectedDrawGames: any[] = [];
@@ -57,18 +56,11 @@ export class RemoveDrawComponent implements OnInit {
       this.spinnerService.off();
       this.eventNames = res;
       this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
-      console.log('eventNames:');
-      console.log(this.eventNames);
     });
   }
 
-  getEvent() {
-    console.log('getEvent()');
+  getEventDraws() {
     const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventID= ${selectedEventID}`);
-    this.selectedEvent = this.eventNames.filter(
-      (x) => x.id === selectedEventID
-    );
     this.spinnerService.on();
     this.apiService.getDraws(selectedEventID).subscribe((res: any) => {
       if (res === null || res === undefined) {
@@ -77,20 +69,15 @@ export class RemoveDrawComponent implements OnInit {
         return;
       }
       this.eventDraws = res;
-      console.log('eventDraws:');
-      console.log(this.eventDraws);
+      this.eventDraws.sort((a, b) => (a.name > b.name ? 1 : -1));
       this.spinnerService.off();
     });
   }
 
   getDrawGames() {
-    console.log('getDrawGames()');
     const selectedEventID = this.firstFormGroup.value.firstCtrl;
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedDrawID: ${selectedDrawID}`);
     this.selectedDraw = this.eventDraws.filter((x) => x.id === selectedDrawID);
-    console.log('selectedDraw:');
-    console.log(this.selectedDraw);
     this.spinnerService.on();
     this.apiService.getGames(selectedEventID).subscribe((res: any) => {
       this.allGames = res;
@@ -104,24 +91,17 @@ export class RemoveDrawComponent implements OnInit {
       );
 
       this.spinnerService.off();
-      console.log(
-        `selectedDrawGames for event: ${selectedEventID}, draw: ${selectedDrawID}`
-      );
-      console.log(this.selectedDrawGames);
     });
   }
 
   deleteDraw() {
-    console.log('deleteDraw()');
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
 
     this.apiService.deleteDraw(selectedDrawID).subscribe(
       (res: any) => {
-        console.log(res);
         this.notificationService.showSuccess('Draw has been deleted!', '');
       },
       (error) => {
-        console.log(error);
         this.notificationService.showError('Something went wrong', '');
       }
     );

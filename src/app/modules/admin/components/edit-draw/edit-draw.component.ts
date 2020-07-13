@@ -25,9 +25,10 @@ export class EditDrawComponent implements OnInit {
   eventDraws: any[] = [];
   selectedEvent;
   selectedDrawId;
+  selectedDraw;
 
-  minDate;
-  maxDate;
+  minDate: Date;
+  maxDate: Date;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -62,15 +63,11 @@ export class EditDrawComponent implements OnInit {
       this.spinnerService.off();
       this.eventNames = res;
       this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
-      console.log('eventNames:');
-      console.log(this.eventNames);
     });
   }
 
-  getEvent() {
-    console.log('getEvent()');
+  getEventDraws() {
     const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventID= ${selectedEventID}`);
     this.selectedEvent = this.eventNames.filter(
       (x) => x.id === selectedEventID
     );
@@ -82,20 +79,18 @@ export class EditDrawComponent implements OnInit {
         return;
       }
       this.eventDraws = res;
-      console.log('eventDraws:');
-      console.log(this.eventDraws);
+      this.eventDraws.sort((a, b) => (a.name > b.name ? 1 : -1));
       this.spinnerService.off();
     });
   }
 
   getDraw() {
-    console.log('getDraw()');
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedDrawID: ${this.selectedDrawId}`);
+    this.selectedDraw = this.eventDraws.filter(
+      (x) => x.id === this.selectedDrawId
+    );
     this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
-    console.log(this.minDate);
-    console.log(this.maxDate);
   }
 
   onClickSubmit() {
@@ -104,10 +99,6 @@ export class EditDrawComponent implements OnInit {
       .get('thirdCtrlDate')
       .value?.toLocaleString();
     const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
-
-    console.log(`newDrawName= ${newDrawName}`);
-    console.log(`newDrawStart= ${newDrawStart}`);
-    console.log(`newDrawUrl= ${newDrawUrl}`);
 
     this.apiService
       .editDraw(this.selectedDrawId, newDrawName, newDrawStart, newDrawUrl)
