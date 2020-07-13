@@ -12,6 +12,6 @@ COPY package*.json ./
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
-RUN if [ "$NODE_ENV" = "prd" ] ; then echo one ; else echo two ; fi
+RUN {{ NG_BUILD_VERSION }}
 
 #CMD ["node", "./server/server.js"]
