@@ -320,7 +320,7 @@ export class ApiService {
   // Pool
   public getPool(eventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/admin/${eventId}/pool`);
+      `${environment.apiUrl}/api/v1/admin/${eventId}/pools`);
   }
 
   public createPool(nameData, eventId) {

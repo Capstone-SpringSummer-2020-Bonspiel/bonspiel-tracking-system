@@ -14,8 +14,6 @@ export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
   // secondFormGroup: FormGroup;
 
-  feedBackData: null;
-
   constructor(
     private _formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -46,14 +44,18 @@ export class CreateOrganizationComponent implements OnInit {
     this.apiService
       .createOrganization(fullName, shortName)
       .subscribe((res: any) => {
-        this.feedBackData = res;
         console.log(res);
 
-        this.apiService.getAllOrganizations().subscribe((res: any) => {
-          console.log(res)
-        })
+        // this.apiService.getAllOrganizations().subscribe((res: any) => {
+        //   console.log(res)
+        // })
+        this.notificationService.showSuccess('Organization has been created', '')
         this.spinnerService.off();
-      })
+      },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong', '');
+        })
 
     // const dialogRef = this.dialog.open(Create, {
     //   data: {

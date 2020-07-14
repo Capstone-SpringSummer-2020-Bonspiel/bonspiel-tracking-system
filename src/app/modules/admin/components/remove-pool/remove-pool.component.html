@@ -1,3 +1,44 @@
 <div class="slide-in-text">
   <h1> Remove Pool </h1>
 </div>
+<mat-vertical-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <mat-form-field>
+      <mat-label>Select Event for Pools</mat-label>
+      <mat-select [(value)]="selectedPool" (selectionChange)="onEventSelected($event)">
+        <mat-option *ngFor="let event of this.allEventData" [value]="event">
+          {{event.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <mat-form-field>
+      <mat-label>Select Pool to Delete</mat-label>
+      <mat-select [(value)]="selectedPool" (selectionChange)="onPoolSelected($event)">
+        <mat-option *ngFor="let Pool of this.allPoolData" [value]="Pool">
+          {{Pool.full_name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-step>
+  <div>
+    <button mat-button matStepperPrevious>Back</button>
+    <button mat-button matStepperNext>Next</button>
+  </div>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onPoolDelete()">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

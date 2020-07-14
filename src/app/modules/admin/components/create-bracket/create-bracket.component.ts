@@ -14,8 +14,6 @@ export class CreateBracketComponent implements OnInit {
   zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
 
-  feedBackData: any;
-
   allEventData: null;
   selectedEventId: Number;
   selectedEvent: any = {
@@ -57,19 +55,29 @@ export class CreateBracketComponent implements OnInit {
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEventId = event.value;
+    this.selectedEventId = event.value.id;
   }
 
   onCreateBracket() {
     const bracketName = this.firstFormGroup.value.firstCtrl;
-    console.log(`full name: ${bracketName}`);
+    console.log(`full name:`);
+    console.log(this.selectedEventId)
+    this.spinnerService.on();
 
-    // this.spinnerService.on();
-    // this.apiService
-    //   .createBracket(bracketName, this.selectedEvent.id)
-    //   .subscribe((res: any) => {  
-    //     this.spinnerService.off();
-    //     this.feedBackData = res;
-    //   })
+    this.apiService
+      .createBracket(bracketName, String(this.selectedEvent.id))
+      .subscribe((res: any) => {
+        this.notificationService.showSuccess('Bracket has been created', '')
+
+        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+          console.log(res)
+        })
+
+        this.spinnerService.off();
+      },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong when adding Bracket', '');
+        })
   }
 }

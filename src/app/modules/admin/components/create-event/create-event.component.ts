@@ -81,11 +81,7 @@ export class CreateEventComponent implements OnInit {
     this.apiService.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
       .subscribe(
         (res: any) => {
-          // this.feedBackData = res;
           console.log(res);
-          // dialogRef.afterClosed().subscribe(result => {
-          //   console.log("something happened.")
-          // })
           this.notificationService.showSuccess('Event has been created', '')
           this.spinnerService.off()
         },
