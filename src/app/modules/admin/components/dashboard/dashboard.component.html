@@ -221,10 +221,12 @@
                         <button mat-button
                           (click)="accordion.closeAll()">Collapse All</button>
                       </div>
+
+
                       <mat-accordion class="example-headers-align"
                         multi>
 
-                        <!-- EXPANSION PANEL -->
+                        <!-- EXPANSION PANEL FOR DRAWS-->
                         <mat-expansion-panel *ngFor="let draw of draws">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -235,83 +237,166 @@
                             </mat-panel-description>
                           </mat-expansion-panel-header>
 
-                          <!-- EXPANSION PANEL DRAW CONTENT -->
-                          <mat-expansion-panel *ngFor="let game of filterGames(draw.id)">
-                            <mat-expansion-panel-header>
-                              <mat-panel-title>
-                                Game ID: {{game.game_id}}
-                              </mat-panel-title>
-                              <mat-panel-description>
-                                {{game.team_name1}} vs. {{game.team_name2}}
-                              </mat-panel-description>
-                              <p class="mr-5">Ice Sheet: {{game.ice_sheet}}</p>
-                            </mat-expansion-panel-header>
+                          <!-- MAT CARD FOR GAMES -->
+                          <mat-card *ngFor="let game of filterGames(draw.id)"
+                            flex-gt-sm
+                            class="mb-3">
+                            <!-- <mat-card-title>{{game.notes}}</mat-card-title>
+                            <mat-card-subtitle>Event Type: {{game.event_type}}</mat-card-subtitle>
+                            <mat-divider></mat-divider>
+                            <mat-list>
 
-                            <!-- EXPANSION PANEL GAME CONTENT -->
-                            <p>{{game.notes}}</p>
-                            <!-- <mat-form-field>
-                              <mat-label>First name</mat-label>
-                              <input matInput>
-                            </mat-form-field>
-  
-                            <mat-form-field>
-                              <mat-label>Age</mat-label>
-                              <input matInput
-                                type="number"
-                                min="1">
-                            </mat-form-field> -->
-                          </mat-expansion-panel>
+                              <h3 matSubheader>Game Info</h3> -->
 
-                          <!-- <mat-form-field>
-                            <mat-label>First name</mat-label>
-                            <input matInput>
-                          </mat-form-field>
+                            <mat-list>
 
-                          <mat-form-field>
-                            <mat-label>Age</mat-label>
-                            <input matInput
-                              type="number"
-                              min="1">
-                          </mat-form-field> -->
+                              <mat-divider matInset></mat-divider>
+
+                              <div class="container">
+                                <div class="row">
+
+                                  <div class="col-sm-3">
+                                    <ul class="list-group">
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>account_box</mat-icon>
+                                          <h4 matLine>Game Name</h4>
+                                          <p matLine>{{game.notes}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>account_box</mat-icon>
+                                          <h4 matLine>Team 1</h4>
+                                          <p matLine>{{game.team_name1}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Draw ID</h4>
+                                          <p matLine>{{game.draw_id}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Finished?</h4>
+                                          <p matLine>{{game.finished}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                    </ul>
+                                  </div>
+
+                                  <div class="col-sm-3">
+                                    <ul class="list-group">
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Ice Sheet</h4>
+                                          <p matLine>{{game.ice_sheet}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>description</mat-icon>
+                                          <h4 matLine>Team 2</h4>
+                                          <p matLine>{{game.team_name2}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Game ID</h4>
+                                          <p matLine>{{game.game_id}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                    </ul>
+                                  </div>
+
+                                  <div class="col-sm-3">
+                                    <ul class="list-group">
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Winner</h4>
+                                          <p matLine>{{game.winner}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Winner Destination Game</h4>
+                                          <p matLine>{{game.winner_dest}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Pool ID</h4>
+                                          <p matLine>{{game.pool_id}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                    </ul>
+                                  </div>
+
+                                  <div class="col-sm-3">
+                                    <ul class="list-group">
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>account_box</mat-icon>
+                                          <h4 matLine>Event Type</h4>
+                                          <p matLine>{{game.event_type}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Loser Destination Game</h4>
+                                          <p matLine>{{game.loser_dest}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                      <li class="list-group-item">
+                                        <mat-list-item>
+                                          <mat-icon matListAvatar>vpn_key</mat-icon>
+                                          <h4 matLine>Bracket ID</h4>
+                                          <p matLine>{{game.bracket_id}}</p>
+                                        </mat-list-item>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <mat-divider matInset></mat-divider>
+
+                              <!-- <mat-divider></mat-divider>
+
+                              <h3 matSubheader>Dates</h3>
+                              <mat-list-item>
+                                <mat-icon matListAvatar>access_time</mat-icon>
+                                <h4 matLine></h4>
+                                <p matLine></p>
+                              </mat-list-item>
+
+                              <mat-divider matInset></mat-divider>
+
+                              <mat-list-item>
+                                <mat-icon matListAvatar>today</mat-icon>
+                                <h4 matLine></h4>
+                                <p matLine></p>
+                              </mat-list-item> -->
+
+                            </mat-list>
+                            <mat-divider></mat-divider>
+                            <mat-card-actions>
+                              <button mat-button
+                                color="primary"
+                                class="text-upper">Edit</button>
+                            </mat-card-actions>
+                          </mat-card>
+
                         </mat-expansion-panel>
-
-                        <!-- <mat-expansion-panel disabled>
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              Destination
-                            </mat-panel-title>
-                            <mat-panel-description>
-                              Type the country name
-                              <mat-icon>map</mat-icon>
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-
-                          <mat-form-field>
-                            <mat-label>Country</mat-label>
-                            <input matInput>
-                          </mat-form-field>
-                        </mat-expansion-panel>
-                        
-                        <mat-expansion-panel>
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              Day of the trip
-                            </mat-panel-title>
-                            <mat-panel-description>
-                              Inform the date you wish to travel
-                              <mat-icon>date_range</mat-icon>
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-
-                          <mat-form-field>
-                            <mat-label>Date</mat-label>
-                            <input matInput
-                              [matDatepicker]="picker"
-                              (focus)="picker.open()"
-                              readonly>
-                          </mat-form-field>
-                          <mat-datepicker #picker></mat-datepicker>
-                        </mat-expansion-panel> -->
                       </mat-accordion>
 
                     </div>
