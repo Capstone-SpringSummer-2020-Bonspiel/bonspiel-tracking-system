@@ -37,7 +37,7 @@ export class RemoveEndscoreComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -56,7 +56,10 @@ export class RemoveEndscoreComponent implements OnInit {
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.notificationService.showError(
+          'Could not fetch curling events',
+          'ERROR'
+        );
         this.spinnerService.off();
         return;
       }
@@ -95,40 +98,35 @@ export class RemoveEndscoreComponent implements OnInit {
     this.selectedGameId = this.thirdFormGroup.value.thirdCtrl;
     console.log(`selectedGameId= ${this.selectedGameId}`);
     this.spinnerService.on();
-    this.apiService.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
-      const eventScores = res;
-      this.endScores = eventScores.filter(
-        (x) => x.game_id === this.selectedGameId && x.endscore_id != null
-      );
-      this.spinnerService.off();
-      this.endScores.sort(compare);
-      const selectedGame = this.games.filter(
-        (x) => x.game_id === this.selectedGameId
-      );
-      this.team1 = selectedGame[0].team_name1;
-      this.team2 = selectedGame[0].team_name2;
-      console.log('endScores= ');
-      console.log(this.endScores);
-    });
+    this.apiService
+      .getScoresByEvent(this.selectedEventId)
+      .subscribe((res: any) => {
+        const eventScores = res;
+        this.endScores = eventScores.filter(
+          (x) => x.game_id === this.selectedGameId && x.endscore_id != null
+        );
+        this.spinnerService.off();
+        this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
+        const selectedGame = this.games.filter(
+          (x) => x.game_id === this.selectedGameId
+        );
+        this.team1 = selectedGame[0].team_name1;
+        this.team2 = selectedGame[0].team_name2;
+        console.log('endScores= ');
+        console.log(this.endScores);
+      });
   }
 
   onClickSubmit() {
     const endId = this.fourthFormGroup.value.fourthCtrlEndId;
     console.log(`endId= ${endId}`);
     this.apiService.removeEndScore(endId).subscribe(
-      (res: any) => this.notificationService.showSuccess('End Score has been removed', ''),
+      (res: any) =>
+        this.notificationService.showSuccess('End Score has been removed', ''),
       (error) => {
         console.log(error);
         this.notificationService.showError(error, '');
       }
     );
   }
-}
-
-// Helper Function
-function compare(a, b) {
-  const endA = a.end_number;
-  const endB = b.end_number;
-
-  return endA > endB ? 1 : -1;
 }

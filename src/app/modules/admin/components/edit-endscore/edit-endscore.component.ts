@@ -38,7 +38,7 @@ export class EditEndscoreComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -59,7 +59,10 @@ export class EditEndscoreComponent implements OnInit {
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
-        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.notificationService.showError(
+          'Could not fetch curling events',
+          'ERROR'
+        );
         this.spinnerService.off();
         return;
       }
@@ -98,25 +101,27 @@ export class EditEndscoreComponent implements OnInit {
     this.selectedGameId = this.thirdFormGroup.value.thirdCtrl;
     console.log(`selectedGameId= ${this.selectedGameId}`);
     this.spinnerService.on();
-    this.apiService.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
-      const eventScores = res;
-      this.endScores = eventScores.filter(
-        (x) => x.game_id === this.selectedGameId && x.endscore_id != null
-      );
-      this.spinnerService.off();
-      this.endScores.sort(compare);
-      const selectedGame = this.games.filter(
-        (x) => x.game_id === this.selectedGameId
-      );
-      this.team1 = selectedGame[0].team_name1;
-      this.team2 = selectedGame[0].team_name2;
-      console.log('endScores= ');
-      console.log(this.endScores);
-    });
+    this.apiService
+      .getScoresByEvent(this.selectedEventId)
+      .subscribe((res: any) => {
+        const eventScores = res;
+        this.endScores = eventScores.filter(
+          (x) => x.game_id === this.selectedGameId && x.endscore_id != null
+        );
+        this.spinnerService.off();
+        this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
+        const selectedGame = this.games.filter(
+          (x) => x.game_id === this.selectedGameId
+        );
+        this.team1 = selectedGame[0].team_name1;
+        this.team2 = selectedGame[0].team_name2;
+        console.log('endScores= ');
+        console.log(this.endScores);
+      });
   }
 
   onClickSubmit() {
-    var blank = false;
+    var blank = 'false';
     var curlingTeam1Scored;
     var score;
     this.selectedEndNumberId = this.fourthFormGroup.value.fourthCtrlEndId;
@@ -129,13 +134,13 @@ export class EditEndscoreComponent implements OnInit {
       this.notificationService.showError('Only one positive score allowed', '');
       return;
     } else if (team1Score === 0 && team2Score === 0) {
-      curlingTeam1Scored = false;
+      curlingTeam1Scored = 'false';
       score = 0;
     } else if (team1Score > 0 && team2Score === 0) {
-      curlingTeam1Scored = true;
+      curlingTeam1Scored = 'true';
       score = team1Score;
     } else if (team1Score === 0 && team2Score > 0) {
-      curlingTeam1Scored = false;
+      curlingTeam1Scored = 'false';
       score = team2Score;
     }
     console.log(`gameId= ${this.selectedGameId}`);
@@ -147,19 +152,14 @@ export class EditEndscoreComponent implements OnInit {
       .editEndScore(this.selectedEndNumberId, blank, curlingTeam1Scored, score)
       .subscribe(
         (res: any) =>
-          this.notificationService.showSuccess('End Score has been modified', ''),
+          this.notificationService.showSuccess(
+            'End Score has been modified',
+            ''
+          ),
         (error) => {
           console.log(error);
           this.notificationService.showError('Something went wrong', '');
         }
       );
   }
-}
-
-// Helper Function
-function compare(a, b) {
-  const endA = a.end_number;
-  const endB = b.end_number;
-
-  return endA > endB ? 1 : -1;
 }
