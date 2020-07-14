@@ -2,8 +2,7 @@
   <h1> Edit Team </h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
+<mat-vertical-stepper linear #stepper>
 
   <!-- Stepper 1: Select team -->
   <mat-step [stepControl]="firstFormGroup">
@@ -11,12 +10,8 @@
       <ng-template matStepLabel> Select A Team </ng-template>
       <mat-form-field>
         <mat-label> Team Name </mat-label>
-        <mat-select formControlName="firstCtrl"
-          name="teams"
-          (selectionChange)="getTeamId(); stepper.next()"
-          required>
-          <mat-option *ngFor="let team of teams"
-            [value]="team.id">
+        <mat-select formControlName="firstCtrl" name="teams" (selectionChange)="getTeamId(); stepper.next()" required>
+          <mat-option *ngFor="let team of teams" [value]="team.id">
             {{team.team_name}}
           </mat-option>
         </mat-select>
@@ -30,15 +25,16 @@
       <ng-template matStepLabel> Edit Team Name</ng-template>
       <mat-form-field>
         <mat-label> Team Name </mat-label>
-        <input matInput
-          placeholder="Evergreen Curling Club"
-          formControlName="secondCtrl"
-          required>
+        <input matInput placeholder="Evergreen Curling Club" formControlName="secondCtrl" required>
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <mat-label> Note </mat-label>
+        <input matInput placeholder="1st Place" formControlName="secondCtrlNote">
       </mat-form-field>
     </form>
     <div>
-      <button mat-button
-        matStepperNext>Next</button>
+      <button mat-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
@@ -47,30 +43,17 @@
     <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> Optional Fields </ng-template>
       <mat-form-field>
-        <mat-label> Note </mat-label>
-        <input matInput
-          placeholder="(Optional)"
-          formControlName="thirdCtrlNote">
-      </mat-form-field>
-      <br />
-
-      <mat-form-field>
         <mat-label> Select Organization... </mat-label>
-        <mat-select formControlName="thirdCtrlOrg"
-          name="organizations">
-          <mat-option *ngFor="let organization of organizations"
-            [value]="organization.id">
+        <mat-select formControlName="thirdCtrlOrg" name="organizations">
+          <mat-option *ngFor="let organization of organizations" [value]="organization.id">
             {{organization.full_name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickSubmit(); stepper.reset()">Submit</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="onClickSubmit(); stepper.reset()">Submit</button>
       </div>
     </form>
   </mat-step>

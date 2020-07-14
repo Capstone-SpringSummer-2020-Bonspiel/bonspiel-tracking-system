@@ -19,7 +19,7 @@ export class RemoveTeamComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -29,21 +29,18 @@ export class RemoveTeamComponent implements OnInit {
     this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
       this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
-      console.log(`teams=`);
-      console.log(this.teams);
       this.spinnerService.off();
     });
   }
 
-  getTeamId() { }
+  getTeamId() {}
 
   onClickSubmit() {
     const teamId = this.firstFormGroup.value.firstFormCtrl;
-    console.log(`teamId= ${teamId}`);
     this.apiService.removeTeam(teamId).subscribe(
-      (res: any) => this.notificationService.showSuccess('Team has been deleted', ''),
+      (res: any) =>
+        this.notificationService.showSuccess('Team has been deleted', ''),
       (error) => {
-        console.log(error);
         this.notificationService.showError('Something went wrong', '');
       }
     );
