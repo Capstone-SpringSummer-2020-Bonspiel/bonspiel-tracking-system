@@ -43,7 +43,7 @@ export class EditPoolComponent implements OnInit {
     this.apiService
       .getPool('1')
       .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log('[DEBUG] eventObtain() in Pool component:');
         console.log(res);
         this.allPoolData = res;
         this.selectedPoolData = res[0];

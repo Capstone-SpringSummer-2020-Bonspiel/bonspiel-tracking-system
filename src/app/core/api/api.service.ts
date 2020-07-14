@@ -284,7 +284,7 @@ export class ApiService {
   // Bracket
   public getBracket(eventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/admin/${eventId}/brackets`);
+      `${environment.apiUrl}/api/v1/${eventId}/brackets`);
   }
 
   public createBracket(nameData, eventId) {
@@ -320,7 +320,7 @@ export class ApiService {
   // Pool
   public getPool(eventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/admin/${eventId}/pools`);
+      `${environment.apiUrl}/api/v1/${eventId}/pools`);
   }
 
   public createPool(nameData, eventId) {

@@ -15,9 +15,6 @@ export class EditEventComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
-  fouthFormGroup: FormGroup;
-  fifthFormGroup: FormGroup;
-  sixthFormGroup: FormGroup;
   selectedEvent: any = {
     name: 'name',
     info: 'info',
@@ -26,13 +23,13 @@ export class EditEventComponent implements OnInit {
     event_type: 'String',
     completed: true,
   }
-  feedBackData: any;
+
   allEventData: null;
   selectedEventId: Number;
 
   eventTypes: any[] = [
-    { value: 'pool', viewValue: 'Pool' },
-    { value: 'bracket', viewValue: 'Bracket' },
+    { value: 'pools', viewValue: 'Pools' },
+    { value: 'brackets', viewValue: 'Brackets' },
     { value: 'championship', viewValue: 'Championship' },
     { value: 'friendly', viewValue: 'Friendly' },
   ];
@@ -65,23 +62,20 @@ export class EditEventComponent implements OnInit {
         this.spinnerService.off();
       })
 
+    this.zeroFormGroup = this._formBuilder.group({
+      zeroCtrl: ['', Validators.required],
+    });
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: [''],
+      firstCtrlInfo: [''],
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: [''],
+      thirdCtrl: [''],
+      thirdCtrlCond: [''],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: [''],
-    });
-    this.fouthFormGroup = this._formBuilder.group({
-      fouthCtrl: [''],
-    });
-    this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrl: [''],
-    });
-    this.sixthFormGroup = this._formBuilder.group({
-      sixthCtrl: [''],
+      fifthCtrlBeg: [''],
+      fifthCtrlEnd: [''],
     });
   }
 
@@ -99,24 +93,24 @@ export class EditEventComponent implements OnInit {
       name = this.firstFormGroup.value.firstCtrl;
     }
     var info = this.selectedEvent.info;
-    if (this.secondFormGroup.value.secondCtrl != '') {
-      info = this.secondFormGroup.value.secondCtrl;
+    if (this.firstFormGroup.value.firstCtrlInfo != '') {
+      info = this.firstFormGroup.value.firstCtrlInfo;
     }
     var event_type = this.selectedEvent.event_type;
     if (this.thirdFormGroup.value.thirdCtrl != '') {
       event_type = this.thirdFormGroup.value.thirdCtrl;
     }
     var completed = this.selectedEvent.completed;
-    if (this.fouthFormGroup.value.fouthCtrl != '') {
-      completed = this.fouthFormGroup.value.fouthCtrl;
+    if (this.secondFormGroup.value.thirdCtrlCond != '') {
+      completed = this.secondFormGroup.value.thirdCtrlCond;
     }
     var begin_date = this.selectedEvent.begin_date;
-    if (this.fifthFormGroup.value.fifthCtrl != '') {
-      begin_date = this.fifthFormGroup.value.fifthCtrl;
+    if (this.thirdFormGroup.value.fifthCtrlBeg != '') {
+      begin_date = this.thirdFormGroup.value.fifthCtrlBeg;
     }
     var end_date = this.selectedEvent.end_date;
-    if (this.sixthFormGroup.value.sixthCtrl != '') {
-      end_date = this.sixthFormGroup.value.sixthCtrl;
+    if (this.thirdFormGroup.value.fifthCtrlEnd != '') {
+      end_date = this.thirdFormGroup.value.fifthCtrlEnd;
     }
 
     console.log(`full name: ${name}`);
@@ -126,15 +120,15 @@ export class EditEventComponent implements OnInit {
     console.log(`event type: ${event_type}`);
     console.log(`complete: ${completed}`);
 
-    this.feedBackData = {
-      signal: 200,
-      name: name,
-      info: info,
-      begin_date: begin_date,
-      end_date: end_date,
-      event_type: event_type,
-      completed: completed,
-    }
+    // this.feedBackData = {
+    //   signal: 200,
+    //   name: name,
+    //   info: info,
+    //   begin_date: begin_date,
+    //   end_date: end_date,
+    //   event_type: event_type,
+    //   completed: completed,
+    // }
 
     // this.spinnerService.on();
     // this.apiService
@@ -144,20 +138,20 @@ export class EditEventComponent implements OnInit {
     //     this.feedBackData = res;
     //   })
 
-    const dialogRef = this.dialog.open(EditEventDialog, {
-      data: {
-        signal: '200',
-        name: name,
-        info: info,
-        begin_date: begin_date,
-        end_date: end_date,
-        event_type: event_type,
-        completed: completed,
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("something happened.")
-    })
+    // const dialogRef = this.dialog.open(EditEventDialog, {
+    //   data: {
+    //     signal: '200',
+    //     name: name,
+    //     info: info,
+    //     begin_date: begin_date,
+    //     end_date: end_date,
+    //     event_type: event_type,
+    //     completed: completed,
+    //   }
+    // });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log("something happened.")
+    // })
 
   }
 }
