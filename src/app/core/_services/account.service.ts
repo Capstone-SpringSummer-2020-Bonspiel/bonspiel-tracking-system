@@ -65,6 +65,7 @@ export class AccountService {
     this.userSubject.next(null);
     this.router.navigate(['/account/login']);
 
+    // Remove all setTimeouts for auth refreshes
     let highestTimeoutId = setTimeout(() => { });
     for (let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
