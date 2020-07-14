@@ -418,3 +418,23 @@ hr {
 .example-headers-align .mat-form-field + .mat-form-field {
   margin-left: 8px;
 }
+
+.yellow-icon {
+  color: yellow;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.yellow-icon svg {
+  fill: yellow;
+}
+
+.red-icon {
+  color: red;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.red-icon svg {
+  fill: red;
+}
+
+.p-2 {
+  display: inline-block;
+}

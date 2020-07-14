@@ -2,25 +2,24 @@
   <h1> Add Organization </h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
+<mat-vertical-stepper linear #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Organization Name </ng-template>
       <mat-form-field>
         <mat-label> Organization Name </mat-label>
-        <input matInput
-          type='text'
-          placeholder="New Organization"
-          formControlName="firstCtrl"
-          required>
+        <input matInput type='text' placeholder="New Organization" formControlName="firstCtrl" required>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label> Short Name </mat-label>
+        <input matInput type='text' placeholder="New Short Name" formControlName="secondCtrl" required>
       </mat-form-field>
       <div>
-        <button mat-button
-          matStepperNext>Next</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
-
+    <!-- 
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel> Organization Short Name </ng-template>
@@ -39,18 +38,15 @@
             matStepperNext>Next</button>
         </div>
       </form>
-    </mat-step>
+    </mat-step> -->
 
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <p>You are now done.</p>
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="createOrganization()">Submit</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="createOrganization()">Submit</button>
       </div>
     </mat-step>
   </mat-step>

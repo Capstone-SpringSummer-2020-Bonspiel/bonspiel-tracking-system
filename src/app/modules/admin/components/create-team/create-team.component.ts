@@ -20,14 +20,14 @@ export class CreateTeamComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrlName: ['', Validators.required],
+      firstCtrlNote: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrlNote: [''],
       secondCtrlOrg: [null],
     });
     this.spinnerService.on();
@@ -35,22 +35,17 @@ export class CreateTeamComponent implements OnInit {
       this.organizations = res;
       this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
       this.spinnerService.off();
-      console.log('organizations=');
-      console.log(this.organizations);
     });
   }
 
   onClickSubmit() {
     const name = this.firstFormGroup.value.firstCtrlName;
-    const note = this.secondFormGroup.value.secondCtrlNote;
+    const note = this.firstFormGroup.value.firstCtrlNote;
     const org = this.secondFormGroup.value.secondCtrlOrg;
-    console.log(`name= ${name}`);
-    console.log(`note= ${note}`);
-    console.log(`org= ${org}`);
     this.apiService.createTeam(name, note, org).subscribe(
-      (res: any) => this.notificationService.showSuccess('Team has been created', ''),
+      (res: any) =>
+        this.notificationService.showSuccess('Team has been created', ''),
       (error) => {
-        console.log(error);
         this.notificationService.showError('Something went wront', '');
       }
     );

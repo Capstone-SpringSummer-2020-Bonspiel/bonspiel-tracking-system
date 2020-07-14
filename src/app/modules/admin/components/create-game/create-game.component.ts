@@ -42,7 +42,7 @@ export class CreateGameComponent implements OnInit {
 
   colors = ['red', 'yellow'];
   iceSheets = ['A', 'B', 'C'];
-  eventTypes = ['friendly', 'pools', 'brackets', 'championship'];
+  eventTypes = ['pools', 'brackets'];
 
   console = console;
 

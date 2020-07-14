@@ -37,7 +37,7 @@ export class CreateCurlerComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -54,39 +54,28 @@ export class CreateCurlerComponent implements OnInit {
     this.spinnerService.on();
     this.apiService.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
+      this.organizations.sort((a, b) => (a.name > b.name ? 1 : -1));
       this.spinnerService.off();
-      console.log('organizations:');
-      console.log(this.organizations);
     });
   }
 
-  getOrgTeams() {
-    console.log('getOrgTeams()');
+  getAllTeams() {
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
     this.spinnerService.on();
-    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
+    this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
+      this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
       this.spinnerService.off();
-      console.log('teams:');
-      console.log(this.teams);
     });
   }
 
   getTeamId() {
-    console.log('getTeamId()');
     this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
   }
 
   onClickSubmit() {
-    console.log('onClickSubmit()');
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
     const name = this.thirdFormGroup.value.thirdCtrlName;
     const position = this.thirdFormGroup.value.thirdCtrlPosition;
-    console.log(`name= ${name}`);
-    console.log(`position= ${position}`);
     this.apiService
       .createCurler(
         name,
@@ -95,9 +84,9 @@ export class CreateCurlerComponent implements OnInit {
         this.selectedTeamID.toString()
       )
       .subscribe(
-        (res: any) => this.notificationService.showSuccess('Curler has been created', ''),
+        (res: any) =>
+          this.notificationService.showSuccess('Curler has been created', ''),
         (error) => {
-          console.log(error);
           this.notificationService.showError('Something went wrong', '');
         }
       );

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as shape from 'd3-shape';
+import { ApiService } from '@app/core/api/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SpinnerService } from '@app/shared/services/spinner.service';
+import { NotificationService } from '@app/shared/services/notification.service';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-remove-bracket',
@@ -7,14 +12,28 @@ import * as shape from 'd3-shape';
   styleUrls: ['./remove-bracket.component.scss']
 })
 export class RemoveBracketComponent implements OnInit {
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+
+  allBracketData: null;
+  allEventData: null;
+  selectedBracket: null;
+  submitResult: Number;
+  selectedBracketId: Number;
+  selectedEventId: 0;
 
   nodes = [];
-
   edges = [];
 
   curve = shape.curveLinear;
 
-  constructor() { }
+  constructor(
+    private apiService: ApiService,
+    private _formBuilder: FormBuilder,
+    public dialog: MatDialog,
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
 
@@ -25,6 +44,24 @@ export class RemoveBracketComponent implements OnInit {
     //     label: String.fromCharCode(97 + i).toUpperCase()
     //   });
     // }
+    this.spinnerService.on();
+    this.apiService
+      .getEvents()
+      .subscribe((res: any) => {
+        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log(res);
+        this.allEventData = res;
+        this.selectedEventId = res[0].id;
+        console.log("ThisEventDataBelow:");
+        console.log(this.allEventData);
+
+        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+          this.allBracketData = res;
+          this.selectedBracket = res[0];
+        })
+
+        this.spinnerService.off();
+      })
 
     this.nodes = [
       { id: '801', label: '24 vs. 16' },
@@ -201,5 +238,49 @@ export class RemoveBracketComponent implements OnInit {
       // }
     ];
   }
+  onEventSelected(event: any) {
+    console.log('the selected Event is:');
+    console.log(this.allEventData);
 
+    this.selectedEventId = event.value.id;
+    console.log('the selected Event ID is:');
+    console.log(this.selectedEventId);
+
+    this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
+      this.allBracketData = res;
+      this.selectedBracket = res[0];
+      this.selectedBracketId = res[0].id;
+    })
+  }
+  onBracketSelected(event: any) {
+    console.log(this.allEventData);
+    console.log('the selected Pool is:');
+    console.log(this.allEventData);
+    console.log(event.value);
+
+    this.selectedBracketId = event.value.id;
+  }
+  onBracketDelete() {
+    // const targetEventId = this.firstFormGroup.value.firstCtrl;
+    // const targetPoolId = this.secondFormGroup.value.secondCtrl;
+    console.log("Event Select: ")
+    console.log(this.selectedEventId)
+    console.log("Bracket Delete: ")
+    console.log(this.selectedBracketId)
+
+    this.spinnerService.on();
+    this.apiService
+      .removeBracket(String(this.selectedBracketId))
+      .subscribe(
+        (res: any) => {
+          this.notificationService.showError('Organization has been deleted', '');
+          this.spinnerService.off();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong during delete event', '');
+        })
+
+
+  }
 }

@@ -18,13 +18,12 @@ export class EditCurlerComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
-  fourthFormGroup: FormGroup;
 
   organizations: any[] = [];
+  curlers: any[] = [];
   teams: any[] = [];
   selectedOrganizationID;
   selectedTeamID;
-  selectedTeam;
   selectedCurlerID;
   positions = [
     { value: 'skip', viewValue: 'Skip' },
@@ -39,7 +38,7 @@ export class EditCurlerComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -49,73 +48,50 @@ export class EditCurlerComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required],
-    });
-    this.fourthFormGroup = this._formBuilder.group({
-      fourthCtrlName: ['', Validators.required],
-      fourthCtrlPosition: ['', Validators.required],
+      thirdCtrlName: ['', Validators.required],
+      thirdCtrlPosition: ['', Validators.required],
+      thirdCtrlTeam: ['', Validators.required],
+      thirdCtrlOrg: ['', Validators.required],
     });
 
     this.spinnerService.on();
     this.apiService.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
-      this.spinnerService.off();
-      console.log('organizations:');
-      console.log(this.organizations);
+      this.organizations.sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.apiService.getAllTeams().subscribe((res: any) => {
+        this.teams = res;
+        this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
+        this.spinnerService.off();
+      });
     });
   }
-  getOrgTeams() {
-    console.log('getOrgTeams()');
+  getOrgCurlers() {
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
     this.spinnerService.on();
-    this.apiService.getTeamsByEventId(this.selectedOrganizationID).subscribe((res: any) => {
-      this.teams = res;
-      this.spinnerService.off();
-      console.log('teams:');
-      console.log(this.teams);
-    });
-  }
-
-  getTeamId() {
-    console.log('getTeamId()');
-    this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    this.spinnerService.on();
-    this.apiService.getTeams(this.selectedTeamID).subscribe((res: any) => {
-      this.selectedTeam = res;
-      this.spinnerService.off();
-      console.log('selectedTeam: ');
-      console.log(this.selectedTeam);
-    });
+    this.apiService
+      .getCurlersByOrganization(this.selectedOrganizationID)
+      .subscribe((res: any) => {
+        this.curlers = res;
+        this.curlers.sort((a, b) => (a.name > b.name ? 1 : -1));
+        this.spinnerService.off();
+      });
   }
 
   getCurlerId() {
-    console.log('getCurlerId()');
-    this.selectedCurlerID = this.thirdFormGroup.value.thirdCtrl;
-    console.log(`selectedCurlerID= ${this.selectedCurlerID}`);
+    this.selectedCurlerID = this.secondFormGroup.value.secondCtrl;
   }
 
   onClickSubmit() {
-    console.log('onClickSubmit()');
-    console.log(`selectedOrgID= ${this.selectedOrganizationID}`);
-    console.log(`selectedTeamID= ${this.selectedTeamID}`);
-    const name = this.fourthFormGroup.value.fourthCtrlName;
-    const position = this.fourthFormGroup.value.fourthCtrlPosition;
-    console.log(`name= ${name}`);
-    console.log(`position= ${position}`);
+    const newName = this.thirdFormGroup.value.thirdCtrlName || null;
+    const newPosition = this.thirdFormGroup.value.thirdCtrlPosition || null;
+    const newTeam = this.thirdFormGroup.value.thirdCtrlTeam.toString() || null;
+    const newOrg = this.thirdFormGroup.value.thirdCtrlOrg.toString() || null;
     this.apiService
-      .editCurler(
-        name,
-        position,
-        this.selectedOrganizationID.toString(),
-        this.selectedTeamID.toString(),
-        this.selectedCurlerID
-      )
+      .editCurler(newName, newPosition, newOrg, newTeam, this.selectedCurlerID)
       .subscribe(
-        (res: any) => this.notificationService.showSuccess('Curler has been modified', ''),
+        (res: any) =>
+          this.notificationService.showSuccess('Curler has been modified', ''),
         (error) => {
-          console.log(error);
           this.notificationService.showError('Something went wrong', '');
         }
       );
