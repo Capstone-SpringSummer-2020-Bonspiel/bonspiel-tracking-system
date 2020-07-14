@@ -1,3 +1,48 @@
 <div class="slide-in-text">
   <h1> Remove Bracket </h1>
 </div>
+
+<mat-vertical-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <ng-template matStepLabel> Select Event </ng-template>
+    <mat-form-field>
+      <mat-label>Select Event for Brackets</mat-label>
+      <mat-select [(value)]="selectedBracket" (selectionChange)="onEventSelected($event)">
+        <mat-option *ngFor="let event of this.allEventData" [value]="event">
+          {{event.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <ng-template matStepLabel> Select Bracket </ng-template>
+    <mat-form-field>
+      <mat-label>Select Bracket to Delete</mat-label>
+      <mat-select [(value)]="selectedBracket" (selectionChange)="onBracketSelected($event)">
+        <mat-option *ngFor="let Bracket of this.allBracketData" [value]="Bracket">
+          {{Bracket.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onBracketDelete()">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

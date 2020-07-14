@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { NotificationService } from '@app/shared/services/notification.service';
+
 
 @Component({
   selector: 'app-remove-event',
@@ -18,6 +20,7 @@ export class RemoveEventComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -39,19 +42,26 @@ export class RemoveEventComponent implements OnInit {
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEventId = event.value;
+    this.selectedEventId = event.value.id;
   }
   onEventDelete() {
     console.log("Event Delete: ")
     console.log(this.selectedEventId)
-    this.submitResult = 200;
 
-    // this.spinnerService.on();
-    // this.apiService
-    //   .deleteEvent(this.selectedEventId)
-    //   .subscribe((res: any) => {
-    //     this.spinnerService.off();
-    //   })
+    this.spinnerService.on();
+    this.apiService.deleteEvent(String(this.selectedEventId))
+      .subscribe(
+        (res: any) => {
+          console.log(res)
+          this.notificationService.showSuccess('Event has been deleted', '')
+          this.spinnerService.off()
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong during delete event', '');
+        }
+
+      )
   }
   // onClickConfirm(){
   //   if(confirm("are you sure?")){

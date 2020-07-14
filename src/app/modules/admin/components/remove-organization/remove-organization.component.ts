@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-remove-organization',
@@ -18,6 +19,7 @@ export class RemoveOrganizationComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -36,22 +38,27 @@ export class RemoveOrganizationComponent implements OnInit {
   }
   onOrganizationSelected(event: any) {
     console.log(this.allOrganizationData);
-    console.log('the selected event is:');
+    console.log('the selected organization is:');
     console.log(this.selectedOrganization);
 
-    this.selectedOrganizationId = event.value;
+    this.selectedOrganizationId = event.value.id;
   }
   onOrganizationDelete() {
-    console.log("Event Delete: ")
+    console.log("Organization Delete: ")
     console.log(this.selectedOrganizationId)
-    this.submitResult = 200;
 
-    // this.spinnerService.on();
-    // this.apiService
-    //   .deleteOrganization(this.selectedEventId)
-    //   .subscribe((res: any) => {
-    //     this.spinnerService.off();
-    //   })
+    this.spinnerService.on();
+    this.apiService
+      .removeOrganization(String(this.selectedOrganizationId))
+      .subscribe(
+        (res: any) => {
+          this.notificationService.showError('Organization has been deleted', '');
+          this.spinnerService.off();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong during delete event', '');
+        })
   }
   // onClickConfirm(){
   //   if(confirm("are you sure?")){

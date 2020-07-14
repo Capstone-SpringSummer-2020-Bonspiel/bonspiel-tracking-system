@@ -93,14 +93,7 @@ export class ApiService {
     );
   }
 
-  public editEvent(
-    nameData,
-    beginDateData,
-    endDateData,
-    completedData,
-    infoData,
-    eventTypeData,
-    eventId
+  public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId
   ) {
     const body = {
       name: nameData,
@@ -117,6 +110,7 @@ export class ApiService {
   }
 
   public deleteEvent(eventId) {
+    console.log(eventId)
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`
     );
@@ -232,6 +226,7 @@ export class ApiService {
       `${environment.apiUrl}/api/v1/admin/org/${orgId}`
     );
   }
+
   // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error
 
   /********************************************************************/
@@ -303,6 +298,10 @@ export class ApiService {
   /********************************************************************* */
 
   // Bracket
+  public getBracket(eventId) {
+    return this.httpService.get(
+      `${environment.apiUrl}/api/v1/${eventId}/brackets`);
+  }
 
   public createBracket(nameData, eventId) {
     const body = {
@@ -335,6 +334,10 @@ export class ApiService {
   /********************************************************************* */
 
   // Pool
+  public getPool(eventId) {
+    return this.httpService.get(
+      `${environment.apiUrl}/api/v1/${eventId}/pools`);
+  }
 
   public createPool(nameData, eventId) {
     const body = {
