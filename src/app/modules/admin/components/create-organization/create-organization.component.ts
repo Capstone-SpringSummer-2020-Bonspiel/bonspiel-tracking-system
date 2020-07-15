@@ -12,7 +12,6 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
-  // secondFormGroup: FormGroup;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -24,18 +23,14 @@ export class CreateOrganizationComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-      secondCtrl: ['', Validators.required],
+      fullNameCtrl: ['', Validators.required],
+      shortNameCtrl: ['', Validators.required],
     });
-    // this.secondFormGroup = this._formBuilder.group({
-    //   secondCtrl: ['', Validators.required],
-    // });
-
   }
 
   createOrganization() {
-    const fullName = this.firstFormGroup.value.firstCtrl;
-    const shortName = this.firstFormGroup.value.secondCtrl;
+    const fullName = this.firstFormGroup.value.fullNameCtrl;
+    const shortName = this.firstFormGroup.value.shortNameCtrl;
 
     console.log(`full name: ${fullName}`);
     console.log(`detail info: ${shortName}`);
@@ -43,34 +38,19 @@ export class CreateOrganizationComponent implements OnInit {
     this.spinnerService.on();
     this.apiService
       .createOrganization(fullName, shortName)
-      .subscribe((res: any) => {
-        console.log(res);
+      .subscribe(
+        (res: any) => {
+          console.log(res);
 
-        // this.apiService.getAllOrganizations().subscribe((res: any) => {
-        //   console.log(res)
-        // })
-        this.notificationService.showSuccess('Organization has been created', '')
-        this.spinnerService.off();
-      },
+          // this.apiService.getAllOrganizations().subscribe((res: any) => {
+          //   console.log(res)
+          // })
+          this.notificationService.showSuccess('Organization has been created', '')
+          this.spinnerService.off();
+        },
         (error) => {
           console.log(error);
           this.notificationService.showError('Something went wrong', '');
         })
-
-    // const dialogRef = this.dialog.open(Create, {
-    //   data: {
-    //     signal: '200',
-    //     name: name,
-    //     info: info,
-    //     // begin_date: begin_date,
-    //     // end_date: end_date,
-    //     // event_type: event_type,
-    //     // completed: completed,
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log("something happened.")
-    // })
-
   }
 }

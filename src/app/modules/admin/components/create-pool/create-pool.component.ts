@@ -34,43 +34,47 @@ export class CreatePoolComponent implements OnInit {
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
 
         this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: [''],
+      nameDataCtrl: ['', Validators.required],
     });
 
   }
   onEventSelected(event: any) {
-    console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
+    this.selectedEvent = event.value;
     this.selectedEventId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
   }
 
   onCreatePool() {
-    const bracketName = this.firstFormGroup.value.firstCtrl;
-    console.log(`full name: ${bracketName}`);
+    const poolName = this.firstFormGroup.value.nameDataCtrl;
+    console.log('SELECTED EVENT ID');
+    console.log(this.selectedEventId)
+    console.log('NEW BRACKET NAME:');
+    console.log(poolName);
 
     this.spinnerService.on();
     this.apiService
-      .createPool(bracketName, String(this.selectedEventId))
+      .createPool(poolName, String(this.selectedEventId))
       .subscribe(
         (res: any) => {
 
-          // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-          //   console.log("display pool for event")
-          //   console.log(res)
-          // })
+          this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
+            console.log("display pool for event:")
+            console.log(res)
+          })
           this.notificationService.showSuccess('Pool has been created', '')
           this.spinnerService.off();
         },

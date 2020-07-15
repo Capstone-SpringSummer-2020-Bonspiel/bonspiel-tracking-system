@@ -12,12 +12,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateEventComponent implements OnInit {
   firstFormGroup: FormGroup;
-  // secondFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
-  // fouthFormGroup: FormGroup;
-  fifthFormGroup: FormGroup;
-  // sixthFormGroup: FormGroup;
-  feedBackData: null;
 
   eventTypes: any[] = [
     { value: 'pools', viewValue: 'Pools' },
@@ -40,35 +36,26 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-      firstCtrlInfo: ['', Validators.required],
+      nameDataCtrl: ['', Validators.required],
+      infoDataCtrl: ['', Validators.required],
     });
-    // this.secondFormGroup = this._formBuilder.group({
-    //   secondCtrl: ['', Validators.required],
-    // });
+    this.secondFormGroup = this._formBuilder.group({
+      typeDataCtrl: ['', Validators.required],
+      condDataCtrl: ['', Validators.required],
+    });
     this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required],
-      thirdCtrlCond: ['', Validators.required],
+      begDateCtrl: ['', Validators.required],
+      endDateCtrl: ['', Validators.required],
     });
-    // this.fouthFormGroup = this._formBuilder.group({
-    //   fouthCtrl: ['', Validators.required],
-    // });
-    this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrlBeg: ['', Validators.required],
-      fifthCtrlEnd: ['', Validators.required],
-    });
-    // this.sixthFormGroup = this._formBuilder.group({
-    //   sixthCtrl: ['', Validators.required],
-    // });
   }
 
   onCreateCurlingEvent() {
-    const name = this.firstFormGroup.value.firstCtrl;
-    const info = this.firstFormGroup.value.firstCtrlInfo;
-    const event_type = this.thirdFormGroup.value.thirdCtrl;
-    const completed = this.thirdFormGroup.value.thirdCtrlCond;
-    const begin_date = this.fifthFormGroup.value.fifthCtrlBeg;
-    const end_date = this.fifthFormGroup.value.fifthCtrlEnd;
+    const name = this.firstFormGroup.value.nameDataCtrl;
+    const info = this.firstFormGroup.value.infoDataCtrl;
+    const event_type = this.secondFormGroup.value.typeDataCtrl;
+    const completed = this.secondFormGroup.value.condDataCtrl;
+    const begin_date = this.thirdFormGroup.value.begDateCtrl;
+    const end_date = this.thirdFormGroup.value.endDateCtrl;
     console.log(`full name: ${name}`);
     console.log(`detail info: ${info}`);
     console.log(`begin-date: ${begin_date}`);

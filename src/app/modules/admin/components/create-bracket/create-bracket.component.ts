@@ -34,40 +34,47 @@ export class CreateBracketComponent implements OnInit {
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
 
         this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: [''],
+      nameDataCtrl: ['', Validators.required],
     });
-
   }
 
   onEventSelected(event: any) {
-    console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
+    this.selectedEvent = event.value;
     this.selectedEventId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
   }
 
   onCreateBracket() {
-    const bracketName = this.firstFormGroup.value.firstCtrl;
-    console.log(`full name:`);
+    const bracketName = this.firstFormGroup.value.nameDataCtrl;
+    console.log('SELECTED EVENT ID');
     console.log(this.selectedEventId)
-    this.spinnerService.on();
+    console.log('NEW BRACKET NAME:');
+    console.log(bracketName);
 
+    this.spinnerService.on();
     this.apiService
       .createBracket(bracketName, String(this.selectedEvent.id))
       .subscribe((res: any) => {
         this.notificationService.showSuccess('Bracket has been created', '')
+
+        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+          console.log("display bracket for event:")
+          console.log(res)
+        })
 
         this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
           console.log(res)
