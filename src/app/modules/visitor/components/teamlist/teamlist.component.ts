@@ -66,7 +66,7 @@ export class TeamlistComponent {
 
   eventBegin() {
     this.api
-      .getTeams(this.selectedEventId)
+      .getTeamsByEventId(this.selectedEventId)
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
