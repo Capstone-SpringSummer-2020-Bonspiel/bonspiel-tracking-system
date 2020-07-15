@@ -46,9 +46,15 @@ export class AppComponent {
     let dateNow = new Date().getTime();  // epoch in milliseconds 
     let token = localStorage.getItem('user');
 
-    if (this.isValidToken(token)) {
+    if (token) {
 
       console.log('we have a token!');
+
+      // Case: token is invalid, logout
+      if (!this.isValidToken(token)) {
+        console.log('token expired; logout!');
+        this.accountService.logout();
+      }
 
       let myToken = JSON.parse(token);
       let expiryAt = new Date(myToken.expiryAt).getTime();
