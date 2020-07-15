@@ -4,6 +4,8 @@ import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-event',
@@ -62,7 +64,7 @@ export class CreateEventComponent implements OnInit {
     // });
   }
 
-  onCreateCurlingEvent() {
+  onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.value.firstCtrl;
     const info = this.firstFormGroup.value.firstCtrlInfo;
     const event_type = this.thirdFormGroup.value.thirdCtrl;
@@ -83,13 +85,16 @@ export class CreateEventComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Event has been created', '')
-          this.spinnerService.off()
         },
         (error) => {
           console.log(error);
           this.notificationService.showError('Something went wrong', '');
-        }
-      )
+        })
+      .add(
+        () => {  // finally
+          stepper.reset();
+          this.spinnerService.off()
+        });
 
     // const dialogRef = this.dialog.open(CreateEventDialog, {
     //   data: {

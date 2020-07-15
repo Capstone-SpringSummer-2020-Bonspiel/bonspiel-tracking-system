@@ -5,6 +5,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { forkJoin } from 'rxjs';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-create-game',
@@ -46,9 +47,12 @@ export class CreateGameComponent implements OnInit {
 
   console = console;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private spinnerService: SpinnerService) { }
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit() {
     this.firstFormGroup = this.formBuilder.group({
@@ -175,11 +179,21 @@ export class CreateGameComponent implements OnInit {
 
     this.spinnerService.on();
 
-    this.apiService.createGame(this.selectedEventId, body).subscribe((res) => {
-      console.log(res);
-      this.spinnerService.off();
-      stepper.next();
-    });
+    this.apiService.createGame(this.selectedEventId, body)
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.notificationService.showSuccess('Game was successfully created', '')
+        },
+        (err) => {
+          console.log(err);
+          this.notificationService.showError('Something went wrong', '')
+        })
+      .add(
+        () => {  // finally
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 
   updateTeams(teamNum) {

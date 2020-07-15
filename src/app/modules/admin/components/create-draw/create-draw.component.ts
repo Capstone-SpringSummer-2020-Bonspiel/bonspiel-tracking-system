@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -44,8 +44,8 @@ export class CreateDrawComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     this.date = new Date();
@@ -82,26 +82,30 @@ export class CreateDrawComponent implements OnInit {
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const newDrawName = this.secondFormGroup.value.secondCtrlName;
     const newDrawStart = this.secondFormGroup
       .get('secondCtrlDate')
       .value?.toLocaleString();
     const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
 
-    this.apiService
-      .createDraw(
-        this.selectedEventId.toString(),
-        newDrawName,
-        newDrawStart,
-        newDrawUrl
-      )
+    this.spinnerService.on();
+
+    this.apiService.createDraw(this.selectedEventId.toString(), newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Draw has been created', ''),
+        (res: any) => {
+          this.notificationService.showSuccess('Draw has been created', '');
+          stepper.reset();
+          this.spinnerService.off();
+        },
         (error) => {
           this.notificationService.showError('Something went wrong', '');
-        }
-      );
+        })
+      .add(
+        () => {  // finally
+          stepper.reset();
+          this.spinnerService.off()
+        });
+    ;
   }
 }

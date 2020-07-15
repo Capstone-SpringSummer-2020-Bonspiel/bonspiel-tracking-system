@@ -44,7 +44,7 @@ export class AppComponent {
 
     // JWT Authentication
     let dateNow = new Date().getTime();  // epoch in milliseconds 
-    let token = localStorage.getItem('user');
+    let token = JSON.parse(localStorage.getItem('user'));
 
     if (token) {
 
@@ -56,9 +56,8 @@ export class AppComponent {
         this.accountService.logout();
       }
 
-      let myToken = JSON.parse(token);
-      let expiryAt = new Date(myToken.expiryAt).getTime();
-      let maxAge = myToken.maxAge;
+      let expiryAt = new Date(token.expiryAt).getTime();
+      let maxAge = token.maxAge;
 
       // Case: token has expired, logout
       if (dateNow > (expiryAt - 15000) || expiryAt === NaN) {
