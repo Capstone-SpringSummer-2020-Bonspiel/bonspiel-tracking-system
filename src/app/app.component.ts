@@ -42,10 +42,11 @@ export class AppComponent {
 
     console.log('APP COMPONENT STARTED!');
 
+    // JWT Authentication
     let dateNow = new Date().getTime();  // epoch in milliseconds 
     let token = localStorage.getItem('user');
 
-    if (token) {
+    if (this.isValidToken(token)) {
 
       console.log('we have a token!');
 
@@ -55,7 +56,7 @@ export class AppComponent {
 
       // Case: token has expired, logout
       if (dateNow > (expiryAt - 15000) || expiryAt === NaN) {
-        console.log('logout!');
+        console.log('token expired; logout!');
         this.accountService.logout();
       }
 
@@ -77,6 +78,9 @@ export class AppComponent {
           }, maxAge - 15000);
         }, (expiryAt - new Date().getTime() - 15000));  // try to refresh within the window (between 9:30 & 10 minutes)
       }
+    } else {
+      console.log('bad token; logout!');
+      this.accountService.logout();
     }
 
     // Get all curling events
@@ -140,5 +144,24 @@ export class AppComponent {
           localStorage.setItem('user', JSON.stringify(newUser));
           this.accountService.userSubject.next(newUser);
         });
+  }
+
+  isValidToken(token) {
+    if (!token) {
+      return false;
+    }
+
+    const propertiesToTest = [
+      'username',
+      'token',
+      'maxAge',
+      'isSuperAdmin',
+      'expiryAt'
+    ];
+    if (propertiesToTest.every(x => x in token)) {
+      return true;
+    }
+
+    return false;
   }
 }
