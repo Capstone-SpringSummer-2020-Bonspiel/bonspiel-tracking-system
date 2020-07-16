@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -75,13 +75,24 @@ export class RemoveCurlerComponent implements OnInit {
     this.selectedCurlerID = this.secondFormGroup.value.secondCtrl;
   }
 
-  onClickSubmit() {
-    this.apiService.removeCurler(this.selectedCurlerID).subscribe(
-      (res: any) =>
-        this.notificationService.showSuccess('Curler has been removed', ''),
-      (error) => {
-        this.notificationService.showError('Something went wrong', '');
-      }
-    );
+  onClickSubmit(stepper: MatStepper) {
+    this.spinnerService.on();
+
+    this.apiService
+      .removeCurler(this.selectedCurlerID)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Curler has been removed', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -117,16 +117,29 @@ export class RemoveEndscoreComponent implements OnInit {
       });
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const endId = this.fourthFormGroup.value.fourthCtrlEndId;
-    console.log(`endId= ${endId}`);
-    this.apiService.removeEndScore(endId).subscribe(
-      (res: any) =>
-        this.notificationService.showSuccess('End Score has been removed', ''),
-      (error) => {
-        console.log(error);
-        this.notificationService.showError(error, '');
-      }
-    );
+
+    this.spinnerService.on();
+
+    this.apiService
+      .removeEndScore(endId)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess(
+            'End Score has been removed',
+            ''
+          );
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

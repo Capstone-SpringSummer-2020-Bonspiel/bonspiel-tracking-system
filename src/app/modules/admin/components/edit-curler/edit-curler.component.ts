@@ -5,10 +5,11 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-edit-curler',
   templateUrl: './edit-curler.component.html',
@@ -81,19 +82,29 @@ export class EditCurlerComponent implements OnInit {
     this.selectedCurlerID = this.secondFormGroup.value.secondCtrl;
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const newName = this.thirdFormGroup.value.thirdCtrlName || null;
     const newPosition = this.thirdFormGroup.value.thirdCtrlPosition || null;
     const newTeam = this.thirdFormGroup.value.thirdCtrlTeam.toString() || null;
     const newOrg = this.thirdFormGroup.value.thirdCtrlOrg.toString() || null;
+
+    this.spinnerService.on();
+
     this.apiService
       .editCurler(newName, newPosition, newOrg, newTeam, this.selectedCurlerID)
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Curler has been modified', ''),
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Curler has been modified', '');
+          stepper.reset();
+        },
         (error) => {
-          this.notificationService.showError('Something went wrong', '');
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

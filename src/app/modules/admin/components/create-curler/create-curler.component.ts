@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -73,9 +73,12 @@ export class CreateCurlerComponent implements OnInit {
     this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const name = this.thirdFormGroup.value.thirdCtrlName;
     const position = this.thirdFormGroup.value.thirdCtrlPosition;
+
+    this.spinnerService.on();
+
     this.apiService
       .createCurler(
         name,
@@ -84,11 +87,18 @@ export class CreateCurlerComponent implements OnInit {
         this.selectedTeamID.toString()
       )
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Curler has been created', ''),
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Curler has been created', '');
+          stepper.reset();
+        },
         (error) => {
-          this.notificationService.showError('Something went wrong', '');
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

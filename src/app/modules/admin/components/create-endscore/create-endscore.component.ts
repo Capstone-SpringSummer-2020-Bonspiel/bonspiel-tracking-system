@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -122,7 +122,7 @@ export class CreateEndscoreComponent implements OnInit {
       });
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     var blank = 'false';
     var curlingTeam1Scored;
     var score;
@@ -145,11 +145,9 @@ export class CreateEndscoreComponent implements OnInit {
       curlingTeam1Scored = 'false';
       score = team2Score;
     }
-    console.log(`gameId= ${this.selectedGameId}`);
-    console.log(`endNumber = ${endNumber}`);
-    console.log(`blank= ${blank}`);
-    console.log(`curlingTeam1Scored= ${curlingTeam1Scored}`);
-    console.log(`score= ${score}`);
+
+    this.spinnerService.on();
+
     this.apiService
       .createEndScore(
         this.selectedGameId,
@@ -159,15 +157,21 @@ export class CreateEndscoreComponent implements OnInit {
         score
       )
       .subscribe(
-        (res: any) =>
+        (res: any) => {
+          console.log(res);
           this.notificationService.showSuccess(
             'End Score has been created',
             ''
-          ),
+          );
+          stepper.reset();
+        },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -94,16 +94,26 @@ export class RemoveDrawComponent implements OnInit {
     });
   }
 
-  deleteDraw() {
+  deleteDraw(stepper: MatStepper) {
     const selectedDrawID = this.secondFormGroup.value.secondCtrl;
 
-    this.apiService.deleteDraw(selectedDrawID).subscribe(
-      (res: any) => {
-        this.notificationService.showSuccess('Draw has been deleted!', '');
-      },
-      (error) => {
-        this.notificationService.showError('Something went wrong', '');
-      }
-    );
+    this.spinnerService.off();
+
+    this.apiService
+      .deleteDraw(selectedDrawID)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Draw has been deleted', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }
