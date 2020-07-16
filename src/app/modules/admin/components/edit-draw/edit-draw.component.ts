@@ -35,7 +35,7 @@ export class EditDrawComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -108,13 +108,14 @@ export class EditDrawComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Draw has been modified', '');
+          stepper.reset();
         },
         (error) => {
           console.log(error);
           this.notificationService.showError(error.message, 'ERROR');
         }
-      ).add(() => {
-        stepper.reset();
+      )
+      .add(() => {
         this.spinnerService.off();
       });
   }

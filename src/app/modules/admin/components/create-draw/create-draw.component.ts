@@ -44,8 +44,8 @@ export class CreateDrawComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
-  ) { }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.date = new Date();
@@ -92,21 +92,26 @@ export class CreateDrawComponent implements OnInit {
 
     this.spinnerService.on();
 
-    this.apiService.createDraw(this.selectedEventId.toString(), newDrawName, newDrawStart, newDrawUrl)
+    this.apiService
+      .createDraw(
+        this.selectedEventId.toString(),
+        newDrawName,
+        newDrawStart,
+        newDrawUrl
+      )
       .subscribe(
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Draw has been created', '');
+          stepper.reset();
         },
         (error) => {
           console.log(error);
           this.notificationService.showError(error.message, 'ERROR');
-        })
-      .add(
-        () => {
-          stepper.reset();
-          this.spinnerService.off()
-        });
-    ;
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -33,7 +33,7 @@ export class RemoveDrawComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -99,18 +99,21 @@ export class RemoveDrawComponent implements OnInit {
 
     this.spinnerService.off();
 
-    this.apiService.deleteDraw(selectedDrawID).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.notificationService.showSuccess('Draw has been deleted', '');
-      },
-      (error) => {
-        console.log(error);
-        this.notificationService.showError(error.message, 'ERROR');
-      }
-    ).add(() => {
-      stepper.reset();
-      this.spinnerService.off()
-    });
+    this.apiService
+      .deleteDraw(selectedDrawID)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Draw has been deleted', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }
