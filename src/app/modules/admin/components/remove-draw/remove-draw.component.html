@@ -88,7 +88,7 @@
     <div class="m2">
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="deleteDraw(); stepper.reset()"> Delete Draw</button>
+      <button mat-button (click)="deleteDraw(stepper)"> Delete Draw</button>
 
     </div>
   </mat-step>

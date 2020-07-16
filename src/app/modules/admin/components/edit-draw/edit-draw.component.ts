@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -35,7 +35,7 @@ export class EditDrawComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
@@ -93,22 +93,29 @@ export class EditDrawComponent implements OnInit {
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const newDrawName = this.thirdFormGroup.value.thirdCtrlName;
     const newDrawStart = this.thirdFormGroup
       .get('thirdCtrlDate')
       .value?.toLocaleString();
     const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
 
+    this.spinnerService.on();
+
     this.apiService
       .editDraw(this.selectedDrawId, newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Draw has been modified', ''),
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Draw has been modified', '');
+        },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      ).add(() => {
+        stepper.reset();
+        this.spinnerService.off();
+      });
   }
 }

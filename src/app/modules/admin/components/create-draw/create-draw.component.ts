@@ -70,6 +70,7 @@ export class CreateDrawComponent implements OnInit {
       }
       this.spinnerService.off();
       this.eventNames = res;
+      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
     });
   }
 
@@ -94,15 +95,15 @@ export class CreateDrawComponent implements OnInit {
     this.apiService.createDraw(this.selectedEventId.toString(), newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
         (res: any) => {
+          console.log(res);
           this.notificationService.showSuccess('Draw has been created', '');
-          stepper.reset();
-          this.spinnerService.off();
         },
         (error) => {
-          this.notificationService.showError('Something went wrong', '');
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
         })
       .add(
-        () => {  // finally
+        () => {
           stepper.reset();
           this.spinnerService.off()
         });
