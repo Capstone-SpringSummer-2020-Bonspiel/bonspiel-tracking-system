@@ -40,19 +40,27 @@ export class EditBracketComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
+        // this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-          this.allBracketData = res;
-          this.selectedBracket = res[0];
-          this.selectedBracketId = res[0].id;
-        })
+        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+        //   this.allBracketData = res;
+        //   this.selectedBracket = res[0];
+        //   if (res[0]) {
+        //     this.selectedBracketId = res[0].id;
+        //   }
+        // })
 
         this.spinnerService.off();
       })
 
+    this.zeroFormGroup = this._formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.firstFormGroup = this._formBuilder.group({
+      bracketCtrl: ['', Validators.required],
+    });
     this.secondFormGroup = this._formBuilder.group({
       eventNameCtrl: ['', Validators.required],
     });
@@ -71,7 +79,9 @@ export class EditBracketComponent implements OnInit {
       console.log(res)
       this.allBracketData = res;
       this.selectedBracket = res[0];
-      this.selectedBracketId = res[0].id;
+      if (res[0]) {
+        this.selectedBracketId = res[0].id;
+      }
     })
   }
   onBracketSelected(bracket: any) {

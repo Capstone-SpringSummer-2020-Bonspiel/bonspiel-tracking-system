@@ -41,20 +41,25 @@ export class EditPoolComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-          console.log(res)
-          this.allPoolData = res;
-          this.selectedPool = res[0];
-          this.selectedPoolId = res[0].id;
-        })
+        // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
+        //   console.log(res)
+        //   this.allPoolData = res;
+        //   this.selectedPool = res[0];
+        //   // this.selectedPoolId = res[0].id;
+        // })
 
         this.spinnerService.off();
       })
 
+    this.zeroFormGroup = this._formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.firstFormGroup = this._formBuilder.group({
+      poolCtrl: ['', Validators.required],
+    });
     this.secondFormGroup = this._formBuilder.group({
       eventNameCtrl: ['', Validators.required],
     });
@@ -73,7 +78,9 @@ export class EditPoolComponent implements OnInit {
       console.log(res)
       this.allPoolData = res;
       this.selectedPool = res[0];
-      this.selectedPoolId = res[0].id;
+      if (res[0]) {
+        this.selectedPoolId = res[0].id;
+      }
     })
   }
   onPoolSelected(pool: any) {

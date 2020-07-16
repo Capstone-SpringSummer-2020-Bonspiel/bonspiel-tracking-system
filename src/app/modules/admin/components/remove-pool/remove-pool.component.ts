@@ -11,8 +11,8 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./remove-pool.component.scss']
 })
 export class RemovePoolComponent implements OnInit {
+  zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
 
   allPoolData: null;
   allEventData: null;
@@ -38,19 +38,24 @@ export class RemovePoolComponent implements OnInit {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allEventData = res;
-        this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-          this.allPoolData = res;
-          this.selectedPool = res[0];
-          this.selectedPoolId = res[0].id;
-        })
+        // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
+        //   this.allPoolData = res;
+        //   this.selectedPool = res[0];
+        //   this.selectedPoolId = res[0].id;
+        // })
 
         this.spinnerService.off();
       })
+
+    this.zeroFormGroup = this._formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.firstFormGroup = this._formBuilder.group({
+      poolCtrl: ['', Validators.required],
+    });
   }
   onEventSelected(event: any) {
     console.log('the selected event is:');
@@ -65,7 +70,9 @@ export class RemovePoolComponent implements OnInit {
     this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
       this.allPoolData = res;
       this.selectedPool = res[0];
-      this.selectedPoolId = res[0].id;
+      if (res[0]) {
+        this.selectedPoolId = res[0].id;
+      }
     })
   }
   onPoolSelected(pool: any) {

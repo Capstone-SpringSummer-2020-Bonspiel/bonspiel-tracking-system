@@ -12,8 +12,8 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./remove-bracket.component.scss']
 })
 export class RemoveBracketComponent implements OnInit {
+  zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
 
   allBracketData: null;
   allEventData: null;
@@ -41,22 +41,27 @@ export class RemoveBracketComponent implements OnInit {
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log('getEvent():');
         console.log(res);
         this.allEventData = res;
-        this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
-        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-          this.allBracketData = res;
-          this.selectedBracket = res[0];
-          this.selectedBracketId = res[0].id;
-        })
+        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+        //   this.allBracketData = res;
+        //   this.selectedBracket = res[0];
+        //   this.selectedBracketId = res[0].id;
+        // })
 
         this.spinnerService.off();
       })
+
+    this.zeroFormGroup = this._formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.firstFormGroup = this._formBuilder.group({
+      bracketCtrl: ['', Validators.required],
+    });
   }
   onEventSelected(event: any) {
     console.log('the selected event is:');
@@ -72,7 +77,9 @@ export class RemoveBracketComponent implements OnInit {
       console.log(res)
       this.allBracketData = res;
       this.selectedBracket = res[0];
-      this.selectedBracketId = res[0].id;
+      if (res[0]) {
+        this.selectedBracketId = res[0].id;
+      }
     })
   }
   onBracketSelected(bracket: any) {

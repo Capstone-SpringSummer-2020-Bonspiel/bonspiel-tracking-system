@@ -18,6 +18,7 @@ export class RemoveOrganizationComponent implements OnInit {
   zeroFormGroup: FormGroup;
 
   constructor(
+    private _formBuilder: FormBuilder,
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
@@ -33,12 +34,15 @@ export class RemoveOrganizationComponent implements OnInit {
         console.log(res);
         this.allOrganizationData = res;
         this.selectedOrganization = res[0];
-        this.selectedOrganizationId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allOrganizationData);
 
         this.spinnerService.off();
       })
+
+    this.zeroFormGroup = this._formBuilder.group({
+      organizationCtrl: ['', Validators.required],
+    });
   }
   onOrganizationSelected(event: any) {
     console.log('the selected event is:');

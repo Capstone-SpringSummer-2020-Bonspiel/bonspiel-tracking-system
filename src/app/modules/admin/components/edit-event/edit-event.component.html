@@ -5,18 +5,20 @@
 <mat-vertical-stepper linear #stepper>
   <!-- SELECT EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
-    <ng-template matStepLabel> Select Edited Event </ng-template>
-    <mat-form-field>
-      <mat-label>Select Event to Edit</mat-label>
-      <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event); stepper.next()" required>
-        <mat-option *ngFor="let event of this.allEventData" [value]="event">
-          {{event.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div *ngIf="this.selectedEvent != null">
-      <button mat-button matStepperNext>Next</button>
-    </div>
+    <form [formGroup]="zeroFormGroup">
+      <ng-template matStepLabel> Select Edited Event </ng-template>
+      <mat-form-field>
+        <mat-label>Select Event to Edit</mat-label>
+        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event); stepper.next()" required>
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="this.selectedEvent != null">
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
   </mat-step>
 
   <!-- INPUT NEW INFO -->

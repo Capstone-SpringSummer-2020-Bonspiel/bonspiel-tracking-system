@@ -5,38 +5,42 @@
 <mat-vertical-stepper linear #stepper>
   <!-- SELECT EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
-    <ng-template matStepLabel> Select Event </ng-template>
-    <mat-form-field>
-      <mat-label>Select Event for Brackets</mat-label>
-      <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event);" required>
-        <mat-option *ngFor="let event of this.allEventData" [value]="event">
-          {{event.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div *ngIf="this.selectedBracket != null">
-      <button mat-button matStepperNext>Next</button>
-    </div>
+    <form [formGroup]="zeroFormGroup">
+      <ng-template matStepLabel> Select Event </ng-template>
+      <mat-form-field>
+        <mat-label>Select Event for Brackets</mat-label>
+        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event);" required>
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
   </mat-step>
 
   <!-- SELECT Bracket -->
   <mat-step [stepControl]="firstFormGroup">
-    <ng-template matStepLabel> Select Bracket </ng-template>
-    <div *ngIf="this.selectedBracket == null">
-      <p> Selected Event Has No Bracket Exist. </p>
-    </div>
-    <mat-form-field *ngIf="this.selectedBracket != null">
-      <mat-label>Select Bracket to Modify</mat-label>
-      <mat-select [(value)]="selectedBracket" (selectionChange)="onBracketSelected($event); stepper.next()" required>
-        <mat-option *ngFor="let bracket of this.allBracketData" [value]="bracket">
-          {{bracket.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select Bracket </ng-template>
+      <div *ngIf="this.selectedBracket == null">
+        <p> Selected Event Has No Bracket Exist. </p>
+      </div>
+      <mat-form-field *ngIf="this.selectedBracket != null">
+        <mat-label>Select Bracket to Modify</mat-label>
+        <mat-select formControlName="bracketCtrl" (selectionChange)="onBracketSelected($event); stepper.next()" required>
+          <mat-option *ngFor="let bracket of this.allBracketData" [value]="bracket">
+            {{bracket.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
   </mat-step>
 
   <!-- INPUT NEW INFO -->

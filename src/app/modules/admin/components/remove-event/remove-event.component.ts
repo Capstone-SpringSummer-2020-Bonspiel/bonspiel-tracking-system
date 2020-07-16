@@ -18,6 +18,7 @@ export class RemoveEventComponent implements OnInit {
   zeroFormGroup: FormGroup;
 
   constructor(
+    private _formBuilder: FormBuilder,
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
@@ -33,12 +34,15 @@ export class RemoveEventComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
         this.spinnerService.off();
       })
+
+    this.zeroFormGroup = this._formBuilder.group({
+      eventCtrl: ['', Validators.required],
+    });
   }
   onEventSelected(event: any) {
     console.log('the selected event is:');
