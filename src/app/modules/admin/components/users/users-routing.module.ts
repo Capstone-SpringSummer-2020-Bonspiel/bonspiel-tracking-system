@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       { path: '', component: ListComponent },
       { path: 'add', component: AddEditComponent },
-      { path: 'edit/:username/:isSuperAdmin', component: AddEditComponent, pathMatch: 'full' }
+      { path: 'edit/:username/:isSuperAdmin/:active', component: AddEditComponent, pathMatch: 'full' }
     ]
   }
 ];

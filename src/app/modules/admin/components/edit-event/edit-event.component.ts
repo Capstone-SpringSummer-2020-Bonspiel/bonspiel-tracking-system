@@ -66,16 +66,16 @@ export class EditEventComponent implements OnInit {
       zeroCtrl: ['', Validators.required],
     });
     this.firstFormGroup = this._formBuilder.group({
-      eventNameCtrl: [''],
-      eventInfoCtrl: [''],
+      firstCtrl: [''],
+      firstCtrlInfo: [''],
     });
     this.secondFormGroup = this._formBuilder.group({
-      eventTypeCtrl: [''],
-      eventFinishedCtrl: [''],
+      thirdCtrl: [''],
+      thirdCtrlCond: [''],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      eventStartCtrl: [''],
-      eventEndCtrl: [''],
+      fifthCtrlBeg: [''],
+      fifthCtrlEnd: [''],
     });
   }
 

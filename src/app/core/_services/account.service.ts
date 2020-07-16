@@ -84,11 +84,12 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/api/v1/admin/createAdmin`, body);
   }
 
-  editAdmin(username, password, isSuperAdmin) {
+  editAdmin(username, password, isSuperAdmin, active) {
     const body = {
       username,
       password,
-      isSuperAdmin
+      isSuperAdmin,
+      active
     };
     console.log(body);
     return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);

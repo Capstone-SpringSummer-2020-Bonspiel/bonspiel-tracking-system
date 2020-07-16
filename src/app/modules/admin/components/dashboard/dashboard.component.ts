@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit {
     },
     {
       name: 'completed',
-      header: 'Status',
+      header: 'Completed?',
     },
     {
       name: 'begin_date',
@@ -135,6 +135,27 @@ export class DashboardComponent implements OnInit {
       tooltip: '',
     },
   ];
+
+  keyToLabel = {
+    'bracket_id': 'Bracket ID',
+    'curlingteam1_id': 'Curling Team 1 ID',
+    'curlingteam2_id': 'Curling Team 2 ID',
+    'draw_id': 'Draw ID',
+    'event_type': 'Event Type',
+    'finished': 'Finished?',
+    'game_id': 'Game ID',
+    'game_name': 'Game Name',
+    'ice_sheet': 'Ice Sheet',
+    'loser_dest': 'Loser Destination Game',
+    'notes': 'Notes',
+    'pool_id': 'Pool ID',
+    'stone_color1': 'Stone Color 1',
+    'stone_color2': 'Stone Color 2',
+    'team_name1': 'Team Name 1',
+    'team_name2': 'Team Name 2',
+    'winner': 'Winner',
+    'winner_dest': 'Winner Destination Game',
+  }
 
   /**************************************************************************/
 
@@ -333,5 +354,9 @@ export class DashboardComponent implements OnInit {
       return [];
     }
     return this.games.filter(e => e.draw_id === draw_id);
+  }
+
+  convertKeyToLabel(key) {
+    return this.keyToLabel[key];
   }
 }

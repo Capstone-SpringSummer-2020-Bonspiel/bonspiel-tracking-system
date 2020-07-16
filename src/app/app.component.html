@@ -14,7 +14,7 @@
       class="m-0 pb-1"> Current Events </p>
     <mat-list role="list"
       class="p-0">
-      <mat-list-item *ngFor="let curlingEvent of curlingEvents"
+      <mat-list-item *ngFor="let curlingEvent of getCurlingEvents(false)"
         class="dropdown-item"
         role="listitem">
         <button class="btn btn-link"
@@ -32,7 +32,7 @@
       class="m-0 pb-1"> Past Events </p>
     <mat-list role="list"
       class="p-0">
-      <mat-list-item *ngFor="let curlingEvent of curlingEvents"
+      <mat-list-item *ngFor="let curlingEvent of getCurlingEvents(true)"
         class="dropdown-item"
         role="listitem">
         <button class="btn btn-link"
@@ -44,23 +44,6 @@
       </mat-list-item>
     </mat-list>
 
-    <!-- FUTURE EVENTS -->
-    <p *ngIf="curlingEvents"
-      matSubheader
-      class="m-0 pb-1"> Future Events </p>
-    <mat-list role="list"
-      class="p-0">
-      <mat-list-item *ngFor="let curlingEvent of curlingEvents"
-        class="dropdown-item"
-        role="listitem">
-        <button class="btn btn-link"
-          (click)="loadNewEvent(curlingEvent)"
-          style="outline: none"
-          matTooltip="{{ curlingEvent.begin_date | date: 'fullDate' }}">
-          <span> {{ curlingEvent.name }} </span>
-        </button>
-      </mat-list-item>
-    </mat-list>
   </mat-sidenav>
 
   <mat-sidenav-content>

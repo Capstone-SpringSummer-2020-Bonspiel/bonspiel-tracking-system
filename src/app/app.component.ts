@@ -83,9 +83,6 @@ export class AppComponent {
           }, maxAge - 15000);
         }, (expiryAt - new Date().getTime() - 15000));  // try to refresh within the window (between 9:30 & 10 minutes)
       }
-    } else {
-      console.log('bad token; logout!');
-      this.accountService.logout();
     }
 
     // Get all curling events
@@ -109,8 +106,8 @@ export class AppComponent {
             this.apiService.changeEvent(this.curlingEvents.find((e) => e.id === eventId));
           });
 
-        // console.log('[DEBUG] curlingEvents');
-        // console.log(this.curlingEvents);
+        console.log('[DEBUG] curlingEvents');
+        console.log(this.curlingEvents);
       });
   }
 
@@ -168,5 +165,9 @@ export class AppComponent {
     }
 
     return false;
+  }
+
+  getCurlingEvents(completed) {
+    return this.curlingEvents.filter(e => e.completed === completed);
   }
 }

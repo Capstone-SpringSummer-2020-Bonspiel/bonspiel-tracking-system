@@ -438,3 +438,25 @@ hr {
 .p-2 {
   display: inline-block;
 }
+
+.flex-item {
+  width: 160px;
+  height: auto;
+  margin: 1px;
+  padding: 10px;
+  background-color: rgba(192, 192, 192, 0.808);
+  color: rgb(0, 0, 0);
+  text-align: center;
+
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 1.3em;
+  border-radius: 14px;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}

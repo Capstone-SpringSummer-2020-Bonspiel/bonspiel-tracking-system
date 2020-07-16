@@ -6,11 +6,15 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '@core/_services';
 import { NotificationService } from '@app/shared/services/notification.service';
 
-@Component({ templateUrl: 'add-edit.component.html' })
+@Component({
+  templateUrl: 'add-edit.component.html',
+  styleUrls: ['./add-edit.component.scss']
+})
 export class AddEditComponent implements OnInit {
   form: FormGroup;
   username: string;
   isSuperAdmin: any;
+  active: any;
   isAddMode: boolean;
   loading = false;
   submitted = false;
@@ -27,10 +31,12 @@ export class AddEditComponent implements OnInit {
   ngOnInit() {
     this.username = this.route.snapshot.params['username'];
     this.isSuperAdmin = this.route.snapshot.params['isSuperAdmin'];
+    this.active = this.route.snapshot.params['active'];
     this.isAddMode = !this.username;
 
     console.log(this.username);
     console.log(this.isSuperAdmin);
+    console.log(this.active);
 
     // password not required in edit mode
     const passwordValidators = [Validators.minLength(6)];
@@ -42,6 +48,7 @@ export class AddEditComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', passwordValidators],
       isSuperAdmin: [false, Validators.required],
+      active: [false, Validators.required],
     });
 
     // Case: Edit Mode
@@ -49,7 +56,8 @@ export class AddEditComponent implements OnInit {
       this.form.setValue({
         username: this.username,
         password: null,
-        isSuperAdmin: (this.isSuperAdmin == "true")
+        isSuperAdmin: (this.isSuperAdmin == "true"),
+        active: (this.active == "true")
       });
     }
   }
@@ -82,26 +90,31 @@ export class AddEditComponent implements OnInit {
     const isSuperAdmin = String(this.form.value.isSuperAdmin);
     this.accountService.createAdmin(username, password, isSuperAdmin)
       .subscribe(
-        data => {
+        (data) => {
           this.notificationService.showSuccess('User added successfully', '');
           this.router.navigate(['/admin/users']);
         },
-        error => {
+        (error) => {
           this.notificationService.showError('Something went wrong', '');
           this.loading = false;
         });
   }
 
   private updateUser() {
-    this.accountService.editAdmin(this.f.username.value, null, String(this.f.isSuperAdmin.value))
+    const username = this.f.username.value;
+    const password = null;
+    const isSuperAdmin = String(this.f.isSuperAdmin.value);
+    const active = String(this.f.active.value);
+    this.accountService.editAdmin(username, password, isSuperAdmin, active)
       .pipe(first())
       .subscribe(
-        data => {
+        (data) => {
           this.alertService.success('Update successful', { keepAfterRouteChange: true });
           this.router.navigate(['/admin/users']);
         },
-        error => {
+        (error) => {
           this.alertService.error(error);
+          this.notificationService.showError('Something went wrong', '');
           this.loading = false;
         });
   }

@@ -6,4 +6,5 @@
   maxAge: string;
   expiryAt?: string;
   isSuperAdmin: string;
+  active: string;
 }
