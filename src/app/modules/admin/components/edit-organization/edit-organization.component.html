@@ -2,80 +2,58 @@
   <h1> Edit Organization </h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
+<mat-vertical-stepper linear #stepper>
+  <!-- SELECT EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
     <ng-template matStepLabel> Select Edited Organization </ng-template>
     <mat-form-field>
       <mat-label>Select Event to Edit</mat-label>
-      <mat-select [(value)]="selectedOrganization"
-        (selectionChange)="onEventSelected($event)">
-        <mat-option *ngFor="let event of this.allOrganizationData"
-          [value]="event">
-          {{event.name}}
+      <mat-select [(value)]="selectedOrganization" (selectionChange)="onOrganizationSelected($event); stepper.next()" required>
+        <mat-option *ngFor="let Organization of this.allOrganizationData" [value]="Organization">
+          {{Organization.full_name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        matStepperNext>Next</button>
+    <div *ngIf="this.selectedOrganization != null">
+      <button mat-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
+  <!-- INPUT NEW INFO -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Organization Name </ng-template>
-      <p>Enter New Info or Leave Blank to Keep Previous Info</p>
-      <p>Previous Event Name: {{this.selectedOrganization.name}} </p>
+      <div *ngIf="this.selectedOrganization != null">
+        <p>Enter New Info or Leave Blank to Keep Previous Info</p>
+        <p>Previous Organization Full Name: {{this.selectedOrganization.full_name}} </p>
+      </div>
       <mat-form-field>
-        <mat-label> New Event Name </mat-label>
-        <input matInput
-          type='text'
-          placeholder="New Event Name"
-          formControlName="firstCtrl">
+        <mat-label> New Full Name </mat-label>
+        <input matInput type='text' placeholder="New Event Name" formControlName="eventFullCtrl">
+      </mat-form-field>
+      <br>
+      <div *ngIf="this.selectedOrganization != null">
+        <p>Previous Organization Short Name: {{this.selectedOrganization.short_name}} </p>
+      </div>
+      <mat-form-field>
+        <mat-label> New Short Name </mat-label>
+        <input matInput type='text' placeholder="New Event Explaination" formControlName="eventShortCtrl">
       </mat-form-field>
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
 
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> New Organization Short Name </ng-template>
-      <p>Enter New Info or Leave Blank to Keep Previous Info</p>
-      <p>Previous Event Info: {{this.selectedOrganization.info}} </p>
-      <mat-form-field>
-        <mat-label> Event Detail </mat-label>
-        <input matInput
-          type='text'
-          placeholder="New Event Explaination"
-          formControlName="secondCtrl">
-      </mat-form-field>
-      <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-
+  <!-- FINISH & SUBMIT -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        (click)="stepper.reset()">Reset</button>
-      <button mat-button
-        (click)="editOrganization()">Submit</button>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

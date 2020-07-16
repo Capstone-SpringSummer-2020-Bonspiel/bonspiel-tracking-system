@@ -3,7 +3,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-remove-event',
@@ -15,6 +15,7 @@ export class RemoveEventComponent implements OnInit {
   selectedEvent: null;
   submitResult: Number;
   selectedEventId: Number;
+  zeroFormGroup: FormGroup;
 
   constructor(
     private apiService: ApiService,
@@ -31,6 +32,8 @@ export class RemoveEventComponent implements OnInit {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allEventData = res;
+        this.selectedEvent = res[0];
+        this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
 
@@ -38,13 +41,16 @@ export class RemoveEventComponent implements OnInit {
       })
   }
   onEventSelected(event: any) {
-    console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
+    this.selectedEvent = event.value;
     this.selectedEventId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
   }
-  onEventDelete() {
+  onClickSubmit(stepper) {
     console.log("Event Delete: ")
     console.log(this.selectedEventId)
 
@@ -53,15 +59,19 @@ export class RemoveEventComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res)
-          this.notificationService.showSuccess('Event has been deleted', '')
+          this.notificationService.showSuccess('Event has been successfully deleted!', '')
           this.spinnerService.off()
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong during delete event', '');
-        }
-
-      )
+          this.notificationService.showError('Event deleted failed!', '');
+          this.spinnerService.off();
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
   // onClickConfirm(){
   //   if(confirm("are you sure?")){

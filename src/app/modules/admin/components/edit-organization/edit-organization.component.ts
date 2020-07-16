@@ -13,10 +13,9 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class EditOrganizationComponent implements OnInit {
   zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  feedBackData: any;
+
   allOrganizationData: null;
-  selectedEventId: Number;
+  selectedOrganizationId: Number;
   selectedOrganization: any = {
     shortName: 'shortname',
     fullName: 'fullname',
@@ -39,6 +38,7 @@ export class EditOrganizationComponent implements OnInit {
         console.log(res);
         this.allOrganizationData = res;
         this.selectedOrganization = res[0];
+        this.selectedOrganizationId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allOrganizationData);
 
@@ -46,60 +46,71 @@ export class EditOrganizationComponent implements OnInit {
       })
 
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: [''],
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: [''],
+      eventFullCtrl: [''],
+      eventShortCtrl: [''],
     });
   }
 
-  onEventSelected(event: any) {
-    console.log(this.allOrganizationData);
+  onOrganizationSelected(event: any) {
     console.log('the selected event is:');
     console.log(this.selectedOrganization);
 
-    this.selectedEventId = event.value;
+    this.selectedOrganization = event.value;
+    this.selectedOrganizationId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedOrganization);
   }
 
-  editOrganization() {
-    var name = this.selectedOrganization.name;
-    if (this.firstFormGroup.value.firstCtrl != '') {
-      name = this.firstFormGroup.value.firstCtrl;
+  onClickSubmit(stepper) {
+    //Edit Organization
+    var fullName = this.selectedOrganization.name;
+    if (this.firstFormGroup.value.eventFullCtrl != '') {
+      fullName = this.firstFormGroup.value.eventFullCtrl;
     }
-    var info = this.selectedOrganization.info;
-    if (this.secondFormGroup.value.secondCtrl != '') {
-      info = this.secondFormGroup.value.secondCtrl;
-    }
-
-    console.log(`full name: ${name}`);
-    console.log(`detail info: ${info}`);
-
-    this.feedBackData = {
-      signal: 200,
-      name: name,
-      info: info,
+    var shortName = this.selectedOrganization.info;
+    if (this.firstFormGroup.value.eventShortCtrl != '') {
+      shortName = this.firstFormGroup.value.eventShortCtrl;
     }
 
-    // this.spinnerService.on();
-    // this.apiService
-    //   .editOrganization(fullName, shortName, this.selectedOrganization.id)
-    //   .subscribe((res: any) => {  
-    //     this.spinnerService.off();
-    //     this.feedBackData = res;
-    //   })
+    console.log(`full name: ${fullName}`);
+    console.log(`detail info: ${shortName}`);
 
-    // const dialogRef = this.dialog.open(EditEventDialog, {
-    //   data: {
-    //     signal: '200',
-    //     name: name,
-    //     info: info,
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log("something happened.")
-    // })
 
+    this.spinnerService.on();
+    this.apiService
+      .editOrganization(fullName, shortName, String(this.selectedOrganizationId))
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+
+          this.notificationService.showSuccess('Organization has been created', '')
+          this.spinnerService.off();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError('Something went wrong', '');
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
+
+
+
+
+  // const dialogRef = this.dialog.open(EditEventDialog, {
+  //   data: {
+  //     signal: '200',
+  //     name: name,
+  //     info: info,
+  //   }
+  // });
+  // dialogRef.afterClosed().subscribe(result => {
+  //   console.log("something happened.")
+  // })
 }
 
 //getAllOrganizations()

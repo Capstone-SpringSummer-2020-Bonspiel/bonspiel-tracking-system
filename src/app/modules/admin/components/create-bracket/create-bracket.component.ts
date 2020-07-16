@@ -4,6 +4,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-create-bracket',
@@ -38,12 +39,13 @@ export class CreateBracketComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
+        this.selectedEventId = res[0].id;
 
         this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
-      nameDataCtrl: ['', Validators.required],
+      eventNameCtrl: ['', Validators.required],
     });
   }
 
@@ -58,8 +60,9 @@ export class CreateBracketComponent implements OnInit {
     console.log(this.selectedEvent);
   }
 
-  onCreateBracket() {
-    const bracketName = this.firstFormGroup.value.nameDataCtrl;
+  onClickSubmit(stepper) {
+    //Create Bracket
+    const bracketName = this.firstFormGroup.value.eventNameCtrl;
     console.log('SELECTED EVENT ID');
     console.log(this.selectedEventId)
     console.log('NEW BRACKET NAME:');
@@ -69,22 +72,21 @@ export class CreateBracketComponent implements OnInit {
     this.apiService
       .createBracket(bracketName, String(this.selectedEvent.id))
       .subscribe((res: any) => {
-        this.notificationService.showSuccess('Bracket has been created', '')
-
-        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-          console.log("display bracket for event:")
-          console.log(res)
-        })
-
-        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-          console.log(res)
-        })
-
-        this.spinnerService.off();
+        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+        //   console.log("display bracket for event:")
+        //   console.log(res)
+        // })
+        console.log(res)
+        this.notificationService.showSuccess('Bracket has been created!', '')
       },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong when adding Bracket', '');
+          this.notificationService.showError('Bracket create failed!', '');
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }

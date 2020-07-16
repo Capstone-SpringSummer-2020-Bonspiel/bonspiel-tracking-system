@@ -16,6 +16,7 @@ export class RemovePoolComponent implements OnInit {
 
   allPoolData: null;
   allEventData: null;
+  selectedEvent: null;
   selectedPool: null;
   submitResult: Number;
   selectedPoolId: Number;
@@ -30,15 +31,6 @@ export class RemovePoolComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    // this.firstFormGroup = this._formBuilder.group({
-    //   firstCtrl: ['', Validators.required],
-    // });
-    // this.secondFormGroup = this._formBuilder.group({
-    //   secondCtrl: ['', Validators.required],
-    // });
-
-
     this.spinnerService.on();
     this.apiService
       .getEvents()
@@ -46,6 +38,7 @@ export class RemovePoolComponent implements OnInit {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allEventData = res;
+        this.selectedEvent = res[0];
         this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
@@ -53,18 +46,21 @@ export class RemovePoolComponent implements OnInit {
         this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
           this.allPoolData = res;
           this.selectedPool = res[0];
+          this.selectedPoolId = res[0].id;
         })
 
         this.spinnerService.off();
       })
   }
   onEventSelected(event: any) {
-    console.log('the selected Event is:');
-    console.log(this.allEventData);
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
 
+    this.selectedEvent = event.value;
     this.selectedEventId = event.value.id;
-    console.log('the selected Event ID is:');
-    console.log(this.selectedEventId);
+
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
 
     this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
       this.allPoolData = res;
@@ -72,18 +68,18 @@ export class RemovePoolComponent implements OnInit {
       this.selectedPoolId = res[0].id;
     })
   }
-  onPoolSelected(event: any) {
+  onPoolSelected(pool: any) {
     console.log(this.allEventData);
     console.log('the selected Pool is:');
     console.log(this.allEventData);
-    console.log(event.value);
+    console.log(pool.value);
 
-    this.selectedPoolId = event.value.id;
+    this.selectedPool = pool.value;
+    this.selectedPoolId = pool.value.id;
   }
 
-  onPoolDelete() {
-    // const targetEventId = this.firstFormGroup.value.firstCtrl;
-    // const targetPoolId = this.secondFormGroup.value.secondCtrl;
+  onClickSubmit(stepper) {
+    //Remove Pool
     console.log("Event Select: ")
     console.log(this.selectedEventId)
     console.log("Pool Delete: ")
@@ -94,13 +90,19 @@ export class RemovePoolComponent implements OnInit {
       .removePool(String(this.selectedPoolId))
       .subscribe(
         (res: any) => {
-          this.notificationService.showError('Organization has been deleted', '');
+          this.notificationService.showSuccess('Pool has been successfully deleted!', '');
           this.spinnerService.off();
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong during delete event', '');
+          this.notificationService.showError('Pool deleted failed!', '');
+          this.spinnerService.off();
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
 
 
   }

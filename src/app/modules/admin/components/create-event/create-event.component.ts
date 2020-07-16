@@ -4,6 +4,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-create-event',
@@ -36,26 +37,27 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      nameDataCtrl: ['', Validators.required],
-      infoDataCtrl: ['', Validators.required],
+      eventNameCtrl: ['', Validators.required],
+      eventInfoCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
-      typeDataCtrl: ['', Validators.required],
-      condDataCtrl: ['', Validators.required],
+      eventTypeCtrl: ['', Validators.required],
+      eventFinishedCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      begDateCtrl: ['', Validators.required],
-      endDateCtrl: ['', Validators.required],
+      eventStartCtrl: ['', Validators.required],
+      eventEndCtrl: ['', Validators.required],
     });
   }
 
-  onCreateCurlingEvent() {
-    const name = this.firstFormGroup.value.nameDataCtrl;
-    const info = this.firstFormGroup.value.infoDataCtrl;
-    const event_type = this.secondFormGroup.value.typeDataCtrl;
-    const completed = this.secondFormGroup.value.condDataCtrl;
-    const begin_date = this.thirdFormGroup.value.begDateCtrl;
-    const end_date = this.thirdFormGroup.value.endDateCtrl;
+  onClickSubmit(stepper) {
+    //Create Event
+    const name = this.firstFormGroup.value.eventNameCtrl;
+    const info = this.firstFormGroup.value.eventInfoCtrl;
+    const event_type = this.secondFormGroup.value.eventTypeCtrl;
+    const completed = this.secondFormGroup.value.eventFinishedCtrl;
+    const begin_date = this.thirdFormGroup.value.eventStartCtrl;
+    const end_date = this.thirdFormGroup.value.eventEndCtrl;
     console.log(`full name: ${name}`);
     console.log(`detail info: ${info}`);
     console.log(`begin-date: ${begin_date}`);
@@ -64,35 +66,21 @@ export class CreateEventComponent implements OnInit {
     console.log(`complete: ${completed}`);
 
     this.spinnerService.on();
-
     this.apiService.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess('Event has been created', '')
-          this.spinnerService.off()
+          this.notificationService.showSuccess('Event has been created!', '')
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
-        }
-      )
-
-    // const dialogRef = this.dialog.open(CreateEventDialog, {
-    //   data: {
-    //     signal: '200',
-    //     name: name,
-    //     info: info,
-    //     begin_date: begin_date,
-    //     end_date: end_date,
-    //     event_type: event_type,
-    //     completed: completed,
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log("something happened.")
-    // })
-
+          this.notificationService.showError('Event create failed!', '');
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }
 export interface DialogData {

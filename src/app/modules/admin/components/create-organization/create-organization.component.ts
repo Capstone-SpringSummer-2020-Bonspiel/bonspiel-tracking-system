@@ -23,14 +23,15 @@ export class CreateOrganizationComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      fullNameCtrl: ['', Validators.required],
-      shortNameCtrl: ['', Validators.required],
+      eventFullCtrl: ['', Validators.required],
+      eventShortCtrl: ['', Validators.required],
     });
   }
 
-  createOrganization() {
-    const fullName = this.firstFormGroup.value.fullNameCtrl;
-    const shortName = this.firstFormGroup.value.shortNameCtrl;
+  onClickSubmit(stepper) {
+    //Create Organization
+    const fullName = this.firstFormGroup.value.eventFullCtrl;
+    const shortName = this.firstFormGroup.value.eventShortCtrl;
 
     console.log(`full name: ${fullName}`);
     console.log(`detail info: ${shortName}`);
@@ -41,16 +42,20 @@ export class CreateOrganizationComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
-
           // this.apiService.getAllOrganizations().subscribe((res: any) => {
+          //   console.log("display Organization:")
           //   console.log(res)
           // })
-          this.notificationService.showSuccess('Organization has been created', '')
-          this.spinnerService.off();
+          this.notificationService.showSuccess('Organization has been created!', '')
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+          this.notificationService.showError('Organization create failed!', '');
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }

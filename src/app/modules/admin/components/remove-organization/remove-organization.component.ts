@@ -3,6 +3,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-remove-organization',
@@ -14,6 +15,7 @@ export class RemoveOrganizationComponent implements OnInit {
   selectedOrganization: null;
   submitResult: Number;
   selectedOrganizationId: Number;
+  zeroFormGroup: FormGroup;
 
   constructor(
     private apiService: ApiService,
@@ -30,6 +32,8 @@ export class RemoveOrganizationComponent implements OnInit {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allOrganizationData = res;
+        this.selectedOrganization = res[0];
+        this.selectedOrganizationId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allOrganizationData);
 
@@ -37,13 +41,17 @@ export class RemoveOrganizationComponent implements OnInit {
       })
   }
   onOrganizationSelected(event: any) {
-    console.log(this.allOrganizationData);
-    console.log('the selected organization is:');
+    console.log('the selected event is:');
     console.log(this.selectedOrganization);
 
+    this.selectedOrganization = event.value;
     this.selectedOrganizationId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedOrganization);
   }
-  onOrganizationDelete() {
+  onClickSubmit(stepper) {
+    //Remove Organization
     console.log("Organization Delete: ")
     console.log(this.selectedOrganizationId)
 
@@ -52,13 +60,20 @@ export class RemoveOrganizationComponent implements OnInit {
       .removeOrganization(String(this.selectedOrganizationId))
       .subscribe(
         (res: any) => {
-          this.notificationService.showError('Organization has been deleted', '');
+          this.notificationService.showSuccess('Organization has been successfully deleted!', '');
           this.spinnerService.off();
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong during delete event', '');
+          this.notificationService.showError('Organization deleted failed!', '');
+          this.spinnerService.off();
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
+
   }
   // onClickConfirm(){
   //   if(confirm("are you sure?")){

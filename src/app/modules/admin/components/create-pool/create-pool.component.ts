@@ -38,12 +38,13 @@ export class CreatePoolComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
+        this.selectedEventId = res[0].id;
 
         this.spinnerService.off();
       })
 
     this.firstFormGroup = this._formBuilder.group({
-      nameDataCtrl: ['', Validators.required],
+      eventNameCtrl: ['', Validators.required],
     });
 
   }
@@ -58,8 +59,9 @@ export class CreatePoolComponent implements OnInit {
     console.log(this.selectedEvent);
   }
 
-  onCreatePool() {
-    const poolName = this.firstFormGroup.value.nameDataCtrl;
+  onClickSubmit(stepper) {
+    //Create Pool
+    const poolName = this.firstFormGroup.value.eventNameCtrl;
     console.log('SELECTED EVENT ID');
     console.log(this.selectedEventId)
     console.log('NEW BRACKET NAME:');
@@ -70,17 +72,21 @@ export class CreatePoolComponent implements OnInit {
       .createPool(poolName, String(this.selectedEventId))
       .subscribe(
         (res: any) => {
-
-          this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-            console.log("display pool for event:")
-            console.log(res)
-          })
+          // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
+          //   console.log("display pool for event:")
+          //   console.log(res)
+          // })
+          console.log(res)
           this.notificationService.showSuccess('Pool has been created', '')
-          this.spinnerService.off();
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong when adding pool', '');
+          this.notificationService.showError('Pool create failed!', '');
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }
