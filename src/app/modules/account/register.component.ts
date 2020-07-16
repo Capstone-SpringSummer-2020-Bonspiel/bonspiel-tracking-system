@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
       // firstName: ['', Validators.required],
       // lastName: ['', Validators.required],
       username: ['', Validators.required],
-      // password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -43,11 +43,11 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.register(this.form.value)
+    this.accountService.register(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Registration successful', { keepAfterRouteChange: true });
+          this.alertService.success('Registration successful.  Please wait for approval e-mail before signing in', { keepAfterRouteChange: true });
           this.router.navigate(['../login'], { relativeTo: this.route });
         },
         error => {

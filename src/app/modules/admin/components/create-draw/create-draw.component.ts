@@ -96,14 +96,11 @@ export class CreateDrawComponent implements OnInit {
         (res: any) => {
           this.notificationService.showSuccess('Draw has been created', '');
           stepper.reset();
-          this.spinnerService.off();
         },
         (error) => {
           this.notificationService.showError('Something went wrong', '');
-        })
-      .add(
-        () => {  // finally
-          stepper.reset();
+        },
+        () => {
           this.spinnerService.off()
         });
     ;
