@@ -22,7 +22,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpService: HttpClient) {}
+  constructor(private httpService: HttpClient) { }
 
   /********************************************************************/
 
@@ -103,6 +103,8 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
+    console.log('last check before lunch')
+    console.log(body)
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`,
       body
@@ -318,6 +320,7 @@ export class ApiService {
       name: nameData,
       eventId: eventIdData,
     };
+    console.log(body)
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`,
       body
@@ -325,6 +328,8 @@ export class ApiService {
   }
 
   public removeBracket(bracketId) {
+    console.log('delete target bracket:')
+    console.log(bracketId)
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`
     );
@@ -361,6 +366,8 @@ export class ApiService {
   }
 
   public removePool(poolId) {
+    console.log('delete target pool:')
+    console.log(poolId)
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/pool/${poolId}`
     );
