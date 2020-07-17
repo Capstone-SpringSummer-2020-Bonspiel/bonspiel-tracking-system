@@ -69,28 +69,17 @@ export class ApiService {
     this.eventSource.next(newEvent);
   }
 
-  public createEvent(
-    nameData,
-    beginDateData,
-    endDateData,
-    completedData,
-    infoData,
-    eventTypeData
-  ) {
+  public createEvent(name, info, eventType, completed, beginDate, endDate) {
     const body = {
-      name: nameData,
-      eventType: eventTypeData,
-      info: infoData,
-      completed: completedData,
-      beginDate: beginDateData,
-      endDate: endDateData,
+      name,
+      beginDate,
+      endDate,
+      completed,
+      info,
+      eventType
     };
-    console.log('sending body:');
     console.log(body);
-    return this.httpService.post(
-      `${environment.apiUrl}/api/v1/admin/event`,
-      body
-    );
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event`, body);
   }
 
   public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId

@@ -15,7 +15,7 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
   styleUrls: ['./password.component.scss']
 })
 export class PasswordComponent implements OnInit {
-  form: FormGroup;
+  formGroup: FormGroup;
   loading = false;
   submitted = false;
   returnUrl: string;
@@ -37,7 +37,7 @@ export class PasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
+    this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     }, { validator: this.passwordConfirming });
@@ -74,7 +74,7 @@ export class PasswordComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.form.controls; }
+  get f() { return this.formGroup.controls; }
 
   onSubmit() {
     if (!this.currentUser.username) {
@@ -89,7 +89,7 @@ export class PasswordComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.form.invalid) {
+    if (this.formGroup.invalid) {
       if (this.f.password.value.length < 6 || this.f.confirmPassword.value.length < 6) {
         this.notificationService.showError('Your password must be at least 6 characters long', '');
       }
@@ -116,12 +116,12 @@ export class PasswordComponent implements OnInit {
           console.log('PASSWORD NOT CHANGED');
           this.notificationService.showError('Something went wrong', '');
           this.loading = false;
-          this.form.reset();
+          this.formGroup.reset();
         })
       .add(() => {
-        this.form.reset()
-        Object.keys(this.form.controls).forEach(key => {
-          this.form.controls[key].setErrors(null)
+        this.formGroup.reset()
+        Object.keys(this.formGroup.controls).forEach(key => {
+          this.formGroup.controls[key].setErrors(null)
         });
       });
   }
