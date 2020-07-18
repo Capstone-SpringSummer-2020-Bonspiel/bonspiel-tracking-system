@@ -22,7 +22,7 @@ export class CreatePoolComponent implements OnInit {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -43,7 +43,7 @@ export class CreatePoolComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventNameCtrl: ['', Validators.required],
     });
 

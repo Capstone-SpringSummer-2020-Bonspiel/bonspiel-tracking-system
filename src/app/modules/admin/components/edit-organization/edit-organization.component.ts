@@ -22,7 +22,7 @@ export class EditOrganizationComponent implements OnInit {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -45,10 +45,10 @@ export class EditOrganizationComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       organizationCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventFullCtrl: [''],
       eventShortCtrl: [''],
     });

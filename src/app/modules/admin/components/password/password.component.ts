@@ -25,7 +25,7 @@ export class PasswordComponent implements OnInit {
   username = null;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
@@ -37,7 +37,7 @@ export class PasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formGroup = this.formBuilder.group({
+    this.formGroup = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     }, { validator: this.passwordConfirming });

@@ -18,7 +18,7 @@ export class RemoveEventComponent implements OnInit {
   zeroFormGroup: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
@@ -40,7 +40,7 @@ export class RemoveEventComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
   }

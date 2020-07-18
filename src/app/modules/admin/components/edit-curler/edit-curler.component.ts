@@ -35,20 +35,20 @@ export class EditCurlerComponent implements OnInit {
     { value: 'alternate', viewValue: 'Alternate' },
   ];
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrl: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       thirdCtrlName: ['', Validators.required],
       thirdCtrlPosition: ['', Validators.required],
       thirdCtrlTeam: ['', Validators.required],

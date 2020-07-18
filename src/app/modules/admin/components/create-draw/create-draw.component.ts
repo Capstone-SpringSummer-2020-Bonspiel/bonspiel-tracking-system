@@ -41,7 +41,7 @@ export class CreateDrawComponent implements OnInit {
   maxDate: Date;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
@@ -49,10 +49,10 @@ export class CreateDrawComponent implements OnInit {
 
   ngOnInit(): void {
     this.date = new Date();
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrlName: ['', Validators.required],
       secondCtrlDate: ['', Validators.required],
       secondCtrlUrl: [''],

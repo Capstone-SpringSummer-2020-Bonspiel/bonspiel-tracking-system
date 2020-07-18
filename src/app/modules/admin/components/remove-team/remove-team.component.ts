@@ -15,14 +15,14 @@ export class RemoveTeamComponent implements OnInit {
   teams: any[] = [];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstFormCtrl: ['', Validators.required],
     });
     this.spinnerService.on();
@@ -33,7 +33,7 @@ export class RemoveTeamComponent implements OnInit {
     });
   }
 
-  getTeamId() {}
+  getTeamId() { }
 
   onClickSubmit(stepper: MatStepper) {
     const teamId = this.firstFormGroup.value.firstFormCtrl;

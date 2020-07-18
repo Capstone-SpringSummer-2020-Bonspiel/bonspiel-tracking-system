@@ -45,15 +45,15 @@ export class RemoveGameComponent implements OnInit {
 
   console = console;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService) { }
 
   ngOnInit() {
-    this.firstFormGroup = this.formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventId: ['', Validators.required],
     });
-    this.secondFormGroup = this.formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       gameId: [null],
     });
 
