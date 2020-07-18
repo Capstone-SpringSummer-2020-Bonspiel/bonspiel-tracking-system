@@ -28,17 +28,17 @@
   </mat-step>
 
 
-  <!-- SUBMIT -->
+  <!-- REMOVE -->
   <mat-step>
-    <ng-template matStepLabel>Submit</ng-template>
-    <p>Click Submit when ready.</p>
+    <ng-template matStepLabel>Remove</ng-template>
+    <p>Click Remove when ready.</p>
     <div>
       <button mat-button
         matStepperPrevious>Back</button>
       <button mat-button
         (click)="stepper.reset()">Reset</button>
       <button mat-button
-        (click)="onClickSubmit(stepper)">Submit</button>
+        (click)="onClickRemove(stepper)">Remove</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

@@ -4,6 +4,7 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
@@ -17,14 +18,13 @@ import { NgxMatNativeDateModule } from '@angular-material-components/datetime-pi
   styleUrls: ['./remove-draw.component.scss'],
 })
 export class RemoveDrawComponent implements OnInit {
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  formGroup: FormGroup;
 
-  eventNames: any[] = [];
-  eventDraws: any[] = [];
-  selectedDraw;
-  allGames: any[] = [];
-  selectedDrawGames: any[] = [];
+  events: any[] = [];
+  draws: any[] = [];
+  games: any[] = [];
+  selectedDraw: any[] = [];
+  selectedGames: any[] = [];
   drawDisplayedColumns: string[] = ['event_id', 'name', 'start', 'video_url'];
   gameDisplayedColumns: string[] = ['name', 'team_name1', 'team_name2'];
 
@@ -36,13 +36,21 @@ export class RemoveDrawComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required],
-    });
-    this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          drawCtrl: ['', Validators.required],
+        })
+      ]),
     });
 
+    console.log(this.formGroup);
+
+    // Get events
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
@@ -54,53 +62,70 @@ export class RemoveDrawComponent implements OnInit {
         return;
       }
       this.spinnerService.off();
-      this.eventNames = res;
-      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.events = res;
+      this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
     });
   }
 
-  getEventDraws() {
-    const selectedEventID = this.firstFormGroup.value.firstCtrl;
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
+  getdraws() {
+    const selectedEventID = this.getCtrlValue(0).eventCtrl;
+
+    // Get draws
     this.spinnerService.on();
-    this.apiService.getDraws(selectedEventID).subscribe((res: any) => {
-      if (res === null || res === undefined) {
-        this.notificationService.showError('Could not fetch draws', 'ERROR');
+    this.apiService.getDraws(selectedEventID)
+      .subscribe(
+        (res: any) => {
+          if (res === null || res === undefined) {
+            this.notificationService.showError('Could not fetch draws', 'ERROR');
+            return;
+          }
+          this.draws = res;
+          this.draws.sort((a, b) => (a.name > b.name ? 1 : -1));
+        })
+      .add(() => {
         this.spinnerService.off();
-        return;
-      }
-      this.eventDraws = res;
-      this.eventDraws.sort((a, b) => (a.name > b.name ? 1 : -1));
-      this.spinnerService.off();
-    });
+      });
   }
 
   getDrawGames() {
-    const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    const selectedDrawID = this.secondFormGroup.value.secondCtrl;
-    this.selectedDraw = this.eventDraws.filter((x) => x.id === selectedDrawID);
-    this.spinnerService.on();
-    this.apiService.getGames(selectedEventID).subscribe((res: any) => {
-      this.allGames = res;
-      if (res === null || res === undefined) {
-        this.notificationService.showError('Could not fetch games', 'ERROR');
-        this.spinnerService.off();
-        return;
-      }
-      this.selectedDrawGames = this.allGames.filter(
-        (x) => x.draw_id === selectedDrawID
-      );
+    const selectedEventID = this.getCtrlValue(0).eventCtrl;
+    const selectedDrawID = this.getCtrlValue(1).drawCtrl;
+    this.selectedDraw = this.draws.filter((x) => x.id === selectedDrawID);
 
-      this.spinnerService.off();
-    });
+    // Get games
+    this.spinnerService.on();
+    this.apiService.getGames(selectedEventID)
+      .subscribe(
+        (res: any) => {
+          this.games = res;
+          if (res === null || res === undefined) {
+            this.notificationService.showError('Could not fetch games', 'ERROR');
+            this.spinnerService.off();
+            return;
+          }
+          this.selectedGames = this.games.filter(
+            (x) => x.draw_id === selectedDrawID
+          );
+
+          this.spinnerService.off();
+        });
   }
 
-  deleteDraw(stepper: MatStepper) {
-    const selectedDrawID = this.secondFormGroup.value.secondCtrl;
+  onClickRemove(stepper: MatStepper) {
+    const selectedDrawID = this.getCtrlValue(1).drawCtrl;
 
-    this.spinnerService.off();
-
-    this.apiService
-      .deleteDraw(selectedDrawID)
+    // Delete draw
+    this.spinnerService.on();
+    this.apiService.deleteDraw(selectedDrawID)
       .subscribe(
         (res: any) => {
           console.log(res);

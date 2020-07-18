@@ -47,7 +47,7 @@ export class RemoveEventComponent implements OnInit {
     });
   }
 
-  onClickSubmit(stepper: MatStepper) {
+  onClickRemove(stepper: MatStepper) {
     const eventId = String(this.formGroup.value.eventIdCtrl.id);
 
     // Remove event
