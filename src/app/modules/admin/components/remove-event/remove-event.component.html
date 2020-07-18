@@ -1,36 +1,44 @@
 <div class="slide-in-text">
-  <h1> Remove Event </h1>
+  <h1>Remove Event</h1>
 </div>
 
-<mat-vertical-stepper linear #stepper>
+<mat-vertical-stepper #stepper
+  linear>
+
   <!-- SELECT EVENT -->
-  <mat-step [stepControl]="zeroFormGroup">
-    <form [formGroup]="zeroFormGroup">
-      <ng-template matStepLabel> Select Event </ng-template>
+  <mat-step [stepControl]="formGroup">
+    <form [formGroup]="formGroup">
+      <ng-template matStepLabel>Select Event</ng-template>
       <mat-form-field>
-        <mat-label>Select Event to Delete</mat-label>
-        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event); stepper.next()" required>
-          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+        <mat-label>Select Event to Remove</mat-label>
+        <mat-select formControlName="eventIdCtrl"
+          required>
+          <mat-option *ngFor="let event of this.events"
+            [value]="event">
             {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button
+          matStepperNext>Next</button>
       </div>
     </form>
 
   </mat-step>
 
 
-  <!-- FINISH & SUBMIT -->
+  <!-- SUBMIT -->
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onClickSubmit(stepper)">Delete Event</button>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

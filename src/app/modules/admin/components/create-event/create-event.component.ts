@@ -47,6 +47,7 @@ export class CreateEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Initialize form group
     this.formGroup = this.fb.group({
       formArray: this.fb.array([
         this.fb.group({
@@ -70,7 +71,7 @@ export class CreateEventComponent implements OnInit {
     return this.formGroup.get('formArray');
   }
 
-  onClickSubmit(stepper) {
+  onClickSubmit(stepper: MatStepper) {
     const name = this.formGroup.value.formArray[0].eventNameCtrl;
     const info = this.formGroup.value.formArray[0].eventInfoCtrl;
     const event_type = this.formGroup.value.formArray[1].eventTypeCtrl;
@@ -78,9 +79,8 @@ export class CreateEventComponent implements OnInit {
     const begin_date = String(this.formGroup.value.formArray[2].eventStartCtrl.toLocaleString());
     const end_date = String(this.formGroup.value.formArray[2].eventEndCtrl.toLocaleString());
 
-    this.spinnerService.on();
-
     // Create Event
+    this.spinnerService.on();
     this.apiService.createEvent(name, info, event_type, completed, begin_date, end_date)
       .subscribe(
         (res) => {
