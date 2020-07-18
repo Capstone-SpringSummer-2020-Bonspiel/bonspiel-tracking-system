@@ -15,7 +15,7 @@
         <mat-label> Select Event </mat-label>
         <mat-select formControlName="eventCtrl"
           name="event"
-          (selectionChange)="getdraws(); stepper.next()"
+          (selectionChange)="getDraws(); stepper.next()"
           required>
           <mat-option *ngFor="let event of events"
             [value]="event.id"

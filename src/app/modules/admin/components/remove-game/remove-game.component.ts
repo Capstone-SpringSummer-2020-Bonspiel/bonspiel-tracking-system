@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { forkJoin } from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
+import { NotificationService } from '@app/shared/services/notification.service';
 
 @Component({
   selector: 'app-remove-game',
@@ -11,92 +12,93 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrls: ['./remove-game.component.scss']
 })
 export class RemoveGameComponent implements OnInit {
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
-  fourthFormGroup: FormGroup;
-
-  selectedEventId = null;
-  selectedDrawId = null;
-  selectedTeam1Id = undefined;
-  selectedTeam2Id = undefined;
-  selectedTeam1StoneColor = 'red';
-  selectedTeam2StoneColor = 'yellow';
-  finished = false;
+  formGroup: FormGroup;
 
   events: any = [];
-  optionGroups: any = [
-    {
-      name: 'Pools',
-      list: []
-    },
-    {
-      name: 'Brackets',
-      list: []
-    }
-  ];
-  draws: any = [];
   games: any = [];
-  teams: any = [];
 
-  colors = ['red', 'yellow'];
-  iceSheets = ['A', 'B', 'C'];
-  eventTypes = ['friendly', 'pools', 'brackets', 'championship'];
-
-  console = console;
-
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private apiService: ApiService,
-    private spinnerService: SpinnerService) { }
+    private spinnerService: SpinnerService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit() {
-    this.firstFormGroup = this.fb.group({
-      eventId: ['', Validators.required],
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          gameCtrl: ['', Validators.required],
+        })
+      ]),
     });
-    this.secondFormGroup = this.fb.group({
-      gameId: [null],
-    });
+
+    console.log(this.formGroup);
 
     this.getEvents();
   }
 
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
   getEvents() {
-    // Get list of existing events
-    this.apiService.getEvents().subscribe((res) => {
-      this.events = res;
-      console.log('events:');
-      console.log(this.events);
-    });
-  }
-
-  setEventId() {
-    this.selectedEventId = this.firstFormGroup.value.eventId;  // eventId
-    console.log('selectedEventId:');
-    console.log(this.selectedEventId);
-  }
-
-  getGamesByEventId() {
-    this.apiService.getGames(this.selectedEventId).subscribe((res) => {
-      this.games = res;
-      console.log('games:');
-      console.log(this.games);
-    });
-  }
-
-  onClickSubmit(stepper: MatStepper) {
+    // Get events
     this.spinnerService.on();
-
-    this.apiService.removeGame(this.secondFormGroup.controls.gameId.value).subscribe((res) => {
-      console.log(res);
-      this.spinnerService.off();
-      stepper.next();
-    });
+    this.apiService.getEvents()
+      .subscribe((res) => {
+        this.events = res;
+        console.log('events:');
+        console.log(this.events);
+      })
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 
-  resetStepper(stepper: MatStepper) {
-    stepper.reset();
+  getGames() {
+    // Get games
+    this.spinnerService.on();
+    this.apiService.getGames(this.getCtrlValue(0).eventCtrl)
+      .subscribe(
+        (res) => {
+          this.games = res;
+          console.log('games:');
+          console.log(this.games);
+        })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
 
-    this.firstFormGroup.reset();
-    this.secondFormGroup.reset();
+  onClickRemove(stepper: MatStepper) {
+    const gameId = this.getCtrlValue(1).gameCtrl;
+
+    // Remove game
+    this.spinnerService.on();
+    this.apiService.removeGame(gameId)
+      .subscribe(
+        (res) => {
+          console.log(res);
+
+          this.notificationService.showSuccess('Game was removed', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        })
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

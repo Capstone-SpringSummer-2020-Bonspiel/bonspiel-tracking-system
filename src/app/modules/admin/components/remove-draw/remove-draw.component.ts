@@ -50,6 +50,19 @@ export class RemoveDrawComponent implements OnInit {
 
     console.log(this.formGroup);
 
+    this.getEvents();
+  }
+
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
+  getEvents() {
     // Get events
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
@@ -67,16 +80,7 @@ export class RemoveDrawComponent implements OnInit {
     });
   }
 
-  // Returns a FormArray with the name 'formArray'
-  get formArray(): AbstractControl | null {
-    return this.formGroup.get('formArray');
-  }
-
-  getCtrlValue(index) {
-    return this.formGroup.get('formArray').value[index];
-  }
-
-  getdraws() {
+  getDraws() {
     const selectedEventID = this.getCtrlValue(0).eventCtrl;
 
     // Get draws
