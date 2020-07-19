@@ -24,6 +24,17 @@ export class RemoveEventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      eventIdCtrl: ['', Validators.required],
+    });
+
+    console.log(this.formGroup);
+
+    this.getEvents();
+  }
+
+  getEvents() {
     // Get events
     this.spinnerService.on();
     this.apiService.getEvents()
@@ -33,18 +44,10 @@ export class RemoveEventComponent implements OnInit {
           console.log(res);
 
           this.events = res;
-
-          console.log('events');
-          console.log(this.events);
         })
       .add(() => {
         this.spinnerService.off();
       })
-
-    // Initialize form group
-    this.formGroup = this.fb.group({
-      eventIdCtrl: ['', Validators.required],
-    });
   }
 
   onClickRemove(stepper: MatStepper) {
@@ -66,6 +69,9 @@ export class RemoveEventComponent implements OnInit {
           Object.keys(this.formGroup.controls).forEach(key => {
             this.formGroup.controls[key].setErrors(null)
           });
+
+          // Re-fetch events
+          this.getEvents();
         },
         (err) => {
           console.log(err);

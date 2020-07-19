@@ -4,14 +4,14 @@ import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
+
 @Component({
   selector: 'app-remove-team',
   templateUrl: './remove-team.component.html',
   styleUrls: ['./remove-team.component.scss'],
 })
 export class RemoveTeamComponent implements OnInit {
-  firstFormGroup: FormGroup;
-
+  formGroup: FormGroup;
   teams: any[] = [];
 
   constructor(
@@ -22,35 +22,58 @@ export class RemoveTeamComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this.fb.group({
-      firstFormCtrl: ['', Validators.required],
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      teamIdCtrl: ['', Validators.required],
     });
-    this.spinnerService.on();
-    this.apiService.getAllTeams().subscribe((res: any) => {
-      this.teams = res;
-      this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
-      this.spinnerService.off();
-    });
+
+    console.log(this.formGroup);
+
+    this.getTeams();
   }
 
-  getTeamId() { }
-
-  onClickSubmit(stepper: MatStepper) {
-    const teamId = this.firstFormGroup.value.firstFormCtrl;
-
+  getTeams() {
+    // Get teams
     this.spinnerService.on();
+    this.apiService.getAllTeams()
+      .subscribe(
+        (res: any) => {
+          this.teams = res;
+          this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
 
+        })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  onClickRemove(stepper: MatStepper) {
+    const teamId = this.formGroup.get('teamIdCtrl').value;
+
+    // Delete team
+    this.spinnerService.on();
     this.apiService
-      .removeTeam(teamId)
+      .deleteTeam(teamId)
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess('Team has been deleted', '');
+          this.notificationService.showSuccess('Team has been removed', '');
+
+          // Reset the stepper
           stepper.reset();
+
+          // // Reset the form and validation
+          // this.formGroup.reset()
+          // Object.keys(this.formGroup.controls).forEach(key => {
+          //   this.formGroup.controls[key].setErrors(null)
+          // });
+
+          // Re-fetch teams
+          this.getTeams();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Something went wrong');
         }
       )
       .add(() => {

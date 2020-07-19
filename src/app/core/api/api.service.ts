@@ -372,7 +372,7 @@ export class ApiService {
     );
   }
 
-  public removeTeamEvent(eventId, teamId) {
+  public deleteTeamEvent(eventId, teamId) {
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`
     );
@@ -449,7 +449,7 @@ export class ApiService {
     );
   }
 
-  public removeTeam(teamId) {
+  public deleteTeam(teamId) {
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/team/${teamId}`
     );
