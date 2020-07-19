@@ -15,7 +15,7 @@ export class NotificationService {
     positionClass: 'toast-top-center',
   };
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: ToastrService) { }
 
   showSuccess(message, title) {
     this.toastr.success(message, title, this.defaultPositionClass);

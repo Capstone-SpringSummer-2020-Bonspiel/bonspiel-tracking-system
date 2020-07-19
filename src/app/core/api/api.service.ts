@@ -213,9 +213,8 @@ export class ApiService {
   }
 
   public removeOrganization(orgId) {
-    return this.httpService.delete(
-      `${environment.apiUrl}/api/v1/admin/org/${orgId}`
-    );
+    console.log(`Removing orgId: ${orgId}`)
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/org/${orgId}`);
   }
 
   // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error

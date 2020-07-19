@@ -133,12 +133,12 @@ export class RemoveDrawComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess('Draw has been deleted', '');
+          this.notificationService.showSuccess('Draw has been removed', '');
           stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'Something went wrong');
         }
       )
       .add(() => {
