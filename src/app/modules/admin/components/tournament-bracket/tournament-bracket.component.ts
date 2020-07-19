@@ -1,33 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as shape from 'd3-shape';
+import { ApiService } from '@app/core/api/api.service';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
   selector: 'app-tournament-bracket',
+  template: `Say {{ message }}`,
   templateUrl: './tournament-bracket.component.html',
   styleUrls: ['./tournament-bracket.component.scss'],
 })
 export class TournamentBracketComponent implements OnInit {
+  @Input() childMessage: string;
+
   nodes = [];
 
   edges = [];
 
+  data = [];
+
   curve = shape.curveLinear;
 
-  constructor() {}
+  constructor(
+    private apiService: ApiService,
+    private spinnerService: SpinnerService
+  ) {}
 
   ngOnInit(): void {
-    console.log('jsonData=');
-    console.log(jsonData);
+    //this.spinnerService.on();
+    console.log(`eventId= ${this.childMessage}`);
+    this.apiService.generateBracket(this.childMessage).subscribe((res: any) => {
+      console.log('response');
+      console.log(res);
+      this.data = res;
+      //this.spinnerService.off();
+    });
+    console.log('data=');
+    console.log(this.data);
 
-    for (var i = 0; i < jsonData.edges.length; i++) {
-      this.edges.push(jsonData.edges[i]);
-    }
+    // for (var i = 0; i < jsonData.edges.length; i++) {
+    //   this.edges.push(jsonData.edges[i]);
+    // }
 
-    for (var i = 0; i < jsonData.nodes.length; i++) {
-      this.nodes.push(jsonData.nodes[i]);
-    }
-    this.edges.sort((a, b) => (a.target > b.target ? 1 : -1));
-    this.nodes.sort((a, b) => (a.id > b.id ? 1 : -1));
+    // for (var i = 0; i < jsonData.nodes.length; i++) {
+    //   this.nodes.push(jsonData.nodes[i]);
+    // }
 
     console.log('this.edges=');
     console.log(this.edges);
@@ -59,12 +75,12 @@ const jsonData = {
       label: 'A Series of Unfortunate Ends vs Junk Up the Front',
     },
     {
-      id: '820',
-      label: '#curlsquad vs Casablankends',
-    },
-    {
       id: '808',
       label: '#curlsquad vs Double - Double Ds',
+    },
+    {
+      id: '820',
+      label: '#curlsquad vs Casablankends',
     },
     {
       id: '804',
@@ -165,12 +181,12 @@ const jsonData = {
       label: 'Mystery Inc. vs Hold Em to 1',
     },
     {
-      id: '841',
-      label: 'The Jerks vs SL,UTs',
-    },
-    {
       id: '812',
       label: 'The Jerks vs Ill Fill This In Later',
+    },
+    {
+      id: '841',
+      label: 'The Jerks vs SL,UTs',
     },
     {
       id: '823',
@@ -189,24 +205,20 @@ const jsonData = {
       label: 'Double - Double Ds vs SL,UTs',
     },
     {
-      id: '839',
-      label: 'Curlers of the Lost Arc vs The Jerks',
+      id: '821',
+      label: 'Curlers of the Lost Arc vs Mystery Inc.',
     },
     {
       id: '810',
       label: 'Curlers of the Lost Arc vs Hack to the Future',
     },
     {
-      id: '821',
-      label: 'Curlers of the Lost Arc vs Mystery Inc.',
+      id: '839',
+      label: 'Curlers of the Lost Arc vs The Jerks',
     },
     {
       id: '802',
       label: 'Bulls Team Awesome vs Olsen Twins & Co',
-    },
-    {
-      id: '831',
-      label: 'Angry Canadiens vs Double - Double Ds',
     },
     {
       id: '817',
@@ -216,245 +228,201 @@ const jsonData = {
       id: '805',
       label: 'Angry Canadiens vs Junk Up the Front',
     },
+    {
+      id: '831',
+      label: 'Angry Canadiens vs Double - Double Ds',
+    },
   ],
   edges: [
     {
-      id: '0',
       source: '814',
       target: '826',
     },
     {
-      id: '1',
       source: '814',
       target: '830',
     },
     {
-      id: '2',
-      source: '820',
-      target: '828',
-    },
-    {
-      id: '3',
-      source: '820',
-      target: '832',
-    },
-    {
-      id: '4',
       source: '808',
       target: '820',
     },
     {
-      id: '5',
       source: '808',
       target: '819',
     },
     {
-      id: '6',
+      source: '820',
+      target: '828',
+    },
+    {
+      source: '820',
+      target: '832',
+    },
+    {
       source: '804',
       target: '816',
     },
     {
-      id: '7',
       source: '804',
       target: '815',
     },
     {
-      id: '8',
       source: '824',
       target: '836',
     },
     {
-      id: '9',
       source: '824',
       target: '840',
     },
     {
-      id: '10',
       source: '811',
       target: '824',
     },
     {
-      id: '11',
       source: '811',
       target: '823',
     },
     {
-      id: '12',
       source: '822',
       target: '836',
     },
     {
-      id: '13',
       source: '822',
       target: '840',
     },
     {
-      id: '14',
       source: '815',
       target: '825',
     },
     {
-      id: '15',
       source: '815',
       target: '829',
     },
     {
-      id: '16',
       source: '806',
       target: '818',
     },
     {
-      id: '17',
       source: '806',
       target: '817',
     },
     {
-      id: '18',
       source: '801',
       target: '814',
     },
     {
-      id: '19',
       source: '801',
       target: '813',
     },
     {
-      id: '20',
       source: '813',
       target: '825',
     },
     {
-      id: '21',
       source: '813',
       target: '829',
     },
     {
-      id: '22',
       source: '803',
       target: '816',
     },
     {
-      id: '23',
       source: '803',
       target: '815',
     },
     {
-      id: '24',
       source: '816',
       target: '826',
     },
     {
-      id: '25',
       source: '816',
       target: '830',
     },
     {
-      id: '26',
       source: '818',
       target: '828',
     },
     {
-      id: '27',
       source: '818',
       target: '832',
     },
     {
-      id: '28',
       source: '809',
       target: '822',
     },
     {
-      id: '29',
       source: '809',
       target: '821',
     },
     {
-      id: '30',
       source: '812',
       target: '824',
     },
     {
-      id: '31',
       source: '812',
       target: '823',
     },
     {
-      id: '32',
       source: '823',
       target: '835',
     },
     {
-      id: '33',
       source: '823',
       target: '839',
     },
     {
-      id: '34',
       source: '807',
       target: '820',
     },
     {
-      id: '35',
       source: '807',
       target: '819',
     },
     {
-      id: '36',
       source: '819',
       target: '827',
     },
     {
-      id: '37',
       source: '819',
       target: '831',
     },
     {
-      id: '38',
-      source: '810',
-      target: '822',
-    },
-    {
-      id: '39',
-      source: '810',
-      target: '821',
-    },
-    {
-      id: '40',
       source: '821',
       target: '835',
     },
     {
-      id: '41',
       source: '821',
       target: '839',
     },
     {
-      id: '42',
+      source: '810',
+      target: '822',
+    },
+    {
+      source: '810',
+      target: '821',
+    },
+    {
       source: '802',
       target: '814',
     },
     {
-      id: '43',
       source: '802',
       target: '813',
     },
     {
-      id: '44',
       source: '817',
       target: '827',
     },
     {
-      id: '45',
       source: '817',
       target: '831',
     },
     {
-      id: '46',
       source: '805',
       target: '818',
     },
     {
-      id: '47',
       source: '805',
       target: '817',
     },

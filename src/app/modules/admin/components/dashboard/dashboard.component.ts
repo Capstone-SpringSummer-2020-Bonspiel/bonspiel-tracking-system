@@ -39,6 +39,9 @@ export interface Event {
 
 @Component({
   selector: 'app-dashboard',
+  template: ` <app-tournament-bracket
+    [childMessage]="parentMessage"
+  ></app-tournament-bracket>`,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: [
@@ -58,6 +61,7 @@ export interface Event {
 })
 export class DashboardComponent implements OnInit {
   /**************************************************************************/
+  parentMessage = 'message from parent';
 
   @ViewChild('paginatorTop', { static: false }) paginatorTop: MatPaginator;
   @ViewChild('paginatorBottom', { static: false })
@@ -137,25 +141,25 @@ export class DashboardComponent implements OnInit {
   ];
 
   keyToLabel = {
-    'bracket_id': 'Bracket ID',
-    'curlingteam1_id': 'Curling Team 1 ID',
-    'curlingteam2_id': 'Curling Team 2 ID',
-    'draw_id': 'Draw ID',
-    'event_type': 'Event Type',
-    'finished': 'Finished?',
-    'game_id': 'Game ID',
-    'game_name': 'Game Name',
-    'ice_sheet': 'Ice Sheet',
-    'loser_dest': 'Loser Destination Game',
-    'notes': 'Notes',
-    'pool_id': 'Pool ID',
-    'stone_color1': 'Stone Color 1',
-    'stone_color2': 'Stone Color 2',
-    'team_name1': 'Team Name 1',
-    'team_name2': 'Team Name 2',
-    'winner': 'Winner',
-    'winner_dest': 'Winner Destination Game',
-  }
+    bracket_id: 'Bracket ID',
+    curlingteam1_id: 'Curling Team 1 ID',
+    curlingteam2_id: 'Curling Team 2 ID',
+    draw_id: 'Draw ID',
+    event_type: 'Event Type',
+    finished: 'Finished?',
+    game_id: 'Game ID',
+    game_name: 'Game Name',
+    ice_sheet: 'Ice Sheet',
+    loser_dest: 'Loser Destination Game',
+    notes: 'Notes',
+    pool_id: 'Pool ID',
+    stone_color1: 'Stone Color 1',
+    stone_color2: 'Stone Color 2',
+    team_name1: 'Team Name 1',
+    team_name2: 'Team Name 2',
+    winner: 'Winner',
+    winner_dest: 'Winner Destination Game',
+  };
 
   /**************************************************************************/
 
@@ -213,8 +217,8 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
-  ) { }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.spinnerService.on();
@@ -222,7 +226,10 @@ export class DashboardComponent implements OnInit {
     // Get all events
     this.apiService.getEvents().subscribe((rows: any) => {
       if (rows === null || rows === undefined) {
-        this.notificationService.showError('Could not fetch curling events', 'ERROR');
+        this.notificationService.showError(
+          'Could not fetch curling events',
+          'ERROR'
+        );
         this.spinnerService.off();
         return;
       }
@@ -273,7 +280,7 @@ export class DashboardComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
       row.position + 1
-      }`;
+    }`;
   }
 
   onClickTabs(event: MatTabChangeEvent, sample: any) {
@@ -286,7 +293,7 @@ export class DashboardComponent implements OnInit {
     if (event.index === 2) {
       this.spinnerService.on();
       // Get all draws + games
-      this.apiService.getDraws(sample.id).subscribe(rows => {
+      this.apiService.getDraws(sample.id).subscribe((rows) => {
         this.draws = rows;
         console.log(this.draws);
         this.apiService.getGames(sample.id).subscribe((rows: any[]) => {
@@ -353,7 +360,7 @@ export class DashboardComponent implements OnInit {
     if (!this.games) {
       return [];
     }
-    return this.games.filter(e => e.draw_id === draw_id);
+    return this.games.filter((e) => e.draw_id === draw_id);
   }
 
   convertKeyToLabel(key) {
