@@ -65,19 +65,15 @@ export class RemoveDrawComponent implements OnInit {
   getEvents() {
     // Get events
     this.spinnerService.on();
-    this.apiService.getEvents().subscribe((res: any) => {
-      if (res === null || res === undefined) {
-        this.notificationService.showError(
-          'Could not fetch curling events',
-          'ERROR'
-        );
+    this.apiService.getEvents()
+      .subscribe((res: any) => {
+        console.log(res);
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+      })
+      .add(() => {
         this.spinnerService.off();
-        return;
-      }
-      this.spinnerService.off();
-      this.events = res;
-      this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
-    });
+      });
   }
 
   getDraws() {
