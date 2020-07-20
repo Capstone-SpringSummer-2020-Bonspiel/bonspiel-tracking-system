@@ -1,78 +1,100 @@
 <div class="conatiner">
   <div class="row">
     <div class="col-sm-12">
-      <h1 class="text-center"> Team List
-        <mat-form-field>
-          <mat-select [(value)]="selectedEvent"
-            (selectionChange)="onEventSelected($event)">
-            <mat-option *ngFor="let event of this.allEventData"
-              [value]="event">
-              {{event.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </h1>
+      <h1 class="text-center"> Team List </h1>
+      <mat-form-field class="field-center">
+        <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
   <div class="col-sm-12">
-    <table mat-table
-      [dataSource]="this.allTeamData"
-      multiTemplateDataRows
-      class="mat-elevation-z8">
+    <table mat-table [dataSource]="this.allTeamData" multiTemplateDataRows class="mat-elevation-z8">
       <!-- <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
         <th mat-header-cell *matHeaderCellDef> {{column}} </th>
         <td mat-cell *matCellDef="let team"> {{team[column]}} </td>
       </ng-container> -->
-
+      <!-- 
       <ng-container matColumnDef="id">
-        <th mat-header-cell
-          *matHeaderCellDef> ID </th>
-        <td mat-cell
-          *matCellDef="let team"> ID: {{team.id}} </td>
-      </ng-container>
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let team"> ID: {{team.id}} </td>
+      </ng-container> 
+-->
+
+      <!-- UP/DOWN ARROW COLUMN -->
+      <!-- <ng-container *ngSwitchCase="'arrow'" sticky>
+          <th mat-header-cell
+            *matHeaderCellDef>
+            <mat-icon style="opacity: 0.0"> keyboard_arrow_right </mat-icon>
+          </th>
+
+          <td mat-cell
+            *matCellDef="let sample">
+            <div [ngSwitch]="sample">
+              <ng-container *ngSwitchCase="expandedElement">
+                <mat-icon style="cursor: default"> expand_less </mat-icon>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                <mat-icon style="cursor: default"> expand_more </mat-icon>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container> -->
 
       <ng-container matColumnDef="team_name">
-        <th mat-header-cell
-          *matHeaderCellDef> TEAM </th>
-        <td mat-cell
-          *matCellDef="let team"> Name: {{team.team_name}} </td>
+        <th mat-header-cell *matHeaderCellDef> TEAM </th>
+        <td mat-cell *matCellDef="let team"> {{team.team_name}} </td>
       </ng-container>
 
       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedDetail">
-        <td mat-cell
-          *matCellDef="let team"
-          [attr.colspan]="displayedColumns.length">
-          <div class="team-detail"
-            [@detailExpand]="team == expandedElement ? 'expanded' : 'collapsed'">
-            <div class="team-member"
-              *ngIf="team.curlers.length==0">
+        <td mat-cell *matCellDef="let team" [attr.colspan]="displayedColumns.length">
+          <div class="team-detail" [@detailExpand]="team == expandedElement ? 'expanded' : 'collapsed'">
+
+            <div class="team-member" *ngIf="team.curlers.length==0">
               <div class="member-other"> No One in this team </div>
             </div>
-            <div class="team-member"
-              *ngIf="team.curlers.length>0">
-              <div class="member-ID"> ID: {{team.curlers[0].curler_id}} </div>
-              <div class="member-Name"> Member: {{team.curlers[0].curler_name}} </div>
-              <div class="member-Position"> Position: {{team.curlers[0].curler_position}} </div>
-              <div class="member-Note"> Member: {{team.curlers[0].curler_note}} </div>
+            <div class="team-member" *ngIf="team.curlers.length>0">
+              <!-- <div class="member-ID"> ID: {{team.curlers[0].curler_id}} </div> -->
+              <div class="curler-photo">
+                <img src="assets\img\Chief.jpg" alt="" style="margin: 0 auto">
+              </div>
+              <div class="curler-info">
+                <div class="member-Name"> Member: {{team.curlers[0].curler_name}} </div>
+                <div class="member-Position"> Position: {{team.curlers[0].curler_position}} </div>
+                <div class="member-Note"> Member: {{team.curlers[0].curler_note}} </div>
+              </div>
             </div>
-            <div class="team-member"
-              *ngIf="team.curlers.length>1">
-              <div class="member-ID"> ID: {{team.curlers[1].curler_id}} </div>
+            <div class="team-member" *ngIf="team.curlers.length>1">
+              <!-- <div class="member-ID"> ID: {{team.curlers[1].curler_id}} </div> -->
+              <div class="curler-photo">
+                <img src="assets\img\Chief.jpg" alt="">
+              </div>
+
               <div class="member-Name"> Member: {{team.curlers[1].curler_name}} </div>
               <div class="member-Position"> Position: {{team.curlers[1].curler_position}} </div>
               <div class="member-Note"> Member: {{team.curlers[1].curler_note}} </div>
             </div>
-            <div class="team-member"
-              *ngIf="team.curlers.length>2">
-              <div class="member-ID"> ID: {{team.curlers[2].curler_id}} </div>
+            <div class="team-member" *ngIf="team.curlers.length>2">
+              <!-- <div class="member-ID"> ID: {{team.curlers[2].curler_id}} </div> -->
+              <div class="curler-photo">
+                <img src="assets\img\Chief.jpg" alt="">
+              </div>
+
               <div class="member-Name"> Member: {{team.curlers[2].curler_name}} </div>
               <div class="member-Position"> Position: {{team.curlers[2].curler_position}} </div>
               <div class="member-Note"> Member: {{team.curlers[2].curler_note}} </div>
             </div>
-            <div class="team-member"
-              *ngIf="team.curlers.length>3">
-              <div class="member-ID"> ID: {{team.curlers[3].curler_id}} </div>
+            <div class="team-member" *ngIf="team.curlers.length>3">
+              <!-- <div class="member-ID"> ID: {{team.curlers[3].curler_id}} </div> -->
+              <div class="curler-photo">
+                <img src="assets\img\Chief.jpg" alt="">
+              </div>
+
               <div class="member-Name"> Member: {{team.curlers[3].curler_name}} </div>
               <div class="member-Position"> Position: {{team.curlers[3].curler_position}} </div>
               <div class="member-Note"> Member: {{team.curlers[3].curler_note}} </div>
@@ -85,17 +107,10 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row
-        *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-        *matRowDef="let team; columns: displayedColumns;"
-        class="team-row"
-        [class.expanded-row]="expandedElement === team"
-        (click)="expandedElement = expandedElement === team ? null : team">
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let team; columns: displayedColumns;" class="team-row" [class.expanded-row]="expandedElement === team" (click)="expandedElement = expandedElement === team ? null : team">
       </tr>
-      <tr mat-row
-        *matRowDef="let row; columns: ['expandedDetail']"
-        class="detail-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
   </div>
 </div>
