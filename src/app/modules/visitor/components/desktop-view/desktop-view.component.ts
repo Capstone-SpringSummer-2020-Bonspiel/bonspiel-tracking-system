@@ -50,6 +50,8 @@ export class DesktopViewComponent implements OnInit {
   currentStandings = [];
   currentEventId = null;
   currentEvent = null;
+  allScores = [];
+  currentScores = [];
 
   constructor(
     private apiService: ApiService,
@@ -89,176 +91,198 @@ export class DesktopViewComponent implements OnInit {
 
           this.allGames = res;
 
-          // Add dataSource key-value pair for Scores Tab
-          for (let game of this.allGames) {
-            game.dataSource = [
-              {
-                name: game.team_name1,
-                round_1: '5',
-                round_2: '5',
-                round_3: '5',
-                round_4: '5',
-                round_5: '5',
-                round_6: '5',
-                round_7: '5',
-                round_8: '5',
-                final_score: '5',
-              },
-              {
-                name: game.team_name2,
-                round_1: '5',
-                round_2: '5',
-                round_3: '5',
-                round_4: '5',
-                round_5: '5',
-                round_6: '5',
-                round_7: '5',
-                round_8: '5',
-                final_score: '5',
-              },
-            ];
-          }
+          this.apiService
+            .getScoresByEvent(this.currentEventId)
+            .subscribe((res: any) => {
+              this.allScores = res;
 
-          this.currentGames = this.allGames.filter(
-            (x) => x.draw_id === this.selectedDraw.id
-          );
+              // Add dataSource key-value pair for Scores Tab
+              for (let game of this.allGames) {
+                game.dataSource = [
+                  {
+                    name: game.team_name1,
+                    round_1: '0',
+                    round_2: '2',
+                    round_3: '0',
+                    round_4: '0',
+                    round_5: '2',
+                    round_6: '0',
+                    round_7: '1',
+                    round_8: '0',
+                    final_score: '',
+                  },
+                  {
+                    name: game.team_name2,
+                    round_1: '0',
+                    round_2: '0',
+                    round_3: '2',
+                    round_4: '1',
+                    round_5: '0',
+                    round_6: '2',
+                    round_7: '0',
+                    round_8: '5',
+                    final_score: '',
+                  },
+                ];
+              }
 
-          // console.log(`[DEBUG] selectedDraw:`);
-          // console.log(this.selectedDraw);
-          // console.log(`[DEBUG] allDraws:`);
-          // console.log(this.allDraws);
-          // console.log(`[DEBUG] allGames:`);
-          // console.log(this.allGames);
-          // console.log(`[DEBUG] currentGames:`);
-          // console.log(this.currentGames);
-
-          // Populate all standings
-          let buckets = {};
-          for (let game of this.allGames) {
-            if (isNaN(game.winner)) {
-              continue;
-            }
-
-            if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
-              buckets[game.curlingteam1_id] = {
-                name: game.team_name1,
-                team_id: game.curlingteam1_id,
-                wins: 0,
-                losses: 0,
-                pool_id: game.pool_id,
-                bracket_id: game.bracket_id,
-              };
-            }
-
-            if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
-              buckets[game.curlingteam2_id] = {
-                name: game.team_name2,
-                team_id: game.curlingteam2_id,
-                wins: 0,
-                losses: 0,
-                pool_id: game.pool_id,
-                bracket_id: game.bracket_id,
-              };
-            }
-
-            if (game.winner === game.curlingteam1_id) {
-              buckets[game.curlingteam1_id].wins++;
-              buckets[game.curlingteam2_id].losses++;
-            } else {
-              buckets[game.curlingteam2_id].wins++;
-              buckets[game.curlingteam1_id].losses++;
-            }
-          }
-
-          // console.log('[DEBUG] buckets:');
-          // console.log(buckets);
-
-          // Convert object to array
-          let arr = Object.keys(buckets).map((key) => buckets[key]);
-
-          // console.log('[DEBUG] arr:');
-          // console.log(arr);
-
-          const A = [];
-          for (const team of arr) {
-            // Add a new container for each pool ID if it does not already exist
-            if (
-              team.pool_id !== null &&
-              A.filter((e) => e.type === 'Pool' && e.id === team.pool_id)
-                .length === 0
-            ) {
-              A.push({
-                type: 'Pool',
-                id: team.pool_id,
-                teams: [],
-              });
-            }
-
-            // Add a a new container for each bracket ID if it does not already exist
-            if (
-              team.bracket_id !== null &&
-              A.filter((e) => e.type === 'Bracket' && e.id === team.bracket_id)
-                .length === 0
-            ) {
-              A.push({
-                type: 'Bracket',
-                id: team.bracket_id,
-                teams: [],
-              });
-            }
-
-            // Add a a new, special container for games that don't have a pool_id & bracket_id
-            if (
-              team.pool_id === null &&
-              team.bracket_id === null &&
-              A.filter((e) => e.type === 'Other').length === 0
-            ) {
-              A.push({
-                type: 'Other',
-                id: '',
-                teams: [],
-              });
-            }
-
-            // Add teams to the corresponding pool container ...
-            if (team.pool_id !== null) {
-              const found = A.find(
-                (e) => e.type === 'Pool' && e.id === team.pool_id
+              this.currentGames = this.allGames.filter(
+                (x) => x.draw_id === this.selectedDraw.id
               );
-              if (found) {
-                found.teams.push(team);
-              }
-            }
 
-            // ... or bracket container ...
-            else if (team.bracket_id !== null) {
-              const found = A.find(
-                (e) => e.type === 'Bracket' && e.id === team.bracket_id
+              this.currentGames.forEach((game) =>
+                this.allScores.forEach((score) => {
+                  if (score.game_id === game.game_id)
+                    this.currentScores.push(score);
+                })
               );
-              if (found) {
-                found.teams.push(team);
+
+              // console.log(`[DEBUG] selectedDraw:`);
+              // console.log(this.selectedDraw);
+              // console.log(`[DEBUG] allDraws:`);
+              // console.log(this.allDraws);
+              // console.log(`[DEBUG] allGames:`);
+              // console.log(this.allGames);
+              // console.log(`[DEBUG] currentGames:`);
+              // console.log(this.currentGames);
+              // console.log('[DEBUG] allScores:');
+              // console.log(this.allScores);
+              // console.log('[DEBUG] currentScores:');
+              // console.log(this.currentScores);
+
+              // Populate all standings
+              let buckets = {};
+              for (let game of this.allGames) {
+                if (isNaN(game.winner)) {
+                  continue;
+                }
+
+                if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
+                  buckets[game.curlingteam1_id] = {
+                    name: game.team_name1,
+                    team_id: game.curlingteam1_id,
+                    wins: 0,
+                    losses: 0,
+                    pool_id: game.pool_id,
+                    bracket_id: game.bracket_id,
+                  };
+                }
+
+                if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
+                  buckets[game.curlingteam2_id] = {
+                    name: game.team_name2,
+                    team_id: game.curlingteam2_id,
+                    wins: 0,
+                    losses: 0,
+                    pool_id: game.pool_id,
+                    bracket_id: game.bracket_id,
+                  };
+                }
+
+                if (game.winner === game.curlingteam1_id) {
+                  buckets[game.curlingteam1_id].wins++;
+                  buckets[game.curlingteam2_id].losses++;
+                } else {
+                  buckets[game.curlingteam2_id].wins++;
+                  buckets[game.curlingteam1_id].losses++;
+                }
               }
-            }
 
-            // ... or other container
-            else {
-              const found = A.find((e) => e.type === 'Other');
-              if (found) {
-                found.teams.push(team);
+              // console.log('[DEBUG] buckets:');
+              // console.log(buckets);
+
+              // Convert object to array
+              let arr = Object.keys(buckets).map((key) => buckets[key]);
+
+              // console.log('[DEBUG] arr:');
+              // console.log(arr);
+
+              const A = [];
+              for (const team of arr) {
+                // Add a new container for each pool ID if it does not already exist
+                if (
+                  team.pool_id !== null &&
+                  A.filter((e) => e.type === 'Pool' && e.id === team.pool_id)
+                    .length === 0
+                ) {
+                  A.push({
+                    type: 'Pool',
+                    id: team.pool_id,
+                    teams: [],
+                  });
+                }
+
+                // Add a a new container for each bracket ID if it does not already exist
+                if (
+                  team.bracket_id !== null &&
+                  A.filter(
+                    (e) => e.type === 'Bracket' && e.id === team.bracket_id
+                  ).length === 0
+                ) {
+                  A.push({
+                    type: 'Bracket',
+                    id: team.bracket_id,
+                    teams: [],
+                  });
+                }
+
+                // Add a a new, special container for games that don't have a pool_id & bracket_id
+                if (
+                  team.pool_id === null &&
+                  team.bracket_id === null &&
+                  A.filter((e) => e.type === 'Other').length === 0
+                ) {
+                  A.push({
+                    type: 'Other',
+                    id: '',
+                    teams: [],
+                  });
+                }
+
+                // Add teams to the corresponding pool container ...
+                if (team.pool_id !== null) {
+                  const found = A.find(
+                    (e) => e.type === 'Pool' && e.id === team.pool_id
+                  );
+                  if (found) {
+                    found.teams.push(team);
+                  }
+                }
+
+                // ... or bracket container ...
+                else if (team.bracket_id !== null) {
+                  const found = A.find(
+                    (e) => e.type === 'Bracket' && e.id === team.bracket_id
+                  );
+                  if (found) {
+                    found.teams.push(team);
+                  }
+                }
+
+                // ... or other container
+                else {
+                  const found = A.find((e) => e.type === 'Other');
+                  if (found) {
+                    found.teams.push(team);
+                  }
+                }
               }
-            }
-          }
 
-          // console.log('[DEBUG] A:');
-          // console.log(A);
+              // console.log('[DEBUG] A:');
+              // console.log(A);
 
-          this.dataSourceAllStandings.length = 0; // Clear array
-          this.dataSourceAllStandings = A; // Populate array
+              this.dataSourceAllStandings.length = 0; // Clear array
+              this.dataSourceAllStandings = A; // Populate array
 
-          // console.log('[DEBUG] dataSourceAllStandings');
-          // console.log(this.dataSourceAllStandings);
+              this.dataSourceAllStandings.forEach((group) => {
+                group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
+              });
 
-          this.spinnerService.off();
+              // console.log('[DEBUG] dataSourceAllStandings');
+              // console.log(this.dataSourceAllStandings);
+
+              this.spinnerService.off();
+            });
         });
       });
     });
@@ -320,6 +344,15 @@ export class DesktopViewComponent implements OnInit {
     this.currentGames = this.allGames.filter(
       (e) => e.draw_id === this.selectedDraw.id
     );
+
+    this.currentScores = [];
+    this.currentGames.forEach((game) =>
+      this.allScores.forEach((score) => {
+        if (score.game_id === game.game_id) this.currentScores.push(score);
+      })
+    );
+    console.log('[DEBUG] currentScores:');
+    console.log(this.currentScores);
 
     // console.log('AFTER');
     // console.log(this.currentGames);
