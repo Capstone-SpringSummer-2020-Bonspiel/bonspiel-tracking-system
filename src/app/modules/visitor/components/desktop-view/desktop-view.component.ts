@@ -198,6 +198,14 @@ export class DesktopViewComponent implements OnInit {
               // console.log(arr);
 
               const A = [];
+
+              //Add a new container for all teams
+              A.push({
+                type: 'All Teams',
+                id: '',
+                teams: [],
+              });
+
               for (const team of arr) {
                 // Add a new container for each pool ID if it does not already exist
                 if (
@@ -266,6 +274,21 @@ export class DesktopViewComponent implements OnInit {
                     found.teams.push(team);
                   }
                 }
+                // Add team to the 'All Teams' container
+                if (team.name !== null) {
+                  const found = A.find((e) => e.type === 'All Teams');
+                  if (found) {
+                    found.teams.push(team);
+                  }
+                }
+              }
+
+              // If event type is 'Other' then 'All Teams' is redundant
+              if (
+                A.find((e) => e.type === 'Other') &&
+                A.find((e) => e.type === 'All Teams')
+              ) {
+                A.splice(0, 1);
               }
 
               // console.log('[DEBUG] A:');
@@ -274,13 +297,14 @@ export class DesktopViewComponent implements OnInit {
               this.dataSourceAllStandings.length = 0; // Clear array
               this.dataSourceAllStandings = A; // Populate array
 
+              //reverse sort losses, sort wins
               this.dataSourceAllStandings.forEach((group) => {
                 group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
                 group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
               });
 
-              // console.log('[DEBUG] dataSourceAllStandings');
-              // console.log(this.dataSourceAllStandings);
+              console.log('[DEBUG] dataSourceAllStandings');
+              console.log(this.dataSourceAllStandings);
 
               this.spinnerService.off();
             });
