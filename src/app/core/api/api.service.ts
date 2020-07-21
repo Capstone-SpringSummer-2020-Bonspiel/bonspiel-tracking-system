@@ -55,7 +55,7 @@ export class ApiService {
 
   public generateBracket(curlingEventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/events/${curlingEventId}/generate_brackets`
+      `${environment.apiUrl}/api/v1/events/${curlingEventId}/generate-brackets`
     );
   }
 

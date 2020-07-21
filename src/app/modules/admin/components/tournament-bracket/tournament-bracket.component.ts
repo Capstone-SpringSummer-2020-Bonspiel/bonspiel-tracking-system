@@ -26,16 +26,29 @@ export class TournamentBracketComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.spinnerService.on();
+    this.spinnerService.on();
     console.log(`eventId= ${this.childMessage}`);
     this.apiService.generateBracket(this.childMessage).subscribe((res: any) => {
       console.log('response');
       console.log(res);
       this.data = res;
-      //this.spinnerService.off();
+      this.spinnerService.off();
+
+      for (var i = 0; i < res.edges.length; i++) {
+        this.edges.push(res.edges[i]);
+      }
+
+      for (var i = 0; i < res.nodes.length; i++) {
+        this.nodes.push(res.nodes[i]);
+      }
+
+      console.log('data=');
+      console.log(this.data);
+      console.log('this.edges=');
+      console.log(this.edges);
+      console.log('this.nodes=');
+      console.log(this.nodes);
     });
-    console.log('data=');
-    console.log(this.data);
 
     // for (var i = 0; i < jsonData.edges.length; i++) {
     //   this.edges.push(jsonData.edges[i]);
@@ -44,11 +57,6 @@ export class TournamentBracketComponent implements OnInit {
     // for (var i = 0; i < jsonData.nodes.length; i++) {
     //   this.nodes.push(jsonData.nodes[i]);
     // }
-
-    console.log('this.edges=');
-    console.log(this.edges);
-    console.log('this.nodes=');
-    console.log(this.nodes);
   }
 }
 
