@@ -72,4 +72,9 @@ tr.team-row:not(.expanded-row):active {
   position: relative;
   left: 37%;
 }
-
+.expansion-panel{
+  width: 100%;
+  margin: 10px;
+  border: 1px solid black;
+  word-wrap:break-word;
+}

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { MatExpansionPanel } from '@angular/material/expansion';
 //import { Address } from 'cluster';
 
 @Component({
@@ -17,6 +18,7 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  viewProviders: [MatExpansionPanel]
 })
 
 
@@ -29,6 +31,7 @@ export class TeamlistComponent {
   allTeamData = null;
   allEventData = null;
   selectedEvent = null;
+  panelOpenState = false;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
