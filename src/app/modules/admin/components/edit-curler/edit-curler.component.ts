@@ -25,7 +25,7 @@ export class EditCurlerComponent implements OnInit {
   teams: any[] = [];
   selectedOrganizationID;
   selectedTeamID;
-  selectedCurlerID;
+  selectedCurler;
   positions = [
     { value: 'skip', viewValue: 'Skip' },
     { value: 'vice', viewValue: 'Vice' },
@@ -49,10 +49,10 @@ export class EditCurlerComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrlName: ['', Validators.required],
-      thirdCtrlPosition: ['', Validators.required],
-      thirdCtrlTeam: ['', Validators.required],
-      thirdCtrlOrg: ['', Validators.required],
+      thirdCtrlName: [''],
+      thirdCtrlPosition: [''],
+      thirdCtrlTeam: [''],
+      thirdCtrlOrg: [''],
     });
 
     this.spinnerService.on();
@@ -63,6 +63,7 @@ export class EditCurlerComponent implements OnInit {
         this.teams = res;
         this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
         this.spinnerService.off();
+        console.log(this.organizations);
       });
     });
   }
@@ -79,19 +80,33 @@ export class EditCurlerComponent implements OnInit {
   }
 
   getCurlerId() {
-    this.selectedCurlerID = this.secondFormGroup.value.secondCtrl;
+    this.selectedCurler = this.curlers.find(
+      (x) => x.id == this.secondFormGroup.value.secondCtrl
+    );
+    this.selectedCurler.organization = this.organizations.find(
+      (x) => (x.id = this.selectedCurler.affiliation)
+    );
+    console.log('selectedcurler');
+    console.log(this.selectedCurler);
   }
 
   onClickSubmit(stepper: MatStepper) {
-    const newName = this.thirdFormGroup.value.thirdCtrlName || null;
-    const newPosition = this.thirdFormGroup.value.thirdCtrlPosition || null;
-    const newTeam = this.thirdFormGroup.value.thirdCtrlTeam.toString() || null;
-    const newOrg = this.thirdFormGroup.value.thirdCtrlOrg.toString() || null;
+    const newName =
+      this.thirdFormGroup.value.thirdCtrlName || this.selectedCurler.name;
+    const newPosition =
+      this.thirdFormGroup.value.thirdCtrlPosition ||
+      this.selectedCurler.position;
+    const newTeam =
+      this.thirdFormGroup.value.thirdCtrlTeam.toString() ||
+      this.selectedCurler.curlingteam_id;
+    const newOrg =
+      this.thirdFormGroup.value.thirdCtrlOrg.toString() ||
+      this.selectedCurler.affiliation;
 
     this.spinnerService.on();
 
     this.apiService
-      .editCurler(newName, newPosition, newOrg, newTeam, this.selectedCurlerID)
+      .editCurler(newName, newPosition, newOrg, newTeam, this.selectedCurler.id)
       .subscribe(
         (res: any) => {
           console.log(res);
