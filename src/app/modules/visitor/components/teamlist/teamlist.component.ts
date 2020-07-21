@@ -43,7 +43,18 @@ export class TeamlistComponent {
         this.selectedEventId = res[0].id;
         console.log(this.selectedEventId);
 
-        this.eventBegin();
+        this.api
+          .getTeamsByEventId(this.selectedEventId)
+          .subscribe((res: any) => {
+            console.log('[DEBUG] eventObtain() in schedule component:');
+            console.log(res);
+            this.allTeamData = res;
+            this.allTeamData.sort(this.allTeamData.id);
+            console.log(this.allTeamData);
+            // console.log("ThisEventDrawDataBelow:");
+            // console.log(this.eventDrawData);
+            this.spinner.off();
+          });
         this.spinner.off();
       })
   }
@@ -66,7 +77,7 @@ export class TeamlistComponent {
 
   eventBegin() {
     this.api
-      .getTeams(this.selectedEventId)
+      .getTeamsByEventId(this.selectedEventId)
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);

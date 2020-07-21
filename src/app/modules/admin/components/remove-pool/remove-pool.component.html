@@ -2,32 +2,38 @@
   <h1> Remove Pool </h1>
 </div>
 <mat-vertical-stepper linear #stepper>
-  <mat-step [stepControl]="firstFormGroup">
-    <ng-template matStepLabel> Select Event </ng-template>
-    <mat-form-field>
-      <mat-label>Select Event for Pools</mat-label>
-      <mat-select [(value)]="selectedPool" (selectionChange)="onEventSelected($event)">
-        <mat-option *ngFor="let event of this.allEventData" [value]="event">
-          {{event.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
+  <mat-step [stepControl]="zeroFormGroup">
+    <form [formGroup]="zeroFormGroup">
+      <ng-template matStepLabel> Select Event </ng-template>
+      <mat-form-field>
+        <mat-label>Select Event for Pools</mat-label>
+        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event); stepper.next()" required>
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
   </mat-step>
 
-  <mat-step [stepControl]="secondFormGroup">
-    <ng-template matStepLabel> Select Pool </ng-template>
-    <mat-form-field>
-      <mat-label>Select Pool to Delete</mat-label>
-      <mat-select [(value)]="selectedPool" (selectionChange)="onPoolSelected($event)">
-        <mat-option *ngFor="let Pool of this.allPoolData" [value]="Pool">
-          {{Pool.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select Pool </ng-template>
+      <div *ngIf="this.selectedPool == null">
+        <p> Selected Event Has No Pool Exist. </p>
+      </div>
+      <mat-form-field>
+        <mat-label>Select Pool to Delete</mat-label>
+        <mat-select formControlName="poolCtrl" (selectionChange)="onPoolSelected($event); stepper.next()" required>
+          <mat-option *ngFor="let pool of this.allPoolData" [value]="pool">
+            {{pool.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext>Next</button>
@@ -41,7 +47,7 @@
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onPoolDelete()">Submit</button>
+      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

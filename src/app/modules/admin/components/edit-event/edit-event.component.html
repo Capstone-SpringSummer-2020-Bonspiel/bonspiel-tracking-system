@@ -2,124 +2,103 @@
   <h1> Edit Event </h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
+<mat-vertical-stepper linear #stepper>
+  <!-- SELECT EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
     <form [formGroup]="zeroFormGroup">
       <ng-template matStepLabel> Select Edited Event </ng-template>
       <mat-form-field>
         <mat-label>Select Event to Edit</mat-label>
-        <mat-select [(value)]="selectedEvent"
-          (selectionChange)="onEventSelected($event)">
-          <mat-option *ngFor="let event of this.allEventData"
-            [value]="event">
+        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event); stepper.next()" required>
+          <mat-option *ngFor="let event of this.allEventData" [value]="event">
             {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
+      <div *ngIf="this.selectedEvent != null">
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
 
+  <!-- INPUT NEW INFO -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Event Name </ng-template>
-      <p>Enter New Info or Leave Blank to Keep Previous Info</p>
-      <p>Previous Event Name: {{this.selectedEvent.name}} </p>
+      <div *ngIf="this.selectedEvent != null">
+        <p>Enter New Info or Leave Blank to Keep Previous Info</p>
+        <p>Previous Event Name: {{this.selectedEvent.name}} </p>
+      </div>
       <mat-form-field>
         <mat-label> New Event Name </mat-label>
-        <input matInput
-          type='text'
-          placeholder="New Event Name"
-          formControlName="eventNameCtrl">
+        <input matInput type='text' placeholder="New Event Name" formControlName="eventNameCtrl">
       </mat-form-field>
       <br>
+      <p>Previous Event Detail: {{this.selectedEvent.info}} </p>
       <mat-form-field>
         <mat-label> Event Detail </mat-label>
-        <input matInput
-          type='text'
-          placeholder="New Event Explanation"
-          formControlName="eventInfoCtrl">
+        <input matInput type='text' placeholder="New Event Explanation" formControlName="eventInfoCtrl">
       </mat-form-field>
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
-
 
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> New Event Type </ng-template>
-      <p>Select New Type or Leave Blank to Keep Previous Type</p>
-      <p>Previous Event Type: {{this.selectedEvent.event_type}} </p>
+      <div *ngIf="this.selectedEvent != null">
+        <p>Select New Type or Leave Blank to Keep Previous Type</p>
+        <p>Previous Event Type: {{this.selectedEvent.event_type}} </p>
+      </div>
       <mat-form-field>
         <mat-label> Event Type </mat-label>
-        <mat-select formControlName="eventTypeCtrl"
-          name="eventType">
-          <mat-option *ngFor="let eventType of eventTypes"
-            [value]="eventType.value"> {{eventType.viewValue}} </mat-option>
+        <mat-select formControlName="eventTypeCtrl" name="eventType">
+          <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.value"> {{eventType.viewValue}} </mat-option>
         </mat-select>
       </mat-form-field>
       <br>
+      <p>Previous Event Finished: {{this.selectedEvent.finished}} </p>
       <mat-form-field>
         <mat-label>Event Condition</mat-label>
-        <mat-select formControlName="eventFinishedCtrl"
-          name="eventType">
-          <mat-option *ngFor="let statusTypes of statusTypes"
-            [value]="statusTypes.value"> {{statusTypes.viewValue}} </mat-option>
+        <mat-select formControlName="eventFinishedCtrl" name="eventType">
+          <mat-option *ngFor="let statusTypes of statusTypes" [value]="statusTypes.value"> {{statusTypes.viewValue}} </mat-option>
         </mat-select>
       </mat-form-field>
       <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
 
-
-
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> New Event Begin Date </ng-template>
-      <p>Enter New Date or Leave Blank to Keep Previous Date</p>
-      <p>Previous Event Begin Date: {{this.selectedEvent.begin_date}} </p>
+      <div *ngIf="this.selectedEvent != null">
+        <p>Enter New Date or Leave Blank to Keep Previous Date</p>
+        <p>Previous Event End Date: {{this.selectedEvent.begin_date}} </p>
+      </div>
       <mat-form-field>
         <mat-label>Event Beginning Date</mat-label>
-        <input matInput
-          [matDatepicker]="picker1"
-          formControlName="eventStartCtrl">
-        <mat-datepicker-toggle matSuffix
-          [for]="picker1"></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="picker1" formControlName="eventStartCtrl">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
+      <br>
+      <p>Previous Event Name: {{this.selectedEvent.end_date}} </p>
+      <mat-form-field>
+        <mat-label>Event End Date</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="eventEndCtrl">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2 color="primary"></mat-datepicker>
+      </mat-form-field>
     </form>
-    <br>
-    <mat-form-field>
-      <mat-label>Event End Date</mat-label>
-      <input matInput
-        [matDatepicker]="picker2"
-        formControlName="eventEndCtrl">
-      <mat-datepicker-toggle matSuffix
-        [for]="picker2"></mat-datepicker-toggle>
-      <mat-datepicker #picker2
-        color="primary"></mat-datepicker>
-    </mat-form-field>
     <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        matStepperNext>Next</button>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
@@ -127,12 +106,9 @@
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        (click)="stepper.reset()">Reset</button>
-      <button mat-button
-        (click)="onEditCurlingEvent()">Submit</button>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

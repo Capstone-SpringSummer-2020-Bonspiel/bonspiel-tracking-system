@@ -3,11 +3,13 @@
 </div>
 
 <mat-vertical-stepper linear #stepper>
+  <!-- SELECT EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
     <ng-template matStepLabel> Select Event </ng-template>
     <mat-form-field>
       <mat-label>Select Event to Edit</mat-label>
-      <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
+      <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event); stepper.next()" required>
+        <mat-option>--</mat-option>
         <mat-option *ngFor="let event of this.allEventData" [value]="event">
           {{event.name}}
         </mat-option>
@@ -19,12 +21,13 @@
     </div>
   </mat-step>
 
+  <!-- INPUT NEW INFO -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Bracket Name </ng-template>
       <mat-form-field>
         <mat-label> New Bracket Name </mat-label>
-        <input matInput type='text' placeholder="New Bracket Name" formControlName="firstCtrl">
+        <input matInput type='text' placeholder="New Bracket Name" formControlName="eventNameCtrl">
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Back</button>
@@ -33,13 +36,14 @@
     </form>
   </mat-step>
 
+  <!-- FINISH & SUBMIT -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onCreateBracket()">Submit</button>
+      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>
