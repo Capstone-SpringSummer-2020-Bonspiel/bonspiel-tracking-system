@@ -275,6 +275,7 @@ export class DesktopViewComponent implements OnInit {
               this.dataSourceAllStandings = A; // Populate array
 
               this.dataSourceAllStandings.forEach((group) => {
+                group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
                 group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
               });
 
