@@ -1,12 +1,11 @@
 {
-  "vscodeWorkspaceSwitcher.paths": [
-    "/home/raven/Documents/workspaces"
-  ],
+  "vscodeWorkspaceSwitcher.paths": ["/home/raven/Documents/workspaces"],
   "workbench.startupEditor": "newUntitledFile",
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
   "editor.minimap.enabled": false,
   "html.format.unformatted": "code",
+  "html.format.wrapAttributes": "force",
   "ego.power-tools": {
     "buttons": [
       {
@@ -38,12 +37,8 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "python.formatting.autopep8Args": [
-    "--ignore E121"
-  ],
-  "markdown.styles": [
-    "markdown.css"
-  ],
+  "python.formatting.autopep8Args": ["--ignore E121"],
+  "markdown.styles": ["markdown.css"],
   "window.zoomLevel": 0,
   "liveServer.settings.donotVerifyTags": true,
   "liveServer.settings.donotShowInfoMsg": true,
