@@ -303,8 +303,8 @@ export class DesktopViewComponent implements OnInit {
                 group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
               });
 
-              console.log('[DEBUG] dataSourceAllStandings');
-              console.log(this.dataSourceAllStandings);
+              //console.log('[DEBUG] dataSourceAllStandings');
+              //console.log(this.dataSourceAllStandings);
 
               this.spinnerService.off();
             });
