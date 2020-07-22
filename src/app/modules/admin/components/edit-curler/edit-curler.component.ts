@@ -26,13 +26,16 @@ export class EditCurlerComponent implements OnInit {
   selectedOrganizationID;
   selectedTeamID;
   selectedCurler;
+  throwingOrders = [
+    { value: 'lead', viewValue: 'Lead' },
+    { value: 'second', viewValue: 'Second' },
+    { value: 'third', viewValue: 'Third' },
+    { value: 'fourth', viewValue: 'Fourth' },
+    { value: 'alternate', viewValue: 'Alternate' },
+  ];
   positions = [
     { value: 'skip', viewValue: 'Skip' },
     { value: 'vice', viewValue: 'Vice' },
-    { value: 'second', viewValue: 'Second' },
-    { value: 'lead', viewValue: 'Lead' },
-    { value: 'fourth', viewValue: 'Fourth' },
-    { value: 'alternate', viewValue: 'Alternate' },
   ];
   constructor(
     private _formBuilder: FormBuilder,
@@ -50,6 +53,7 @@ export class EditCurlerComponent implements OnInit {
     });
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrlName: [''],
+      thirdCtrlThrowing: [''],
       thirdCtrlPosition: [''],
       thirdCtrlTeam: [''],
       thirdCtrlOrg: [''],
@@ -63,12 +67,13 @@ export class EditCurlerComponent implements OnInit {
         this.teams = res;
         this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
         this.spinnerService.off();
-        console.log(this.organizations);
       });
     });
   }
+
   getOrgCurlers() {
     this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
+    console.log(`orgID = ${this.selectedOrganizationID}`);
     this.spinnerService.on();
     this.apiService
       .getCurlersByOrganization(this.selectedOrganizationID)
@@ -81,10 +86,10 @@ export class EditCurlerComponent implements OnInit {
 
   getCurlerId() {
     this.selectedCurler = this.curlers.find(
-      (x) => x.id == this.secondFormGroup.value.secondCtrl
+      (x) => x.id === this.secondFormGroup.value.secondCtrl
     );
     this.selectedCurler.organization = this.organizations.find(
-      (x) => (x.id = this.selectedCurler.affiliation)
+      (x) => x.id === this.selectedCurler.affiliation
     );
     console.log('selectedcurler');
     console.log(this.selectedCurler);
@@ -102,11 +107,28 @@ export class EditCurlerComponent implements OnInit {
     const newOrg =
       this.thirdFormGroup.value.thirdCtrlOrg.toString() ||
       this.selectedCurler.affiliation;
+    const newThrowing =
+      this.thirdFormGroup.value.thirdCtrlThrowing ||
+      this.selectedCurler.throwing_order;
 
+    console.log(`this.selectedCurler.id= ${this.selectedCurler.id}`);
+    console.log(`newname = ${newName}`);
+    console.log(`new Position = ${newPosition}`);
+    console.log(`new Team= ${newTeam}`);
+    console.log(`new Org= ${newOrg}`);
+    console.log(`new Throwing= ${newThrowing}`);
     this.spinnerService.on();
 
     this.apiService
-      .editCurler(newName, newPosition, newOrg, newTeam, this.selectedCurler.id)
+      .editCurler(
+        newName,
+        newPosition,
+        newOrg,
+        newTeam,
+        null,
+        newThrowing,
+        this.selectedCurler.id
+      )
       .subscribe(
         (res: any) => {
           console.log(res);

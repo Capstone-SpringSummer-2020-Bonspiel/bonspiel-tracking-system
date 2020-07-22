@@ -22,7 +22,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpService: HttpClient) { }
+  constructor(private httpService: HttpClient) {}
 
   /********************************************************************/
 
@@ -93,7 +93,14 @@ export class ApiService {
     );
   }
 
-  public editEvent(nameData, beginDateData, endDateData, completedData, infoData, eventTypeData, eventId
+  public editEvent(
+    nameData,
+    beginDateData,
+    endDateData,
+    completedData,
+    infoData,
+    eventTypeData,
+    eventId
   ) {
     const body = {
       name: nameData,
@@ -103,8 +110,8 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    console.log('last check before lunch')
-    console.log(body)
+    console.log('last check before lunch');
+    console.log(body);
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`,
       body
@@ -112,7 +119,7 @@ export class ApiService {
   }
 
   public deleteEvent(eventId) {
-    console.log(eventId)
+    console.log(eventId);
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`
     );
@@ -265,12 +272,21 @@ export class ApiService {
     );
   }
 
-  public createCurler(name, position, affiliation, curlingTeamId) {
+  public createCurler(
+    name,
+    position,
+    affiliation,
+    curlingTeamId,
+    photoObj,
+    throwingOrder
+  ) {
     const body = {
       name: name,
       position: position,
       affiliation: affiliation,
       curlingTeamId: curlingTeamId,
+      photoObj: photoObj,
+      throwingOrder: throwingOrder,
     };
     return this.httpService.post(
       `${environment.apiUrl}/api/v1/admin/curler`,
@@ -278,12 +294,22 @@ export class ApiService {
     );
   }
 
-  public editCurler(name, position, affiliation, curlingTeamId, curlerId) {
+  public editCurler(
+    name,
+    position,
+    affiliation,
+    curlingTeamId,
+    photoObj,
+    throwingOrder,
+    curlerId
+  ) {
     const body = {
       name: name,
       position: position,
       affiliation: affiliation,
       curlingTeamId: curlingTeamId,
+      photoObj: photoObj,
+      throwingOrder: throwingOrder,
     };
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/curler/${curlerId}`,
@@ -302,7 +328,8 @@ export class ApiService {
   // Bracket
   public getBracket(eventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/${eventId}/brackets`);
+      `${environment.apiUrl}/api/v1/${eventId}/brackets`
+    );
   }
 
   public createBracket(nameData, eventId) {
@@ -320,7 +347,7 @@ export class ApiService {
       name: nameData,
       eventId: eventIdData,
     };
-    console.log(body)
+    console.log(body);
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`,
       body
@@ -328,8 +355,8 @@ export class ApiService {
   }
 
   public removeBracket(bracketId) {
-    console.log('delete target bracket:')
-    console.log(bracketId)
+    console.log('delete target bracket:');
+    console.log(bracketId);
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/bracket/${bracketId}`
     );
@@ -341,7 +368,8 @@ export class ApiService {
   // Pool
   public getPool(eventId) {
     return this.httpService.get(
-      `${environment.apiUrl}/api/v1/${eventId}/pools`);
+      `${environment.apiUrl}/api/v1/${eventId}/pools`
+    );
   }
 
   public createPool(nameData, eventId) {
@@ -366,8 +394,8 @@ export class ApiService {
   }
 
   public removePool(poolId) {
-    console.log('delete target pool:')
-    console.log(poolId)
+    console.log('delete target pool:');
+    console.log(poolId);
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/pool/${poolId}`
     );

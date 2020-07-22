@@ -24,13 +24,16 @@ export class CreateCurlerComponent implements OnInit {
   teams: any[] = [];
   selectedOrganizationID;
   selectedTeamID;
+  throwingOrders = [
+    { value: 'lead', viewValue: 'Lead' },
+    { value: 'second', viewValue: 'Second' },
+    { value: 'third', viewValue: 'Third' },
+    { value: 'fourth', viewValue: 'Fourth' },
+    { value: 'alternate', viewValue: 'Alternate' },
+  ];
   positions = [
     { value: 'skip', viewValue: 'Skip' },
     { value: 'vice', viewValue: 'Vice' },
-    { value: 'second', viewValue: 'Second' },
-    { value: 'lead', viewValue: 'Lead' },
-    { value: 'fourth', viewValue: 'Fourth' },
-    { value: 'alternate', viewValue: 'Alternate' },
   ];
   constructor(
     private _formBuilder: FormBuilder,
@@ -48,7 +51,8 @@ export class CreateCurlerComponent implements OnInit {
     });
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrlName: ['', Validators.required],
-      thirdCtrlPosition: ['', Validators.required],
+      thirdCtrlThrowing: [''],
+      thirdCtrlPosition: [''],
     });
 
     this.spinnerService.on();
@@ -75,7 +79,9 @@ export class CreateCurlerComponent implements OnInit {
 
   onClickSubmit(stepper: MatStepper) {
     const name = this.thirdFormGroup.value.thirdCtrlName;
-    const position = this.thirdFormGroup.value.thirdCtrlPosition;
+    const throwingOrder = this.thirdFormGroup.value.thirdCtrlThrowing || null;
+    const position = this.thirdFormGroup.value.thirdCtrlPosition || null;
+    const photoObj = null;
 
     this.spinnerService.on();
 
@@ -84,7 +90,9 @@ export class CreateCurlerComponent implements OnInit {
         name,
         position,
         this.selectedOrganizationID.toString(),
-        this.selectedTeamID.toString()
+        this.selectedTeamID.toString(),
+        photoObj,
+        throwingOrder
       )
       .subscribe(
         (res: any) => {

@@ -49,18 +49,30 @@
       <mat-card *ngIf="selectedCurler"
         class="m-2">
         Name: {{selectedCurler.name}} <br />
-        Position: {{selectedCurler.position}} <br />
+        Throwing Order: {{selectedCurler.throwing_order | titlecase}} <br />
+        Position: {{selectedCurler.position | titlecase}} <br />
         Team: {{selectedCurler.curlingteamname}} <br />
-        Club: {{selectedCurler.organization.full_name}} <br />
+        Club Affiliation: {{selectedCurler.organization.full_name}} <br />
       </mat-card>
       <mat-form-field>
-        <mat-label>New Name</mat-label>
+        <mat-label>Name</mat-label>
         <input matInput
           formControlName="thirdCtrlName">
       </mat-form-field>
       <br>
       <mat-form-field>
-        <mat-label>New Position</mat-label>
+        <mat-label>Throwing Order</mat-label>
+        <mat-select formControlName="thirdCtrlThrowing"
+          name="orders">
+          <mat-option *ngFor="let order of throwingOrders"
+            [value]="order.value">
+            {{order.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Position</mat-label>
         <mat-select formControlName="thirdCtrlPosition"
           name="positions">
           <mat-option *ngFor="let position of positions"
@@ -71,7 +83,7 @@
       </mat-form-field>
       <br>
       <mat-form-field>
-        <mat-label>New Team</mat-label>
+        <mat-label>Team</mat-label>
         <mat-select formControlName="thirdCtrlTeam"
           name="teams">
           <mat-option *ngFor="let team of teams"
@@ -82,7 +94,7 @@
       </mat-form-field>
       <br>
       <mat-form-field>
-        <mat-label>New Organization</mat-label>
+        <mat-label>Affiliation</mat-label>
         <mat-select formControlName="thirdCtrlOrg"
           name="organizations">
           <mat-option *ngFor="let organization of organizations"
