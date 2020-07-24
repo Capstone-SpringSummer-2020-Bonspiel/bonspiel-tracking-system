@@ -285,14 +285,19 @@ export class DesktopViewComponent implements OnInit {
 
               // If event type is 'Other' then 'All Teams' is redundant
               if (
-                A.find((e) => e.type === 'Other') &&
+                (A.find((e) => e.type === 'Other') ||
+                  A.find((e) => e.type === 'Bracket')) &&
                 A.find((e) => e.type === 'All Teams')
               ) {
-                A.splice(0, 1);
+                console.log(A.findIndex((e) => e.type === 'All Teams'));
+                A.splice(
+                  A.findIndex((e) => e.type !== 'All Teams'),
+                  1
+                );
               }
 
-              // console.log('[DEBUG] A:');
-              // console.log(A);
+              console.log('[DEBUG] A:');
+              console.log(A);
 
               this.dataSourceAllStandings.length = 0; // Clear array
               this.dataSourceAllStandings = A; // Populate array

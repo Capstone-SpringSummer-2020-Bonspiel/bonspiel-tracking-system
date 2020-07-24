@@ -89,7 +89,7 @@ export class RemoveDrawComponent implements OnInit {
       this.selectedDrawGames = this.allGames.filter(
         (x) => x.draw_id === selectedDrawID
       );
-
+      console.log(this.selectedDrawGames);
       this.spinnerService.off();
     });
   }
