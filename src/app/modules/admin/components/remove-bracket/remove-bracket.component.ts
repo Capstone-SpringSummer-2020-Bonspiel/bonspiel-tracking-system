@@ -1,122 +1,114 @@
 import { Component, OnInit } from '@angular/core';
-import * as shape from 'd3-shape';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-remove-bracket',
   templateUrl: './remove-bracket.component.html',
-  styleUrls: ['./remove-bracket.component.scss']
+  styleUrls: ['./remove-bracket.component.scss'],
 })
 export class RemoveBracketComponent implements OnInit {
-  zeroFormGroup: FormGroup;
-  firstFormGroup: FormGroup;
+  formGroup: FormGroup;
 
-  allBracketData: null;
-  allEventData: null;
-  selectedEvent: null;
-  selectedBracket: null;
-  submitResult: Number;
-  selectedBracketId: Number;
-  selectedEventId: Number;
-
-  nodes = [];
-  edges = [];
-
-  curve = shape.curveLinear;
+  events: any = [];
+  brackets: any = [];
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
-  ) { }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          bracketCtrl: ['', Validators.required],
+        }),
+      ]),
+    });
+
+    console.log(this.formGroup);
+
+    this.getEvents();
+  }
+
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
+  getEvents() {
+    // Get events
     this.spinnerService.on();
     this.apiService
       .getEvents()
-      .subscribe((res: any) => {
-        console.log('getEvent():');
-        console.log(res);
-        this.allEventData = res;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
-
-        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-        //   this.allBracketData = res;
-        //   this.selectedBracket = res[0];
-        //   this.selectedBracketId = res[0].id;
-        // })
-
-        this.spinnerService.off();
+      .subscribe((res) => {
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+        console.log('events:');
+        console.log(this.events);
       })
-
-    this.zeroFormGroup = this.fb.group({
-      eventCtrl: ['', Validators.required],
-    });
-    this.firstFormGroup = this.fb.group({
-      bracketCtrl: ['', Validators.required],
-    });
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
-  onEventSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(event);
 
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-      console.log(res)
-      this.allBracketData = res;
-      this.selectedBracket = res[0];
-      if (res[0]) {
-        this.selectedBracketId = res[0].id;
-      }
-    })
-  }
-  onBracketSelected(bracket: any) {
-    console.log(this.allEventData);
-    console.log('the selected Pool is:');
-    console.log(bracket.value);
-
-    this.selectedBracket = bracket.value;
-    this.selectedBracketId = bracket.value.id;
-  }
-  onClickSubmit(stepper) {
-    //Remove Bracket
-    console.log("Event Select: ")
-    console.log(this.selectedEventId)
-    console.log("Bracket Delete: ")
-    console.log(this.selectedBracket)
-    console.log(this.selectedBracketId)
-
+  getBrackets() {
+    // Get brackets
     this.spinnerService.on();
     this.apiService
-      .removeBracket(this.selectedBracketId)
+      .getBracket(this.getCtrlValue(0).eventCtrl)
+      .subscribe((res) => {
+        this.brackets = res;
+        console.log('brackets:');
+        console.log(this.brackets);
+      })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  onClickRemove(stepper: MatStepper) {
+    const bracketId = this.getCtrlValue(1).bracketCtrl;
+
+    // Remove bracket
+    this.spinnerService.on();
+    this.apiService
+      .removeBracket(bracketId)
       .subscribe(
         (res: any) => {
-          this.notificationService.showSuccess('Bracket has been successfully deleted!', '');
-          this.spinnerService.off();
+          console.log(res);
+
+          this.notificationService.showSuccess('Bracket has been removed', '');
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Bracket deleted failed!', '');
-          this.spinnerService.off();
-        })
-      .add(
-        () => {
-          stepper.reset();
-          this.spinnerService.off()
-        });
-
-
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

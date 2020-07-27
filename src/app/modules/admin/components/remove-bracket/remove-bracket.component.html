@@ -2,54 +2,68 @@
   <h1> Remove Bracket </h1>
 </div>
 
-<mat-vertical-stepper linear #stepper>
-  <mat-step [stepControl]="zeroFormGroup">
-    <form [formGroup]="zeroFormGroup">
-      <ng-template matStepLabel> Select Event </ng-template>
+<form [formGroup]="formGroup">
+  <mat-vertical-stepper linear
+    #stepper
+    formArrayName="formArray">
+
+    <!-- EVENT -->
+    <mat-step formGroupName="0"
+      [stepControl]="formArray?.get([0])">
+      <ng-template matStepLabel> Select an Event </ng-template>
       <mat-form-field>
-        <mat-label>Select Event for Brackets</mat-label>
-        <mat-select formControlName="eventCtrl" (selectionChange)="onEventSelected($event); stepper.next()" required>
-          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+        <mat-label>Choose an Event</mat-label>
+        <mat-select formControlName="eventCtrl"
+          (selectionChange)="getBrackets(); stepper.next()"
+          required>
+          <mat-option *ngFor="let event of events"
+            [value]="event.id">
             {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button
+          matStepperNext>Next</button>
       </div>
-    </form>
+    </mat-step>
 
-  </mat-step>
-
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select Bracket </ng-template>
-      <div *ngIf="this.selectedBracket == null">
-        <p> Selected Event Has No Bracket Exist. </p>
-      </div>
-      <mat-form-field *ngIf="this.selectedBracket != null">
-        <mat-label>Select Bracket to Delete</mat-label>
-        <mat-select formControlName="bracketCtrl" (selectionChange)="onBracketSelected($event); stepper.next()" required>
-          <mat-option *ngFor="let bracket of this.allBracketData" [value]="bracket">
+    <!-- BRACKET -->
+    <mat-step formGroupName="1"
+      [stepControl]="formArray?.get([1])">
+      <ng-template matStepLabel> Select a Bracket </ng-template>
+      <mat-form-field>
+        <mat-label>Choose Bracket</mat-label>
+        <mat-select formControlName="bracketCtrl"
+          (selectionChange)="stepper.next()"
+          required>
+          <mat-option *ngFor="let bracket of brackets"
+            [value]="bracket.id">
             {{bracket.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
       </div>
-    </form>
-  </mat-step>
+    </mat-step>
 
-
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
-    </div>
-  </mat-step>
-</mat-vertical-stepper>
+    <!-- REMOVE -->
+    <mat-step>
+      <ng-template matStepLabel>Remove</ng-template>
+      <p>Click Remove when ready.</p>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="stepper.reset()">Reset</button>
+        <button mat-button
+          (click)="onClickRemove(stepper)">Remove</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+</form>
