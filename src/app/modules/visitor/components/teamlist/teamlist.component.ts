@@ -74,8 +74,8 @@ export class TeamlistComponent {
     console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
-    this.selectedEventId = this.selectedEvent.id;
-    // this.selectedEvent = event.value;
+    this.selectedEventId = event.value.id;
+    this.selectedEvent = event.value;
     this.eventBegin();
   }
 

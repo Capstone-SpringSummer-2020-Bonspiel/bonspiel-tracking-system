@@ -269,8 +269,8 @@ ul {
   flex-flow: column wrap;
   justify-content: center;
   align-items: flex-start;
-  // margin: 16px;
-  // padding: 16px;
+  margin: 0px;
+  padding: 0px;
   border-radius: 8px;
   height: auto;
   width: auto;
@@ -428,7 +428,7 @@ hr {
 }
 
 .example-headers-align .mat-form-field + .mat-form-field {
-  margin-left: 8px;
+  margin-left: 5px;
 }
 
 .yellow-icon {
@@ -452,7 +452,7 @@ hr {
 }
 
 .cell-container{
-  // margin: 10px;
+  margin: 10px;
 }
 .game-box{
   margin: 0;
