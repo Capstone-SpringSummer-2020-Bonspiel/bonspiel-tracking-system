@@ -1,116 +1,112 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { MatStepper } from '@angular/material/stepper';
 import { NotificationService } from '@app/shared/services/notification.service';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-remove-pool',
   templateUrl: './remove-pool.component.html',
-  styleUrls: ['./remove-pool.component.scss']
+  styleUrls: ['./remove-pool.component.scss'],
 })
 export class RemovePoolComponent implements OnInit {
-  zeroFormGroup: FormGroup;
-  firstFormGroup: FormGroup;
+  formGroup: FormGroup;
 
-  allPoolData: null;
-  allEventData: null;
-  selectedEvent: null;
-  selectedPool: null;
-  submitResult: Number;
-  selectedPoolId: Number;
-  selectedEventId: 0;
+  events: any = [];
+  pools: any = [];
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
-    public dialog: MatDialog,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
-  ) { }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          poolCtrl: ['', Validators.required],
+        }),
+      ]),
+    });
+
+    console.log(this.formGroup);
+
+    this.getEvents();
+  }
+
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
+  getEvents() {
+    // Get events
     this.spinnerService.on();
     this.apiService
       .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
-
-        // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-        //   this.allPoolData = res;
-        //   this.selectedPool = res[0];
-        //   this.selectedPoolId = res[0].id;
-        // })
-
-        this.spinnerService.off();
+      .subscribe((res) => {
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+        console.log('events:');
+        console.log(this.events);
       })
-
-    this.zeroFormGroup = this.fb.group({
-      eventCtrl: ['', Validators.required],
-    });
-    this.firstFormGroup = this.fb.group({
-      poolCtrl: ['', Validators.required],
-    });
-  }
-  onEventSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-      this.allPoolData = res;
-      this.selectedPool = res[0];
-      if (res[0]) {
-        this.selectedPoolId = res[0].id;
-      }
-    })
-  }
-  onPoolSelected(pool: any) {
-    console.log(this.allEventData);
-    console.log('the selected Pool is:');
-    console.log(this.allEventData);
-    console.log(pool.value);
-
-    this.selectedPool = pool.value;
-    this.selectedPoolId = pool.value.id;
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 
-  onClickSubmit(stepper) {
-    //Remove Pool
-    console.log("Event Select: ")
-    console.log(this.selectedEventId)
-    console.log("Pool Delete: ")
-    console.log(this.selectedPoolId)
-
+  getPools() {
+    // Get pools
     this.spinnerService.on();
     this.apiService
-      .removePool(String(this.selectedPoolId))
+      .getPool(this.getCtrlValue(0).eventCtrl)
+      .subscribe((res: any) => {
+        this.pools = res;
+        this.pools.sort((a, b) => (a.name > b.name ? 1 : -1));
+        console.log('pools:');
+        console.log(this.pools);
+      })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  onClickRemove(stepper: MatStepper) {
+    const poolId = this.getCtrlValue(1).poolCtrl;
+
+    // Remove pool
+    this.spinnerService.on();
+    this.apiService
+      .removePool(poolId)
       .subscribe(
         (res: any) => {
-          this.notificationService.showSuccess('Pool has been successfully deleted!', '');
-          this.spinnerService.off();
+          console.log(res);
+          this.notificationService.showSuccess('Pool has been removed', '');
         },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Pool deleted failed!', '');
-          this.spinnerService.off();
-        })
-      .add(
-        () => {
-          stepper.reset();
-          this.spinnerService.off()
-        });
-
-
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -9,10 +9,10 @@ import { MatStepper } from '@angular/material/stepper';
 @Component({
   selector: 'app-remove-event',
   templateUrl: './remove-event.component.html',
-  styleUrls: ['./remove-event.component.scss']
+  styleUrls: ['./remove-event.component.scss'],
 })
 export class RemoveEventComponent implements OnInit {
-  events: null;
+  events: any = [];
   formGroup: FormGroup;
 
   constructor(
@@ -20,8 +20,8 @@ export class RemoveEventComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
-  ) { }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     // Initialize form group
@@ -37,17 +37,18 @@ export class RemoveEventComponent implements OnInit {
   getEvents() {
     // Get events
     this.spinnerService.on();
-    this.apiService.getEvents()
-      .subscribe(
-        (res: any) => {
-          console.log('[DEBUG] eventObtain() in schedule component:');
-          console.log(res);
+    this.apiService
+      .getEvents()
+      .subscribe((res: any) => {
+        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log(res);
 
-          this.events = res;
-        })
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+      })
       .add(() => {
         this.spinnerService.off();
-      })
+      });
   }
 
   onClickRemove(stepper: MatStepper) {
@@ -55,19 +56,23 @@ export class RemoveEventComponent implements OnInit {
 
     // Remove event
     this.spinnerService.on();
-    this.apiService.deleteEvent(eventId)
+    this.apiService
+      .deleteEvent(eventId)
       .subscribe(
         (res: any) => {
-          console.log(res)
-          this.notificationService.showSuccess('Event has been successfully deleted!', '')
+          console.log(res);
+          this.notificationService.showSuccess(
+            'Event has been successfully deleted!',
+            ''
+          );
 
           // Reset the stepper
           stepper.reset();
 
           // Reset the form and validation
-          this.formGroup.reset()
-          Object.keys(this.formGroup.controls).forEach(key => {
-            this.formGroup.controls[key].setErrors(null)
+          this.formGroup.reset();
+          Object.keys(this.formGroup.controls).forEach((key) => {
+            this.formGroup.controls[key].setErrors(null);
           });
 
           // Re-fetch events
@@ -75,11 +80,14 @@ export class RemoveEventComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError(err.message, 'Something went wrong');
-        })
-      .add(
-        () => {
-          this.spinnerService.off()
-        });
+          this.notificationService.showError(
+            err.message,
+            'Something went wrong'
+          );
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

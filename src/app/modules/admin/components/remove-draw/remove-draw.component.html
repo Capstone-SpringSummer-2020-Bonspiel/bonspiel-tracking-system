@@ -27,8 +27,6 @@
       </mat-form-field>
       <div>
         <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
           matStepperNext>Next</button>
       </div>
     </mat-step>
@@ -37,6 +35,7 @@
     <mat-step formGroupName="1"
       [stepControl]="formArray?.get([1])">
       <ng-template matStepLabel> Select a Draw </ng-template>
+
       <mat-form-field>
         <mat-label> Select Draw... </mat-label>
         <mat-select formControlName="drawCtrl"
@@ -51,6 +50,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <div>
         <button mat-button
           matStepperPrevious>Back</button>

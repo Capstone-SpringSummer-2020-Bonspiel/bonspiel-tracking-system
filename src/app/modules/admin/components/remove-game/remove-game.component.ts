@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { forkJoin } from 'rxjs';
@@ -9,7 +14,7 @@ import { NotificationService } from '@app/shared/services/notification.service';
 @Component({
   selector: 'app-remove-game',
   templateUrl: './remove-game.component.html',
-  styleUrls: ['./remove-game.component.scss']
+  styleUrls: ['./remove-game.component.scss'],
 })
 export class RemoveGameComponent implements OnInit {
   formGroup: FormGroup;
@@ -22,7 +27,7 @@ export class RemoveGameComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Initialize form group
@@ -33,7 +38,7 @@ export class RemoveGameComponent implements OnInit {
         }),
         this.fb.group({
           gameCtrl: ['', Validators.required],
-        })
+        }),
       ]),
     });
 
@@ -54,9 +59,11 @@ export class RemoveGameComponent implements OnInit {
   getEvents() {
     // Get events
     this.spinnerService.on();
-    this.apiService.getEvents()
+    this.apiService
+      .getEvents()
       .subscribe((res) => {
         this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
         console.log('events:');
         console.log(this.events);
       })
@@ -68,13 +75,13 @@ export class RemoveGameComponent implements OnInit {
   getGames() {
     // Get games
     this.spinnerService.on();
-    this.apiService.getGames(this.getCtrlValue(0).eventCtrl)
-      .subscribe(
-        (res) => {
-          this.games = res;
-          console.log('games:');
-          console.log(this.games);
-        })
+    this.apiService
+      .getGames(this.getCtrlValue(0).eventCtrl)
+      .subscribe((res) => {
+        this.games = res;
+        console.log('games:');
+        console.log(this.games);
+      })
       .add(() => {
         this.spinnerService.off();
       });
@@ -85,7 +92,8 @@ export class RemoveGameComponent implements OnInit {
 
     // Remove game
     this.spinnerService.on();
-    this.apiService.removeGame(gameId)
+    this.apiService
+      .removeGame(gameId)
       .subscribe(
         (res) => {
           console.log(res);
@@ -96,7 +104,8 @@ export class RemoveGameComponent implements OnInit {
         (error) => {
           console.log(error);
           this.notificationService.showError(error.message, 'ERROR');
-        })
+        }
+      )
       .add(() => {
         this.spinnerService.off();
       });
