@@ -33,10 +33,10 @@ export class DesktopViewComponent implements OnInit {
     'round_8',
     'final_score',
   ];
-  standingsColumns = ['name', 'wins', 'losses'];
+  standingsColumns = ['name', 'wins', 'losses', 'ties'];
   dataSourceDraws = [];
   dataSourceGames = [];
-  dataSourceAllStandings = [];
+  dataSourceStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
@@ -45,31 +45,30 @@ export class DesktopViewComponent implements OnInit {
   selectedPoolID = null;
   allDraws = [];
   allGames = [];
-  buckets = [];
+  poolBracketList = [];
   currentGames = [];
   currentStandings = [];
   currentEventId = null;
   currentEvent = null;
   allScores = [];
   currentScores = [];
+  selectedPoolBracket = 'All Teams';
 
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.spinnerService.on();
 
     // Get current event ID
     this.apiService.currentEventId$.subscribe((eventId) => {
-      this.spinnerService.on();
-
-      this.currentEventId = eventId;
       // this.currentEventId = 5;  // DEBUGGING
       // console.log(`[DEBUG] currentEventId: ${this.currentEventId}`);
+      this.currentEventId = eventId;
 
       // Get current event name
       this.apiService.currentEvent$.subscribe((currentEvent) => {
@@ -81,8 +80,8 @@ export class DesktopViewComponent implements OnInit {
         // console.log('[DEBUG] draws:');
         // console.log(res);
 
-        this.selectedDraw = res[res.length - 1];
         this.allDraws = res;
+        this.selectedDraw = res[res.length - 1];
 
         // Get all games by event ID
         this.apiService.getGames(this.currentEventId).subscribe((res: any) => {
@@ -93,7 +92,7 @@ export class DesktopViewComponent implements OnInit {
 
           this.apiService
             .getScoresByEvent(this.currentEventId)
-            .subscribe((res: any) => {
+            .subscribe(async (res: any) => {
               this.allScores = res;
 
               // Add dataSource key-value pair for Scores Tab
@@ -109,6 +108,14 @@ export class DesktopViewComponent implements OnInit {
                     round_6: '0',
                     round_7: '1',
                     round_8: '0',
+                    rounds: ['0',
+                      '2',
+                      '0',
+                      '0',
+                      '2',
+                      '0',
+                      '1',
+                      '0'],
                     final_score: '',
                   },
                   {
@@ -121,6 +128,14 @@ export class DesktopViewComponent implements OnInit {
                     round_6: '2',
                     round_7: '0',
                     round_8: '5',
+                    rounds: ['0',
+                      '2',
+                      '0',
+                      '0',
+                      '2',
+                      '0',
+                      '1',
+                      '0'],
                     final_score: '',
                   },
                 ];
@@ -137,179 +152,213 @@ export class DesktopViewComponent implements OnInit {
                 })
               );
 
-              // console.log(`[DEBUG] selectedDraw:`);
-              // console.log(this.selectedDraw);
-              // console.log(`[DEBUG] allDraws:`);
-              // console.log(this.allDraws);
-              // console.log(`[DEBUG] allGames:`);
-              // console.log(this.allGames);
-              // console.log(`[DEBUG] currentGames:`);
-              // console.log(this.currentGames);
-              // console.log('[DEBUG] allScores:');
-              // console.log(this.allScores);
-              // console.log('[DEBUG] currentScores:');
-              // console.log(this.currentScores);
+              console.log('this.allGames:');
+              console.log(this.allGames);
 
-              // Populate all standings
-              let buckets = {};
+              /************************************************************************/
+
+              let pools;
+              let brackets;
+
+              await this.apiService.getPool(this.currentEventId)
+                .toPromise()
+                .then(
+                  (res: any) => {
+                    // console.log('pools:');
+                    // console.log(res);
+
+                    // Convert array of objects to object
+                    let arr = res;
+                    let result = {};
+                    for (let i = 0; i < arr.length; i++) {
+                      result[arr[i].id] = {
+                        event_id: arr[i].event_id,
+                        name: arr[i].name,
+                        color: arr[i].color
+                      }
+                    }
+
+                    pools = result;
+                    console.log('pools:');
+                    console.log(pools);
+                  });
+
+              await this.apiService.getBracket(this.currentEventId)
+                .toPromise()
+                .then(
+                  (res: any) => {
+                    // console.log('pools:');
+                    // console.log(res);
+
+                    // Convert array of objects to object
+                    let arr = res;
+                    let result = {};
+                    for (let i = 0; i < arr.length; i++) {
+                      result[arr[i].id] = {
+                        event_id: arr[i].event_id,
+                        name: arr[i].name,
+                        color: arr[i].color
+                      }
+                    }
+
+                    brackets = result;
+                    console.log('brackets:');
+                    console.log(brackets);
+                  });
+
+              this.allGames.forEach((e) => {
+                e.pool_name = pools[e.pool_id]?.name || null;
+                e.type = pools[e.pool_id]?.name ? 'Pool' : null;
+                e.bracket_name = pools[e.bracket_id]?.name || null;
+                e.type = pools[e.pool_id]?.name ? 'Bracket' : null;
+
+                e.label_name = pools[e.pool_id]?.name || pools[e.bracket_id]?.name || null;
+              })
+
+              // Get unique names of pools & brackets
+              let unique_names = [...new Set(this.allGames.map((e) => e.label_name))];
+              unique_names = unique_names.filter(e => e !== null);
+              unique_names = ['All Teams'].concat(unique_names);
+
+              console.log('unique_names:');
+              console.log(unique_names);
+
+              // Create team mapping
+              let team_mapping = {};
               for (let game of this.allGames) {
-                if (isNaN(game.winner)) {
-                  continue;
+                if (!(team_mapping.hasOwnProperty(game.curlingteam1_id))) {
+                  team_mapping[game.curlingteam1_id] = game.team_name1
                 }
+                if (!(team_mapping.hasOwnProperty(game.curlingteam2_id))) {
+                  team_mapping[game.curlingteam2_id] = game.team_name2
+                }
+              }
 
-                if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
-                  buckets[game.curlingteam1_id] = {
-                    name: game.team_name1,
-                    team_id: game.curlingteam1_id,
+              console.log(team_mapping);
+
+              let A = this.allGames.filter((e) => e.label_name === unique_names[1]);
+
+              // this.poolBracketList = [
+              //   [
+              //     'pool 1', [
+              //       {
+              //         name: team_name1,
+              //         wins: 0,
+              //         losses: 0,
+              //         ties: 0
+              //       },
+              //       {
+              //         name: team_name2,
+              //         wins: 0,
+              //         losses: 0,
+              //         ties: 0
+              //       }
+              //     ]
+              //   ],
+              //   ['pool 2'],
+              //   ['pool 3'],
+              //   ['bracket 1'],
+              //   ['bracket 2']
+              // ]
+
+              for (let event_type_name of unique_names) {
+
+                // console.log(event_type_name);
+
+                // Get all games in a given pool or bracket
+                let games = this.allGames.filter((e) => e.label_name === event_type_name);
+
+                // Get all unique teams in a given pool or bracket
+                let teams = [...new Set(games.map((e) => e.curlingteam1_id).concat(games.map((e) => e.curlingteam2_id)))];
+
+                console.log(teams);
+
+                // Add a counter object for each team
+                let to_add = [
+                  event_type_name,  // Cattle-A
+                  []                // List of team standings
+                ];
+
+                for (let team_id of teams) {
+                  to_add[1].push({
+                    team_name: team_mapping[team_id],
+                    team_id: team_id,
                     wins: 0,
                     losses: 0,
-                    pool_id: game.pool_id,
-                    bracket_id: game.bracket_id,
-                  };
+                    ties: 0
+                  })
                 }
 
-                if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
-                  buckets[game.curlingteam2_id] = {
-                    name: game.team_name2,
-                    team_id: game.curlingteam2_id,
-                    wins: 0,
-                    losses: 0,
-                    pool_id: game.pool_id,
-                    bracket_id: game.bracket_id,
-                  };
+                // Tally up the scores
+                for (let game of games) {
+
+                  // Increment ties...
+                  if (game.finished === true && game.winner === null) {
+                    to_add[1].find(e => e.team_id === game.curlingteam1_id).ties++;
+                    to_add[1].find(e => e.team_id === game.curlingteam2_id).ties++;
+                  }
+
+                  // Increment win...
+                  else if (game.finished === true && game.winner === game.curlingteam1_id) {
+                    to_add[1].find(e => e.team_id === game.curlingteam1_id).wins++;
+                    to_add[1].find(e => e.team_id === game.curlingteam2_id).losses++;
+                  }
+
+                  // Increment losses...
+                  else if (game.finished === true && game.winner === game.curlingteam2_id) {
+                    to_add[1].find(e => e.team_id === game.curlingteam2_id).wins++;
+                    to_add[1].find(e => e.team_id === game.curlingteam1_id).losses++;
+                  }
+
                 }
 
-                if (game.winner === game.curlingteam1_id) {
-                  buckets[game.curlingteam1_id].wins++;
-                  buckets[game.curlingteam2_id].losses++;
-                } else {
-                  buckets[game.curlingteam2_id].wins++;
-                  buckets[game.curlingteam1_id].losses++;
-                }
+                this.poolBracketList.push(to_add);
               }
 
-              // console.log('[DEBUG] buckets:');
-              // console.log(buckets);
+              // Combine all lists for All Teams list
 
-              // Convert object to array
-              let arr = Object.keys(buckets).map((key) => buckets[key]);
 
-              // console.log('[DEBUG] arr:');
-              // console.log(arr);
+              console.log(this.poolBracketList);
 
-              const A = [];
+              let totals = {};
+              for (let arr of this.poolBracketList.slice(1)) {
+                for (let game of arr[1]) {
+                  if (!(totals.hasOwnProperty(game.team_id))) {
+                    // console.log('creating');
+                    // console.log(game);
 
-              //Add a new container for all teams
-              A.push({
-                type: 'All Teams',
-                id: '',
-                teams: [],
-              });
+                    totals[game.team_id] = game
+                  } else {
+                    // console.log('adding');
+                    // console.log(totals[game.team_id]);
+                    // console.log(game);
 
-              for (const team of arr) {
-                // Add a new container for each pool ID if it does not already exist
-                if (
-                  team.pool_id !== null &&
-                  A.filter((e) => e.type === 'Pool' && e.id === team.pool_id)
-                    .length === 0
-                ) {
-                  A.push({
-                    type: 'Pool',
-                    id: team.pool_id,
-                    teams: [],
-                  });
-                }
+                    // console.log('before');
+                    // console.log(totals[game.team_id].wins);
 
-                // Add a a new container for each bracket ID if it does not already exist
-                if (
-                  team.bracket_id !== null &&
-                  A.filter(
-                    (e) => e.type === 'Bracket' && e.id === team.bracket_id
-                  ).length === 0
-                ) {
-                  A.push({
-                    type: 'Bracket',
-                    id: team.bracket_id,
-                    teams: [],
-                  });
-                }
 
-                // Add a a new, special container for games that don't have a pool_id & bracket_id
-                if (
-                  team.pool_id === null &&
-                  team.bracket_id === null &&
-                  A.filter((e) => e.type === 'Other').length === 0
-                ) {
-                  A.push({
-                    type: 'Other',
-                    id: '',
-                    teams: [],
-                  });
-                }
+                    totals[game.team_id].wins += game.wins;
+                    totals[game.team_id].losses += game.losses;
+                    totals[game.team_id].ties += game.ties;
 
-                // Add teams to the corresponding pool container ...
-                if (team.pool_id !== null) {
-                  const found = A.find(
-                    (e) => e.type === 'Pool' && e.id === team.pool_id
-                  );
-                  if (found) {
-                    found.teams.push(team);
-                  }
-                }
+                    // console.log('after');
+                    // console.log(totals[game.team_id].wins);
 
-                // ... or bracket container ...
-                else if (team.bracket_id !== null) {
-                  const found = A.find(
-                    (e) => e.type === 'Bracket' && e.id === team.bracket_id
-                  );
-                  if (found) {
-                    found.teams.push(team);
-                  }
-                }
 
-                // ... or other container
-                else {
-                  const found = A.find((e) => e.type === 'Other');
-                  if (found) {
-                    found.teams.push(team);
-                  }
-                }
-                // Add team to the 'All Teams' container
-                if (team.name !== null) {
-                  const found = A.find((e) => e.type === 'All Teams');
-                  if (found) {
-                    found.teams.push(team);
                   }
                 }
               }
 
-              // If event type is 'Other' then 'All Teams' is redundant
-              if (
-                (A.find((e) => e.type === 'Other') ||
-                  A.find((e) => e.type === 'Bracket')) &&
-                A.find((e) => e.type === 'All Teams')
-              ) {
-                console.log(A.findIndex((e) => e.type === 'All Teams'));
-                A.splice(
-                  A.findIndex((e) => e.type !== 'All Teams'),
-                  1
-                );
-              }
+              console.log(totals);
 
-              console.log('[DEBUG] A:');
-              console.log(A);
+              this.selectedPoolBracket = this.poolBracketList[0][0];
+              this.poolBracketList[0][1] = Object.values(totals);
+              this.dataSourceStandings = Object.values(totals);
 
-              this.dataSourceAllStandings.length = 0; // Clear array
-              this.dataSourceAllStandings = A; // Populate array
+              console.log('this.dataSourceStandings');
 
-              //reverse sort losses, sort wins
-              this.dataSourceAllStandings.forEach((group) => {
-                group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
-                group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
-              });
-
-              //console.log('[DEBUG] dataSourceAllStandings');
-              //console.log(this.dataSourceAllStandings);
+              console.log('poolBracketList:');
+              console.log(this.poolBracketList);
 
               this.spinnerService.off();
             });
@@ -387,6 +436,13 @@ export class DesktopViewComponent implements OnInit {
     // console.log('AFTER');
     // console.log(this.currentGames);
   }
+
+  onTeamSelected(event: any) {
+    console.log('the selected team is:');
+    console.log(event.value);
+
+    this.dataSourceStandings = this.poolBracketList.find((e) => e[0] === event.value)[1];
+  }
 }
 
 export interface Game {
@@ -415,6 +471,7 @@ export interface Standing {
   name: string;
   wins: number;
   losses: number;
+  ties: number;
   pool_id: number;
   bracket_id: number;
 }
