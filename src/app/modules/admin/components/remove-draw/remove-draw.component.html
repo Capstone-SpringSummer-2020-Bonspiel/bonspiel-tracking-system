@@ -2,134 +2,155 @@
   <h1> Remove Draw </h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
-  <!-- Stepper 1: Select Event Name -->
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select Curling Event </ng-template>
+<form [formGroup]="formGroup">
+  <mat-vertical-stepper linear
+    #stepper
+    formArrayName="formArray">
+
+    <!-- EVENT -->
+    <mat-step formGroupName="0"
+      [stepControl]="formArray?.get([0])">
+      <ng-template matStepLabel> Select an Event </ng-template>
       <mat-form-field>
-        <mat-label> Select Curling Event... </mat-label>
-        <mat-select formControlName="firstCtrl"
-          name="eventName"
-          (selectionChange)="getEventDraws(); stepper.next()"
+        <mat-label> Select Event </mat-label>
+        <mat-select formControlName="eventCtrl"
+          name="event"
+          (selectionChange)="getDraws(); stepper.next()"
           required>
-          <mat-option *ngFor="let eventName of eventNames"
-            [value]="eventName.id"
-            matTooltip="{{eventName.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"
+            matTooltip="{{event.begin_date | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
             [matTooltipPosition]="'right'">
-            {{eventName.name}}
+            {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-    </form>
-  </mat-step>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </mat-step>
 
-  <!-- Stepper 2: Select Draw-->
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> Select Draw </ng-template>
-
+    <!-- DRAW -->
+    <mat-step formGroupName="1"
+      [stepControl]="formArray?.get([1])">
+      <ng-template matStepLabel> Select a Draw </ng-template>
       <mat-form-field>
         <mat-label> Select Draw... </mat-label>
-        <mat-select formControlName="secondCtrl"
-          name="eventDraws"
+        <mat-select formControlName="drawCtrl"
+          name="draws"
           (selectionChange)="getDrawGames(); stepper.next()"
           required>
-          <mat-option *ngFor="let eventDraw of eventDraws"
-            [value]="eventDraw.id"
-            matTooltip="{{eventDraw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+          <mat-option *ngFor="let draw of draws"
+            [value]="draw.id"
+            matTooltip="{{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
             [matTooltipPosition]="'right'">
-            {{eventDraw.name}}
+            {{draw.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </mat-step>
 
-    </form>
-  </mat-step>
+    <!-- DRAW INFO -->
+    <mat-step>
+      <ng-template matStepLabel> Review Draw Info </ng-template>
 
+      <!-- DRAW INFO TABLE -->
+      <table mat-table
+        [dataSource]="selectedDraw"
+        class="m-2 mat-elevation-z8">
 
-  <!-- Stepper 3: Draw Information-->
-  <mat-step>
+        <ng-container matColumnDef="event_id">
+          <th mat-header-cell
+            *matHeaderCellDef> Event ID </th>
+          <td mat-cell
+            *matCellDef="let draw">{{draw.event_id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+            *matHeaderCellDef> Draw Name </th>
+          <td mat-cell
+            *matCellDef="let draw">{{draw.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="start">
+          <th mat-header-cell
+            *matHeaderCellDef> Start Time </th>
+          <td mat-cell
+            *matCellDef="let draw">{{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="video_url">
+          <th mat-header-cell
+            *matHeaderCellDef> Video URL</th>
+          <td mat-cell
+            *matCellDef="let draw">{{draw.video_url}}</td>
+        </ng-container>
 
-    <ng-template matStepLabel> Draw Information </ng-template>
+        <tr mat-header-row
+          *matHeaderRowDef="drawDisplayedColumns"></tr>
+        <tr mat-row
+          *matRowDef="let row; columns: drawDisplayedColumns;"></tr>
+      </table>
 
-    <!--Draw Info Table-->
-    <table mat-table
-      [dataSource]="selectedDraw"
-      class="m-2 mat-elevation-z8">
+      <!-- GAME INFO TABLE -->
+      <table *ngIf="selectedGames.length>0"
+        mat-table
+        [dataSource]="selectedGames"
+        class="m-2 mat-elevation-z8">
 
-      <ng-container matColumnDef="event_id">
-        <th mat-header-cell
-          *matHeaderCellDef> Event ID </th>
-        <td mat-cell
-          *matCellDef="let draw">{{draw.event_id}}</td>
-      </ng-container>
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-          *matHeaderCellDef> Draw Name </th>
-        <td mat-cell
-          *matCellDef="let draw">{{draw.name}}</td>
-      </ng-container>
-      <ng-container matColumnDef="start">
-        <th mat-header-cell
-          *matHeaderCellDef> Start Time </th>
-        <td mat-cell
-          *matCellDef="let draw">{{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}</td>
-      </ng-container>
-      <ng-container matColumnDef="video_url">
-        <th mat-header-cell
-          *matHeaderCellDef> Video URL</th>
-        <td mat-cell
-          *matCellDef="let draw">{{draw.video_url}}</td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+            *matHeaderCellDef> Game Notes</th>
+          <td mat-cell
+            *matCellDef="let game"> {{game.notes}} </td>
+        </ng-container>
+        <ng-container matColumnDef="team_name1">
+          <th mat-header-cell
+            *matHeaderCellDef> Team 1 </th>
+          <td mat-cell
+            *matCellDef="let game"> {{game.team_name1}} </td>
+        </ng-container>
+        <ng-container matColumnDef="team_name2">
+          <th mat-header-cell
+            *matHeaderCellDef> Team 2 </th>
+          <td mat-cell
+            *matCellDef="let game"> {{game.team_name2}} </td>
+        </ng-container>
 
-      <tr mat-header-row
-        *matHeaderRowDef="drawDisplayedColumns"></tr>
-      <tr mat-row
-        *matRowDef="let row; columns: drawDisplayedColumns;"></tr>
-    </table>
+        <tr mat-header-row
+          *matHeaderRowDef="gameDisplayedColumns"></tr>
+        <tr mat-row
+          *matRowDef="let row; columns: gameDisplayedColumns;"></tr>
+      </table>
 
-    <!--Game Info Table-->
-    <table *ngIf="selectedDrawGames.length>0"
-      mat-table
-      [dataSource]="selectedDrawGames"
-      class="m-2 mat-elevation-z8">
+      <div class="mt-3">
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </mat-step>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-          *matHeaderCellDef> Game Name</th>
-        <td mat-cell
-          *matCellDef="let game"> {{game.game_name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="team_name1">
-        <th mat-header-cell
-          *matHeaderCellDef> Team 1 </th>
-        <td mat-cell
-          *matCellDef="let game"> {{game.team_name1}} </td>
-      </ng-container>
-      <ng-container matColumnDef="team_name2">
-        <th mat-header-cell
-          *matHeaderCellDef> Team 2 </th>
-        <td mat-cell
-          *matCellDef="let game"> {{game.team_name2}} </td>
-      </ng-container>
+    <!-- REMOVE -->
+    <mat-step>
+      <ng-template matStepLabel>Remove</ng-template>
+      <p>Click Remove when ready.</p>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="stepper.reset()">Reset</button>
+        <button mat-button
+          (click)="onClickRemove(stepper)">Remove</button>
+      </div>
+    </mat-step>
 
-      <tr mat-header-row
-        *matHeaderRowDef="gameDisplayedColumns"></tr>
-      <tr mat-row
-        *matRowDef="let row; columns: gameDisplayedColumns;"></tr>
-    </table>
-
-    <div class="m2">
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        (click)="stepper.reset()">Reset</button>
-      <button mat-button
-        (click)="deleteDraw(stepper)"> Delete Draw</button>
-
-    </div>
-  </mat-step>
-
-</mat-vertical-stepper>
+  </mat-vertical-stepper>
+</form>

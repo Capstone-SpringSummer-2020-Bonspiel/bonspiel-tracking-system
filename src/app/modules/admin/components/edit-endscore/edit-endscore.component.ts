@@ -34,23 +34,23 @@ export class EditEndscoreComponent implements OnInit {
   displayedColumns = ['endNumber', 'team1Score', 'team2Score'];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrl: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       thirdCtrl: ['', Validators.required],
     });
-    this.fourthFormGroup = this._formBuilder.group({
+    this.fourthFormGroup = this.fb.group({
       fourthCtrlEndId: ['', Validators.required],
       fourthCtrlTeam1Score: ['', Validators.required],
       fourthCtrlTeam2Score: ['', Validators.required],

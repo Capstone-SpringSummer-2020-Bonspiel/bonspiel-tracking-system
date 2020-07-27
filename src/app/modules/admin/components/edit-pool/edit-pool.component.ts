@@ -25,7 +25,7 @@ export class EditPoolComponent implements OnInit {
   selectedEventId: 0;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -54,13 +54,13 @@ export class EditPoolComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       poolCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       eventNameCtrl: ['', Validators.required],
     });
   }

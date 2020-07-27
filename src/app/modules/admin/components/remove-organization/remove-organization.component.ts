@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatStep, MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-remove-organization',
@@ -11,78 +12,61 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./remove-organization.component.scss']
 })
 export class RemoveOrganizationComponent implements OnInit {
-  allOrganizationData: null;
-  selectedOrganization: null;
-  submitResult: Number;
-  selectedOrganizationId: Number;
-  zeroFormGroup: FormGroup;
+  organizations: null;
+  formGroup: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
-    public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
-    this.spinnerService.on();
-    this.apiService
-      .getAllOrganizations()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allOrganizationData = res;
-        this.selectedOrganization = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allOrganizationData);
-
-        this.spinnerService.off();
-      })
-
-    this.zeroFormGroup = this._formBuilder.group({
+    // Initialize form group
+    this.formGroup = this.fb.group({
       organizationCtrl: ['', Validators.required],
     });
+
+    console.log(this.formGroup);
+
+    this.getOrganizations();
   }
-  onOrganizationSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(this.selectedOrganization);
 
-    this.selectedOrganization = event.value;
-    this.selectedOrganizationId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedOrganization);
-  }
-  onClickSubmit(stepper) {
-    //Remove Organization
-    console.log("Organization Delete: ")
-    console.log(this.selectedOrganizationId)
-
+  getOrganizations() {
+    // Get organizations
     this.spinnerService.on();
-    this.apiService
-      .removeOrganization(String(this.selectedOrganizationId))
+    this.apiService.getAllOrganizations()
       .subscribe(
         (res: any) => {
-          this.notificationService.showSuccess('Organization has been successfully deleted!', '');
-          this.spinnerService.off();
+          console.log('[DEBUG] eventObtain() in schedule component:');
+          console.log(res);
+          this.organizations = res;
+        })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  onClickRemove(stepper: MatStepper) {
+    const orgId = String(this.formGroup.get('organizationCtrl').value.id);
+
+    // Remove organization
+    this.spinnerService.on();
+    this.apiService.removeOrganization(orgId)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Organization has been removed', '');
+          stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Organization deleted failed!', '');
-          this.spinnerService.off();
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Something went wrong');
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
-
   }
-  // onClickConfirm(){
-  //   if(confirm("are you sure?")){
-  //     this.onEventDelete();
-  //     console.log("Event Deleted.");
-  //   }
-  // }
 }

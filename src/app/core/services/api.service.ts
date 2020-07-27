@@ -334,7 +334,7 @@ export class ApiService {
     return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`, body);
   }
 
-  public removeTeamEvent(eventId, teamId) {
+  public deleteTeamEvent(eventId, teamId) {
     return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`);
   }
   // CASCADE DELETE will NOT be setup.
@@ -393,7 +393,7 @@ export class ApiService {
     return this.httpService.put(`${environment.apiUrl}/api/v1/admin/team/${teamId}`, body);
   }
 
-  public removeTeam(teamId) {
+  public deleteTeam(teamId) {
     return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/team/${teamId}`);
   }
 }

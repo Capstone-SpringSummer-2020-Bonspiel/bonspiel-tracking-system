@@ -20,7 +20,7 @@ export class AddEditComponent implements OnInit {
   submitted = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
@@ -44,7 +44,7 @@ export class AddEditComponent implements OnInit {
       passwordValidators.push(Validators.required);
     }
 
-    this.form = this.formBuilder.group({
+    this.form = this.fb.group({
       username: ['', Validators.required],
       password: ['', passwordValidators],
       isSuperAdmin: [false, Validators.required],

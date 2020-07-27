@@ -15,14 +15,14 @@ export class AddTeamToEventComponent implements OnInit {
   events: any = [];
   teams: any = [];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private fb: FormBuilder,
     private apiService: ApiService,) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this.formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       teamCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this.formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
 

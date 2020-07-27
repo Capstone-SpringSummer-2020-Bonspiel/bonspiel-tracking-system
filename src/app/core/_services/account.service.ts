@@ -70,8 +70,8 @@ export class AccountService {
     }
   }
 
-  register(user: User) {
-    return this.http.post(`${environment.apiUrl}/users/register`, user);
+  register(username, password) {
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/register`, { username, password });
   }
 
   createAdmin(username, password, isSuperAdmin) {

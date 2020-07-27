@@ -14,7 +14,7 @@ export class CreateOrganizationComponent implements OnInit {
   firstFormGroup: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -22,7 +22,7 @@ export class CreateOrganizationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventFullCtrl: ['', Validators.required],
       eventShortCtrl: ['', Validators.required],
     });

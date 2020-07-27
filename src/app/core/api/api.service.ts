@@ -69,28 +69,17 @@ export class ApiService {
     this.eventSource.next(newEvent);
   }
 
-  public createEvent(
-    nameData,
-    beginDateData,
-    endDateData,
-    completedData,
-    infoData,
-    eventTypeData
-  ) {
+  public createEvent(name, info, eventType, completed, beginDate, endDate) {
     const body = {
-      name: nameData,
-      eventType: eventTypeData,
-      info: infoData,
-      completed: completedData,
-      beginDate: beginDateData,
-      endDate: endDateData,
+      name,
+      beginDate,
+      endDate,
+      completed,
+      info,
+      eventType
     };
-    console.log('sending body:');
     console.log(body);
-    return this.httpService.post(
-      `${environment.apiUrl}/api/v1/admin/event`,
-      body
-    );
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event`, body);
   }
 
   public editEvent(
@@ -231,9 +220,8 @@ export class ApiService {
   }
 
   public removeOrganization(orgId) {
-    return this.httpService.delete(
-      `${environment.apiUrl}/api/v1/admin/org/${orgId}`
-    );
+    console.log(`Removing orgId: ${orgId}`)
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/org/${orgId}`);
   }
 
   // CASCADE DELETE will NOT be setup. If any curlers or curling team are in organization, then delete will error
@@ -412,7 +400,7 @@ export class ApiService {
     );
   }
 
-  public removeTeamEvent(eventId, teamId) {
+  public deleteTeamEvent(eventId, teamId) {
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`
     );
@@ -489,7 +477,7 @@ export class ApiService {
     );
   }
 
-  public removeTeam(teamId) {
+  public deleteTeam(teamId) {
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/team/${teamId}`
     );

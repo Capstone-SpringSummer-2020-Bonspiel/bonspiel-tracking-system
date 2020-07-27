@@ -24,7 +24,7 @@ export class RemovePoolComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -50,10 +50,10 @@ export class RemovePoolComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       poolCtrl: ['', Validators.required],
     });
   }

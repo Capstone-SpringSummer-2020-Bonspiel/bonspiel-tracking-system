@@ -2,16 +2,20 @@
   <h1> Remove Team </h1>
 </div>
 
-<mat-vertical-stepper linear #stepper>
+<mat-vertical-stepper linear
+  #stepper>
 
-  <!-- Stepper 1: Select team -->
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select A Team </ng-template>
+  <!-- TEAM -->
+  <mat-step [stepControl]="formGroup">
+    <form [formGroup]="formGroup">
+      <ng-template matStepLabel> Select a Team </ng-template>
       <mat-form-field>
         <mat-label> Team Name </mat-label>
-        <mat-select formControlName="firstFormCtrl" name="teams" required>
-          <mat-option *ngFor="let team of teams" [value]="team.id">
+        <mat-select formControlName="teamIdCtrl"
+          name="teams"
+          required>
+          <mat-option *ngFor="let team of teams"
+            [value]="team.id">
             {{team.team_name}}
           </mat-option>
         </mat-select>
@@ -19,9 +23,22 @@
     </form>
 
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onClickSubmit(stepper)">Submit</button>
+      <button mat-button
+        matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <!-- REMOVE -->
+  <mat-step>
+    <ng-template matStepLabel>Remove</ng-template>
+    <p>Click Remove when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickRemove(stepper)">Remove</button>
     </div>
   </mat-step>
 

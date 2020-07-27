@@ -48,25 +48,25 @@ export class CreateGameComponent implements OnInit {
   console = console;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
-    this.firstFormGroup = this.formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventId: ['', Validators.required],
       eventType: ['', Validators.required],
     });
-    this.secondFormGroup = this.formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       poolId: [''],
       bracketId: [null],
     });
-    this.thirdFormGroup = this.formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       drawId: ['', Validators.required],
     });
-    this.fourthFormGroup = this.formBuilder.group({
+    this.fourthFormGroup = this.fb.group({
       gameName: [''],
       team1Id: [''],
       team1StoneColor: ['red', Validators.required],

@@ -24,7 +24,7 @@ export class EditBracketComponent implements OnInit {
   selectedEvent: null;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -55,13 +55,13 @@ export class EditBracketComponent implements OnInit {
         this.spinnerService.off();
       })
 
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       bracketCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       eventNameCtrl: ['', Validators.required],
     });
   }

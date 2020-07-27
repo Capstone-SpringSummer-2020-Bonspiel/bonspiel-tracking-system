@@ -39,7 +39,7 @@ export class EditEventComponent implements OnInit {
   ];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -62,18 +62,22 @@ export class EditEventComponent implements OnInit {
 
         this.spinnerService.off();
       })
-    this.zeroFormGroup = this._formBuilder.group({
+    this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: [''],
       firstCtrlInfo: [''],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       thirdCtrl: [''],
       thirdCtrlCond: [''],
     });
+<<<<<<< HEAD
     this.thirdFormGroup = this._formBuilder.group({
+=======
+    this.thirdFormGroup = this.fb.group({
+>>>>>>> Dave/BP-172_refactor-remove-pool-component
       eventStartCtrl: ['', Validators.required],
       eventEndCtrl: ['', Validators.required],
     });

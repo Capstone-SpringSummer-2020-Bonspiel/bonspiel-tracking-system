@@ -1,39 +1,40 @@
 <div class="slide-in-text">
-  <h1> Remove Game </h1>
+  <h1>Remove Game</h1>
 </div>
 
-<mat-vertical-stepper linear
-  #stepper>
+<form [formGroup]="formGroup">
+  <mat-vertical-stepper linear
+    #stepper
+    formArrayName="formArray">
 
-  <!-- SELECT EVENT -->
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select an Event & Type </ng-template>
+    <!-- EVENT -->
+    <mat-step formGroupName="0"
+      [stepControl]="formArray?.get([0])">
+      <ng-template matStepLabel>Select an Event</ng-template>
       <mat-form-field>
-        <mat-label> Choose an Event </mat-label>
-        <mat-select formControlName="eventId"
-          (selectionChange)="setEventId(); getGamesByEventId(); stepper.next()"
+        <mat-label>Choose an Event</mat-label>
+        <mat-select formControlName="eventCtrl"
+          (selectionChange)="getGames()"
           required>
           <mat-option> -- </mat-option>
           <mat-option *ngFor="let event of events"
-            [value]="event.id"> {{event.name}} </mat-option>
+            [value]="event.id">{{event.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div>
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </form>
-  </mat-step>
+    </mat-step>
 
-  <!-- SELECT GAME -->
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> Select a Game </ng-template>
+    <!-- GAME -->
+    <mat-step formGroupName="1"
+      [stepControl]="formArray?.get([1])">
+      <ng-template matStepLabel>Select a Game</ng-template>
 
       <mat-form-field>
-        <mat-label> Choose Game </mat-label>
-        <mat-select formControlName="gameId">
+        <mat-label>Choose Game</mat-label>
+        <mat-select formControlName="gameCtrl">
           <mat-option>--</mat-option>
           <mat-option *ngFor="let game of games"
             [value]="game.game_id">
@@ -46,20 +47,23 @@
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
+          matStepperNext>Next</button>
       </div>
-    </form>
-  </mat-step>
+    </mat-step>
 
-  <!-- COMPLETED -->
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button
-        matStepperPrevious>Back</button>
-      <button mat-button
-        (click)="resetStepper(stepper)">Reset</button>
-    </div>
-  </mat-step>
-</mat-vertical-stepper>
+    <!-- REMOVE -->
+    <mat-step>
+      <ng-template matStepLabel>Remove</ng-template>
+      <p>Click Remove when ready.</p>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="stepper.reset()">Reset</button>
+        <button mat-button
+          (click)="onClickRemove(stepper)">Remove</button>
+      </div>
+    </mat-step>
+
+  </mat-vertical-stepper>
+</form>

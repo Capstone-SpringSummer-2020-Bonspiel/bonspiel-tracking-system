@@ -2,33 +2,40 @@
   <h1> Remove Organization </h1>
 </div>
 
-<mat-vertical-stepper linear #stepper>
+<mat-vertical-stepper linear
+  #stepper>
   <!-- SELECT EVENT -->
-  <mat-step [stepControl]="zeroFormGroup">
-    <form [formGroup]="zeroFormGroup">
-      <ng-template matStepLabel> Select Event </ng-template>
+  <mat-step [stepControl]="formGroup">
+    <form [formGroup]="formGroup">
+      <ng-template matStepLabel> Select an Organization </ng-template>
       <mat-form-field>
         <mat-label>Select Organization to Delete</mat-label>
-        <mat-select formControlName="organizationCtrl" (selectionChange)="onOrganizationSelected($event); stepper.next()" required>
-          <mat-option *ngFor="let Organization of this.allOrganizationData" [value]="Organization">
-            {{Organization.full_name}}
+        <mat-select formControlName="organizationCtrl"
+          required>
+          <mat-option *ngFor="let organization of this.organizations"
+            [value]="organization">
+            {{organization.full_name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button
+          matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
 
-  <!-- FINISH & SUBMIT -->
+  <!-- REMOVE -->
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Remove</ng-template>
+    <p>Click Remove when ready.</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onClickSubmit(stepper)">Delete Organization</button>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickRemove(stepper)">Remove</button>
     </div>
   </mat-step>
 
