@@ -8,7 +8,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
-  styleUrls: ['./edit-event.component.scss']
+  styleUrls: ['./edit-event.component.scss'],
 })
 export class EditEventComponent implements OnInit {
   zeroFormGroup: FormGroup;
@@ -22,7 +22,7 @@ export class EditEventComponent implements OnInit {
     end_date: 'Date',
     event_type: 'String',
     completed: true,
-  }
+  };
 
   allEventData: null;
   selectedEventId: Number;
@@ -43,25 +43,22 @@ export class EditEventComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
-    public dialog: MatDialog,
-  ) { }
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-
     this.spinnerService.on();
-    this.apiService
-      .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        this.selectedEvent = res[0];
-        // this.selectedEventId = res[0].id;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
+    this.apiService.getEvents().subscribe((res: any) => {
+      console.log('[DEBUG] eventObtain() in schedule component:');
+      console.log(res);
+      this.allEventData = res;
+      this.selectedEvent = res[0];
+      // this.selectedEventId = res[0].id;
+      console.log('ThisEventDataBelow:');
+      console.log(this.allEventData);
 
-        this.spinnerService.off();
-      })
+      this.spinnerService.off();
+    });
     this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
@@ -73,11 +70,7 @@ export class EditEventComponent implements OnInit {
       thirdCtrl: [''],
       thirdCtrlCond: [''],
     });
-<<<<<<< HEAD
-    this.thirdFormGroup = this._formBuilder.group({
-=======
     this.thirdFormGroup = this.fb.group({
->>>>>>> Dave/BP-172_refactor-remove-pool-component
       eventStartCtrl: ['', Validators.required],
       eventEndCtrl: ['', Validators.required],
     });
@@ -128,32 +121,44 @@ export class EditEventComponent implements OnInit {
     console.log(`complete: ${completed}`);
 
     this.spinnerService.on();
-    this.apiService.editEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type, String(this.selectedEventId))
+    this.apiService
+      .editEvent(
+        name,
+        String(begin_date.toLocaleString()),
+        String(end_date.toLocaleString()),
+        String(completed),
+        info,
+        event_type,
+        String(this.selectedEventId)
+      )
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess('Event has been successfully modified!', '')
+          this.notificationService.showSuccess(
+            'Event has been successfully modified!',
+            ''
+          );
         },
         (error) => {
           console.log(error);
           this.notificationService.showError('Event modified Failed!', '');
-        })
-      .add(
-        () => {
-          stepper.reset();
-          this.spinnerService.off()
-        });
+        }
+      )
+      .add(() => {
+        stepper.reset();
+        this.spinnerService.off();
+      });
   }
 }
 
 export interface DialogData {
-  signal: String,
-  name: String,
-  info: String,
-  begin_date: String,
-  end_date: String,
-  event_type: String,
-  completed: String,
+  signal: String;
+  name: String;
+  info: String;
+  begin_date: String;
+  end_date: String;
+  event_type: String;
+  completed: String;
 }
 
 @Component({
@@ -161,7 +166,7 @@ export interface DialogData {
   templateUrl: 'edit-event-dialog.html',
 })
 export class EditEventDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 }
 
 // export interface Event {
