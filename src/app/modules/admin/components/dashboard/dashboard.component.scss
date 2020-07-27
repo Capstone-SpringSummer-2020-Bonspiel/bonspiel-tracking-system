@@ -264,6 +264,18 @@ ul {
     width: auto;
 }
 
+.example-large-box-spe {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: flex-start;
+  // margin: 16px;
+  // padding: 16px;
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+}
+
 .example-large-box.start {
     justify-content: start;
 }
@@ -437,4 +449,21 @@ hr {
 
 .p-2 {
   display: inline-block;
+}
+
+.cell-container{
+  // margin: 10px;
+}
+.game-box{
+  margin: 0;
+  padding: 0;
+//   display: flex;
+//   flex-flow: column wrap;
+//   justify-content: center;
+//   align-items: flex-start;
+//   // margin: 16px;
+//   // padding: 16px;
+//   border-radius: 8px;
+//   height: auto;
+//   width: auto;
 }

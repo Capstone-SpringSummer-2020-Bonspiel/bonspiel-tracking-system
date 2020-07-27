@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
@@ -18,7 +18,8 @@ import { MatExpansionPanel } from '@angular/material/expansion';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  viewProviders: [MatExpansionPanel]
+  viewProviders: [MatExpansionPanel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 
