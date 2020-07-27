@@ -19,7 +19,7 @@ export class MobileViewComponent implements OnInit {
   standingsColumns = ['name', 'wins', 'losses'];
   dataSourceDraws = [];
   dataSourceGames = [];
-  dataSourceAllStandings = [];
+  dataSourceStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
@@ -40,7 +40,7 @@ export class MobileViewComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.spinnerService.on();
@@ -277,17 +277,17 @@ export class MobileViewComponent implements OnInit {
               // console.log('[DEBUG] A:');
               // console.log(A);
 
-              this.dataSourceAllStandings.length = 0; // Clear array
-              this.dataSourceAllStandings = A; // Populate array
+              this.dataSourceStandings.length = 0; // Clear array
+              this.dataSourceStandings = A; // Populate array
 
               // reverse sort losses, sort wins
-              this.dataSourceAllStandings.forEach((group) => {
+              this.dataSourceStandings.forEach((group) => {
                 group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
                 group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
               });
 
-              // console.log('[DEBUG] dataSourceAllStandings');
-              // console.log(this.dataSourceAllStandings);
+              // console.log('[DEBUG] dataSourceStandings');
+              // console.log(this.dataSourceStandings);
 
               this.spinnerService.off();
             });
