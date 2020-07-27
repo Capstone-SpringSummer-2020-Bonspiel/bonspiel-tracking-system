@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
 
   <!-- Event Header -->
   <div *ngIf="currentEvent && currentEvent.name"
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row w-100">
     <div class="col-lg-8">
 
       <!-- Game Card -->
@@ -56,11 +56,9 @@
               <ng-container matColumnDef="name"
                 sticky>
                 <th mat-header-cell
-                  *matHeaderCellDef
-                  class="m-0 p-0"></th>
+                  *matHeaderCellDef></th>
                 <td mat-cell
-                  *matCellDef="let team"
-                  class="m-0 p-0">
+                  *matCellDef="let team">
                   <button type="button"
                     class="btn btn-light"
                     (click)="openDialog()"> {{team.name}} </button>
@@ -118,7 +116,7 @@
                 <th mat-header-cell
                   *matHeaderCellDef> Final </th>
                 <td mat-cell
-                  *matCellDef="let team"> {{getFinalScore(team)}} </td>
+                  *matCellDef="let team"> {{team.total}} </td>
               </ng-container>
 
               <tr mat-header-row
@@ -129,13 +127,13 @@
           </mat-tab>
 
           <!-- Game Statistics Tab -->
-          <mat-tab label="Statistics">
+          <!-- <mat-tab label="Statistics">
             <div class="text-center">
               <img class="rounded mx-auto d-block"
                 src="https://imgur.com/x5QuUZ1.jpg"
                 alt="Bonspiel Statistics">
             </div>
-          </mat-tab>
+          </mat-tab> -->
         </mat-tab-group>
       </mat-card>
     </div>

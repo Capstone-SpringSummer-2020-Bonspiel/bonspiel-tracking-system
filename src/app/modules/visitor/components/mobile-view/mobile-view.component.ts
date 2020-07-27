@@ -78,36 +78,6 @@ export class MobileViewComponent implements OnInit {
             .subscribe((res: any) => {
               this.allScores = res;
 
-              // Add dataSource key-value pair for Scores Tab
-              for (let game of this.allGames) {
-                game.dataSource = [
-                  {
-                    name: game.team_name1,
-                    round_1: '0',
-                    round_2: '2',
-                    round_3: '0',
-                    round_4: '0',
-                    round_5: '2',
-                    round_6: '0',
-                    round_7: '1',
-                    round_8: '0',
-                    final_score: '',
-                  },
-                  {
-                    name: game.team_name2,
-                    round_1: '0',
-                    round_2: '0',
-                    round_3: '2',
-                    round_4: '1',
-                    round_5: '0',
-                    round_6: '2',
-                    round_7: '0',
-                    round_8: '5',
-                    final_score: '',
-                  },
-                ];
-              }
-
               this.currentGames = this.allGames.filter(
                 (x) => x.draw_id === this.selectedDraw.id
               );
@@ -118,6 +88,48 @@ export class MobileViewComponent implements OnInit {
                     this.currentScores.push(score);
                 })
               );
+
+              //sort by gameid then end number
+              this.currentScores.sort(
+                (a, b) => a.game_id - b.game_id || a.end_number - b.end_number
+              );
+
+              console.log(`[DEBUG] currentGames:`);
+              console.log(this.currentGames);
+              console.log('[DEBUG] this.currentScores');
+              console.log(this.currentScores);
+              let B = [];
+
+              // Add dataSource key-value pair for Scores Tab
+              for (let game of this.currentGames) {
+                B.push({
+                  name: game.team_name1,
+                  total: 0,
+                });
+                B.push({
+                  name: game.team_name2,
+                  total: 0,
+                });
+              }
+
+              for (let score of this.currentScores) {
+                const team1 = B.find((e) => e.name === score.team_name1);
+                const team2 = B.find((e) => e.name === score.team_name2);
+                score.curlingteam1_scored
+                  ? (team1.total += score.score)
+                  : (team2.total += score.score);
+              }
+
+              for (let game of this.currentGames) {
+                const team1 = B.find((e) => e.name === game.team_name1);
+                const team2 = B.find((e) => e.name === game.team_name2);
+                game.dataSource = [team1, team2];
+              }
+              console.log(`[DEBUG] currentGames:`);
+              console.log(this.currentGames);
+
+              console.log('[DEBUG] B:');
+              console.log(B);
 
               // console.log(`[DEBUG] selectedDraw:`);
               // console.log(this.selectedDraw);
@@ -131,6 +143,8 @@ export class MobileViewComponent implements OnInit {
               // console.log(this.allScores);
               // console.log('[DEBUG] currentScores:');
               // console.log(this.currentScores);
+              // console.log('[DEBUG] game.dataSource:');
+              //console.log(game.dataSource);
 
               // Populate all standings
               let buckets = {};
@@ -256,7 +270,6 @@ export class MobileViewComponent implements OnInit {
                     found.teams.push(team);
                   }
                 }
-
                 // Add team to the 'All Teams' container
                 if (team.name !== null) {
                   const found = A.find((e) => e.type === 'All Teams');
@@ -280,14 +293,14 @@ export class MobileViewComponent implements OnInit {
               this.dataSourceAllStandings.length = 0; // Clear array
               this.dataSourceAllStandings = A; // Populate array
 
-              // reverse sort losses, sort wins
+              //reverse sort losses, sort wins
               this.dataSourceAllStandings.forEach((group) => {
                 group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
                 group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
               });
 
-              // console.log('[DEBUG] dataSourceAllStandings');
-              // console.log(this.dataSourceAllStandings);
+              //console.log('[DEBUG] dataSourceAllStandings');
+              //console.log(this.dataSourceAllStandings);
 
               this.spinnerService.off();
             });
@@ -321,19 +334,6 @@ export class MobileViewComponent implements OnInit {
     });
   }
 
-  getFinalScore(team) {
-    return (
-      Number(team.round_1) +
-      Number(team.round_2) +
-      Number(team.round_3) +
-      Number(team.round_4) +
-      Number(team.round_5) +
-      Number(team.round_6) +
-      Number(team.round_7) +
-      Number(team.round_8)
-    );
-  }
-
   convertToAlpha(num) {
     return String.fromCharCode(num + 65);
   }
@@ -362,39 +362,35 @@ export class MobileViewComponent implements OnInit {
     console.log('[DEBUG] currentScores:');
     console.log(this.currentScores);
 
+    let B = [];
+
+    // Add dataSource key-value pair for Scores Tab
+    for (let game of this.currentGames) {
+      B.push({
+        name: game.team_name1,
+        total: 0,
+      });
+      B.push({
+        name: game.team_name2,
+        total: 0,
+      });
+    }
+
+    for (let score of this.currentScores) {
+      const team1 = B.find((e) => e.name === score.team_name1);
+      const team2 = B.find((e) => e.name === score.team_name2);
+      score.curlingteam1_scored
+        ? (team1.total += score.score)
+        : (team2.total += score.score);
+    }
+
+    for (let game of this.currentGames) {
+      const team1 = B.find((e) => e.name === game.team_name1);
+      const team2 = B.find((e) => e.name === game.team_name2);
+      game.dataSource = [team1, team2];
+    }
+
     // console.log('AFTER');
     // console.log(this.currentGames);
   }
-}
-
-export interface Game {
-  name: string;
-  home: string;
-  round_1: string;
-  round_2: string;
-  round_3: string;
-  round_4: string;
-  round_5: string;
-  round_6: string;
-  round_7: string;
-  round_8: string;
-  final_score: string;
-}
-
-export interface Draw {
-  name: string;
-  date: Date;
-  game_1: Game[];
-  game_2: Game[];
-  game_3: Game[];
-  youtube_link: string;
-}
-export interface Standing {
-  name: string;
-  wins: string;
-  losses: string;
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
