@@ -11,16 +11,39 @@
       </mat-form-field>
     </div>
   </div>
+
+
   <div class="col-sm-12">
     <table mat-table [dataSource]="this.finalEventData" class="mat-elevation-z8">
-      <ng-container matColumnDef="drawinfo">
+
+      <ng-container matColumnDef="Draw">
         <th mat-header-cell *matHeaderCellDef> Draw </th>
         <td mat-cell *matCellDef="let draw">
-          <!-- ID: {{draw.drawId}}<br> -->
           {{draw.drawName}}<br>
           Time: {{draw.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}<br>
         </td>
       </ng-container>
+
+      <!-- <ng-container *ngFor="let item of displayedColumns">
+        <ng-container matColumnDef={{item}}>
+          <th mat-header-cell *matHeaderCellDef> {{this.displayedColumns[item]}} </th>
+          <td mat-cell *matCellDef="let draw">
+            <div *ngIf="draw.games[item].team1 != null">
+              <div *ngIf="draw.games[item].name != null">
+                {{draw.games[item].name}} <br>
+              </div>
+              <div *ngIf="draw.games[item].name == null">
+                Unnamed Game <br>
+              </div>
+              Team1: {{draw.games[item].team1}} <br>
+              Team2: {{draw.games[item].team2}} <br>
+              Winner -> Game {{draw.games[item].winnerTo}} <br>
+            </div>
+          </td>
+        </ng-container>
+      </ng-container> -->
+
+
 
       <ng-container matColumnDef="track_a" *ngIf="this.drawSizeNumber > 0">
         <th mat-header-cell *matHeaderCellDef> A </th>

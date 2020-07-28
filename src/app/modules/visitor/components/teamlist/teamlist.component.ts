@@ -51,7 +51,7 @@ export class TeamlistComponent {
             console.log('[DEBUG] eventObtain() in schedule component:');
             console.log(res);
             this.allTeamData = res;
-            this.allTeamData.sort(this.allTeamData.id);
+            // this.allTeamData.sort(this.allTeamData.id);
             console.log(this.allTeamData);
             // console.log("ThisEventDrawDataBelow:");
             // console.log(this.eventDrawData);
@@ -88,7 +88,7 @@ export class TeamlistComponent {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allTeamData = res;
-        this.allTeamData.sort(this.allTeamData.id);
+        // this.allTeamData.sort(this.allTeamData.id);
         console.log(this.allTeamData);
         // console.log("ThisEventDrawDataBelow:");
         // console.log(this.eventDrawData);
@@ -115,7 +115,7 @@ export interface Team {
 // const TEAM_DATA: Team[] = [];
 // var memberData: Member[] = [];
 
-//test data
+// // test data
 // for (let i = 1; i < 6; i++) {
 //   memberData = [];
 //   for (let n = 1; n < 5; n++) {
