@@ -79,9 +79,9 @@ export class CreatePoolComponent implements OnInit {
           console.log(res)
           this.notificationService.showSuccess('Pool has been created', '')
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Pool create failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Pool create failed!');
         })
       .add(
         () => {

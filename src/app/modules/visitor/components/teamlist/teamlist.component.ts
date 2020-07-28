@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 //import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SpinnerService } from '@app/shared/services/spinner.service';
+import { MatExpansionPanel } from '@angular/material/expansion';
 //import { Address } from 'cluster';
 
 @Component({
@@ -17,9 +18,9 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  viewProviders: [MatExpansionPanel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-
 
 
 export class TeamlistComponent {
@@ -29,6 +30,7 @@ export class TeamlistComponent {
   allTeamData = null;
   allEventData = null;
   selectedEvent = null;
+  panelOpenState = false;
 
   constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
 
@@ -49,40 +51,44 @@ export class TeamlistComponent {
             console.log('[DEBUG] eventObtain() in schedule component:');
             console.log(res);
             this.allTeamData = res;
-            this.allTeamData.sort(this.allTeamData.id);
+            // this.allTeamData.sort(this.allTeamData.id);
             console.log(this.allTeamData);
             // console.log("ThisEventDrawDataBelow:");
             // console.log(this.eventDrawData);
             this.spinner.off();
           });
-        this.spinner.off();
+
       })
   }
 
   // dataSource = TEAM_DATA;
-  dataSource = this.allTeamData;
+  //dataSource = this.allTeamData;
   displayedColumns = [
-    'id',
+    // 'id',
     'team_name',
   ];
 
   onEventSelected(event: any) {
-    console.log(this.allEventData);
+    console.log('the selected event is:');
+    console.log(event);
+
+    this.selectedEvent = event.value;
+    this.selectedEventId = event.value.id;
+
     console.log('the selected event is:');
     console.log(this.selectedEvent);
-    this.selectedEventId = this.selectedEvent.id;
-    // this.selectedEvent = event.value;
     this.eventBegin();
   }
 
   eventBegin() {
+    this.spinner.on();
     this.api
       .getTeamsByEventId(this.selectedEventId)
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
         this.allTeamData = res;
-        this.allTeamData.sort(this.allTeamData.id);
+        // this.allTeamData.sort(this.allTeamData.id);
         console.log(this.allTeamData);
         // console.log("ThisEventDrawDataBelow:");
         // console.log(this.eventDrawData);
@@ -106,33 +112,33 @@ export interface Team {
   curlers: Member[];
 }
 
-const TEAM_DATA: Team[] = [];
-var memberData: Member[] = [];
+// const TEAM_DATA: Team[] = [];
+// var memberData: Member[] = [];
 
-//test data
-for (let i = 1; i < 6; i++) {
-  memberData = [];
-  for (let n = 1; n < 5; n++) {
-    memberData.push({ curler_id: i, memberImage: "abc", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
-  }
-  TEAM_DATA.push({
-    id: i,
-    team_name: `team_${i}`,
-    curlers: memberData,
-  })
-}
-for (let i = 6; i < 15; i++) {
-  for (let n = 1; n < 3; n++) {
-    memberData = [];
-    memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
-    memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
-  }
-  TEAM_DATA.push({
-    id: i,
-    team_name: `team_${i}`,
-    curlers: memberData,
-  })
-}
+// // test data
+// for (let i = 1; i < 6; i++) {
+//   memberData = [];
+//   for (let n = 1; n < 5; n++) {
+//     memberData.push({ curler_id: i, memberImage: "abc", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
+//   }
+//   TEAM_DATA.push({
+//     id: i,
+//     team_name: `team_${i}`,
+//     curlers: memberData,
+//   })
+// }
+// for (let i = 6; i < 15; i++) {
+//   for (let n = 1; n < 3; n++) {
+//     memberData = [];
+//     memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
+//     memberData.push({ curler_id: i, memberImage: "123123", curler_name: `member_${i}`, curler_gender: 'male', curler_position: "A", curler_note: "ABCD" });
+//   }
+//   TEAM_DATA.push({
+//     id: i,
+//     team_name: `team_${i}`,
+//     curlers: memberData,
+//   })
+// }
 
 /*
 export interface draw {

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { parseHostBindings } from '@angular/compiler';
+import { KeyboardNavigationFocusBorderOptionsObject } from 'highcharts';
 
 @Component({
   selector: 'app-schedule',
@@ -23,12 +24,16 @@ export class ScheduleComponent implements OnInit {
   totalDraw = 0;
   // finalDrawData: gameData[] = [];
   finalEventData: drawData[] = [];
+  finalData: any[] = [];
   // sheetSize = 0;
   selectedEventId = null;
   drawSizeNumber = null;
   displayedColumns: String[]
   allEventData: null;
   selectedEvent: drawData;
+
+  tableSize: Number;
+  tableColumn: any[] = [];
 
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private spinnerService: SpinnerService) { }
@@ -43,14 +48,26 @@ export class ScheduleComponent implements OnInit {
         this.selectedEvent = res[0];
         this.selectedEventId = res[0].id;
         console.log(this.selectedEventId);
+        console.log(this.selectedEvent);
 
-        this.eventBegin();
-        this.spinnerService.off()
+        this.apiService
+          .getDraws(this.selectedEventId)
+          .subscribe((res: any) => {
+            this.eventDrawData = res;
+            this.totalDraw = res.length;
+
+            this.apiService
+              .getGames(this.selectedEventId)
+              .subscribe((res: any) => {
+                this.eventGameData = res;
+                this.totalGame = res.length;
+
+                this.dataProcess();
+                this.spinnerService.off();
+              })
+          });
+        // this.spinnerService.off()
       })
-
-    // console.log("Test Part1");
-    // console.log("Test Part2");
-    // console.log("Test Part3");
   }
 
 
@@ -67,11 +84,15 @@ export class ScheduleComponent implements OnInit {
   }
 
   onEventSelected(event: any) {
-    console.log(this.allEventData);
+    console.log('the selected event is:');
+    console.log(event);
+
+    this.selectedEvent = event.value;
+    this.selectedEventId = event.value.id;
+
     console.log('the selected event is:');
     console.log(this.selectedEvent);
-    this.selectedEventId = this.selectedEvent.id;
-    // this.selectedEvent = event.value;
+
     this.eventBegin();
   }
 
@@ -109,83 +130,75 @@ export class ScheduleComponent implements OnInit {
 
   }
 
-
-  // eventObtain(targetNum: Number) {
-  //   // return new Promise((resolve, reject) => {
-  //   console.log("Obtain Data From Database");
-
-  //   this.spinnerService.on();
-  //   this.apiService
-  //     .getDraws(targetNum)
-  //     .subscribe((res: any) => {
-  //       console.log('[DEBUG] eventObtain() in schedule component:');
-  //       console.log(res);
-  //       this.eventDrawData = res;
-  //       this.totalDraw = res.length;
-  //       this.eventDrawData.sort(this.eventDrawData.startTime);
-  //       // console.log("ThisEventDrawDataBelow:");
-  //       // console.log(this.eventDrawData);
-  //       // test parseHostBindings, data here
-  //     });
-  //   this.apiService
-  //     .getGames(targetNum)
-  //     .subscribe((res: any) => {
-  //       console.log('[DEBUG] eventObtain() in schedule component:');
-  //       console.log(res);
-  //       this.eventGameData = res;
-  //       this.totalGame = res.length;
-  //       // this.eventGameData.sort(this.eventGameData.videoUrl, this.eventGameData.id);
-  //       console.log("ThisEventGameDataBelow:");
-  //       console.log(this.eventGameData);
-  //       // test passed, data here
-  //       this.spinnerService.off();
-  //       this.dataProcess();
-  //     })
-  // }
-
   //Data Process function, which classify the data from database
   dataProcess(): void {
     this.finalEventData = [];
     var s = 0;
 
     //initialize number array to count size of each draw
-    for (let i = 0; i < this.totalGame; i++) {
-      if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
-        s = 1
-      } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
-        s = 2
-      } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
-        s = 3
-      } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
-        s = 4
-      } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
-        s = 5
-      } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
-        s = 6
-      }
-      if (this.drawSizeNumber < s) {
-        this.drawSizeNumber = s;
-      }
-    }
-
-
-    // //count the size of each draw, and update maxium number
-    // for (let p = 0; p < this.totalDraw; p++) {
-    //   drawSizeCount[p] = 0;
-    //   for (let i = 0; i < this.totalGame; i++) {
-    //     if (this.eventDrawData[p].id == this.eventGameData[i].draw_id) {
-    //       drawSizeCount[p] += 1;
-    //     }
-    //     if (drawSizeCount[p] > this.drawSizeNumber) {
-    //       this.drawSizeNumber = drawSizeCount[p]
-    //     }
+    // for (let i = 0; i < this.totalGame; i++) {
+    //   if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
+    //     s = 1
+    //   } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
+    //     s = 2
+    //   } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
+    //     s = 3
+    //   } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
+    //     s = 4
+    //   } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
+    //     s = 5
+    //   } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
+    //     s = 6
+    //   }
+    //   if (this.drawSizeNumber < s) {
+    //     this.drawSizeNumber = s;
     //   }
     // }
 
-    // console.log("this.drawSizeCount Data BELOW");
-    // console.log(this.drawSizeNumber);
+    //initialize number array to count size of each draw
+    this.tableColumn = []
+    this.tableSize = 0;
+    for (let i = 0; i < this.totalGame; i++) {
+      if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 48 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 57) {
+        this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 48)
+        // console.log(this.eventGameData[i].ice_sheet)
+        // console.log(this.eventGameData[i].ice_sheet)
+        this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 48
+      }
+      else if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 65 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 90) {
+        this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 64)
+        // console.log(this.eventGameData[i].ice_sheet)
+        // console.log(this.eventGameData[i].ice_sheet.charCodeAt(0) - 64)
+        this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 64
+      }
+      else if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 97 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 122) {
+        this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 96)
+        // console.log(this.eventGameData[i].ice_sheet)
+        // console.log(this.eventGameData[i].ice_sheet.charCodeAt(0) - 96)
+        this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 96
+      }
+    }
+    this.tableColumn = this.tableColumn.sort()
+    console.log(this.tableColumn)
+    let n = 0;
+    for (let i = 0; i < this.tableColumn.length; i++) {
+      if (this.tableColumn[i] !== this.tableColumn[n]) {
+        n++;
+        this.tableColumn[n] = this.tableColumn[i]
+      }
+    }
+    this.tableColumn.splice(n + 1)
+    console.log(this.tableColumn)
+    this.tableSize = this.tableColumn.length;
+    this.drawSizeNumber = this.tableSize;
+    // for (let i = 0; i < this.tableColumn.length; i++) {
+    //   this.tableColumn[i] = String.fromCharCode(this.tableColumn[i] + 64)
+    // }
+    this.tableColumn.push(0);
+    this.tableColumn.sort();
+    console.log(this.tableColumn)
 
-
+    //process data to create the final dataset
     for (let p = 0; p < this.totalDraw; p++) {
       this.finalEventData.push({
         id: p + 1,
@@ -212,6 +225,9 @@ export class ScheduleComponent implements OnInit {
       // console.log(this.p + " Draw Data Has been Added. -----------+");
       // console.log(this.finalEventData[this.p]);
     }
+
+
+
     console.log("Empty Data Here");
     console.log(this.finalEventData);
     console.log(this.eventGameData);
@@ -227,17 +243,17 @@ export class ScheduleComponent implements OnInit {
           // console.log('P' + p);
           // console.log('S' + s);
           // console.log('I' + i);
-          if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
+          if (this.eventGameData[i].ice_sheet == 1) {
             s = 0
-          } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
+          } else if (this.eventGameData[i].ice_sheet == 2) {
             s = 1
-          } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
+          } else if (this.eventGameData[i].ice_sheet == 3) {
             s = 2
-          } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
+          } else if (this.eventGameData[i].ice_sheet == 4) {
             s = 3
-          } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
+          } else if (this.eventGameData[i].ice_sheet == 5) {
             s = 4
-          } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
+          } else if (this.eventGameData[i].ice_sheet == 6) {
             s = 5
           }
 
@@ -253,31 +269,18 @@ export class ScheduleComponent implements OnInit {
           this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner;
           // console.log(this.finalEventData[p]);
 
-
-          this.displayedColumns = []
-          this.displayedColumns.push('drawinfo')
-          for (let p = 0; p < this.drawSizeNumber; p++) {
-            this.displayedColumns.push('track_' + String.fromCharCode(97 + p))
-          }
-          // {
-          //   gameId: i + 1,
-          //   eventGameId: this.eventGameData[i].id,
-          //   name: this.eventGameData[i].notes,
-          //   team1: this.eventGameData[i].team_name1,
-          //   team1Id: this.eventGameData[i].curlingteam1_id,
-          //   team2: this.eventGameData[i].team_name2,
-          //   team2Id: this.eventGameData[i].curlingteam2_id,
-          //   finished: this.eventGameData[i].finished,
-          //   winnerId: this.eventGameData[i].null,
-          //   winnerTo: this.eventGameData[i].winner,
-          // };
-          // console.log(this.p + " Game Data Has Been Updated. ---------------++");
-          // console.log(this.finalEventData[this.p]);
         }
+
       }
     }
     console.log("Final Dataset Below:");
     console.log(this.finalEventData);
+
+    this.displayedColumns = []
+    this.displayedColumns.push('Draw')
+    for (let p = 1; p < this.drawSizeNumber + 1; p++) {
+      this.displayedColumns.push('track_' + String.fromCharCode(96 + p))
+    } console.log(this.displayedColumns)
   }
 
   //Control pannel of select event, will call to reload data

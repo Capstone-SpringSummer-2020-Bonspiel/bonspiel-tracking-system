@@ -74,6 +74,11 @@ export class DashboardComponent implements OnInit {
   draws: any;
   games: any;
 
+  teamColors = {
+    color1: null,
+    color2: null,
+  }
+
   filterColumns = [
     {
       name: 'all',

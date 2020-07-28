@@ -21,7 +21,7 @@ export class RemoveEventComponent implements OnInit {
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize form group
@@ -60,13 +60,17 @@ export class RemoveEventComponent implements OnInit {
       .deleteEvent(eventId)
       .subscribe(
         (res: any) => {
-          console.log(res);
-          this.notificationService.showSuccess(
-            'Event has been successfully deleted!',
-            ''
-          );
-
-          // Reset the stepper
+          console.log(res)
+          this.notificationService.showSuccess('Event has been successfully deleted!', '')
+          this.spinnerService.off()
+        },
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event deleted failed!');
+          this.spinnerService.off();
+        })
+      .add(
+        () => {
           stepper.reset();
 
           // Reset the form and validation

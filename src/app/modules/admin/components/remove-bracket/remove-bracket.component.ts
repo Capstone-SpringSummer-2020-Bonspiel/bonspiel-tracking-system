@@ -29,7 +29,7 @@ export class RemoveBracketComponent implements OnInit {
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize form group
@@ -102,13 +102,17 @@ export class RemoveBracketComponent implements OnInit {
 
           this.notificationService.showSuccess('Bracket has been removed', '');
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
-        }
-      )
-      .add(() => {
-        this.spinnerService.off();
-      });
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Bracket deleted failed!');
+          this.spinnerService.off();
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
+
+
   }
 }

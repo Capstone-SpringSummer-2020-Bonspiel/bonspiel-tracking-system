@@ -27,7 +27,7 @@ export class RemovePoolComponent implements OnInit {
     private fb: FormBuilder,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize form group
@@ -100,13 +100,17 @@ export class RemovePoolComponent implements OnInit {
           console.log(res);
           this.notificationService.showSuccess('Pool has been removed', '');
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
-        }
-      )
-      .add(() => {
-        this.spinnerService.off();
-      });
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Pool deleted failed!');
+          this.spinnerService.off();
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
+
+
   }
 }

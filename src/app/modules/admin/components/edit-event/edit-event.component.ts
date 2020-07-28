@@ -44,7 +44,7 @@ export class EditEventComponent implements OnInit {
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.spinnerService.on();
@@ -139,15 +139,15 @@ export class EditEventComponent implements OnInit {
             ''
           );
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Event modified Failed!', '');
-        }
-      )
-      .add(() => {
-        stepper.reset();
-        this.spinnerService.off();
-      });
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event modified Failed!');
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }
 
@@ -166,7 +166,7 @@ export interface DialogData {
   templateUrl: 'edit-event-dialog.html',
 })
 export class EditEventDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 }
 
 // export interface Event {

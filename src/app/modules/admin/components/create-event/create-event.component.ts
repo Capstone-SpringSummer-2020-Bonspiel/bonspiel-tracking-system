@@ -98,12 +98,13 @@ export class CreateEventComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError('Event create failed!', '');
-        }
-      )
-      .add(() => {
-        this.spinnerService.off();
-      });
+          this.notificationService.showError(err, 'Event create failed!');
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }
 

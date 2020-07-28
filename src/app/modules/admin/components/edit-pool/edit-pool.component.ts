@@ -108,9 +108,9 @@ export class EditPoolComponent implements OnInit {
         (res: any) => {
           this.notificationService.showSuccess('Pool has been successfully modified!', '');
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Pool modified failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Pool modified failed!');
         })
       .add(
         () => {
