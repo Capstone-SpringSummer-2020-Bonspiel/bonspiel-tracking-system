@@ -21,38 +21,20 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./desktop-view.component.scss'],
 })
 export class DesktopViewComponent implements OnInit {
-  displayedColumns = [
-    'name',
-    // 'home',
-    'round_1',
-    'round_2',
-    'round_3',
-    'round_4',
-    'round_5',
-    'round_6',
-    'round_7',
-    'round_8',
-    'final_score',
-  ];
   standingsColumns = ['name', 'wins', 'losses', 'ties'];
-  dataSourceDraws = [];
-  dataSourceGames = [];
   dataSourceStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
 
-  selectedDraw = null;
-  selectedPoolID = null;
   allDraws = [];
   allGames = [];
+  allScores = [];
+  selectedDraw = null;
   poolBracketList = [];
   currentGames = [];
-  currentStandings = [];
   currentEventId = null;
   currentEvent = null;
-  allScores = [];
-  currentScores = [];
   selectedPoolBracket = 'All Teams';
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -357,8 +339,6 @@ export class DesktopViewComponent implements OnInit {
 
     console.log('poolBracketList:');
     console.log(this.poolBracketList);
-
-    this.spinnerService.off();
   }
 
   openYoutubeDialog() {
@@ -388,19 +368,6 @@ export class DesktopViewComponent implements OnInit {
     }
   }
 
-  getFinalScore(team) {
-    return (
-      Number(team.round_1) +
-      Number(team.round_2) +
-      Number(team.round_3) +
-      Number(team.round_4) +
-      Number(team.round_5) +
-      Number(team.round_6) +
-      Number(team.round_7) +
-      Number(team.round_8)
-    );
-  }
-
   convertToAlpha(num) {
     return String.fromCharCode(num + 65);
   }
@@ -419,35 +386,4 @@ export class DesktopViewComponent implements OnInit {
     this.dataSourceStandings = this.poolBracketList.find((e) => e[0] === event.value)[1];
     this.dataSourceStandings.sort((a, b) => a.wins - b.wins).reverse();
   }
-}
-
-export interface Game {
-  name: string;
-  // home: string;
-  round_1: string;
-  round_2: string;
-  round_3: string;
-  round_4: string;
-  round_5: string;
-  round_6: string;
-  round_7: string;
-  round_8: string;
-  final_score: string;
-}
-
-export interface Draw {
-  name: string;
-  date: Date;
-  game_1: Game[];
-  game_2: Game[];
-  game_3: Game[];
-  youtube_link: string;
-}
-export interface Standing {
-  name: string;
-  wins: number;
-  losses: number;
-  ties: number;
-  pool_id: number;
-  bracket_id: number;
 }
