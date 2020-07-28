@@ -2,20 +2,36 @@
   [dataSource]="data">
   <ng-container [matColumnDef]="column"
     *ngFor="let column of displayedColumns">
+
     <div *ngIf="column !== 'Team'">
       <th mat-header-cell
         *matHeaderCellDef
         style="text-align: center"> {{column}} </th>
     </div>
+
     <div *ngIf="column === 'Team'">
       <th mat-header-cell
         *matHeaderCellDef
         style="text-align: center"></th>
     </div>
-    <td mat-cell
-      *matCellDef="let element"
-      class="circle"
-      style="text-align: center"> {{element[column]}} </td>
+
+    <div *ngIf="column !== 'Team'">
+      <td mat-cell
+        *matCellDef="let element"
+        class="circle"
+        style="text-align: center"> {{element[column]}} </td>
+    </div>
+
+    <div *ngIf="column === 'Team'">
+      <td mat-cell
+        *matCellDef="let element"
+        class="circle"
+        style="text-align: center">
+        <button type="button"
+          class="btn btn-light"
+          (click)="openDialog()"> {{element[column]}} </button> </td>
+    </div>
+
   </ng-container>
 
   <tr mat-header-row
