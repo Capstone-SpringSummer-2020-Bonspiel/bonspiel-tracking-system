@@ -79,9 +79,9 @@ export class CreateBracketComponent implements OnInit {
         console.log(res)
         this.notificationService.showSuccess('Bracket has been created!', '')
       },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Bracket create failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Bracket create failed!');
         })
       .add(
         () => {

@@ -130,9 +130,9 @@ export class EditEventComponent implements OnInit {
           console.log(res);
           this.notificationService.showSuccess('Event has been successfully modified!', '')
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Event modified Failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event modified Failed!');
         })
       .add(
         () => {

@@ -106,9 +106,9 @@ export class RemoveBracketComponent implements OnInit {
           this.notificationService.showSuccess('Bracket has been successfully deleted!', '');
           this.spinnerService.off();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Bracket deleted failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Bracket deleted failed!');
           this.spinnerService.off();
         })
       .add(

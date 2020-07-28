@@ -66,9 +66,9 @@ export class RemoveEventComponent implements OnInit {
           this.notificationService.showSuccess('Event has been successfully deleted!', '')
           this.spinnerService.off()
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Event deleted failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event deleted failed!');
           this.spinnerService.off();
         })
       .add(

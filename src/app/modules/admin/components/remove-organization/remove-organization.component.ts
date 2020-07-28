@@ -67,9 +67,9 @@ export class RemoveOrganizationComponent implements OnInit {
           this.notificationService.showSuccess('Organization has been successfully deleted!', '');
           this.spinnerService.off();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Organization deleted failed!', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Organization deleted failed!');
           this.spinnerService.off();
         })
       .add(

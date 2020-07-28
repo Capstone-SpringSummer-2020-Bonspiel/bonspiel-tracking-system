@@ -90,9 +90,9 @@ export class EditOrganizationComponent implements OnInit {
           this.notificationService.showSuccess('Organization has been created', '')
           this.spinnerService.off();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Something went wrong');
         })
       .add(
         () => {
