@@ -10,7 +10,7 @@ import { NotificationService } from '@app/shared/services/notification.service';
 @Component({
   selector: 'app-create-game',
   templateUrl: './create-game.component.html',
-  styleUrls: ['./create-game.component.scss']
+  styleUrls: ['./create-game.component.scss'],
 })
 export class CreateGameComponent implements OnInit {
   firstFormGroup: FormGroup;
@@ -30,12 +30,12 @@ export class CreateGameComponent implements OnInit {
   optionGroups: any = [
     {
       name: 'Pools',
-      list: []
+      list: [],
     },
     {
       name: 'Brackets',
-      list: []
-    }
+      list: [],
+    },
   ];
   draws: any = [];
   games: any = [];
@@ -52,7 +52,7 @@ export class CreateGameComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
@@ -93,7 +93,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   setEventId() {
-    this.selectedEventId = this.firstFormGroup.value.eventId;  // eventId
+    this.selectedEventId = this.firstFormGroup.value.eventId; // eventId
     console.log('selectedEventId:');
     console.log(this.selectedEventId);
   }
@@ -101,11 +101,11 @@ export class CreateGameComponent implements OnInit {
   getPoolsBracketsByEventId() {
     // Get pools/brackets
     forkJoin({
-      pools: this.apiService.adHocQuery(`SELECT * FROM pool WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
-      brackets: this.apiService.adHocQuery(`SELECT * FROM bracket WHERE event_id = ${this.selectedEventId} ORDER BY id ASC`),
+      pools: this.apiService.getPool(this.selectedEventId),
+      brackets: this.apiService.getBracket(this.selectedEventId),
     }).subscribe((res: any) => {
-      this.optionGroups[0].list = res.pools.rows;     // pools
-      this.optionGroups[1].list = res.brackets.rows;  // brackets
+      this.optionGroups[0].list = res.pools; // pools
+      this.optionGroups[1].list = res.brackets; // brackets
     });
 
     // Get games
@@ -134,7 +134,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   setDrawId() {
-    this.selectedDrawId = this.thirdFormGroup.value.draw;  // drawId
+    this.selectedDrawId = this.thirdFormGroup.value.draw; // drawId
     console.log('selectedDrawId:');
     console.log(this.selectedDrawId);
   }
@@ -146,22 +146,22 @@ export class CreateGameComponent implements OnInit {
 
   onClickSubmit(stepper: MatStepper) {
     let body = {
-      bracketId: this.secondFormGroup.controls.bracketId.value || null,          // bracketId
-      curlingTeam1Id: this.fourthFormGroup.controls.team1Id.value || null,       // curlingTeam1Id (nullable)
-      curlingTeam2Id: this.fourthFormGroup.controls.team2Id.value || null,       // curlingTeam2Id (nullable)
-      destLoser: this.fourthFormGroup.controls.destLoser.value || null,          // destLoser (nullable)
-      destWinner: this.fourthFormGroup.controls.destWinner.value || null,        // destWinner (nullable)
-      drawId: this.thirdFormGroup.controls.drawId.value,                         // drawId
-      eventType: this.firstFormGroup.controls.eventType.value,                   // eventType
-      finished: this.fourthFormGroup.controls.finished.value,                    // Finished
-      gameName: this.fourthFormGroup.controls.gameName.value,                    // gameName
-      iceSheet: this.fourthFormGroup.controls.iceSheet.value,                    // iceSheet
-      notes: this.fourthFormGroup.controls.notes.value,                          // notes
-      poolId: this.secondFormGroup.controls.poolId.value || null,                // poolId
-      stoneColor1: this.fourthFormGroup.controls.team1StoneColor.value || null,  // stoneColor1
-      stoneColor2: this.fourthFormGroup.controls.team2StoneColor.value || null,  // stoneColor2
-      winner: this.fourthFormGroup.controls.winner.value || null,                // WinnerId (nullable)
-    }
+      bracketId: this.secondFormGroup.controls.bracketId.value || null, // bracketId
+      curlingTeam1Id: this.fourthFormGroup.controls.team1Id.value || null, // curlingTeam1Id (nullable)
+      curlingTeam2Id: this.fourthFormGroup.controls.team2Id.value || null, // curlingTeam2Id (nullable)
+      destLoser: this.fourthFormGroup.controls.destLoser.value || null, // destLoser (nullable)
+      destWinner: this.fourthFormGroup.controls.destWinner.value || null, // destWinner (nullable)
+      drawId: this.thirdFormGroup.controls.drawId.value, // drawId
+      eventType: this.firstFormGroup.controls.eventType.value, // eventType
+      finished: this.fourthFormGroup.controls.finished.value, // Finished
+      gameName: this.fourthFormGroup.controls.gameName.value, // gameName
+      iceSheet: this.fourthFormGroup.controls.iceSheet.value, // iceSheet
+      notes: this.fourthFormGroup.controls.notes.value, // notes
+      poolId: this.secondFormGroup.controls.poolId.value || null, // poolId
+      stoneColor1: this.fourthFormGroup.controls.team1StoneColor.value || null, // stoneColor1
+      stoneColor2: this.fourthFormGroup.controls.team2StoneColor.value || null, // stoneColor2
+      winner: this.fourthFormGroup.controls.winner.value || null, // WinnerId (nullable)
+    };
 
     console.log(body);
 
@@ -179,21 +179,26 @@ export class CreateGameComponent implements OnInit {
 
     this.spinnerService.on();
 
-    this.apiService.createGame(this.selectedEventId, body)
+    this.apiService
+      .createGame(this.selectedEventId, body)
       .subscribe(
         (res) => {
           console.log(res);
-          this.notificationService.showSuccess('Game was successfully created', '')
+          this.notificationService.showSuccess(
+            'Game was successfully created',
+            ''
+          );
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError('Something went wrong', '')
-        })
-      .add(
-        () => {  // finally
-          stepper.reset();
-          this.spinnerService.off()
-        });
+          this.notificationService.showError('Something went wrong', '');
+        }
+      )
+      .add(() => {
+        // finally
+        stepper.reset();
+        this.spinnerService.off();
+      });
   }
 
   updateTeams(teamNum) {
@@ -208,11 +213,15 @@ export class CreateGameComponent implements OnInit {
   }
 
   filterTeams() {
-    return this.teams.filter(e => e.id !== this.selectedTeam1Id).filter(e => e.id !== this.selectedTeam2Id);
+    return this.teams
+      .filter((e) => e.id !== this.selectedTeam1Id)
+      .filter((e) => e.id !== this.selectedTeam2Id);
   }
 
   selectedTeams() {
-    return this.teams.filter(e => e.id === this.selectedTeam1Id || e.id === this.selectedTeam2Id);
+    return this.teams.filter(
+      (e) => e.id === this.selectedTeam1Id || e.id === this.selectedTeam2Id
+    );
   }
 
   resetStepper(stepper: MatStepper) {
@@ -224,4 +233,3 @@ export class CreateGameComponent implements OnInit {
     this.fourthFormGroup.reset();
   }
 }
-

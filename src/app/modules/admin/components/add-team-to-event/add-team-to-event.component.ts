@@ -6,7 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 @Component({
   selector: 'app-add-team-to-event',
   templateUrl: './add-team-to-event.component.html',
-  styleUrls: ['./add-team-to-event.component.scss']
+  styleUrls: ['./add-team-to-event.component.scss'],
 })
 export class AddTeamToEventComponent implements OnInit {
   firstFormGroup: FormGroup;
@@ -15,8 +15,7 @@ export class AddTeamToEventComponent implements OnInit {
   events: any = [];
   teams: any = [];
 
-  constructor(private fb: FormBuilder,
-    private apiService: ApiService,) { }
+  constructor(private fb: FormBuilder, private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
@@ -34,8 +33,8 @@ export class AddTeamToEventComponent implements OnInit {
     // Get list of existing events
     this.apiService.getEvents().subscribe((res) => {
       this.events = res;
-      // console.log('events:');
-      // console.log(this.events);
+      console.log('events:');
+      console.log(this.events);
     });
   }
 
@@ -43,15 +42,13 @@ export class AddTeamToEventComponent implements OnInit {
     // Get teams
     this.apiService.getAllTeams().subscribe((res) => {
       this.teams = res;
-      this.teams.sort((a, b) => (a.team_name > b.team_name) ? 1 : -1);
-      // console.log('teams:');
-      // console.log(this.teams);
+      this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
+      console.log('teams:');
+      console.log(this.teams);
     });
   }
 
-  onClickSubmit() {
-
-  }
+  onClickSubmit() {}
 
   resetStepper(stepper: MatStepper) {
     stepper.reset();
