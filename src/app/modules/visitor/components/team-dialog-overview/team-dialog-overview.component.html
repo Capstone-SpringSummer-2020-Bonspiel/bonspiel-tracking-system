@@ -2,105 +2,20 @@
 
   <div class="row heading">
     <div class="col-md-6 offset-md-3">
-      <h2 class="text-center bottom-line">Team Overview</h2>
-      <p class="subheading text-center">2018 U.S. Olympic Curling Team</p>
+      <h2 class="text-center bottom-line">{{teamName}}</h2>
     </div>
   </div>
 
   <div class="row team-row">
-
-    <div class="col-md-3 col-sm-6 team-wrap">
+    <div *ngFor="let curler of team"
+      class="col-md-3 col-sm-6 team-wrap">
       <div class="team-member text-center">
         <div class="team-img">
           <img src="/assets/img/curler-silhouette.jpg">
-          <!-- <div class="overlay">
-                        <div class="team-details text-center">
-                            <p>
-                                Works as a commercial lines account executive with Marsh & McLennan Agency...Married; expecting their first child in late December 2018...Enjoys fishing and the outdoors.
-                            </p>
-                            <div class="socials mt-20">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
-                                <a href="#"><i class="fa fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div> -->
         </div>
-        <h6 class="team-title">Aileen Geving</h6>
-        <span>Lead</span>
-      </div>
-    </div>
-    <!-- end team member -->
-
-    <div class="col-md-3 col-sm-6 team-wrap">
-      <div class="team-member text-center">
-        <div class="team-img">
-          <img src="/assets/img/curler-silhouette.jpg">
-          <!-- <div class="overlay">
-                        <div class="team-details text-center">
-                            <p>
-                                Becca works for Dick's Sporting Goods as part of its Team USA Olympic Contenders Program.
-                            </p>
-                            <div class="socials mt-20">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
-                                <a href="#"><i class="fa fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div> -->
-        </div>
-        <h6 class="team-title">Becca Hamilton</h6>
-        <span>Second</span>
-      </div>
-    </div>
-    <!-- end team member -->
-
-    <div class="col-md-3 col-sm-6 team-wrap">
-      <div class="team-member last text-center">
-        <div class="team-img">
-          <img src="/assets/img/curler-silhouette.jpg">
-          <!-- <div class="overlay">
-                        <div class="team-details text-center">
-                            <p>
-                                Cory is married and makes a living as a nurse in the Madison area.
-                            </p>
-                            <div class="socials mt-20">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
-                                <a href="#"><i class="fa fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div> -->
-        </div>
-        <h6 class="team-title">Cory Christensen</h6>
-        <span>Vice Skip</span>
-      </div>
-    </div>
-    <!-- end team member -->
-
-    <div class="col-md-3 col-sm-6 team-wrap">
-      <div class="team-member last text-center">
-        <div class="team-img">
-          <img src="/assets/img/curler-silhouette.jpg">
-          <!-- <div class="overlay">
-                        <div class="team-details text-center">
-                            <p>
-                                Nina is married and makes a living as a nurse in the Madison area.
-                            </p>
-                            <div class="socials mt-20">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
-                                <a href="#"><i class="fa fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div> -->
-        </div>
-        <h6 class="team-title">Nina Roth</h6>
-        <span>Skip</span>
+        <h6 class="team-title">{{curler.curler_name}}</h6>
+        <span *ngIf="curler.throwing_order">Throwing order: {{curler.throwing_order | titlecase }}<br></span>
+        <span *ngIf="curler.curler_position">Position: {{curler.curler_position | titlecase}}</span>
       </div>
     </div>
     <!-- end team member -->

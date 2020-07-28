@@ -45,97 +45,100 @@ export class DesktopViewComponent implements OnInit {
     private spinnerService: SpinnerService,
     private cd: ChangeDetectorRef,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.spinnerService.on();
 
     // Get current event
-    this.apiService.currentEvent$
-      .subscribe(
-        (currentEvent) => {
-          this.currentEvent = currentEvent;
-          console.log(1);
-        });
+    this.apiService.currentEvent$.subscribe((currentEvent) => {
+      this.currentEvent = currentEvent;
+      console.log(1);
+    });
 
     // Get current event ID
-    this.apiService.currentEventId$
-      .subscribe(
-        (eventId) => {
-          this.currentEventId = eventId;
-          console.log(2);
+    this.apiService.currentEventId$.subscribe((eventId) => {
+      this.currentEventId = eventId;
+      console.log(2);
 
-          // Get draws, games and scores
-          forkJoin(
-            this.apiService.getDraws(this.currentEventId),
-            this.apiService.getGames(this.currentEventId),
-            this.apiService.getScoresByEvent(this.currentEventId)
-          ).subscribe(
-            ((vals: any) => {
-              console.log('all values', vals);
+      // Get draws, games and scores
+      forkJoin(
+        this.apiService.getDraws(this.currentEventId),
+        this.apiService.getGames(this.currentEventId),
+        this.apiService.getScoresByEvent(this.currentEventId)
+      ).subscribe((vals: any) => {
+        console.log('all values', vals);
 
-              this.allDraws = vals[0];
-              this.allGames = vals[1];
-              this.allScores = vals[2];
+        this.allDraws = vals[0];
+        this.allGames = vals[1];
+        this.allScores = vals[2];
 
-              this.selectedDraw = this.allDraws[this.allDraws.length - 1];
-              // this.notificationService.showInfo(this.selectedDraw.video_url, '');  // DEBUGGING
+        this.selectedDraw = this.allDraws[this.allDraws.length - 1];
+        // this.notificationService.showInfo(this.selectedDraw.video_url, '');  // DEBUGGING
 
-              this.loadGames().then(res => {
-                this.spinnerService.off();
-              });
-
-              this.loadTeamStandings();
-            })
-          );
-
+        this.loadGames().then((res) => {
+          this.spinnerService.off();
         });
+
+        this.loadTeamStandings();
+      });
+    });
   }
 
   loadGames() {
     return new Promise((resolve, reject) => {
-      this.currentGames = this.allGames.filter((x) => x.draw_id === this.selectedDraw.id);
+      this.currentGames = this.allGames.filter(
+        (x) => x.draw_id === this.selectedDraw.id
+      );
 
       for (let game of this.currentGames) {
-        const filteredScores = this.allScores.filter(e => e.game_id === game.game_id);
-        const sortedScores = filteredScores.sort((a, b) => a.end_number - b.end_number);
+        const filteredScores = this.allScores.filter(
+          (e) => e.game_id === game.game_id
+        );
+        const sortedScores = filteredScores.sort(
+          (a, b) => a.end_number - b.end_number
+        );
 
         console.log('filteredScores', filteredScores);
         console.log('sortedScores', sortedScores);
 
-        game.displayedColumns = sortedScores.map(e => String(e.end_number));  // [1', '2', '3', '4', '5', ...]        
+        game.displayedColumns = sortedScores.map((e) => String(e.end_number)); // [1', '2', '3', '4', '5', ...]
         game.displayedColumns.unshift('Team');
         game.displayedColumns.push('Total');
-        game.displayedColumns = game.displayedColumns.filter(e => e !== 'null');
+        game.displayedColumns = game.displayedColumns.filter(
+          (e) => e !== 'null'
+        );
 
         game.data = [
           {
-            'Team': game.team_name1,
-            'Total': 0
+            Team: { team: game.team_name1, team_id: game.curlingteam1_id },
+            Total: 0,
           },
           {
-            'Team': game.team_name2,
-            'Total': 0
-          }
+            Team: { team: game.team_name2, team_id: game.curlingteam2_id },
+            Total: 0,
+          },
         ];
 
         let team1Total = 0;
         let team2Total = 0;
 
-        sortedScores.map(e => e.end_number).forEach((end_number, i) => {
-          console.log('end_number', end_number);
-          if (end_number === null) {
-            return;
-          } else if (sortedScores[i].curlingteam1_scored === true) {
-            game.data[0][end_number] = sortedScores[i].score || 0;
-            game.data[1][end_number] = 0;
-            team1Total += sortedScores[i].score;
-          } else if (sortedScores[i].curlingteam1_scored === false) {
-            game.data[0][end_number] = 0;
-            game.data[1][end_number] = sortedScores[i].score || 0;
-            team2Total += sortedScores[i].score;
-          }
-        });
+        sortedScores
+          .map((e) => e.end_number)
+          .forEach((end_number, i) => {
+            console.log('end_number', end_number);
+            if (end_number === null) {
+              return;
+            } else if (sortedScores[i].curlingteam1_scored === true) {
+              game.data[0][end_number] = sortedScores[i].score || 0;
+              game.data[1][end_number] = 0;
+              team1Total += sortedScores[i].score;
+            } else if (sortedScores[i].curlingteam1_scored === false) {
+              game.data[0][end_number] = 0;
+              game.data[1][end_number] = sortedScores[i].score || 0;
+              team2Total += sortedScores[i].score;
+            }
+          });
 
         game.data[0]['Total'] = team1Total;
         game.data[1]['Total'] = team2Total;
@@ -148,49 +151,48 @@ export class DesktopViewComponent implements OnInit {
   }
 
   async loadTeamStandings() {
-
     let pools;
     let brackets;
 
-    await this.apiService.getPool(this.currentEventId)
+    await this.apiService
+      .getPool(this.currentEventId)
       .toPromise()
-      .then(
-        (res: any) => {
-          // Convert array of objects to object
-          let arr = res;
-          let result = {};
-          for (let i = 0; i < arr.length; i++) {
-            result[arr[i].id] = {
-              event_id: arr[i].event_id,
-              name: arr[i].name,
-              color: arr[i].color
-            }
-          }
+      .then((res: any) => {
+        // Convert array of objects to object
+        let arr = res;
+        let result = {};
+        for (let i = 0; i < arr.length; i++) {
+          result[arr[i].id] = {
+            event_id: arr[i].event_id,
+            name: arr[i].name,
+            color: arr[i].color,
+          };
+        }
 
-          pools = result;
-          console.log('pools:');
-          console.log(pools);
-        });
+        pools = result;
+        console.log('pools:');
+        console.log(pools);
+      });
 
-    await this.apiService.getBracket(this.currentEventId)
+    await this.apiService
+      .getBracket(this.currentEventId)
       .toPromise()
-      .then(
-        (res: any) => {
-          // Convert array of objects to object
-          let arr = res;
-          let result = {};
-          for (let i = 0; i < arr.length; i++) {
-            result[arr[i].id] = {
-              event_id: arr[i].event_id,
-              name: arr[i].name,
-              color: arr[i].color
-            }
-          }
+      .then((res: any) => {
+        // Convert array of objects to object
+        let arr = res;
+        let result = {};
+        for (let i = 0; i < arr.length; i++) {
+          result[arr[i].id] = {
+            event_id: arr[i].event_id,
+            name: arr[i].name,
+            color: arr[i].color,
+          };
+        }
 
-          brackets = result;
-          console.log('brackets:');
-          console.log(brackets);
-        });
+        brackets = result;
+        console.log('brackets:');
+        console.log(brackets);
+      });
 
     this.allGames.forEach((e) => {
       e.pool_name = pools[e.pool_id]?.name || null;
@@ -198,12 +200,13 @@ export class DesktopViewComponent implements OnInit {
       e.bracket_name = pools[e.bracket_id]?.name || null;
       e.type = pools[e.pool_id]?.name ? 'Bracket' : null;
 
-      e.label_name = pools[e.pool_id]?.name || pools[e.bracket_id]?.name || null;
-    })
+      e.label_name =
+        pools[e.pool_id]?.name || pools[e.bracket_id]?.name || null;
+    });
 
     // Get unique names of pools & brackets
     let unique_names = [...new Set(this.allGames.map((e) => e.label_name))];
-    unique_names = unique_names.filter(e => e !== null);
+    unique_names = unique_names.filter((e) => e !== null);
     unique_names = ['All Teams'].concat(unique_names);
 
     console.log('unique_names:');
@@ -212,11 +215,11 @@ export class DesktopViewComponent implements OnInit {
     // Create team mapping
     let team_mapping = {};
     for (let game of this.allGames) {
-      if (!(team_mapping.hasOwnProperty(game.curlingteam1_id))) {
-        team_mapping[game.curlingteam1_id] = game.team_name1
+      if (!team_mapping.hasOwnProperty(game.curlingteam1_id)) {
+        team_mapping[game.curlingteam1_id] = game.team_name1;
       }
-      if (!(team_mapping.hasOwnProperty(game.curlingteam2_id))) {
-        team_mapping[game.curlingteam2_id] = game.team_name2
+      if (!team_mapping.hasOwnProperty(game.curlingteam2_id)) {
+        team_mapping[game.curlingteam2_id] = game.team_name2;
       }
     }
 
@@ -251,21 +254,26 @@ export class DesktopViewComponent implements OnInit {
     // ]
 
     for (let event_type_name of unique_names) {
-
       // console.log(event_type_name);
 
       // Get all games in a given pool or bracket
       let games = this.allGames.filter((e) => e.label_name === event_type_name);
 
       // Get all unique teams in a given pool or bracket
-      let teams = [...new Set(games.map((e) => e.curlingteam1_id).concat(games.map((e) => e.curlingteam2_id)))];
+      let teams = [
+        ...new Set(
+          games
+            .map((e) => e.curlingteam1_id)
+            .concat(games.map((e) => e.curlingteam2_id))
+        ),
+      ];
 
       console.log(teams);
 
       // Add a counter object for each team
       let to_add = [
-        event_type_name,  // Cattle-A
-        []                // List of team standings
+        event_type_name, // Cattle-A
+        [], // List of team standings
       ];
 
       for (let team_id of teams) {
@@ -274,31 +282,35 @@ export class DesktopViewComponent implements OnInit {
           team_id: team_id,
           wins: 0,
           losses: 0,
-          ties: 0
-        })
+          ties: 0,
+        });
       }
 
       // Tally up the scores
       for (let game of games) {
-
         // Increment ties...
         if (game.finished === true && game.winner === null) {
-          to_add[1].find(e => e.team_id === game.curlingteam1_id).ties++;
-          to_add[1].find(e => e.team_id === game.curlingteam2_id).ties++;
+          to_add[1].find((e) => e.team_id === game.curlingteam1_id).ties++;
+          to_add[1].find((e) => e.team_id === game.curlingteam2_id).ties++;
         }
 
         // Increment win...
-        else if (game.finished === true && game.winner === game.curlingteam1_id) {
-          to_add[1].find(e => e.team_id === game.curlingteam1_id).wins++;
-          to_add[1].find(e => e.team_id === game.curlingteam2_id).losses++;
+        else if (
+          game.finished === true &&
+          game.winner === game.curlingteam1_id
+        ) {
+          to_add[1].find((e) => e.team_id === game.curlingteam1_id).wins++;
+          to_add[1].find((e) => e.team_id === game.curlingteam2_id).losses++;
         }
 
         // Increment losses...
-        else if (game.finished === true && game.winner === game.curlingteam2_id) {
-          to_add[1].find(e => e.team_id === game.curlingteam2_id).wins++;
-          to_add[1].find(e => e.team_id === game.curlingteam1_id).losses++;
+        else if (
+          game.finished === true &&
+          game.winner === game.curlingteam2_id
+        ) {
+          to_add[1].find((e) => e.team_id === game.curlingteam2_id).wins++;
+          to_add[1].find((e) => e.team_id === game.curlingteam1_id).losses++;
         }
-
       }
 
       this.poolBracketList.push(to_add);
@@ -306,17 +318,16 @@ export class DesktopViewComponent implements OnInit {
 
     // Combine all lists for All Teams list
 
-
     console.log(this.poolBracketList);
 
     let totals = {};
     for (let arr of this.poolBracketList.slice(1)) {
       for (let game of arr[1]) {
-        if (!(totals.hasOwnProperty(game.team_id))) {
+        if (!totals.hasOwnProperty(game.team_id)) {
           // console.log('creating');
           // console.log(game);
 
-          totals[game.team_id] = game
+          totals[game.team_id] = game;
         } else {
           // console.log('adding');
           // console.log(totals[game.team_id]);
@@ -325,15 +336,12 @@ export class DesktopViewComponent implements OnInit {
           // console.log('before');
           // console.log(totals[game.team_id].wins);
 
-
           totals[game.team_id].wins += game.wins;
           totals[game.team_id].losses += game.losses;
           totals[game.team_id].ties += game.ties;
 
           // console.log('after');
           // console.log(totals[game.team_id].wins);
-
-
         }
       }
     }
@@ -371,8 +379,7 @@ export class DesktopViewComponent implements OnInit {
       var match = url.match(regExp);
       if (match && match[2].length == 11) {
         return true;
-      }
-      else {
+      } else {
         return false;
       }
     }
@@ -393,7 +400,9 @@ export class DesktopViewComponent implements OnInit {
     console.log('the selected team is:');
     console.log(event.value);
 
-    this.dataSourceStandings = this.poolBracketList.find((e) => e[0] === event.value)[1];
+    this.dataSourceStandings = this.poolBracketList.find(
+      (e) => e[0] === event.value
+    )[1];
     this.dataSourceStandings.sort((a, b) => a.wins - b.wins).reverse();
   }
 }
