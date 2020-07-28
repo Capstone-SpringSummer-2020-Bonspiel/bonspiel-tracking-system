@@ -156,6 +156,8 @@ export class ScheduleComponent implements OnInit {
     // }
 
     //initialize number array to count size of each draw
+    this.tableColumn = []
+    this.tableSize = 0;
     for (let i = 0; i < this.totalGame; i++) {
       if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 48 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 57) {
         this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 48)
