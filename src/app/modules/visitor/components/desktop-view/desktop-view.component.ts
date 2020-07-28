@@ -100,9 +100,13 @@ export class DesktopViewComponent implements OnInit {
         const filteredScores = this.allScores.filter(e => e.game_id === game.game_id);
         const sortedScores = filteredScores.sort((a, b) => a.end_number - b.end_number);
 
-        game.displayedColumns = sortedScores.map(e => String(e.end_number));  // [1', '2', '3', '4', '5', ...]
+        console.log('filteredScores', filteredScores);
+        console.log('sortedScores', sortedScores);
+
+        game.displayedColumns = sortedScores.map(e => String(e.end_number));  // [1', '2', '3', '4', '5', ...]        
         game.displayedColumns.unshift('Team');
         game.displayedColumns.push('Total');
+        game.displayedColumns = game.displayedColumns.filter(e => e !== 'null');
 
         game.data = [
           {
@@ -119,14 +123,17 @@ export class DesktopViewComponent implements OnInit {
         let team2Total = 0;
 
         sortedScores.map(e => e.end_number).forEach((end_number, i) => {
-          if (sortedScores[i].curlingteam1_scored === false) {
-            game.data[0][end_number] = 0;
-            game.data[1][end_number] = sortedScores[i].score;
-            team2Total += sortedScores[i].score;
-          } else {
-            game.data[0][end_number] = sortedScores[i].score;
+          console.log('end_number', end_number);
+          if (end_number === null) {
+            return;
+          } else if (sortedScores[i].curlingteam1_scored === true) {
+            game.data[0][end_number] = sortedScores[i].score || 0;
             game.data[1][end_number] = 0;
             team1Total += sortedScores[i].score;
+          } else if (sortedScores[i].curlingteam1_scored === false) {
+            game.data[0][end_number] = 0;
+            game.data[1][end_number] = sortedScores[i].score || 0;
+            team2Total += sortedScores[i].score;
           }
         });
 
@@ -216,6 +223,9 @@ export class DesktopViewComponent implements OnInit {
     console.log(team_mapping);
 
     let A = this.allGames.filter((e) => e.label_name === unique_names[1]);
+
+    // Clear poolBracketList
+    this.poolBracketList.length = 0;
 
     // this.poolBracketList = [
     //   [

@@ -19,10 +19,10 @@ export class EndscoresComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.columnsToDisplay = this.displayedColumns.slice();
 
-    // console.log('ON CHANGES!');
-    // console.log('displayedColumns', this.displayedColumns);
-    // console.log('columnsToDisplay', this.columnsToDisplay);
-    // console.log('data', this.data);
+    console.log('ON CHANGES!');
+    console.log('displayedColumns', this.displayedColumns);
+    console.log('columnsToDisplay', this.columnsToDisplay);
+    console.log('data', this.data);
   }
 
 
