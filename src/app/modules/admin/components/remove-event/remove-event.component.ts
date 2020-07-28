@@ -81,17 +81,14 @@ export class RemoveEventComponent implements OnInit {
 
           // Re-fetch events
           this.getEvents();
-        },
-        (err) => {
-          console.log(err);
-          this.notificationService.showError(
-            err.message,
-            'Something went wrong'
-          );
         }
+        // (err) => {
+        //   console.log(err);
+        //   this.notificationService.showError(err,'Something went wrong');
+        // })
+        // .add(() => {
+        //   this.spinnerService.off();
+        // })
       )
-      .add(() => {
-        this.spinnerService.off();
-      });
   }
 }
