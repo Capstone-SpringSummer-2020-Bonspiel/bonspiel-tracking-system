@@ -32,7 +32,7 @@
         mat-icon-button
         matTooltip=" YouTube Link"
         aria-label="YouTube link button"
-        (click)="openYoutubeDialog(selectedDraw.video_url)">
+        (click)="openYoutubeDialog()">
         <mat-icon> live_tv </mat-icon>
       </button>
     </div>
@@ -41,17 +41,18 @@
   <div class="row">
     <div class="col-lg-8">
 
-      <!-- Game Card -->
       <mat-card class="m-2 mat-elevation-z8"
         *ngFor="let game of currentGames; index as i">
         <mat-card-title style="text-align: center"> Sheet {{convertToAlpha(i)}}: {{game.team_name1}} vs {{game.team_name2}} </mat-card-title>
 
-        <!-- Tab Group -->
         <mat-tab-group mat-align-tabs="center">
 
-          <!-- Scores Tab -->
           <mat-tab label="Scores">
-            <table mat-table
+
+            <app-endscores [displayedColumns]="game.displayedColumns"
+              [data]="game.data"></app-endscores>
+
+            <!-- <table mat-table
               [dataSource]="game.dataSource">
               <ng-container matColumnDef="name"
                 sticky>
@@ -141,10 +142,10 @@
                 *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row
                 *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+            </table> -->
+
           </mat-tab>
 
-          <!-- Game Statistics Tab -->
           <mat-tab label="Statistics">
             <div class="text-center">
               <img class="rounded mx-auto d-block"
@@ -159,48 +160,63 @@
     <div class="col-lg-4">
 
       <!-- Standings Card -->
-      <div class="standings"
-        *ngIf="dataSourceAllStandings.length">
+      <div class="standings">
         <mat-card class="m-2 mat-elevation-z8"
           style='min-height:400px'>
           <mat-card-title style="text-align: center"> Team Standings </mat-card-title>
-          <mat-tab-group mat-align-tabs="center">
-            <mat-tab *ngFor="let item of dataSourceAllStandings; index as i"
-              label="{{item.type}} {{item.id}}">
-              <table mat-table
-                [dataSource]="item.teams">
 
-                <!-- Team Name Column -->
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell
-                    *matHeaderCellDef> Team Name </th>
-                  <td mat-cell
-                    *matCellDef="let team"> {{team.name}} </td>
-                </ng-container>
+          <!-- <div style="min-width: 220px"> -->
+          <div>
+            <mat-form-field style="width: 100%">
+              <!-- <mat-label> Select a Pool or Bracket </mat-label> -->
+              <mat-select [(value)]="selectedPoolBracket"
+                (selectionChange)="onTeamSelected($event)">
+                <mat-option [value]="item[0]"
+                  *ngFor="let item of poolBracketList">
+                  {{item[0]}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-                <!-- Wins Column -->
-                <ng-container matColumnDef="wins">
-                  <th mat-header-cell
-                    *matHeaderCellDef> Wins </th>
-                  <td mat-cell
-                    *matCellDef="let team"> {{team.wins}} </td>
-                </ng-container>
+          <table mat-table
+            [dataSource]="dataSourceStandings">
 
-                <!-- Losses Column -->
-                <ng-container matColumnDef="losses">
-                  <th mat-header-cell
-                    *matHeaderCellDef> Losses </th>
-                  <td mat-cell
-                    *matCellDef="let team"> {{team.losses}} </td>
-                </ng-container>
-                <tr mat-header-row
-                  *matHeaderRowDef="standingsColumns"></tr>
-                <tr mat-row
-                  *matRowDef="let row; columns: standingsColumns;"></tr>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell
+                *matHeaderCellDef> Team </th>
+              <td mat-cell
+                *matCellDef="let team"> {{team.team_name}} </td>
+            </ng-container>
 
-              </table>
-            </mat-tab>
-          </mat-tab-group>
+            <ng-container matColumnDef="wins">
+              <th mat-header-cell
+                *matHeaderCellDef> Wins </th>
+              <td mat-cell
+                *matCellDef="let team"> {{team.wins}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="losses">
+              <th mat-header-cell
+                *matHeaderCellDef> Losses </th>
+              <td mat-cell
+                *matCellDef="let team"> {{team.losses}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ties">
+              <th mat-header-cell
+                *matHeaderCellDef> Ties </th>
+              <td mat-cell
+                *matCellDef="let team"> {{team.ties}} </td>
+            </ng-container>
+
+            <tr mat-header-row
+              *matHeaderRowDef="standingsColumns"></tr>
+            <tr mat-row
+              *matRowDef="let row; columns: standingsColumns;"></tr>
+          </table>
+
+
         </mat-card>
       </div>
     </div>

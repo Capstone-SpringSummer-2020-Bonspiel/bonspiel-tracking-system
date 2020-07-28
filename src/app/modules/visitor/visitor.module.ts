@@ -23,6 +23,7 @@ import { YoutubeDialogComponent } from './components/youtube-dialog/youtube-dial
 import { MobileViewComponent } from './components/mobile-view/mobile-view.component';
 
 import { DesktopViewComponent } from './components/desktop-view/desktop-view.component';
+import { EndscoresComponent } from './components/endscores/endscores.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { DesktopViewComponent } from './components/desktop-view/desktop-view.com
     TeamlistComponent,
     MobileViewComponent,
     DesktopViewComponent,
+    EndscoresComponent,
   ],
 
   imports: [
