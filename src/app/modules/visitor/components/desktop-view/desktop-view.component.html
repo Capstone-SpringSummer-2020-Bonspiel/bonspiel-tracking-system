@@ -32,7 +32,7 @@
         mat-icon-button
         matTooltip=" YouTube Link"
         aria-label="YouTube link button"
-        (click)="openYoutubeDialog(selectedDraw.video_url)">
+        (click)="openYoutubeDialog()">
         <mat-icon> live_tv </mat-icon>
       </button>
     </div>
@@ -41,17 +41,18 @@
   <div class="row">
     <div class="col-lg-8">
 
-      <!-- Game Card -->
       <mat-card class="m-2 mat-elevation-z8"
         *ngFor="let game of currentGames; index as i">
         <mat-card-title style="text-align: center"> Sheet {{convertToAlpha(i)}}: {{game.team_name1}} vs {{game.team_name2}} </mat-card-title>
 
-        <!-- Tab Group -->
         <mat-tab-group mat-align-tabs="center">
 
-          <!-- Scores Tab -->
           <mat-tab label="Scores">
-            <table mat-table
+
+            <app-endscores [displayedColumns]="game.displayedColumns"
+              [data]="game.data"></app-endscores>
+
+            <!-- <table mat-table
               [dataSource]="game.dataSource">
               <ng-container matColumnDef="name"
                 sticky>
@@ -141,10 +142,10 @@
                 *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row
                 *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+            </table> -->
+
           </mat-tab>
 
-          <!-- Game Statistics Tab -->
           <mat-tab label="Statistics">
             <div class="text-center">
               <img class="rounded mx-auto d-block"
