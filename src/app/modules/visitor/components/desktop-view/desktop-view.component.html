@@ -69,15 +69,13 @@
           style='min-height:400px'>
           <mat-card-title style="text-align: center"> Team Standings </mat-card-title>
 
-          <!-- <div style="min-width: 220px"> -->
           <div>
             <mat-form-field style="width: 100%">
-              <!-- <mat-label> Select a Pool or Bracket </mat-label> -->
               <mat-select [(value)]="selectedPoolBracket"
                 (selectionChange)="onTeamSelected($event)">
-                <mat-option [value]="item[0]"
+                <mat-option [value]="item.event_type_name"
                   *ngFor="let item of poolBracketList">
-                  {{item[0]}}
+                  {{item.event_type_name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>

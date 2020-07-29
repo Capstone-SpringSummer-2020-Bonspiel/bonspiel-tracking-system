@@ -22,7 +22,7 @@ export class ApiService {
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpService: HttpClient) {}
+  constructor(private httpService: HttpClient) { }
 
   /********************************************************************/
 
@@ -56,7 +56,6 @@ export class ApiService {
   /********************************************************************/
 
   // Events
-
   public getEvents() {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events`);
   }
