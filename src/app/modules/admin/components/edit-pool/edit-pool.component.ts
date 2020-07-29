@@ -91,6 +91,8 @@ export class EditPoolComponent implements OnInit {
 
     this.selectedPool = pool.value;
     this.selectedPoolId = pool.value.id;
+
+    this.secondFormGroup.controls.eventNameCtrl.setValue(this.selectedPool.name);
   }
 
   onClickSubmit(stepper) {

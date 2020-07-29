@@ -31,7 +31,7 @@ export class EditGameComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize form group
@@ -156,5 +156,5 @@ export class EditGameComponent implements OnInit {
     console.log(this.selectedGame);
   }
 
-  onClickSubmit(stepper: MatStepper) {}
+  onClickSubmit(stepper: MatStepper) { }
 }

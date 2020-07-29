@@ -133,6 +133,20 @@ export class EditCurlerComponent implements OnInit {
           console.log(res);
           this.notificationService.showSuccess('Curler has been modified', '');
           stepper.reset();
+
+          // Reset the form and validation
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (error) => {
           console.log(error);
