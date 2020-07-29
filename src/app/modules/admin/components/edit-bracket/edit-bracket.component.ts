@@ -40,17 +40,8 @@ export class EditBracketComponent implements OnInit {
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        // this.selectedEventId = res[0].id;
         console.log("ThisEventDataBelow:");
         console.log(this.allEventData);
-
-        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-        //   this.allBracketData = res;
-        //   this.selectedBracket = res[0];
-        //   if (res[0]) {
-        //     this.selectedBracketId = res[0].id;
-        //   }
-        // })
 
         this.spinnerService.off();
       })
@@ -62,7 +53,7 @@ export class EditBracketComponent implements OnInit {
       bracketCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      eventNameCtrl: ['', Validators.required],
+      bracketNameCtrl: ['', Validators.required],
     });
   }
   onEventSelected(event: any) {
@@ -85,16 +76,13 @@ export class EditBracketComponent implements OnInit {
     })
   }
   onBracketSelected(bracket: any) {
-    console.log(this.allEventData);
-    console.log('the selected Pool is:');
-    console.log(bracket.value);
-
     this.selectedBracket = bracket.value;
     this.selectedBracketId = bracket.value.id;
+    this.secondFormGroup.controls.bracketNameCtrl.setValue(this.selectedBracket.name);
   }
+
   onClickSubmit(stepper) {
-    //Remove Bracket
-    const bracketName = this.secondFormGroup.value.eventNameCtrl;
+    const bracketName = this.secondFormGroup.value.bracketNameCtrl;
     console.log("Event Select: ")
     console.log(this.selectedEventId)
     console.log("Bracket selected: ")

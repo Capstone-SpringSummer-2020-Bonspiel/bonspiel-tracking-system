@@ -86,14 +86,18 @@ export class EditDrawComponent implements OnInit {
 
   getDraw() {
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    this.selectedDraw = this.eventDraws.filter(
-      (x) => x.id === this.selectedDrawId
-    );
+    this.selectedDraw = this.eventDraws.filter((x) => x.id === this.selectedDrawId);
     this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
+    console.log('selectedDraw', this.selectedDraw);
+
+
   }
 
   onClickSubmit(stepper: MatStepper) {
+
+    console.log('thirdFormGroup', this.thirdFormGroup);
+
     const newDrawName = this.thirdFormGroup.value.thirdCtrlName;
     const newDrawStart = this.thirdFormGroup
       .get('thirdCtrlDate')
@@ -109,6 +113,20 @@ export class EditDrawComponent implements OnInit {
           console.log(res);
           this.notificationService.showSuccess('Draw has been modified', '');
           stepper.reset();
+
+          // Reset the form and validation
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (error) => {
           console.log(error);
