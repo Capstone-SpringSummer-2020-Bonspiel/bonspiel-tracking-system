@@ -40,7 +40,7 @@ export class MobileViewComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.spinnerService.on();
@@ -308,17 +308,30 @@ export class MobileViewComponent implements OnInit {
     });
   }
 
-  openYoutubeDialog(team): void {
-    console.log(`team  ==>  `);
-    console.log(team);
-    const dialogRef = this.dialog.open(YoutubeDialogComponent, {
-      width: '800px',
-      data: { youtube_link: team.youtube_link },
-    });
+  openYoutubeDialog() {
+    const url = this.selectedDraw.video_url;
+    if (this.validateYouTubeUrl(url)) {
+      const dialogRef = this.dialog.open(YoutubeDialogComponent, {
+        width: '800px',
+        data: { youtube_link: url },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('Youtube dialog was closed');
-    });
+      dialogRef.afterClosed().subscribe((result) => {
+        // console.log('Youtube dialog was closed');
+      });
+    }
+  }
+
+  validateYouTubeUrl(url) {
+    if (url != undefined || url != '') {
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+      var match = url.match(regExp);
+      if (match && match[2].length == 11) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   getFinalScore(team) {
