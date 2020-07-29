@@ -98,7 +98,9 @@ export class DesktopViewComponent implements OnInit {
         console.log('filteredScores', filteredScores);
         console.log('sortedScores', sortedScores);
 
-        game.displayedColumns = sortedScores.map((e) => String(e.end_number)); // [1', '2', '3', '4', '5', ...]
+        // Create n columns; 8 or more endscores
+        let len = Math.max(sortedScores.length, 8);
+        game.displayedColumns = Array.from(Array(len), (_, i) => String(i + 1));
         game.displayedColumns.unshift('Team');
         game.displayedColumns.push('Total');
         game.displayedColumns = game.displayedColumns.filter((e) => e !== 'null');
@@ -106,10 +108,26 @@ export class DesktopViewComponent implements OnInit {
         game.data = [
           {
             Team: { team: game.team_name1, team_id: game.curlingteam1_id },
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
             Total: 0,
           },
           {
             Team: { team: game.team_name2, team_id: game.curlingteam2_id },
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
             Total: 0,
           },
         ];
