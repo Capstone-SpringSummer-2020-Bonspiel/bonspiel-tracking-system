@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit {
   ) {
     this.accountService.user$.subscribe(user => {
       this.isSignedIn = user;
-      // console.log(this.user);
     });
   }
 

@@ -206,7 +206,7 @@ export class DesktopViewComponent implements OnInit {
       if (game.pool_id !== null) {
         game.pool_name = pools[game.pool_id].name;
         game.label_name = pools[game.pool_id].name;
-      } else if (game.pool_id !== null) {
+      } else if (game.bracket_id !== null) {
         game.bracket_name = brackets[game.bracket_id].name;
         game.label_name = brackets[game.bracket_id].name;
       } else {

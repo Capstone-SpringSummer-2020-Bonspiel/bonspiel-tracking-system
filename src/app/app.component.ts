@@ -25,7 +25,8 @@ export class AppComponent {
   events: string[] = [];
   opened: boolean;
 
-  curlingEvents = [];
+  currentCurlingEvents = [];
+  pastCurlingEvents = [];
 
   reason = '';
 
@@ -91,23 +92,26 @@ export class AppComponent {
       .subscribe((res: any) => {
 
         // Clear array
-        this.curlingEvents.length = 0;
+        this.currentCurlingEvents.length = 0;
 
         // Re-populate the array
         const events: any = res;
         for (const event of events) {
-          this.curlingEvents.push(event);
+          if (event.completed === true) {
+            this.pastCurlingEvents.push(event);
+          } else {
+            this.currentCurlingEvents.push(event);
+          }
         }
 
         // Set the current event
         this.apiService
           .currentEventId$
           .subscribe((eventId) => {
-            this.apiService.changeEvent(this.curlingEvents.find((e) => e.id === eventId));
+            this.apiService.changeEvent(this.currentCurlingEvents.find((e) => e.id === eventId));
           });
 
-        console.log('[DEBUG] curlingEvents');
-        console.log(this.curlingEvents);
+        console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
       });
   }
 
@@ -121,7 +125,11 @@ export class AppComponent {
     }
 
     this.apiService.changeEventId(newEvent.id);
-    this.apiService.changeEvent(this.curlingEvents.find((e) => e.id === newEvent.id));
+    let found = this.currentCurlingEvents.find((e) => e.id === newEvent.id);
+    if (!found) {
+      found = this.pastCurlingEvents.find((e) => e.id === newEvent.id)
+    }
+    this.apiService.changeEvent(found);
     this.sidenav.close();
   }
 
@@ -167,7 +175,7 @@ export class AppComponent {
     return false;
   }
 
-  getCurlingEvents(completed) {
-    return this.curlingEvents.filter(e => e.completed === completed);
-  }
+  // getCurlingEvents(completed) {
+  //   return this.curlingEvents.filter(e => e.completed === completed);
+  // }
 }

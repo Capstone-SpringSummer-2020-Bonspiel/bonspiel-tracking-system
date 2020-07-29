@@ -9,12 +9,12 @@
     (closed)="events.push('close!')">
 
     <!-- CURRENT EVENTS -->
-    <p *ngIf="curlingEvents"
+    <p *ngIf="currentCurlingEvents"
       matSubheader
       class="m-0 pb-1"> Current Events </p>
     <mat-list role="list"
       class="p-0">
-      <mat-list-item *ngFor="let curlingEvent of getCurlingEvents(false)"
+      <mat-list-item *ngFor="let curlingEvent of currentCurlingEvents"
         class="dropdown-item"
         role="listitem">
         <button class="btn btn-link"
@@ -27,12 +27,12 @@
     </mat-list>
 
     <!-- PAST EVENTS -->
-    <p *ngIf="curlingEvents"
+    <p *ngIf="pastCurlingEvents"
       matSubheader
       class="m-0 pb-1"> Past Events </p>
     <mat-list role="list"
       class="p-0">
-      <mat-list-item *ngFor="let curlingEvent of getCurlingEvents(true)"
+      <mat-list-item *ngFor="let curlingEvent of pastCurlingEvents"
         class="dropdown-item"
         role="listitem">
         <button class="btn btn-link"
