@@ -3,70 +3,92 @@ import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-remove-event',
   templateUrl: './remove-event.component.html',
-  styleUrls: ['./remove-event.component.scss']
+  styleUrls: ['./remove-event.component.scss'],
 })
 export class RemoveEventComponent implements OnInit {
-  allEventData: null;
-  selectedEvent: null;
-  submitResult: Number;
-  selectedEventId: Number;
+  events: any = [];
+  formGroup: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private apiService: ApiService,
     public dialog: MatDialog,
     private spinnerService: SpinnerService,
-    private notificationService: NotificationService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      eventIdCtrl: ['', Validators.required],
+    });
+
+    console.log(this.formGroup);
+
+    this.getEvents();
+  }
+
+  getEvents() {
+    // Get events
     this.spinnerService.on();
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
         console.log(res);
-        this.allEventData = res;
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
 
-        this.spinnerService.off();
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
       })
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
-  onEventSelected(event: any) {
-    console.log(this.allEventData);
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
 
-    this.selectedEventId = event.value.id;
-  }
-  onEventDelete() {
-    console.log("Event Delete: ")
-    console.log(this.selectedEventId)
+  onClickRemove(stepper: MatStepper) {
+    const eventId = String(this.formGroup.value.eventIdCtrl.id);
 
+    // Remove event
     this.spinnerService.on();
-    this.apiService.deleteEvent(String(this.selectedEventId))
+    this.apiService
+      .deleteEvent(eventId)
       .subscribe(
         (res: any) => {
           console.log(res)
-          this.notificationService.showSuccess('Event has been deleted', '')
+          this.notificationService.showSuccess('Event has been successfully deleted!', '')
           this.spinnerService.off()
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Something went wrong during delete event', '');
-        }
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event deleted failed!');
+          this.spinnerService.off();
+        })
+      .add(
+        () => {
+          stepper.reset();
 
+          // Reset the form and validation
+          this.formGroup.reset();
+          Object.keys(this.formGroup.controls).forEach((key) => {
+            this.formGroup.controls[key].setErrors(null);
+          });
+
+          // Re-fetch events
+          this.getEvents();
+        }
+        // (err) => {
+        //   console.log(err);
+        //   this.notificationService.showError(err,'Something went wrong');
+        // })
+        // .add(() => {
+        //   this.spinnerService.off();
+        // })
       )
   }
-  // onClickConfirm(){
-  //   if(confirm("are you sure?")){
-  //     this.onEventDelete();
-  //     console.log("Event Deleted.");
-  //   }
-  // }
 }

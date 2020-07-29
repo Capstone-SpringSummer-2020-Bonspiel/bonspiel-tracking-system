@@ -4,8 +4,9 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -15,118 +16,164 @@ import { NotificationService } from '@app/shared/services/notification.service';
   styleUrls: ['./remove-endscore.component.scss'],
 })
 export class RemoveEndscoreComponent implements OnInit {
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
-  fourthFormGroup: FormGroup;
+  formGroup: FormGroup;
 
-  eventNames: any[] = [];
-  draws: any[] = [];
-  games: any[] = [];
-  endScores: any[] = [];
-  selectedEventId;
-  selectedDrawId;
-  selectedGameId;
-  selectedEndNumberId;
+  events: any = [];
+  draws: any = [];
+  games: any = [];
+  endScores: any = [];
+  selectedDraw: any[] = [];
+  selectedGames: any[] = [];
+
   team1;
   team2;
   displayedColumns = ['endNumber', 'team1Score', 'team2Score'];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required],
-    });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required],
-    });
-    this.fourthFormGroup = this._formBuilder.group({
-      fourthCtrlEndId: ['', Validators.required],
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          drawCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          gameCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          endCtrl: ['', Validators.required],
+        }),
+      ]),
     });
 
+    console.log(this.formGroup);
+
+    this.getEvents();
+  }
+
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
+
+  getCtrlValue(index) {
+    return this.formGroup.get('formArray').value[index];
+  }
+
+  getEvents() {
+    // Get events
     this.spinnerService.on();
-    this.apiService.getEvents().subscribe((res: any) => {
+    this.apiService
+      .getEvents()
+      .subscribe((res) => {
+        this.events = res;
+        this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+        console.log('events:');
+        console.log(this.events);
+      })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  getDraws() {
+    const selectedEventId = this.getCtrlValue(0).eventCtrl;
+
+    // Get draws
+    this.spinnerService.on();
+    this.apiService
+      .getDraws(selectedEventId)
+      .subscribe((res: any) => {
+        if (res === null || res === undefined) {
+          this.notificationService.showError('Could not fetch draws', 'ERROR');
+          return;
+        }
+        this.draws = res;
+        this.draws.sort((a, b) => (a.name > b.name ? 1 : -1));
+      })
+      .add(() => {
+        this.spinnerService.off();
+      });
+  }
+
+  getGames() {
+    const selectedEventId = this.getCtrlValue(0).eventCtrl;
+    const selectedDrawId = this.getCtrlValue(1).drawCtrl;
+    this.selectedDraw = this.draws.filter((x) => x.id === selectedDrawId);
+
+    // Get games
+    this.spinnerService.on();
+    this.apiService.getGames(selectedEventId).subscribe((res: any) => {
+      this.games = res;
       if (res === null || res === undefined) {
-        this.notificationService.showError(
-          'Could not fetch curling events',
-          'ERROR'
-        );
+        this.notificationService.showError('Could not fetch games', 'ERROR');
         this.spinnerService.off();
         return;
       }
-      this.spinnerService.off();
-      this.eventNames = res;
-      console.log('eventNames:');
-      console.log(this.eventNames);
-    });
-  }
+      this.selectedGames = this.games.filter(
+        (x) => x.draw_id === selectedDrawId
+      );
 
-  getEventDraws() {
-    this.selectedEventId = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventId= ${this.selectedEventId}`);
-    this.spinnerService.on();
-    this.apiService.getDraws(this.selectedEventId).subscribe((res: any) => {
-      this.draws = res;
       this.spinnerService.off();
-      console.log('draws');
-      console.log(this.draws);
-    });
-  }
-
-  getDrawGames() {
-    this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedDrawId= ${this.selectedDrawId}`);
-    this.spinnerService.on();
-    this.apiService.getGames(this.selectedEventId).subscribe((res: any) => {
-      this.games = res.filter((x) => x.draw_id === this.selectedDrawId);
-      this.spinnerService.off();
-      console.log('games');
-      console.log(this.games);
     });
   }
 
   getEndScores() {
-    this.selectedGameId = this.thirdFormGroup.value.thirdCtrl;
-    console.log(`selectedGameId= ${this.selectedGameId}`);
+    const selectedEventId = this.getCtrlValue(0).eventCtrl;
+    const selectedDrawId = this.getCtrlValue(1).drawCtrl;
+    const selectedGameId = this.getCtrlValue(2).gameCtrl;
+    console.log(`selectedGameId= ${selectedGameId}`);
     this.spinnerService.on();
-    this.apiService
-      .getScoresByEvent(this.selectedEventId)
-      .subscribe((res: any) => {
-        const eventScores = res;
-        this.endScores = eventScores.filter(
-          (x) => x.game_id === this.selectedGameId && x.endscore_id != null
-        );
-        this.spinnerService.off();
-        this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
-        const selectedGame = this.games.filter(
-          (x) => x.game_id === this.selectedGameId
-        );
-        this.team1 = selectedGame[0].team_name1;
-        this.team2 = selectedGame[0].team_name2;
-        console.log('endScores= ');
-        console.log(this.endScores);
-      });
+    this.apiService.getScoresByEvent(selectedEventId).subscribe((res: any) => {
+      const eventScores = res;
+      this.endScores = eventScores.filter(
+        (x) => x.game_id === selectedGameId && x.endscore_id != null
+      );
+      this.spinnerService.off();
+      this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
+      const selectedGame = this.games.filter(
+        (x) => x.game_id === selectedGameId
+      );
+      this.team1 = selectedGame[0].team_name1;
+      this.team2 = selectedGame[0].team_name2;
+      console.log('endScores= ');
+      console.log(this.endScores);
+    });
   }
 
-  onClickSubmit() {
-    const endId = this.fourthFormGroup.value.fourthCtrlEndId;
-    console.log(`endId= ${endId}`);
-    this.apiService.removeEndScore(endId).subscribe(
-      (res: any) =>
-        this.notificationService.showSuccess('End Score has been removed', ''),
-      (error) => {
-        console.log(error);
-        this.notificationService.showError(error, '');
-      }
-    );
+  onClickRemove(stepper: MatStepper) {
+    const endId = this.getCtrlValue(3).endCtrl;
+
+    // Remove end
+    this.spinnerService.on();
+    this.apiService
+      .removeEndScore(endId)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+
+          this.notificationService.showSuccess(
+            'End Score has been removed',
+            ''
+          );
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

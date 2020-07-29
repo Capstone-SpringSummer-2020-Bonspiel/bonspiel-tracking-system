@@ -40,8 +40,6 @@ export class AccountService {
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
 
-          console.log('hello');
-
           // // Countdown timer
           // setInterval(() => {
           //   let token = JSON.parse(localStorage.getItem('user'));
@@ -72,8 +70,8 @@ export class AccountService {
     }
   }
 
-  register(user: User) {
-    return this.http.post(`${environment.apiUrl}/users/register`, user);
+  register(username, password) {
+    return this.http.post(`${environment.apiUrl}/api/v1/admin/register`, { username, password });
   }
 
   createAdmin(username, password, isSuperAdmin) {
@@ -86,11 +84,12 @@ export class AccountService {
     return this.http.post(`${environment.apiUrl}/api/v1/admin/createAdmin`, body);
   }
 
-  editAdmin(username, password, isSuperAdmin) {
+  editAdmin(username, password, isSuperAdmin, active) {
     const body = {
       username,
       password,
-      isSuperAdmin
+      isSuperAdmin,
+      active
     };
     console.log(body);
     return this.http.put(`${environment.apiUrl}/api/v1/admin/editAdmin`, body);

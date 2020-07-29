@@ -3,21 +3,7 @@
   border: 1px solid black;
   word-wrap:break-word;
 }
-/*
-.mat-column{
-  border-right: 1px solid black;
-  border-left: 1px solid black;
-}
-.mat-row:nth-child(even){
-  background: rgb(224, 224, 224)
-}
-.mat-row:nth-child(odd){
-  background: rgba(255,255,255)
-}
-.mat-column-draw{
-  width: 20%;
-}
-*/
+
 tr.detail-row {
   height: 0;
 }
@@ -37,6 +23,17 @@ tr.team-row:not(.expanded-row):active {
 .team-detail {
   overflow: hidden;
   display: flex;
+}
+
+.team-member{
+  margin: 10px;
+}
+.curler-info {
+  text-align:left;
+}
+.curler-photo{
+  display: block;
+  left: 50%;
 }
 
 .lement-diagram {
@@ -61,13 +58,20 @@ tr.team-row:not(.expanded-row):active {
 .team-description-attribution {
   opacity: 0.5;
 }
-.team-member {
-  margin: 10px;
-  width: 25%;
-}
+
 .mat-form-field{
   margin-left: 8px;
   width: auto;
-  min-width: 300px;
+  min-width: 25%;
   color: black;
+}
+.field-center{
+  position: relative;
+  left: 37%;
+}
+.expansion-panel{
+  width: 100%;
+  margin: 10px;
+  border: 1px solid black;
+  word-wrap:break-word;
 }

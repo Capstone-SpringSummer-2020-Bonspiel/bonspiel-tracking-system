@@ -264,6 +264,18 @@ ul {
     width: auto;
 }
 
+.example-large-box-spe {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0px;
+  padding: 0px;
+  border-radius: 8px;
+  height: auto;
+  width: auto;
+}
+
 .example-large-box.start {
     justify-content: start;
 }
@@ -416,7 +428,7 @@ hr {
 }
 
 .example-headers-align .mat-form-field + .mat-form-field {
-  margin-left: 8px;
+  margin-left: 5px;
 }
 
 .yellow-icon {
@@ -437,4 +449,42 @@ hr {
 
 .p-2 {
   display: inline-block;
+}
+
+.flex-item {
+  width: 160px;
+  height: auto;
+  margin: 1px;
+  padding: 10px;
+  background-color: rgba(192, 192, 192, 0.808);
+  color: rgb(0, 0, 0);
+  text-align: center;
+
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 1.3em;
+  border-radius: 14px;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.cell-container{
+  margin: 10px;
+}
+.game-box{
+  margin: 0;
+  padding: 0;
+//   display: flex;
+//   flex-flow: column wrap;
+//   justify-content: center;
+//   align-items: flex-start;
+//   // margin: 16px;
+//   // padding: 16px;
+//   border-radius: 8px;
+//   height: auto;
+//   width: auto;
 }

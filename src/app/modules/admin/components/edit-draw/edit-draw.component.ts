@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -31,20 +31,20 @@ export class EditDrawComponent implements OnInit {
   maxDate: Date;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrl: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       thirdCtrlName: ['', Validators.required],
       thirdCtrlDate: ['', Validators.required],
       thirdCtrlUrl: [''],
@@ -86,29 +86,55 @@ export class EditDrawComponent implements OnInit {
 
   getDraw() {
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    this.selectedDraw = this.eventDraws.filter(
-      (x) => x.id === this.selectedDrawId
-    );
+    this.selectedDraw = this.eventDraws.filter((x) => x.id === this.selectedDrawId);
     this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
+    console.log('selectedDraw', this.selectedDraw);
+
+
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
+
+    console.log('thirdFormGroup', this.thirdFormGroup);
+
     const newDrawName = this.thirdFormGroup.value.thirdCtrlName;
     const newDrawStart = this.thirdFormGroup
       .get('thirdCtrlDate')
       .value?.toLocaleString();
     const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
 
+    this.spinnerService.on();
+
     this.apiService
       .editDraw(this.selectedDrawId, newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Draw has been modified', ''),
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Draw has been modified', '');
+          stepper.reset();
+
+          // Reset the form and validation
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
+        },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -18,21 +18,21 @@ export class EditTeamComponent implements OnInit {
   selectedTeamId;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrl: ['', Validators.required],
       secondCtrlNote: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       thirdCtrlOrg: [null],
     });
 
@@ -52,16 +52,28 @@ export class EditTeamComponent implements OnInit {
     this.selectedTeamId = this.firstFormGroup.value.firstCtrl;
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const name = this.secondFormGroup.value.secondCtrl;
     const note = this.secondFormGroup.value.secondCtrlNote;
     const org = this.thirdFormGroup.value.thirdCtrlOrg;
-    this.apiService.editTeam(this.selectedTeamId, name, note, org).subscribe(
-      (res: any) =>
-        this.notificationService.showSuccess('Team has been created', ''),
-      (error) => {
-        this.notificationService.showError('Something went wrong', '');
-      }
-    );
+
+    this.spinnerService.on();
+
+    this.apiService
+      .editTeam(this.selectedTeamId, name, note, org)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Team has been created', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

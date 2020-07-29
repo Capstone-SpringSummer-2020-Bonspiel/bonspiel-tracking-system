@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -41,18 +41,18 @@ export class CreateDrawComponent implements OnInit {
   maxDate: Date;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.date = new Date();
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrlName: ['', Validators.required],
       secondCtrlDate: ['', Validators.required],
       secondCtrlUrl: [''],
@@ -70,6 +70,7 @@ export class CreateDrawComponent implements OnInit {
       }
       this.spinnerService.off();
       this.eventNames = res;
+      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
     });
   }
 
@@ -82,12 +83,14 @@ export class CreateDrawComponent implements OnInit {
     this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const newDrawName = this.secondFormGroup.value.secondCtrlName;
     const newDrawStart = this.secondFormGroup
       .get('secondCtrlDate')
       .value?.toLocaleString();
     const newDrawUrl = this.secondFormGroup.value.secondCtrlUrl;
+
+    this.spinnerService.on();
 
     this.apiService
       .createDraw(
@@ -97,11 +100,18 @@ export class CreateDrawComponent implements OnInit {
         newDrawUrl
       )
       .subscribe(
-        (res: any) =>
-          this.notificationService.showSuccess('Draw has been created', ''),
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Draw has been created', '');
+          stepper.reset();
+        },
         (error) => {
-          this.notificationService.showError('Something went wrong', '');
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

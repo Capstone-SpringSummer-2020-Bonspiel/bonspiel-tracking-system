@@ -9,6 +9,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SpinnerService } from './services/spinner.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FormatDatePipe } from './pipes/format-date.pipe';
+import { EventFilterPipe } from './pipes/event-filter.pipe';
 
 @NgModule({
   imports: [
@@ -23,8 +24,14 @@ import { FormatDatePipe } from './pipes/format-date.pipe';
     SpinnerComponent,
     PageNotFoundComponent,
     FormatDatePipe,
+    EventFilterPipe,
   ],
-  exports: [ControlMessagesComponent, PageNotFoundComponent, SpinnerComponent],
+  exports: [
+    ControlMessagesComponent,
+    PageNotFoundComponent,
+    SpinnerComponent,
+    EventFilterPipe
+  ],
   providers: [SpinnerService],
 })
-export class SharedModule {}
+export class SharedModule { }

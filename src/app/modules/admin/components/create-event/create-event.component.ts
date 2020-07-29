@@ -1,37 +1,45 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
-  styleUrls: ['./create-event.component.scss']
+  styleUrls: ['./create-event.component.scss'],
 })
 export class CreateEventComponent implements OnInit {
-  firstFormGroup: FormGroup;
-  // secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
-  // fouthFormGroup: FormGroup;
-  fifthFormGroup: FormGroup;
-  // sixthFormGroup: FormGroup;
-  feedBackData: null;
+  formGroup: FormGroup;
+
+  eventDetails = [
+    { value: 'Bonspiel', label: 'Bonspiel' },
+    { value: 'Championship', label: 'Championship' },
+    { value: 'Playdowns', label: 'Playdowns' },
+  ];
 
   eventTypes: any[] = [
-    { value: 'pools', viewValue: 'Pools' },
-    { value: 'brackets', viewValue: 'Brackets' },
-    { value: 'championship', viewValue: 'Championship' },
-    { value: 'friendly', viewValue: 'Friendly' },
+    { value: 'pools', label: 'Pool' },
+    { value: 'brackets', label: 'Bracket' },
+    { value: 'championship', label: 'Championship' },
+    // { value: 'friendly', label: 'Friendly' },
   ];
+
   statusTypes: any[] = [
-    { value: false, viewValue: 'In Progress' },
-    { value: true, viewValue: 'Finished' },
+    { value: false, label: 'Not Started' },
+    { value: false, label: 'In Progress' },
+    { value: true, label: 'Finished' },
   ];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -39,83 +47,75 @@ export class CreateEventComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-      firstCtrlInfo: ['', Validators.required],
+    // Initialize form group
+    this.formGroup = this.fb.group({
+      formArray: this.fb.array([
+        this.fb.group({
+          eventNameCtrl: ['', Validators.required],
+          eventInfoCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          eventTypeCtrl: ['', Validators.required],
+          eventFinishedCtrl: ['', Validators.required],
+        }),
+        this.fb.group({
+          eventStartCtrl: ['', Validators.required],
+          eventEndCtrl: ['', Validators.required],
+        }),
+      ]),
     });
-    // this.secondFormGroup = this._formBuilder.group({
-    //   secondCtrl: ['', Validators.required],
-    // });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required],
-      thirdCtrlCond: ['', Validators.required],
-    });
-    // this.fouthFormGroup = this._formBuilder.group({
-    //   fouthCtrl: ['', Validators.required],
-    // });
-    this.fifthFormGroup = this._formBuilder.group({
-      fifthCtrlBeg: ['', Validators.required],
-      fifthCtrlEnd: ['', Validators.required],
-    });
-    // this.sixthFormGroup = this._formBuilder.group({
-    //   sixthCtrl: ['', Validators.required],
-    // });
   }
 
-  onCreateCurlingEvent() {
-    const name = this.firstFormGroup.value.firstCtrl;
-    const info = this.firstFormGroup.value.firstCtrlInfo;
-    const event_type = this.thirdFormGroup.value.thirdCtrl;
-    const completed = this.thirdFormGroup.value.thirdCtrlCond;
-    const begin_date = this.fifthFormGroup.value.fifthCtrlBeg;
-    const end_date = this.fifthFormGroup.value.fifthCtrlEnd;
-    console.log(`full name: ${name}`);
-    console.log(`detail info: ${info}`);
-    console.log(`begin-date: ${begin_date}`);
-    console.log(`End-date: ${end_date}`);
-    console.log(`event type: ${event_type}`);
-    console.log(`complete: ${completed}`);
+  // Returns a FormArray with the name 'formArray'
+  get formArray(): AbstractControl | null {
+    return this.formGroup.get('formArray');
+  }
 
+  onClickSubmit(stepper: MatStepper) {
+    const name = this.formGroup.value.formArray[0].eventNameCtrl;
+    const info = this.formGroup.value.formArray[0].eventInfoCtrl;
+    const event_type = this.formGroup.value.formArray[1].eventTypeCtrl;
+    const completed = String(this.formGroup.value.formArray[1].eventFinishedCtrl);
+    const begin_date = String(this.formGroup.value.formArray[2].eventStartCtrl.toLocaleString());
+    const end_date = String(this.formGroup.value.formArray[2].eventEndCtrl.toLocaleString());
+
+    // Create Event
     this.spinnerService.on();
-
-    this.apiService.createEvent(name, String(begin_date.toLocaleString()), String(end_date.toLocaleString()), String(completed), info, event_type)
+    this.apiService.createEvent(name, info, event_type, completed, begin_date, end_date)
       .subscribe(
-        (res: any) => {
+        (res) => {
           console.log(res);
-          this.notificationService.showSuccess('Event has been created', '')
-          this.spinnerService.off()
+          this.notificationService.showSuccess('Event has been created!', '');
+
+          // Reset the stepper
+          stepper.reset();
+
+          // Reset the form and validation
+          this.formGroup.reset()
+          Object.keys(this.formGroup.controls).forEach(key => {
+            this.formGroup.controls[key].setErrors(null)
+          });
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Something went wrong', '');
-        }
-      )
-
-    // const dialogRef = this.dialog.open(CreateEventDialog, {
-    //   data: {
-    //     signal: '200',
-    //     name: name,
-    //     info: info,
-    //     begin_date: begin_date,
-    //     end_date: end_date,
-    //     event_type: event_type,
-    //     completed: completed,
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log("something happened.")
-    // })
-
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Event create failed!');
+        })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }
+
 export interface DialogData {
-  signal: String,
-  name: String,
-  info: String,
-  begin_date: String,
-  end_date: String,
-  event_type: String,
-  completed: String,
+  signal: String;
+  name: String;
+  info: String;
+  begin_date: String;
+  end_date: String;
+  event_type: String;
+  completed: String;
 }
 
 @Component({

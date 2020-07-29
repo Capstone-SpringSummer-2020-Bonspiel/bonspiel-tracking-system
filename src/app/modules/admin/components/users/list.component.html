@@ -1,6 +1,7 @@
 ﻿<h1>Users</h1>
 <a routerLink="add"
-  class="btn btn-sm btn-success mb-2">Add User</a>
+  class="btn btn-sm btn-success mb-2 mr-4"
+  style="float: right">Add User</a>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -25,9 +26,29 @@
         </ng-template>
       </td>
       <td>{{user.username}}</td>
-      <td style="white-space: nowrap">
-        <a [routerLink]="[ 'edit/', user.username, user.issuperadmin ]"
-          class="btn btn-sm btn-primary mr-1">Edit</a>
+      <td style="white-space: nowrap; text-align: right">
+
+        <!-- APPROVE -->
+        <button *ngIf="!user.active"
+          (click)="approveUser(user.username)"
+          class="btn btn-sm btn-success btn-delete-user mr-2"
+          [disabled]="user.active">
+          <span>Approve</span>
+        </button>
+
+        <!-- REJECT -->
+        <button *ngIf="!user.active"
+          (click)="rejectUser(user.username)"
+          class="btn btn-sm btn-danger btn-delete-user mr-5"
+          [disabled]="user.active">
+          <span>Reject</span>
+        </button>
+
+        <!-- EDIT -->
+        <a [routerLink]="[ 'edit/', user.username, user.issuperadmin, user.active ]"
+          class="btn btn-sm btn-primary mr-2">Edit</a>
+
+        <!-- DELETE -->
         <button (click)="deleteUser(user.username)"
           class="btn btn-sm btn-danger btn-delete-user"
           [disabled]="user.isDeleting">
@@ -35,6 +56,7 @@
             class="spinner-border spinner-border-sm"></span>
           <span *ngIf="!user.isDeleting">Delete</span>
         </button>
+
       </td>
     </tr>
     <tr *ngIf="!users">

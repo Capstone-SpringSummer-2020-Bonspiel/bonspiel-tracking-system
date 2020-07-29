@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -16,18 +16,18 @@ export class CreateTeamComponent implements OnInit {
   organizations: any[] = [];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrlName: ['', Validators.required],
       firstCtrlNote: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrlOrg: [null],
     });
     this.spinnerService.on();
@@ -38,16 +38,28 @@ export class CreateTeamComponent implements OnInit {
     });
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.value.firstCtrlName;
     const note = this.firstFormGroup.value.firstCtrlNote;
     const org = this.secondFormGroup.value.secondCtrlOrg;
-    this.apiService.createTeam(name, note, org).subscribe(
-      (res: any) =>
-        this.notificationService.showSuccess('Team has been created', ''),
-      (error) => {
-        this.notificationService.showError('Something went wront', '');
-      }
-    );
+
+    this.spinnerService.on();
+
+    this.apiService
+      .createTeam(name, note, org)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.notificationService.showSuccess('Team has been created', '');
+          stepper.reset();
+        },
+        (error) => {
+          console.log(error);
+          this.notificationService.showError(error.message, 'ERROR');
+        }
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

@@ -1,47 +1,75 @@
 <div class="slide-in-text">
   <h1> Remove Pool </h1>
 </div>
-<mat-vertical-stepper linear #stepper>
-  <mat-step [stepControl]="firstFormGroup">
-    <ng-template matStepLabel> Select Event </ng-template>
-    <mat-form-field>
-      <mat-label>Select Event for Pools</mat-label>
-      <mat-select [(value)]="selectedPool" (selectionChange)="onEventSelected($event)">
-        <mat-option *ngFor="let event of this.allEventData" [value]="event">
-          {{event.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-  </mat-step>
 
-  <mat-step [stepControl]="secondFormGroup">
-    <ng-template matStepLabel> Select Pool </ng-template>
-    <mat-form-field>
-      <mat-label>Select Pool to Delete</mat-label>
-      <mat-select [(value)]="selectedPool" (selectionChange)="onPoolSelected($event)">
-        <mat-option *ngFor="let Pool of this.allPoolData" [value]="Pool">
-          {{Pool.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
-    </div>
-  </mat-step>
+<form [formGroup]="formGroup">
+  <mat-vertical-stepper linear
+    #stepper
+    formArrayName="formArray">
 
+    <!-- EVENT -->
+    <mat-step formGroupName="0"
+      [stepControl]="formArray?.get([0])">
+      <ng-template matStepLabel> Select an Event </ng-template>
+      <mat-form-field>
+        <mat-label>Choose an Event</mat-label>
+        <mat-select formControlName="eventCtrl"
+          name="event"
+          (selectionChange)="getPools(); stepper.next()"
+          required>
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"
+            matTooltip="{{event.begin_date | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+            [matTooltipPosition]="'right'">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </mat-step>
 
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button (click)="onPoolDelete()">Submit</button>
-    </div>
-  </mat-step>
-</mat-vertical-stepper>
+    <!-- POOL -->
+    <mat-step formGroupName="1"
+      [stepControl]="formArray?.get([1])">
+      <ng-template matStepLabel> Select a Pool </ng-template>
+
+      <mat-form-field>
+        <mat-label>Choose a Pool </mat-label>
+        <mat-select formControlName="poolCtrl"
+          name="pools"
+          (selectionChange)="stepper.next()"
+          required>
+          <mat-option *ngFor="let pool of pools"
+            [value]="pool.id">
+            {{pool.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </mat-step>
+
+    <!-- REMOVE -->
+    <mat-step>
+      <ng-template matStepLabel>Remove</ng-template>
+      <p>Click Remove when ready.</p>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          (click)="stepper.reset()">Reset</button>
+        <button mat-button
+          (click)="onClickRemove(stepper)">Remove</button>
+      </div>
+    </mat-step>
+
+  </mat-vertical-stepper>
+</form>

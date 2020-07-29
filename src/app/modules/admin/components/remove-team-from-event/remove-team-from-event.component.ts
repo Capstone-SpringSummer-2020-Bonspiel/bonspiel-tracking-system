@@ -18,14 +18,14 @@ export class RemoveTeamFromEventComponent implements OnInit {
   selectedEvent = '';
   selectedTeam = '';
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private fb: FormBuilder,
     private apiService: ApiService,) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this.formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this.formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       teamCtrl: ['', Validators.required],
     });
 

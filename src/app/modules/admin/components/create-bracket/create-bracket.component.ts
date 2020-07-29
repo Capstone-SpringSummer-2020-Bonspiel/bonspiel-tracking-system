@@ -4,6 +4,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-create-bracket',
@@ -22,7 +23,7 @@ export class CreateBracketComponent implements OnInit {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
@@ -34,50 +35,58 @@ export class CreateBracketComponent implements OnInit {
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
+        console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
         this.allEventData = res;
         this.selectedEvent = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
+        this.selectedEventId = res[0].id;
 
         this.spinnerService.off();
       })
 
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: [''],
+    this.firstFormGroup = this.fb.group({
+      eventNameCtrl: ['', Validators.required],
     });
-
   }
 
   onEventSelected(event: any) {
-    console.log(this.allEventData);
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
+    this.selectedEvent = event.value;
     this.selectedEventId = event.value.id;
+
+    console.log('the selected event is:');
+    console.log(this.selectedEvent);
   }
 
-  onCreateBracket() {
-    const bracketName = this.firstFormGroup.value.firstCtrl;
-    console.log(`full name:`);
+  onClickSubmit(stepper) {
+    //Create Bracket
+    const bracketName = this.firstFormGroup.value.eventNameCtrl;
+    console.log('SELECTED EVENT ID');
     console.log(this.selectedEventId)
-    this.spinnerService.on();
+    console.log('NEW BRACKET NAME:');
+    console.log(bracketName);
 
+    this.spinnerService.on();
     this.apiService
       .createBracket(bracketName, String(this.selectedEvent.id))
       .subscribe((res: any) => {
-        this.notificationService.showSuccess('Bracket has been created', '')
-
-        this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-          console.log(res)
-        })
-
-        this.spinnerService.off();
+        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
+        //   console.log("display bracket for event:")
+        //   console.log(res)
+        // })
+        console.log(res)
+        this.notificationService.showSuccess('Bracket has been created!', '')
       },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError('Something went wrong when adding Bracket', '');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err, 'Bracket create failed!');
         })
+      .add(
+        () => {
+          stepper.reset();
+          this.spinnerService.off()
+        });
   }
 }

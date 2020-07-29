@@ -42,20 +42,26 @@ export class AppComponent {
 
     console.log('APP COMPONENT STARTED!');
 
+    // JWT Authentication
     let dateNow = new Date().getTime();  // epoch in milliseconds 
-    let token = localStorage.getItem('user');
+    let token = JSON.parse(localStorage.getItem('user'));
 
     if (token) {
 
       console.log('we have a token!');
 
-      let myToken = JSON.parse(token);
-      let expiryAt = new Date(myToken.expiryAt).getTime();
-      let maxAge = myToken.maxAge;
+      // Case: token is invalid, logout
+      if (!this.isValidToken(token)) {
+        console.log('token expired; logout!');
+        this.accountService.logout();
+      }
+
+      let expiryAt = new Date(token.expiryAt).getTime();
+      let maxAge = token.maxAge;
 
       // Case: token has expired, logout
       if (dateNow > (expiryAt - 15000) || expiryAt === NaN) {
-        console.log('logout!');
+        console.log('token expired; logout!');
         this.accountService.logout();
       }
 
@@ -100,8 +106,8 @@ export class AppComponent {
             this.apiService.changeEvent(this.curlingEvents.find((e) => e.id === eventId));
           });
 
-        // console.log('[DEBUG] curlingEvents');
-        // console.log(this.curlingEvents);
+        console.log('[DEBUG] curlingEvents');
+        console.log(this.curlingEvents);
       });
   }
 
@@ -140,5 +146,28 @@ export class AppComponent {
           localStorage.setItem('user', JSON.stringify(newUser));
           this.accountService.userSubject.next(newUser);
         });
+  }
+
+  isValidToken(token) {
+    if (!token) {
+      return false;
+    }
+
+    const propertiesToTest = [
+      'username',
+      'token',
+      'maxAge',
+      'isSuperAdmin',
+      'expiryAt'
+    ];
+    if (propertiesToTest.every(x => x in token)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  getCurlingEvents(completed) {
+    return this.curlingEvents.filter(e => e.completed === completed);
   }
 }

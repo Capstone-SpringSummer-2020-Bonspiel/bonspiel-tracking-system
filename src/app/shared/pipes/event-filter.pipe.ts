@@ -1,24 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'teamFilter'
+  name: 'eventCompleted'
 })
-export class TeamFilterPipe implements PipeTransform {
+export class EventFilterPipe implements PipeTransform {
 
   // transform(value: unknown, ...args: unknown[]): unknown {
   //   return null;
   // }
 
   transform(items: any[], filter: any): any {
-    console.log(items);
-    console.log(filter);
     if (!items || !filter) {
       return items;
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    console.log(`FILTER: ${filter}`);
-    return items.filter(item => item.completed === filter);
+    return items.filter(item => item.completed === 'true');
   }
-
 }

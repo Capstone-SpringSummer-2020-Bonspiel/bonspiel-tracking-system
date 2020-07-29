@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
@@ -34,23 +34,23 @@ export class EditEndscoreComponent implements OnInit {
   displayedColumns = ['endNumber', 'team1Score', 'team2Score'];
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       secondCtrl: ['', Validators.required],
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       thirdCtrl: ['', Validators.required],
     });
-    this.fourthFormGroup = this._formBuilder.group({
+    this.fourthFormGroup = this.fb.group({
       fourthCtrlEndId: ['', Validators.required],
       fourthCtrlTeam1Score: ['', Validators.required],
       fourthCtrlTeam2Score: ['', Validators.required],
@@ -120,7 +120,7 @@ export class EditEndscoreComponent implements OnInit {
       });
   }
 
-  onClickSubmit() {
+  onClickSubmit(stepper: MatStepper) {
     var blank = 'false';
     var curlingTeam1Scored;
     var score;
@@ -143,23 +143,27 @@ export class EditEndscoreComponent implements OnInit {
       curlingTeam1Scored = 'false';
       score = team2Score;
     }
-    console.log(`gameId= ${this.selectedGameId}`);
-    console.log(`endID = ${this.selectedEndNumberId}`);
-    console.log(`blank= ${blank}`);
-    console.log(`curlingTeam1Scored= ${curlingTeam1Scored}`);
-    console.log(`score= ${score}`);
+
+    this.spinnerService.on();
+
     this.apiService
       .editEndScore(this.selectedEndNumberId, blank, curlingTeam1Scored, score)
       .subscribe(
-        (res: any) =>
+        (res: any) => {
+          console.log(res);
           this.notificationService.showSuccess(
             'End Score has been modified',
             ''
-          ),
+          );
+          stepper.reset();
+        },
         (error) => {
           console.log(error);
-          this.notificationService.showError('Something went wrong', '');
+          this.notificationService.showError(error.message, 'ERROR');
         }
-      );
+      )
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }

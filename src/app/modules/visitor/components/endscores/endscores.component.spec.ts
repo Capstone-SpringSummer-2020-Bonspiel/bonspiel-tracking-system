@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditCurlingGameComponent } from './edit-curling-game.component';
+import { EndscoresComponent } from './endscores.component';
 
-describe('EditCurlingGameComponent', () => {
-  let component: EditCurlingGameComponent;
-  let fixture: ComponentFixture<EditCurlingGameComponent>;
+describe('EndscoresComponent', () => {
+  let component: EndscoresComponent;
+  let fixture: ComponentFixture<EndscoresComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditCurlingGameComponent ]
+      declarations: [ EndscoresComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditCurlingGameComponent);
+    fixture = TestBed.createComponent(EndscoresComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
