@@ -15,19 +15,19 @@ export class EndscoresComponent implements OnInit, OnChanges {
   columnsToDisplay: string[] = [];
   @Input() data;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
-    console.log(this.data);
+    // console.log(this.data);
   }
 
   ngOnChanges() {
     this.columnsToDisplay = this.displayedColumns.slice();
 
-    console.log('ON CHANGES!');
-    console.log('displayedColumns', this.displayedColumns);
-    console.log('columnsToDisplay', this.columnsToDisplay);
-    console.log('data', this.data);
+    // console.log('ON CHANGES!');
+    // console.log('displayedColumns', this.displayedColumns);
+    // console.log('columnsToDisplay', this.columnsToDisplay);
+    // console.log('data', this.data);
   }
 
   openDialog(teamId): void {
