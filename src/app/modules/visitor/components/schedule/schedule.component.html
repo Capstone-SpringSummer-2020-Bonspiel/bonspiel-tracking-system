@@ -3,8 +3,10 @@
     <div class="col-sm-12">
       <h1 class="text-center"> Event Draw Schedule </h1>
       <mat-form-field class="field-center">
-        <mat-select [(value)]="selectedEvent" (selectionChange)="onEventSelected($event)">
-          <mat-option *ngFor="let event of this.allEventData" [value]="event">
+        <mat-select [(value)]="selectedEvent"
+          (selectionChange)="onEventSelected($event)">
+          <mat-option *ngFor="let event of this.allEventData"
+            [value]="event">
             {{event.name}}
           </mat-option>
         </mat-select>
@@ -14,13 +16,19 @@
 
 
   <div class="col-sm-12">
-    <table mat-table [dataSource]="this.finalEventData" class="mat-elevation-z8">
+    <table mat-table
+      [dataSource]="this.finalEventData"
+      class="mat-elevation-z8">
 
       <ng-container matColumnDef="Draw">
-        <th mat-header-cell *matHeaderCellDef> Draw </th>
-        <td mat-cell *matCellDef="let draw">
+        <th mat-header-cell
+          *matHeaderCellDef> Draw </th>
+        <td mat-cell
+          *matCellDef="let draw">
           {{draw.drawName}}<br>
-          Time: {{draw.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}<br>
+          <!-- Time: {{draw.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}<br> -->
+          Time: {{draw.startTime | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}<br>
+
         </td>
       </ng-container>
 
@@ -45,15 +53,18 @@
 
 
 
-      <ng-container matColumnDef="track_a" *ngIf="this.drawSizeNumber > 0">
-        <th mat-header-cell *matHeaderCellDef> A </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_a"
+        *ngIf="this.drawSizeNumber > 0">
+        <th mat-header-cell
+          *matHeaderCellDef> A </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[0].team1 != null">
             <div *ngIf="draw.games[0].name != null">
               {{draw.games[0].name}} <br>
             </div>
             <div *ngIf="draw.games[0].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[0].gameId}} <br>
             </div>
             Team1: {{draw.games[0].team1}} <br>
             Team2: {{draw.games[0].team2}} <br>
@@ -62,15 +73,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="track_b" *ngIf="this.drawSizeNumber > 1">
-        <th mat-header-cell *matHeaderCellDef> B </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_b"
+        *ngIf="this.drawSizeNumber > 1">
+        <th mat-header-cell
+          *matHeaderCellDef> B </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[1].team1 != null">
             <div *ngIf="draw.games[1].name != null">
               {{draw.games[1].name}} <br>
             </div>
             <div *ngIf="draw.games[1].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[1].gameId}} <br>
             </div>
             Team1: {{draw.games[1].team1}} <br>
             Team2: {{draw.games[1].team2}} <br>
@@ -79,15 +93,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="track_c" *ngIf="this.drawSizeNumber > 2">
-        <th mat-header-cell *matHeaderCellDef> C </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_c"
+        *ngIf="this.drawSizeNumber > 2">
+        <th mat-header-cell
+          *matHeaderCellDef> C </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[2].team1 != null">
             <div *ngIf="draw.games[2].name != null">
               {{draw.games[2].name}} <br>
             </div>
             <div *ngIf="draw.games[2].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[2].gameId}} <br>
             </div>
             Team1: {{draw.games[2].team1}} <br>
             Team2: {{draw.games[2].team2}} <br>
@@ -96,15 +113,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="track_d" *ngIf="this.drawSizeNumber > 3">
-        <th mat-header-cell *matHeaderCellDef> D </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_d"
+        *ngIf="this.drawSizeNumber > 3">
+        <th mat-header-cell
+          *matHeaderCellDef> D </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[3].team1 != null">
             <div *ngIf="draw.games[3].name != null">
               {{draw.games[3].name}} <br>
             </div>
             <div *ngIf="draw.games[3].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[3].gameId}} <br>
             </div>
             Team1: {{draw.games[3].team1}} <br>
             Team2: {{draw.games[3].team2}} <br>
@@ -113,15 +133,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="track_e" *ngIf="this.drawSizeNumber > 4">
-        <th mat-header-cell *matHeaderCellDef> E </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_e"
+        *ngIf="this.drawSizeNumber > 4">
+        <th mat-header-cell
+          *matHeaderCellDef> E </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[4].team1 != null">
             <div *ngIf="draw.games[4].name != null">
               {{draw.games[4].name}} <br>
             </div>
             <div *ngIf="draw.games[4].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[4].gameId}} <br>
             </div>
             Team1: {{draw.games[4].team1}} <br>
             Team2: {{draw.games[4].team2}} <br>
@@ -130,15 +153,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="track_f" *ngIf="this.drawSizeNumber > 5">
-        <th mat-header-cell *matHeaderCellDef> F </th>
-        <td mat-cell *matCellDef="let draw">
+      <ng-container matColumnDef="track_f"
+        *ngIf="this.drawSizeNumber > 5">
+        <th mat-header-cell
+          *matHeaderCellDef> F </th>
+        <td mat-cell
+          *matCellDef="let draw">
           <div *ngIf="draw.games[5].team1 != null">
             <div *ngIf="draw.games[5].name != null">
               {{draw.games[5].name}} <br>
             </div>
             <div *ngIf="draw.games[5].name == null">
-              Unnamed Game <br>
+              Game {{draw.games[5].eventGameId}} <br>
             </div>
             Team1: {{draw.games[5].team1}} <br>
             Team2: {{draw.games[5].team2}} <br>
@@ -150,8 +176,12 @@
       <!-- waste code that display team
         <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[0].team1}} </button> VS
             <button type="button" class="btn btn-light" (click)="openDialog()"> {{draw.games[0].team2}} </button> -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns ;" ng-repeat='x in records' ng-class-odd="'odd'"></tr>
+      <tr mat-header-row
+        *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+        *matRowDef="let row; columns: displayedColumns ;"
+        ng-repeat='x in records'
+        ng-class-odd="'odd'"></tr>
     </table>
 
   </div>
