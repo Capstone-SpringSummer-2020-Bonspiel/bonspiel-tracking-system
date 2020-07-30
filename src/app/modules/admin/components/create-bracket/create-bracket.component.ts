@@ -16,11 +16,8 @@ export class CreateBracketComponent implements OnInit {
   firstFormGroup: FormGroup;
 
   allEventData: null;
-  selectedEventId: Number;
-  selectedEvent: any = {
-    shortName: 'shortname',
-    fullName: 'fullname',
-  }
+  selectedEventId: Number = undefined;
+  selectedEvent: any = undefined;
 
   constructor(
     private fb: FormBuilder,
@@ -38,9 +35,6 @@ export class CreateBracketComponent implements OnInit {
         console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
         this.allEventData = res;
-        this.selectedEvent = res[0];
-        this.selectedEventId = res[0].id;
-
         this.spinnerService.off();
       })
 
@@ -49,15 +43,18 @@ export class CreateBracketComponent implements OnInit {
     });
   }
 
-  onEventSelected(event: any) {
+  onEventSelected(event: any, stepper: MatStepper) {
     console.log('the selected event is:');
     console.log(this.selectedEvent);
 
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
+    if (this.selectedEvent === undefined) {
+      this.selectedEvent = undefined;
+      this.selectedEventId = undefined;
+    } else {
+      this.selectedEvent = event.value;
+      this.selectedEventId = event.value.id;
+      stepper.next()
+    }
   }
 
   onClickSubmit(stepper) {

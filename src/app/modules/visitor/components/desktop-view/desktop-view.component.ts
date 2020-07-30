@@ -329,8 +329,6 @@ export class DesktopViewComponent implements OnInit {
         
       }
 
-      console.log('to_add', to_add);
-
       this.poolBracketList.push(to_add);
     }
 

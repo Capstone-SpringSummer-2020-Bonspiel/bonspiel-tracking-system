@@ -26,6 +26,9 @@ export class CreateGameComponent implements OnInit {
   selectedTeam2StoneColor = 'yellow';
   finished = false;
 
+  selectedValue1 = '';
+  selectedValue2 = '';
+
   events: any = [];
   optionGroups: any = [
     {
@@ -40,6 +43,7 @@ export class CreateGameComponent implements OnInit {
   draws: any = [];
   games: any = [];
   teams: any = [];
+  filteredTeams: any = [];
 
   colors = ['red', 'yellow'];
   iceSheets = ['A', 'B', 'C'];
@@ -52,33 +56,35 @@ export class CreateGameComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
-      eventId: ['', Validators.required],
-      eventType: ['', Validators.required],
+      eventIdCtrl: ['', Validators.required],
+      eventTypeCtrl: [''],
     });
     this.secondFormGroup = this.fb.group({
-      poolId: [''],
-      bracketId: [null],
+      poolIdCtrl: [''],
+      bracketIdCtrl: [null],
     });
     this.thirdFormGroup = this.fb.group({
-      drawId: ['', Validators.required],
+      drawIdCtrl: ['', Validators.required],
     });
     this.fourthFormGroup = this.fb.group({
-      gameName: [''],
-      team1Id: [''],
-      team1StoneColor: ['red', Validators.required],
-      team2Id: [''],
-      team2StoneColor: ['yellow', Validators.required],
-      destWinner: [null],
-      destLoser: [null],
-      iceSheet: ['', Validators.required],
-      finished: [false, Validators.required],
-      winner: [null],
-      notes: [''],
+      gameNameCtrl: ['', Validators.required],
+      team1IdCtrl: [''],
+      team2IdCtrl: [''],
+      team1StoneColorCtrl: ['red', Validators.required],
+      team2StoneColorCtrl: ['yellow', Validators.required],
+      destWinnerCtrl: [null],
+      destLoserCtrl: [null],
+      iceSheetCtrl: ['', Validators.required],
+      finishedCtrl: [false, Validators.required],
+      winnerCtrl: [null],
+      notesCtrl: [''],
     });
+
+    console.log('fourthFormGroup', this.fourthFormGroup);
 
     this.getEvents();
   }
@@ -92,45 +98,54 @@ export class CreateGameComponent implements OnInit {
     });
   }
 
-  setEventId() {
-    this.selectedEventId = this.firstFormGroup.value.eventId; // eventId
-    console.log('selectedEventId:');
-    console.log(this.selectedEventId);
+  setEventId(event: any, stepper: MatStepper) {
+    console.log('event', event);
+
+    if (event === undefined) {
+      return;
+    }
+
+    this.selectedEventId = this.firstFormGroup.value.eventIdCtrl; // eventId
+    this.spinnerService.on();
+    this.fetchData();
+    stepper.next();
   }
 
-  getPoolsBracketsByEventId() {
-    // Get pools/brackets
+  fetchData() {
     forkJoin({
       pools: this.apiService.getPool(this.selectedEventId),
       brackets: this.apiService.getBracket(this.selectedEventId),
-    }).subscribe((res: any) => {
-      this.optionGroups[0].list = res.pools; // pools
-      this.optionGroups[1].list = res.brackets; // brackets
-    });
+      draws: this.apiService.getDraws(this.selectedEventId),
+      games: this.apiService.getGames(this.selectedEventId),
+      teams: this.apiService.getTeamsByEventId(this.selectedEventId)
+    }).subscribe(
+      (res: any) => {
+        this.optionGroups[0].list = res.pools; // pools
+        this.optionGroups[1].list = res.brackets; // brackets
+        this.games = res.games;
+        this.teams = res.teams;
+        this.filteredTeams = res.teams;
+        this.draws = res.draws.sort((a, b) => a.start > b.start);
 
-    // Get games
-    this.apiService.getGames(this.selectedEventId).subscribe((res) => {
-      this.games = res;
-      console.log('games:');
-      console.log(this.games);
-    });
+        console.log('pools', this.optionGroups[0].list);
+        console.log('brackets', this.optionGroups[1].list);
+        console.log('draws', this.draws);
+        console.log('games', this.games);
+        console.log('teams', this.teams);
+
+        this.spinnerService.off();
+      });
   }
 
-  getTeamsByEventId() {
-    // Get teams
-    this.apiService.getTeamsByEventId(this.selectedEventId).subscribe((res) => {
-      this.teams = res;
-      console.log('teams:');
-      console.log(this.teams);
-    });
-  }
+  setPoolOrBracket(event, stepper: MatStepper, eventType) {
+    console.log('event', event);
 
-  getDrawsByEventId() {
-    this.apiService.getDraws(this.selectedEventId).subscribe((res: any) => {
-      this.draws = res.sort((a, b) => a.start > b.start);
-      console.log('draws:');
-      console.log(this.draws);
-    });
+    if (event === undefined) {
+      return;
+    }
+
+    this.firstFormGroup.controls.eventTypeCtrl.setValue(eventType);
+    stepper.next();
   }
 
   setDrawId() {
@@ -146,21 +161,21 @@ export class CreateGameComponent implements OnInit {
 
   onClickSubmit(stepper: MatStepper) {
     let body = {
-      bracketId: this.secondFormGroup.controls.bracketId.value || null, // bracketId
-      curlingTeam1Id: this.fourthFormGroup.controls.team1Id.value || null, // curlingTeam1Id (nullable)
-      curlingTeam2Id: this.fourthFormGroup.controls.team2Id.value || null, // curlingTeam2Id (nullable)
-      destLoser: this.fourthFormGroup.controls.destLoser.value || null, // destLoser (nullable)
-      destWinner: this.fourthFormGroup.controls.destWinner.value || null, // destWinner (nullable)
-      drawId: this.thirdFormGroup.controls.drawId.value, // drawId
-      eventType: this.firstFormGroup.controls.eventType.value, // eventType
-      finished: this.fourthFormGroup.controls.finished.value, // Finished
-      gameName: this.fourthFormGroup.controls.gameName.value, // gameName
-      iceSheet: this.fourthFormGroup.controls.iceSheet.value, // iceSheet
-      notes: this.fourthFormGroup.controls.notes.value, // notes
-      poolId: this.secondFormGroup.controls.poolId.value || null, // poolId
-      stoneColor1: this.fourthFormGroup.controls.team1StoneColor.value || null, // stoneColor1
-      stoneColor2: this.fourthFormGroup.controls.team2StoneColor.value || null, // stoneColor2
-      winner: this.fourthFormGroup.controls.winner.value || null, // WinnerId (nullable)
+      bracketId: this.secondFormGroup.controls.bracketIdCtrl.value || null, // bracketId
+      curlingTeam1Id: this.fourthFormGroup.controls.team1IdCtrl.value || null, // curlingTeam1Id (nullable)
+      curlingTeam2Id: this.fourthFormGroup.controls.team2IdCtrl.value || null, // curlingTeam2Id (nullable)
+      destLoser: this.fourthFormGroup.controls.destLoserCtrl.value || null, // destLoser (nullable)
+      destWinner: this.fourthFormGroup.controls.destWinnerCtrl.value || null, // destWinner (nullable)
+      drawId: this.thirdFormGroup.controls.drawIdCtrl.value, // drawId
+      eventType: this.firstFormGroup.controls.eventTypeCtrl.value, // eventType
+      finished: this.fourthFormGroup.controls.finishedCtrl.value, // Finished
+      gameName: this.fourthFormGroup.controls.gameNameCtrl.value, // gameName
+      iceSheet: this.fourthFormGroup.controls.iceSheetCtrl.value, // iceSheet
+      notes: this.fourthFormGroup.controls.notesCtrl.value, // notes
+      poolId: this.secondFormGroup.controls.poolIdCtrl.value || null, // poolId
+      stoneColor1: this.fourthFormGroup.controls.team1StoneColorCtrl.value || null, // stoneColor1
+      stoneColor2: this.fourthFormGroup.controls.team2StoneColorCtrl.value || null, // stoneColor2
+      winner: this.fourthFormGroup.controls.winnerCtrl.value || null, // WinnerId (nullable)
     };
 
     console.log(body);
@@ -184,44 +199,49 @@ export class CreateGameComponent implements OnInit {
       .subscribe(
         (res) => {
           console.log(res);
-          this.notificationService.showSuccess(
-            'Game was successfully created',
-            ''
-          );
+          this.notificationService.showSuccess('Game was successfully created', '');
+
+          // Reset the stepper, forms and validation
+          stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup,
+            this.fourthFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
           this.notificationService.showError('Something went wrong', '');
-        }
-      )
+        })
       .add(() => {
-        // finally
-        stepper.reset();
         this.spinnerService.off();
       });
   }
 
-  updateTeams(teamNum) {
-    console.log(this.fourthFormGroup);
-    if (teamNum === 1) {
-      const selectedTeamId = this.fourthFormGroup.controls.team1Id.value;
-      this.selectedTeam1Id = selectedTeamId;
-    } else if (teamNum === 2) {
-      const selectedTeamId = this.fourthFormGroup.controls.team2Id.value;
-      this.selectedTeam2Id = selectedTeamId;
-    }
-  }
+  disableOptions(team_id) {
+    const selectedTeamId1 = this.fourthFormGroup.controls.team1IdCtrl.value;
+    const selectedTeamId2 = this.fourthFormGroup.controls.team2IdCtrl.value;
+    const A = [Number(selectedTeamId1), Number(selectedTeamId2)];
 
-  filterTeams() {
-    return this.teams
-      .filter((e) => e.id !== this.selectedTeam1Id)
-      .filter((e) => e.id !== this.selectedTeam2Id);
+    if (A.includes(team_id)) {
+      return true;
+    }
+    return false;
   }
 
   selectedTeams() {
-    return this.teams.filter(
-      (e) => e.id === this.selectedTeam1Id || e.id === this.selectedTeam2Id
-    );
+    const selectedTeamId1 = this.fourthFormGroup.controls.team1IdCtrl.value;
+    const selectedTeamId2 = this.fourthFormGroup.controls.team2IdCtrl.value;
+    return this.teams.filter((e) => e.id === selectedTeamId1 || e.id === selectedTeamId2);
   }
 
   resetStepper(stepper: MatStepper) {

@@ -148,22 +148,28 @@ export class CreateEndscoreComponent implements OnInit {
 
     this.spinnerService.on();
 
-    this.apiService
-      .createEndScore(
-        this.selectedGameId,
-        endNumber,
-        blank,
-        curlingTeam1Scored,
-        score
-      )
+    this.apiService.createEndScore(this.selectedGameId, endNumber, blank, curlingTeam1Scored, score)
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess(
-            'End Score has been created',
-            ''
-          );
+          this.notificationService.showSuccess('End Score has been created', '');
+
+          // Reset the stepper, forms and validation
           stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup,
+            this.fourthFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (error) => {
           console.log(error);
