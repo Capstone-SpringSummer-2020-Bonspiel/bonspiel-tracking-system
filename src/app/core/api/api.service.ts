@@ -16,13 +16,33 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
-  private eventIdSource = new BehaviorSubject(1); // Default to event ID 1
+  private eventIdSource = new BehaviorSubject(null); // Default to event ID 1
   currentEventId$ = this.eventIdSource.asObservable();
 
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
   constructor(private httpService: HttpClient) { }
+
+  /********************************************************************/
+
+  // Getter/setters for service's behavior subjects
+
+  changeEventId(newEventId: number) {
+    this.eventIdSource.next(newEventId);
+  }
+
+  changeEvent(newEvent: any) {
+    this.eventSource.next(newEvent);
+  }
+
+  get currentEventId() {
+    return this.eventIdSource.getValue();
+  }
+
+  get currentEvent() {
+    return this.eventSource.getValue();
+  }
 
   /********************************************************************/
 
@@ -58,14 +78,6 @@ export class ApiService {
   // Events
   public getEvents() {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events`);
-  }
-
-  changeEventId(newEventId: number) {
-    this.eventIdSource.next(newEventId);
-  }
-
-  changeEvent(newEvent: any) {
-    this.eventSource.next(newEvent);
   }
 
   public createEvent(name, info, eventType, completed, beginDate, endDate) {

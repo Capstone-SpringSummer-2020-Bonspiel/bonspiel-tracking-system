@@ -71,7 +71,9 @@
         [dataSource]="dataSource"
         multiTemplateDataRows
         #mainTableSort="matSort"
-        matSort>
+        matSort
+        matSortActive="begin_date"
+        matSortDirection="desc">
         <ng-container [matColumnDef]="column"
           *ngFor="let column of displayedColumns">
           <div [ngSwitch]="column">

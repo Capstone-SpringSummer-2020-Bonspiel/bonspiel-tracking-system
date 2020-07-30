@@ -52,6 +52,10 @@ export class DesktopViewComponent implements OnInit {
 
     // Get current event
     this.apiService.currentEvent$.subscribe((currentEvent) => {
+      if (currentEvent === null) {
+        return;
+      }
+
       this.currentEvent = currentEvent;
       console.log(1);
       console.log('currentEvent', this.currentEvent);
@@ -59,6 +63,10 @@ export class DesktopViewComponent implements OnInit {
 
     // Get current event ID
     this.apiService.currentEventId$.subscribe((eventId) => {
+      if (eventId === null) {
+        return;
+      }
+
       this.currentEventId = eventId;
       console.log(2);
       console.log('currentEventId', this.currentEventId);
@@ -326,7 +334,7 @@ export class DesktopViewComponent implements OnInit {
           console.log('loser', game.team_name1);
           continue;
         }
-        
+
       }
 
       this.poolBracketList.push(to_add);
@@ -339,7 +347,7 @@ export class DesktopViewComponent implements OnInit {
     for (let arr of this.poolBracketList) {
       for (let game of arr.list) {
         if (!totals.hasOwnProperty(game.team_id)) {
-          totals[game.team_id] = Object.assign({},game);
+          totals[game.team_id] = Object.assign({}, game);
         } else {
           totals[game.team_id].wins += game.wins;
           totals[game.team_id].losses += game.losses;

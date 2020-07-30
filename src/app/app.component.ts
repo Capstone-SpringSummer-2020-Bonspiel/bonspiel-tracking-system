@@ -104,12 +104,31 @@ export class AppComponent {
           }
         }
 
-        // Set the current event
-        this.apiService
-          .currentEventId$
-          .subscribe((eventId) => {
-            this.apiService.changeEvent(this.currentCurlingEvents.find((e) => e.id === eventId));
-          });
+        // Set to most recent event if current value is null
+        // Otherwise, set it to current value
+        let sorted = this.currentCurlingEvents.sort((a, b) => {
+          let c = new Date(a);
+          let d = new Date(b);
+          return c > d ? 1 : -1;
+        });
+
+        // console.log('sorted', sorted);
+
+        let previousEventId = this.apiService.currentEventId;
+        let previousEvent = this.apiService.currentEvent;
+
+        // console.log('PREVIOUS', previousEventId, previousEvent);
+
+        if (previousEventId === null) {
+          this.apiService.changeEventId(sorted[0].id);
+        } else {
+          this.apiService.changeEventId(previousEventId);
+        }
+        if (previousEvent === null) {
+          this.apiService.changeEvent(sorted[0]);
+        } else {
+          this.apiService.changeEventId(previousEvent);
+        }
 
         console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
       });
