@@ -12,6 +12,7 @@
         <mat-select formControlName="firstCtrl"
           (selectionChange)="getEvent(); stepper.next()"
           required>
+          <mat-option> -- </mat-option>
           <mat-option *ngFor="let eventName of eventNames"
             [value]="eventName.id"
             matTooltip="{{eventName.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
@@ -45,7 +46,8 @@
           formControlName="secondCtrlDate">
         <mat-datepicker-toggle matSuffix
           [for]="picker2"></mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
+        <ngx-mat-datetime-picker #picker2
+          [enableMeridian]="true"></ngx-mat-datetime-picker>
       </mat-form-field>
 
       <br>

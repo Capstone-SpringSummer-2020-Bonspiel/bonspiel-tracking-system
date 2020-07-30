@@ -391,18 +391,13 @@ export class ApiService {
 
   /********************************************************************* */
 
-  public insertTeamEvent(eventId, teamId) {
+  public addTeamToEvent(teamId, eventId) {
     const body = {};
-    return this.httpService.post(
-      `${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`,
-      body
-    );
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`, body);
   }
 
-  public deleteTeamEvent(eventId, teamId) {
-    return this.httpService.delete(
-      `${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`
-    );
+  public removeTeamFromEvent(teamId, eventId) {
+    return this.httpService.delete(`${environment.apiUrl}/api/v1/admin/event/${eventId}/team/${teamId}`);
   }
   // CASCADE DELETE will NOT be setup.
   // Manual check - If the team has played a game in the curling event, they must be removed before the team can be removed from the curling event

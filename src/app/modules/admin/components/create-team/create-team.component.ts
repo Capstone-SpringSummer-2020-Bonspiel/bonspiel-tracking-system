@@ -12,7 +12,6 @@ import { NotificationService } from '@app/shared/services/notification.service';
 })
 export class CreateTeamComponent implements OnInit {
   firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   organizations: any[] = [];
 
   constructor(
@@ -26,27 +25,25 @@ export class CreateTeamComponent implements OnInit {
     this.firstFormGroup = this.fb.group({
       firstCtrlName: ['', Validators.required],
       firstCtrlNote: ['', Validators.required],
-    });
-    this.secondFormGroup = this.fb.group({
-      secondCtrlOrg: [null],
+      firstCtrlOrg: [null],
     });
     this.spinnerService.on();
-    this.apiService.getAllOrganizations().subscribe((res: any) => {
-      this.organizations = res;
-      this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
-      this.spinnerService.off();
-    });
+    this.apiService.getAllOrganizations()
+      .subscribe((res: any) => {
+        this.organizations = res;
+        this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
+        this.spinnerService.off();
+      });
   }
 
   onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.value.firstCtrlName;
     const note = this.firstFormGroup.value.firstCtrlNote;
-    const org = this.secondFormGroup.value.secondCtrlOrg;
+    const org = this.firstFormGroup.value.firstCtrlOrg;
 
     this.spinnerService.on();
 
-    this.apiService
-      .createTeam(name, note, org)
+    this.apiService.createTeam(name, note, org)
       .subscribe(
         (res: any) => {
           console.log(res);

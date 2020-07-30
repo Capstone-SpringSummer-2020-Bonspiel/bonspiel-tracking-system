@@ -19,24 +19,6 @@ export class SidebarComponent implements OnInit {
 
   addRoutes = [
     {
-      label: 'Add an Event',
-      path: '/admin/create-event',
-      icon: 'calendar_today',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Add a Draw',
-      path: '/admin/create-draw',
-      icon: 'date_range',
-      class: ''
-    },
-    {
-      label: 'Add a Game',
-      path: '/admin/create-game',
-      icon: 'event',
-      class: ''
-    },
-    {
       label: 'Add a Organization',
       path: '/admin/create-organization',
       icon: 'add_box',
@@ -73,6 +55,24 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Add an Event',
+      path: '/admin/create-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
+      label: 'Add a Draw',
+      path: '/admin/create-draw',
+      icon: 'date_range',
+      class: ''
+    },
+    {
+      label: 'Add a Game',
+      path: '/admin/create-game',
+      icon: 'event',
+      class: ''
+    },
+    {
       label: 'Add an End Score',
       path: '/admin/create-endscore',
       icon: 'plus_one',
@@ -81,24 +81,6 @@ export class SidebarComponent implements OnInit {
   ]
 
   editRoutes = [
-    {
-      label: 'Edit an Event',
-      path: '/admin/edit-event',
-      icon: 'calendar_today',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Edit a Draw',
-      path: '/admin/edit-draw',
-      icon: 'date_range',
-      class: ''
-    },
-    {
-      label: 'Edit a Game',
-      path: '/admin/edit-game',
-      icon: 'event',
-      class: ''
-    },
     {
       label: 'Edit an Organization',
       path: '/admin/edit-organization',
@@ -130,6 +112,24 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Edit an Event',
+      path: '/admin/edit-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
+      label: 'Edit a Draw',
+      path: '/admin/edit-draw',
+      icon: 'date_range',
+      class: ''
+    },
+    {
+      label: 'Edit a Game',
+      path: '/admin/edit-game',
+      icon: 'event',
+      class: ''
+    },
+    {
       label: 'Edit an End Score',
       path: '/admin/edit-endscore',
       icon: 'plus_one',
@@ -138,24 +138,6 @@ export class SidebarComponent implements OnInit {
   ]
 
   removeRoutes = [
-    {
-      label: 'Remove an Event',
-      path: '/admin/remove-event',
-      icon: 'calendar_today',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Remove a Draw',
-      path: '/admin/remove-draw',
-      icon: 'date_range',
-      class: ''
-    },
-    {
-      label: 'Remove a Game',
-      path: '/admin/remove-game',
-      icon: 'event',
-      class: ''
-    },
     {
       label: 'Remove an Organization',
       path: '/admin/remove-organization',
@@ -191,6 +173,24 @@ export class SidebarComponent implements OnInit {
       path: '/admin/remove-bracket',
       icon: 'library_add',
       class: 'd-none d-sm-block'
+    },
+    {
+      label: 'Remove an Event',
+      path: '/admin/remove-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
+      label: 'Remove a Draw',
+      path: '/admin/remove-draw',
+      icon: 'date_range',
+      class: ''
+    },
+    {
+      label: 'Remove a Game',
+      path: '/admin/remove-game',
+      icon: 'event',
+      class: ''
     },
     {
       label: 'Remove an End Score',

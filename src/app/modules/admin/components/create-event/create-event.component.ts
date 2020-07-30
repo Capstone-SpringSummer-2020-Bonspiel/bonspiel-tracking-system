@@ -29,7 +29,6 @@ export class CreateEventComponent implements OnInit {
     { value: 'pools', label: 'Pool' },
     { value: 'brackets', label: 'Bracket' },
     { value: 'championship', label: 'Championship' },
-    // { value: 'friendly', label: 'Friendly' },
   ];
 
   statusTypes: any[] = [
@@ -79,7 +78,6 @@ export class CreateEventComponent implements OnInit {
     const begin_date = String(this.formGroup.value.formArray[2].eventStartCtrl.toLocaleString());
     const end_date = String(this.formGroup.value.formArray[2].eventEndCtrl.toLocaleString());
 
-    // Create Event
     this.spinnerService.on();
     this.apiService.createEvent(name, info, event_type, completed, begin_date, end_date)
       .subscribe(
@@ -87,14 +85,15 @@ export class CreateEventComponent implements OnInit {
           console.log(res);
           this.notificationService.showSuccess('Event has been created!', '');
 
-          // Reset the stepper
+          // Reset the stepper, forms and validation
           stepper.reset();
 
-          // Reset the form and validation
-          this.formGroup.reset()
-          Object.keys(this.formGroup.controls).forEach(key => {
-            this.formGroup.controls[key].setErrors(null)
-          });
+          for (let formGroup of this.formGroup.value.formArray) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
@@ -102,7 +101,6 @@ export class CreateEventComponent implements OnInit {
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
   }

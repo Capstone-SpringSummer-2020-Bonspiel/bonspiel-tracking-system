@@ -29,12 +29,11 @@ export class CreateOrganizationComponent implements OnInit {
   }
 
   onClickSubmit(stepper) {
-    //Create Organization
     const fullName = this.firstFormGroup.value.eventFullCtrl;
     const shortName = this.firstFormGroup.value.eventShortCtrl;
 
-    console.log(`full name: ${fullName}`);
-    console.log(`detail info: ${shortName}`);
+    console.log('fullName', fullName);
+    console.log('shortName', shortName);
 
     this.spinnerService.on();
     this.apiService
@@ -42,11 +41,14 @@ export class CreateOrganizationComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
-          // this.apiService.getAllOrganizations().subscribe((res: any) => {
-          //   console.log("display Organization:")
-          //   console.log(res)
-          // })
           this.notificationService.showSuccess('Organization has been created!', '')
+
+          // Reset the stepper, form and validation
+          stepper.reset();
+          this.firstFormGroup.reset();
+          Object.keys(this.firstFormGroup.controls).forEach((key) => {
+            this.firstFormGroup.controls[key].setErrors(null);
+          });
         },
         (err) => {
           console.log(err);
@@ -54,7 +56,6 @@ export class CreateOrganizationComponent implements OnInit {
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
   }

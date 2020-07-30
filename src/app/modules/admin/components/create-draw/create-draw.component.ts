@@ -92,24 +92,31 @@ export class CreateDrawComponent implements OnInit {
 
     this.spinnerService.on();
 
-    this.apiService
-      .createDraw(
-        this.selectedEventId.toString(),
-        newDrawName,
-        newDrawStart,
-        newDrawUrl
-      )
+    this.apiService.createDraw(this.selectedEventId.toString(), newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Draw has been created', '');
+
+          // Reset the stepper, forms and validation
           stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (error) => {
           console.log(error);
           this.notificationService.showError(error.message, 'ERROR');
-        }
-      )
+        })
       .add(() => {
         this.spinnerService.off();
       });
