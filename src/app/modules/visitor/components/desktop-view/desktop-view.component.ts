@@ -256,8 +256,6 @@ export class DesktopViewComponent implements OnInit {
     // Clear poolBracketList
     this.poolBracketList.length = 0;
 
-    let foobar = [];
-
     // Populate poolBracketList (loop through each pool/bracket)
     for (let event_type_name of unique_event_type_names) {
 
@@ -283,30 +281,19 @@ export class DesktopViewComponent implements OnInit {
         list: [],              // List of team standings
       };
 
-      console.log('-----', to_add);
-
       // Add a JSON object for each team in a single pool or bracket
       for (let team_id of teams) {
-        const objk = {
+        to_add.list.push({
           team_name: team_mapping[team_id],
           team_id: team_id,
           wins: 0,
           losses: 0,
           ties: 0,
-        }
-        console.log(objk);
-        console.log(to_add);
-        to_add.list.push(objk);
+        });
       }
-
-      console.log('-----', to_add);
-
-      console.log('to_add.list', to_add.list)
 
       // Tally up the scores
       for (let game of games) {
-
-        console.log('game_id', game.game_id);
 
         // Skip if game is not finished...
         if (game.finished !== true) {
@@ -339,15 +326,13 @@ export class DesktopViewComponent implements OnInit {
           console.log('loser', game.team_name1);
           continue;
         }
+        
       }
 
       console.log('to_add', to_add);
 
       this.poolBracketList.push(to_add);
-      foobar.push(to_add);
     }
-
-    console.log('foobar', foobar);
 
     console.log('poolBracketList', this.poolBracketList);
 
@@ -356,7 +341,7 @@ export class DesktopViewComponent implements OnInit {
     for (let arr of this.poolBracketList) {
       for (let game of arr.list) {
         if (!totals.hasOwnProperty(game.team_id)) {
-          totals[game.team_id] = game;
+          totals[game.team_id] = Object.assign({},game);
         } else {
           totals[game.team_id].wins += game.wins;
           totals[game.team_id].losses += game.losses;
