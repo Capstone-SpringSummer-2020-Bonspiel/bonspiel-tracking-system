@@ -1,24 +1,25 @@
 <div class="container">
-
-  <div class="row heading">
-    <div class="col-md-6 offset-md-3">
-      <h2 class="text-center bottom-line">{{teamName}}</h2>
-    </div>
-  </div>
-
-  <div class="row team-row">
-    <div *ngFor="let curler of team"
-      class="col-md-3 col-sm-6 team-wrap">
-      <div class="team-member text-center">
-        <div class="team-img">
-          <img src="/assets/img/curler-silhouette.jpg">
-        </div>
-        <h6 class="team-title">{{curler.curler_name}}</h6>
-        <span *ngIf="curler.throwing_order">Throwing order: {{curler.throwing_order | titlecase }}<br></span>
-        <span *ngIf="curler.curler_position">Position: {{curler.curler_position | titlecase}}</span>
+  <mat-dialog-content>
+    <div class="row heading">
+      <div class="col-md-6 offset-md-3">
+        <h2 class="text-center bottom-line">{{teamName}}</h2>
       </div>
     </div>
-    <!-- end team member -->
 
-  </div>
+    <div class="row team-row">
+      <div *ngFor="let curler of team"
+        class="col-md-3 col-sm-6 team-wrap">
+        <div class="team-member text-center">
+          <div class="team-img mt-2">
+            <img src="/assets/img/curler-silhouette.jpg">
+          </div>
+          <h6 class="team-title">{{curler.curler_name}}</h6>
+          <span *ngIf="curler.throwing_order">Throwing order: {{curler.throwing_order | titlecase }}<br></span>
+          <span *ngIf="curler.curler_position">Position: {{curler.curler_position | titlecase}}</span>
+        </div>
+      </div>
+      <!-- end team member -->
+
+    </div>
+  </mat-dialog-content>
 </div>

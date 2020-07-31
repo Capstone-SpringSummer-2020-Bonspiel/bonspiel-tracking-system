@@ -1,12 +1,20 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
-import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
 import { YoutubeDialogComponent } from '@app/modules/visitor/components/youtube-dialog/youtube-dialog.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatSort, Sort } from '@angular/material/sort';
+import { take, first } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { TeamDialogOverviewComponent } from '@app/modules/visitor/components/team-dialog-overview/team-dialog-overview.component';
 
 @Component({
   selector: 'app-mobile-view',
@@ -14,304 +22,357 @@ import { MatSort, Sort } from '@angular/material/sort';
   styleUrls: ['./mobile-view.component.scss'],
 })
 export class MobileViewComponent implements OnInit {
-  displayedColumns = ['name', 'final_score'];
-
-  standingsColumns = ['name', 'wins', 'losses'];
-  dataSourceDraws = [];
-  dataSourceGames = [];
+  standingsColumns = ['name', 'wins', 'losses', 'ties'];
+  displayedColumns = ['name', 'total_score'];
   dataSourceStandings = [];
 
   panelOpenState = false;
   currentReq$ = null;
 
-  selectedDraw = null;
-  selectedPoolID = null;
   allDraws = [];
   allGames = [];
-  buckets = [];
+  allScores = [];
+  selectedDraw = null;
+  poolBracketList = [];
   currentGames = [];
-  currentStandings = [];
   currentEventId = null;
   currentEvent = null;
-  allScores = [];
-  currentScores = [];
+  selectedPoolBracket = 'All Teams';
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private cd: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.spinnerService.on();
+
+    // Get current event
+    this.apiService.currentEvent$.subscribe((currentEvent) => {
+      if (currentEvent === null) {
+        return;
+      }
+
+      this.currentEvent = currentEvent;
+      console.log(1);
+      console.log('currentEvent', this.currentEvent);
+    });
 
     // Get current event ID
     this.apiService.currentEventId$.subscribe((eventId) => {
-      this.spinnerService.on();
-
       if (eventId === null) {
-        return
+        return;
       }
 
       this.currentEventId = eventId;
+      console.log(2);
+      console.log('currentEventId', this.currentEventId);
 
-      // Get current event name
-      this.apiService.currentEvent$.subscribe((currentEvent) => {
-        if (currentEvent === null) {
-          return;
-        }
+      // Get draws, games and scores
+      forkJoin(
+        this.apiService.getDraws(this.currentEventId),
+        this.apiService.getGames(this.currentEventId),
+        this.apiService.getScoresByEvent(this.currentEventId)
+      ).subscribe((vals: any) => {
+        console.log('all values', vals);
 
-        this.currentEvent = currentEvent;
+        this.allDraws = vals[0];
+        this.allGames = vals[1];
+        this.allScores = vals[2];
 
-        // Get current draws by event ID
-        this.apiService.getDraws(this.currentEventId).subscribe((res: any) => {
-          // console.log('[DEBUG] draws:');
-          // console.log(res);
+        this.selectedDraw = this.allDraws[this.allDraws.length - 1];
+        // this.notificationService.showInfo(this.selectedDraw.video_url, '');  // DEBUGGING
 
-          this.selectedDraw = res[res.length - 1];
-          this.allDraws = res;
-
-          // Get all games by event ID
-          this.apiService.getGames(this.currentEventId).subscribe((res: any) => {
-            // console.log('[DEBUG] games');
-            // console.log(res);
-
-            this.allGames = res;
-
-            this.apiService
-              .getScoresByEvent(this.currentEventId)
-              .subscribe((res: any) => {
-                this.allScores = res;
-
-                // Add dataSource key-value pair for Scores Tab
-                for (let game of this.allGames) {
-                  game.dataSource = [
-                    {
-                      name: game.team_name1,
-                      round_1: '0',
-                      round_2: '2',
-                      round_3: '0',
-                      round_4: '0',
-                      round_5: '2',
-                      round_6: '0',
-                      round_7: '1',
-                      round_8: '0',
-                      final_score: '',
-                    },
-                    {
-                      name: game.team_name2,
-                      round_1: '0',
-                      round_2: '0',
-                      round_3: '2',
-                      round_4: '1',
-                      round_5: '0',
-                      round_6: '2',
-                      round_7: '0',
-                      round_8: '5',
-                      final_score: '',
-                    },
-                  ];
-                }
-
-                this.currentGames = this.allGames.filter(
-                  (x) => x.draw_id === this.selectedDraw.id
-                );
-
-                this.currentGames.forEach((game) =>
-                  this.allScores.forEach((score) => {
-                    if (score.game_id === game.game_id)
-                      this.currentScores.push(score);
-                  })
-                );
-
-                // console.log(`[DEBUG] selectedDraw:`);
-                // console.log(this.selectedDraw);
-                // console.log(`[DEBUG] allDraws:`);
-                // console.log(this.allDraws);
-                // console.log(`[DEBUG] allGames:`);
-                // console.log(this.allGames);
-                // console.log(`[DEBUG] currentGames:`);
-                // console.log(this.currentGames);
-                // console.log('[DEBUG] allScores:');
-                // console.log(this.allScores);
-                // console.log('[DEBUG] currentScores:');
-                // console.log(this.currentScores);
-
-                // Populate all standings
-                let buckets = {};
-                for (let game of this.allGames) {
-                  if (isNaN(game.winner)) {
-                    continue;
-                  }
-
-                  if (!buckets.hasOwnProperty(game.curlingteam1_id)) {
-                    buckets[game.curlingteam1_id] = {
-                      name: game.team_name1,
-                      team_id: game.curlingteam1_id,
-                      wins: 0,
-                      losses: 0,
-                      pool_id: game.pool_id,
-                      bracket_id: game.bracket_id,
-                    };
-                  }
-
-                  if (!buckets.hasOwnProperty(game.curlingteam2_id)) {
-                    buckets[game.curlingteam2_id] = {
-                      name: game.team_name2,
-                      team_id: game.curlingteam2_id,
-                      wins: 0,
-                      losses: 0,
-                      pool_id: game.pool_id,
-                      bracket_id: game.bracket_id,
-                    };
-                  }
-
-                  if (game.winner === game.curlingteam1_id) {
-                    buckets[game.curlingteam1_id].wins++;
-                    buckets[game.curlingteam2_id].losses++;
-                  } else {
-                    buckets[game.curlingteam2_id].wins++;
-                    buckets[game.curlingteam1_id].losses++;
-                  }
-                }
-
-                // console.log('[DEBUG] buckets:');
-                // console.log(buckets);
-
-                // Convert object to array
-                let arr = Object.keys(buckets).map((key) => buckets[key]);
-
-                // console.log('[DEBUG] arr:');
-                // console.log(arr);
-
-                const A = [];
-
-                //Add a new container for all teams
-                A.push({
-                  type: 'All Teams',
-                  id: '',
-                  teams: [],
-                });
-
-                for (const team of arr) {
-                  // Add a new container for each pool ID if it does not already exist
-                  if (
-                    team.pool_id !== null &&
-                    A.filter((e) => e.type === 'Pool' && e.id === team.pool_id)
-                      .length === 0
-                  ) {
-                    A.push({
-                      type: 'Pool',
-                      id: team.pool_id,
-                      teams: [],
-                    });
-                  }
-
-                  // Add a a new container for each bracket ID if it does not already exist
-                  if (
-                    team.bracket_id !== null &&
-                    A.filter(
-                      (e) => e.type === 'Bracket' && e.id === team.bracket_id
-                    ).length === 0
-                  ) {
-                    A.push({
-                      type: 'Bracket',
-                      id: team.bracket_id,
-                      teams: [],
-                    });
-                  }
-
-                  // Add a a new, special container for games that don't have a pool_id & bracket_id
-                  if (
-                    team.pool_id === null &&
-                    team.bracket_id === null &&
-                    A.filter((e) => e.type === 'Other').length === 0
-                  ) {
-                    A.push({
-                      type: 'Other',
-                      id: '',
-                      teams: [],
-                    });
-                  }
-
-                  // Add teams to the corresponding pool container ...
-                  if (team.pool_id !== null) {
-                    const found = A.find(
-                      (e) => e.type === 'Pool' && e.id === team.pool_id
-                    );
-                    if (found) {
-                      found.teams.push(team);
-                    }
-                  }
-
-                  // ... or bracket container ...
-                  else if (team.bracket_id !== null) {
-                    const found = A.find(
-                      (e) => e.type === 'Bracket' && e.id === team.bracket_id
-                    );
-                    if (found) {
-                      found.teams.push(team);
-                    }
-                  }
-
-                  // ... or other container
-                  else {
-                    const found = A.find((e) => e.type === 'Other');
-                    if (found) {
-                      found.teams.push(team);
-                    }
-                  }
-
-                  // Add team to the 'All Teams' container
-                  if (team.name !== null) {
-                    const found = A.find((e) => e.type === 'All Teams');
-                    if (found) {
-                      found.teams.push(team);
-                    }
-                  }
-                }
-
-                // If event type is 'Other' then 'All Teams' is redundant
-                if (
-                  A.find((e) => e.type === 'Other') &&
-                  A.find((e) => e.type === 'All Teams')
-                ) {
-                  A.splice(0, 1);
-                }
-
-                // console.log('[DEBUG] A:');
-                // console.log(A);
-
-                this.dataSourceStandings.length = 0; // Clear array
-                this.dataSourceStandings = A; // Populate array
-
-                // reverse sort losses, sort wins
-                this.dataSourceStandings.forEach((group) => {
-                  group.teams.sort((a, b) => (a.losses > b.losses ? 1 : -1));
-                  group.teams.sort((a, b) => (a.wins > b.wins ? -1 : 1));
-                });
-
-                // console.log('[DEBUG] dataSourceStandings');
-                // console.log(this.dataSourceStandings);
-
-                this.spinnerService.off();
-              });
-          });
+        this.loadGames().then((res) => {
+          this.spinnerService.off();
         });
+
+        this.loadTeamStandings();
+        console.log(this.currentGames);
       });
     });
   }
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  loadGames() {
+    return new Promise((resolve, reject) => {
+      console.log('---------------------------------------------------------------');
+      this.currentGames = this.allGames.filter((x) => x.draw_id === this.selectedDraw.id);
+      console.log('currentGames', this.currentGames);
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-      width: 'auto',
+      for (let game of this.currentGames) {
+        const filteredScores = this.allScores.filter((e) => e.game_id === game.game_id);
+        const sortedScores = filteredScores.sort((a, b) => a.end_number - b.end_number);
+
+        console.log('filteredScores', filteredScores);
+        console.log('sortedScores', sortedScores);
+
+        // Create n columns; 8 or more endscores
+        let len = Math.max(sortedScores.length, 8);
+        game.displayedColumns = Array.from(Array(len), (_, i) => String(i + 1));
+        game.displayedColumns.unshift('Team');
+        game.displayedColumns.push('Total');
+        game.displayedColumns = game.displayedColumns.filter((e) => e !== 'null');
+
+        game.data = [
+          {
+            Team: { team: game.team_name1, team_id: game.curlingteam1_id },
+            1: '-',
+            2: '-',
+            3: '-',
+            4: '-',
+            5: '-',
+            6: '-',
+            7: '-',
+            8: '-',
+            Total: 0,
+          },
+          {
+            Team: { team: game.team_name2, team_id: game.curlingteam2_id },
+            1: '-',
+            2: '-',
+            3: '-',
+            4: '-',
+            5: '-',
+            6: '-',
+            7: '-',
+            8: '-',
+            Total: 0,
+          },
+        ];
+
+        let team1Total = 0;
+        let team2Total = 0;
+
+        sortedScores
+          .map((e) => e.end_number)
+          .forEach((end_number, i) => {
+            console.log('end_number', end_number);
+            if (end_number === null) {
+              return;
+            } else if (sortedScores[i].curlingteam1_scored === true) {
+              game.data[0][end_number] = sortedScores[i].score || 0;
+              game.data[1][end_number] = 0;
+              team1Total += sortedScores[i].score;
+            } else if (sortedScores[i].curlingteam1_scored === false) {
+              game.data[0][end_number] = 0;
+              game.data[1][end_number] = sortedScores[i].score || 0;
+              team2Total += sortedScores[i].score;
+            }
+          });
+
+        game.data[0]['Total'] = team1Total;
+        game.data[1]['Total'] = team2Total;
+      }
+
+      console.log('this.currentGames', this.currentGames);
+
+      resolve();
+    });
+  }
+
+  async loadTeamStandings() {
+    console.log('---------------------------------------------------------------');
+
+    // Lookup tables
+    let pools = {};
+    let brackets = {};
+
+    await this.apiService
+      .getPool(this.currentEventId)
+      .toPromise()
+      .then((res: any) => {
+        // Convert array of objects to object
+        let arr = res;
+        for (let i = 0; i < arr.length; i++) {
+          pools[arr[i].id] = {
+            event_id: arr[i].event_id,
+            name: arr[i].name,
+            color: arr[i].color,
+          };
+        }
+      });
+
+    await this.apiService
+      .getBracket(this.currentEventId)
+      .toPromise()
+      .then((res: any) => {
+        // Convert array of objects to object
+        let arr = res;
+        for (let i = 0; i < arr.length; i++) {
+          brackets[arr[i].id] = {
+            event_id: arr[i].event_id,
+            name: arr[i].name,
+            color: arr[i].color,
+          };
+        }
+      });
+
+    console.log('pools', pools);
+    console.log('brackets', brackets);
+
+    /*************************************************************************/
+
+    // Use lookup tables to add pool/bracket names as properties to each game
+    this.allGames.forEach((game) => {
+
+      if (game.pool_id !== null) {
+
+        game.pool_name = pools[game.pool_id].name;
+        game.label_name = pools[game.pool_id].name;
+
+      } else if (game.bracket_id !== null) {
+
+        game.bracket_name = brackets[game.bracket_id].name;
+        game.label_name = brackets[game.bracket_id].name;
+
+      } else {
+
+        game.label_name = 'Other';
+        console.log('==========>', game);
+
+      }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
+    console.log('allGames', this.allGames);
+
+    /*************************************************************************/
+
+    // Get unique names of pools & brackets which is used for dropdown list
+    let unique_event_type_names = ['All Teams', ...new Set(this.allGames.map((game) => game.label_name))];
+
+    console.log('unique_event_type_names', unique_event_type_names);
+
+    /*************************************************************************/
+
+    // Create team mapping for all teams in the event
+    let team_mapping = {};
+    for (let game of this.allGames) {
+      if (!team_mapping.hasOwnProperty(game.curlingteam1_id)) {
+        team_mapping[game.curlingteam1_id] = game.team_name1;
+      }
+      if (!team_mapping.hasOwnProperty(game.curlingteam2_id)) {
+        team_mapping[game.curlingteam2_id] = game.team_name2;
+      }
+    }
+
+    console.log('team_mapping', team_mapping);
+
+    /*************************************************************************/
+
+    // Clear poolBracketList
+    this.poolBracketList.length = 0;
+
+    // Populate poolBracketList (loop through each pool/bracket)
+    for (let event_type_name of unique_event_type_names) {
+
+      console.log('---------------------------------------   ', event_type_name);
+
+      // Get all games in a single pool or bracket
+      let games = this.allGames.filter((e) => e.label_name === event_type_name);
+
+      // Get all unique teams in a single pool or bracket
+      let teams = [...new Set(games.map((e) => e.curlingteam1_id).concat(games.map((e) => e.curlingteam2_id)))];
+
+      console.log('teams ====>', teams);
+      console.log('games ====>', games);
+
+      // If no teams exist, skip
+      if (teams.length === 0) {
+        continue;
+      }
+
+      // Add an array for each team
+      let to_add = {
+        event_type_name: event_type_name, // batchUploadBracket1 (pool or bracket)
+        list: [],              // List of team standings
+      };
+
+      // Add a JSON object for each team in a single pool or bracket
+      for (let team_id of teams) {
+        to_add.list.push({
+          team_name: team_mapping[team_id],
+          team_id: team_id,
+          wins: 0,
+          losses: 0,
+          ties: 0,
+        });
+      }
+
+      // Tally up the scores
+      for (let game of games) {
+
+        // Skip if game is not finished...
+        if (game.finished !== true) {
+          console.log('not finished');
+          continue;
+        }
+
+        // Increment ties...
+        if (game.winner === null) {
+          to_add.list.find((e) => e.team_id === game.curlingteam1_id).ties++;
+          to_add.list.find((e) => e.team_id === game.curlingteam2_id).ties++;
+          console.log('tie', game.team_name1, game.team_name2);
+          continue;
+        }
+
+        // Increment win...
+        if (game.winner === game.curlingteam1_id) {
+          to_add.list.find((e) => e.team_id === game.curlingteam1_id).wins++;
+          to_add.list.find((e) => e.team_id === game.curlingteam2_id).losses++;
+          console.log('winner', game.team_name1);
+          console.log('loser', game.team_name2);
+          continue;
+        }
+
+        // Increment losses...
+        if (game.winner === game.curlingteam2_id) {
+          to_add.list.find((e) => e.team_id === game.curlingteam2_id).wins++;
+          to_add.list.find((e) => e.team_id === game.curlingteam1_id).losses++;
+          console.log('winner', game.team_name2);
+          console.log('loser', game.team_name1);
+          continue;
+        }
+
+      }
+
+      this.poolBracketList.push(to_add);
+    }
+
+    console.log('poolBracketList', this.poolBracketList);
+
+    // Combine all lists for All Teams list
+    let totals = {};
+    for (let arr of this.poolBracketList) {
+      for (let game of arr.list) {
+        if (!totals.hasOwnProperty(game.team_id)) {
+          totals[game.team_id] = Object.assign({}, game);
+        } else {
+          totals[game.team_id].wins += game.wins;
+          totals[game.team_id].losses += game.losses;
+          totals[game.team_id].ties += game.ties;
+        }
+      }
+    }
+
+    console.log('totals', totals);
+
+    // Prepend All Teams list to poolBracketList
+    this.poolBracketList.unshift({
+      event_type_name: 'All Teams',
+      list: Object.values(totals)
     });
+
+    // Set All Teams as default for selectedPoolBracket and dataSourceStandings
+    this.selectedPoolBracket = this.poolBracketList[0].event_type_name;
+    this.dataSourceStandings = Object.values(totals);
+    this.dataSourceStandings.sort((a, b) => a.wins - b.wins).reverse();
+
+    console.log('dataSourceStandings', this.dataSourceStandings);
   }
 
   openYoutubeDialog() {
@@ -340,80 +401,34 @@ export class MobileViewComponent implements OnInit {
     }
   }
 
-  getFinalScore(team) {
-    return (
-      Number(team.round_1) +
-      Number(team.round_2) +
-      Number(team.round_3) +
-      Number(team.round_4) +
-      Number(team.round_5) +
-      Number(team.round_6) +
-      Number(team.round_7) +
-      Number(team.round_8)
-    );
-  }
-
   convertToAlpha(num) {
     return String.fromCharCode(num + 65);
   }
+
   onDrawSelected(event: any) {
-    // console.log('the selected draw is:');
-    // console.log(event.value);
-
-    // Set the current selected draw
     this.selectedDraw = event.value;
+    console.log('selectedDraw', this.selectedDraw);
 
-    // console.log('BEFORE');
-    // console.log(this.currentGames);
-    // console.log(this.selectedDraw.id);
-
-    // Load games by draw ID
-    this.currentGames = this.allGames.filter(
-      (e) => e.draw_id === this.selectedDraw.id
-    );
-
-    this.currentScores = [];
-    this.currentGames.forEach((game) =>
-      this.allScores.forEach((score) => {
-        if (score.game_id === game.game_id) this.currentScores.push(score);
-      })
-    );
-    console.log('[DEBUG] currentScores:');
-    console.log(this.currentScores);
-
-    // console.log('AFTER');
-    // console.log(this.currentGames);
+    this.loadGames();
   }
-}
 
-export interface Game {
-  name: string;
-  home: string;
-  round_1: string;
-  round_2: string;
-  round_3: string;
-  round_4: string;
-  round_5: string;
-  round_6: string;
-  round_7: string;
-  round_8: string;
-  final_score: string;
-}
+  onTeamSelected(event: any) {
+    console.log('the selected team is:');
+    console.log(event.value);
 
-export interface Draw {
-  name: string;
-  date: Date;
-  game_1: Game[];
-  game_2: Game[];
-  game_3: Game[];
-  youtube_link: string;
-}
-export interface Standing {
-  name: string;
-  wins: string;
-  losses: string;
-}
+    this.dataSourceStandings = this.poolBracketList.find((e) => e.event_type_name === event.value).list;
+    this.dataSourceStandings.sort((a, b) => a.wins - b.wins).reverse();
+  }
 
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  openDialog(teamId): void {
+    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
+      width: 'auto',
+      data: teamId,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // console.log('The dialog was closed');
+    });
+  }
+
 }
