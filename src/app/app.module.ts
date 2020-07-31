@@ -32,6 +32,7 @@ import {
 import { MatListModule } from '@angular/material/list';
 import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_helpers';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
     MatListModule,
     NgxGraphModule,
     MatTreeModule,
+    ReactiveFormsModule
   ],
   providers: [
     CookieService,

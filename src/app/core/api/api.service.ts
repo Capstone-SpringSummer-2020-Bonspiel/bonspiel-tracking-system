@@ -361,6 +361,10 @@ export class ApiService {
   }
   // CASCADE DELETE will NOT be setup. If any games exist in bracket, then delete will error out.
 
+  public getTournamentBracketData(eventId) {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/events/${eventId}/generate-brackets`);
+  }
+
   /********************************************************************* */
 
   // Pool

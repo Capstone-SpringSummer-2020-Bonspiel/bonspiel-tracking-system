@@ -17,6 +17,21 @@ export class SidebarComponent implements OnInit {
 
   randomElement = this.images[Math.floor(Math.random() * this.images.length)];
 
+  mainRoutes = [
+    {
+      label: 'Dashboard',
+      path: '/admin',
+      icon: 'dashboard',
+      class: 'd-none d-sm-block'
+    },
+    {
+      label: 'Batch Upload',
+      path: '/admin/file-upload',
+      icon: 'cloud_upload',
+      class: 'd-none d-sm-block'
+    },
+  ]
+
   addRoutes = [
     {
       label: 'Add a Organization',

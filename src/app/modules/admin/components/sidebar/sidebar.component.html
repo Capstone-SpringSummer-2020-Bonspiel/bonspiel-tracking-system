@@ -9,11 +9,13 @@
 
   <mat-divider></mat-divider>
 
-  <a mat-list-item
+  <a *ngFor="let route of mainRoutes"
+    mat-list-item
     routerLinkActive="list-item-active"
-    routerLink="/admin">
-    <mat-icon> dashboard </mat-icon>
-    Dashboard
+    routerLink="{{route.path}}"
+    [ngClass]="route.class">
+    <mat-icon> {{route.icon}} </mat-icon>
+    {{route.label}}
   </a>
 
   <mat-divider></mat-divider>

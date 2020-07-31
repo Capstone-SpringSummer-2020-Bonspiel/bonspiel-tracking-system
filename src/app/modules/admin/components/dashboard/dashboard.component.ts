@@ -212,6 +212,8 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = this.columns.map((e) => e.name);
   dataSource = new MatTableDataSource<Event>([]);
 
+  tournamentBracketData = [];
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
@@ -287,8 +289,32 @@ export class DashboardComponent implements OnInit {
     console.log('tab => ', event.tab);
     console.log('sample => ', sample);
 
+    // Bracket tab
+    if (event.index === 1) {
+      console.log('bracket view tab!');
+
+      this.spinnerService.on();
+
+      const eventId = sample.id;
+
+      this.apiService.getTournamentBracketData(eventId).subscribe((data: any) => {
+        // let payload = [data.nodes, data.edges];
+        // console.log('payload', payload);
+
+        data.nodes.forEach(e => delete e.data);
+        data.nodes.forEach(e => delete e.dimension);
+        data.nodes.forEach(e => delete e.meta);
+        data.nodes.forEach(e => delete e.position);
+        data.edges.forEach(e => e.label = '');
+
+        this.tournamentBracketData = data;
+
+        this.spinnerService.off();
+      });
+    }
+
     // Draws tab
-    if (event.index === 2) {
+    else if (event.index === 2) {
       this.spinnerService.on();
       // Get all draws + games
       this.apiService.getDraws(sample.id).subscribe(rows => {

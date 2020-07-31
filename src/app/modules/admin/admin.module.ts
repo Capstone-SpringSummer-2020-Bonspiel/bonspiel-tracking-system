@@ -83,6 +83,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { TournamentBracketComponent } from './components/tournament-bracket/tournament-bracket.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { PasswordComponent } from './components/password/password.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { PasswordComponent } from './components/password/password.component';
     EditEventDialog,
     TournamentBracketComponent,
     PasswordComponent,
+    FileUploadComponent,
   ],
   imports: [
     CommonModule,

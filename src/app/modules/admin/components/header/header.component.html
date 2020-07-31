@@ -7,8 +7,6 @@
       <mat-icon *ngIf="!isSidebarOpen"> arrow_forward_ios </mat-icon>
     </button>
 
-    <!-- <span> APP LOGO </span> -->
-
     <div fxFlex
       fxLayout="row"
       fxLayoutAlign="end center">
@@ -43,34 +41,28 @@
         </li> -->
 
         <!-- HELP BUTTON -->
-
-        <!-- <li>
+        <li>
           <button mat-button
             [matMenuTriggerFor]="helpMenu">
             <mat-icon>help_outline</mat-icon>
           </button>
           <mat-menu #helpMenu="matMenu">
             <button mat-menu-item>
-              <mat-icon>contact_support</mat-icon>
-              Contact Support
+              <mat-icon>live_help</mat-icon>
+              Instructionals
             </button>
             <button mat-menu-item>
-              <mat-icon>help</mat-icon>
-              Help
+              <mat-icon>question_answer</mat-icon>
+              FAQs
             </button>
             <button mat-menu-item>
-              <mat-icon>help_center</mat-icon>
-              Help Center
-            </button>
-            <button mat-menu-item>
-              <mat-icon>help_outline</mat-icon>
-              Help Outline
+              <mat-icon>email</mat-icon>
+              E-mail Feedback
             </button>
           </mat-menu>
-        </li> -->
+        </li>
 
         <!-- MANAGE USERS BUTTON -->
-
         <li>
           <button mat-button
             [matMenuTriggerFor]="loginMenu">

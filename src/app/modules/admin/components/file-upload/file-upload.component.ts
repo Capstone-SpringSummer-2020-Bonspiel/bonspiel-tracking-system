@@ -1,0 +1,62 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { FileUploadService } from '@app/core/services/file-upload.service';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { NotificationService } from '@app/shared/services/notification.service';
+
+@Component({
+  selector: 'app-file-upload',
+  templateUrl: './file-upload.component.html',
+  styleUrls: ['./file-upload.component.scss']
+})
+export class FileUploadComponent implements OnInit {
+  form: FormGroup;
+  progress: number = 0;
+
+  constructor(
+    public fb: FormBuilder,
+    public fileUploadService: FileUploadService,
+    public notificationService: NotificationService
+  ) {
+    this.form = this.fb.group({
+      fileData: [null]
+    })
+  }
+
+  ngOnInit() { }
+
+  uploadFile(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({
+      fileData: file
+    });
+    this.form.get('fileData').updateValueAndValidity()
+  }
+
+  submitUpload() {
+    this.fileUploadService.uploadFile(this.form.value.fileData).subscribe(
+      (event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            console.log('Request has been made!');
+            this.notificationService.showInfo('Request has been made!', '');
+            break;
+          case HttpEventType.ResponseHeader:
+            console.log('Response header has been received!');
+            // this.notificationService.showInfo('Response header has been received!', '');
+            break;
+          case HttpEventType.UploadProgress:
+            this.progress = Math.round(event.loaded / event.total * 100);
+            console.log(`Uploaded! ${this.progress}%`);
+            // this.notificationService.showInfo(`${this.progress}%`, 'Progress');
+            break;
+          case HttpEventType.Response:
+            console.log('User successfully created!', event.body);
+            this.notificationService.showSuccess('File successfully uploaded!', '');
+            setTimeout(() => {
+              this.progress = 0;
+            }, 1500);
+        }
+      })
+  }
+}

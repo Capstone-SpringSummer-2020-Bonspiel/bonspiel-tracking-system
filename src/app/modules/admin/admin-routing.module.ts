@@ -35,6 +35,7 @@ import { RemoveTeamFromEventComponent } from './components/remove-team-from-even
 
 import { AuthGuard } from '@core/_helpers';
 import { PasswordComponent } from './components/password/password.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 const UsersModule = () => import('./components/users/users.module').then(x => x.UsersModule);
 
@@ -43,6 +44,7 @@ const routes: Routes = [
     path: '', component: AdminComponent,
     children: [
       { path: '', component: DashboardComponent },
+      { path: 'file-upload', component: FileUploadComponent },
       { path: 'create-bracket', component: CreateBracketComponent },
       { path: 'create-curler', component: CreateCurlerComponent },
       { path: 'create-draw', component: CreateDrawComponent },
