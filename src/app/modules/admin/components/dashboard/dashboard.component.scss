@@ -472,10 +472,11 @@ hr {
   justify-content: space-around;
   flex-wrap: wrap;
 }
-.cell-container{
+.cell-container {
   margin: 10px;
 }
-.game-box{
+
+.game-box {
   margin: 0;
   padding: 0;
 //   display: flex;
@@ -487,4 +488,9 @@ hr {
 //   border-radius: 8px;
 //   height: auto;
 //   width: auto;
+}
+
+.tournament-bracket {
+  min-width: 1000px;
+  min-height: 1100px;
 }

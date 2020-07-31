@@ -57,8 +57,8 @@ export class DesktopViewComponent implements OnInit {
       }
 
       this.currentEvent = currentEvent;
-      console.log(1);
-      console.log('currentEvent', this.currentEvent);
+      // console.log(1);
+      // console.log('currentEvent', this.currentEvent);
     });
 
     // Get current event ID
@@ -68,8 +68,8 @@ export class DesktopViewComponent implements OnInit {
       }
 
       this.currentEventId = eventId;
-      console.log(2);
-      console.log('currentEventId', this.currentEventId);
+      // console.log(2);
+      // console.log('currentEventId', this.currentEventId);
 
       // Get draws, games and scores
       forkJoin(
@@ -77,7 +77,7 @@ export class DesktopViewComponent implements OnInit {
         this.apiService.getGames(this.currentEventId),
         this.apiService.getScoresByEvent(this.currentEventId)
       ).subscribe((vals: any) => {
-        console.log('all values', vals);
+        // console.log('all values', vals);
 
         this.allDraws = vals[0];
         this.allGames = vals[1];
@@ -97,16 +97,16 @@ export class DesktopViewComponent implements OnInit {
 
   loadGames() {
     return new Promise((resolve, reject) => {
-      console.log('---------------------------------------------------------------');
+      // console.log('---------------------------------------------------------------');
       this.currentGames = this.allGames.filter((x) => x.draw_id === this.selectedDraw.id);
-      console.log('currentGames', this.currentGames);
+      // console.log('currentGames', this.currentGames);
 
       for (let game of this.currentGames) {
         const filteredScores = this.allScores.filter((e) => e.game_id === game.game_id);
         const sortedScores = filteredScores.sort((a, b) => a.end_number - b.end_number);
 
-        console.log('filteredScores', filteredScores);
-        console.log('sortedScores', sortedScores);
+        // console.log('filteredScores', filteredScores);
+        // console.log('sortedScores', sortedScores);
 
         // Create n columns; 8 or more endscores
         let len = Math.max(sortedScores.length, 8);
@@ -148,7 +148,7 @@ export class DesktopViewComponent implements OnInit {
         sortedScores
           .map((e) => e.end_number)
           .forEach((end_number, i) => {
-            console.log('end_number', end_number);
+            // console.log('end_number', end_number);
             if (end_number === null) {
               return;
             } else if (sortedScores[i].curlingteam1_scored === true) {
@@ -166,14 +166,14 @@ export class DesktopViewComponent implements OnInit {
         game.data[1]['Total'] = team2Total;
       }
 
-      console.log('this.currentGames', this.currentGames);
+      // console.log('this.currentGames', this.currentGames);
 
       resolve();
     });
   }
 
   async loadTeamStandings() {
-    console.log('---------------------------------------------------------------');
+    // console.log('---------------------------------------------------------------');
 
     // Lookup tables
     let pools = {};
@@ -209,8 +209,8 @@ export class DesktopViewComponent implements OnInit {
         }
       });
 
-    console.log('pools', pools);
-    console.log('brackets', brackets);
+    // console.log('pools', pools);
+    // console.log('brackets', brackets);
 
     /*************************************************************************/
 
@@ -230,19 +230,19 @@ export class DesktopViewComponent implements OnInit {
       } else {
 
         game.label_name = 'Other';
-        console.log('==========>', game);
+        // console.log('==========>', game);
 
       }
     });
 
-    console.log('allGames', this.allGames);
+    // console.log('allGames', this.allGames);
 
     /*************************************************************************/
 
     // Get unique names of pools & brackets which is used for dropdown list
     let unique_event_type_names = ['All Teams', ...new Set(this.allGames.map((game) => game.label_name))];
 
-    console.log('unique_event_type_names', unique_event_type_names);
+    // console.log('unique_event_type_names', unique_event_type_names);
 
     /*************************************************************************/
 
@@ -257,7 +257,7 @@ export class DesktopViewComponent implements OnInit {
       }
     }
 
-    console.log('team_mapping', team_mapping);
+    // console.log('team_mapping', team_mapping);
 
     /*************************************************************************/
 
@@ -267,7 +267,7 @@ export class DesktopViewComponent implements OnInit {
     // Populate poolBracketList (loop through each pool/bracket)
     for (let event_type_name of unique_event_type_names) {
 
-      console.log('---------------------------------------   ', event_type_name);
+      // console.log('---------------------------------------   ', event_type_name);
 
       // Get all games in a single pool or bracket
       let games = this.allGames.filter((e) => e.label_name === event_type_name);
@@ -275,8 +275,8 @@ export class DesktopViewComponent implements OnInit {
       // Get all unique teams in a single pool or bracket
       let teams = [...new Set(games.map((e) => e.curlingteam1_id).concat(games.map((e) => e.curlingteam2_id)))];
 
-      console.log('teams ====>', teams);
-      console.log('games ====>', games);
+      // console.log('teams ====>', teams);
+      // console.log('games ====>', games);
 
       // If no teams exist, skip
       if (teams.length === 0) {
@@ -305,7 +305,7 @@ export class DesktopViewComponent implements OnInit {
 
         // Skip if game is not finished...
         if (game.finished !== true) {
-          console.log('not finished');
+          // console.log('not finished');
           continue;
         }
 
@@ -313,7 +313,7 @@ export class DesktopViewComponent implements OnInit {
         if (game.winner === null) {
           to_add.list.find((e) => e.team_id === game.curlingteam1_id).ties++;
           to_add.list.find((e) => e.team_id === game.curlingteam2_id).ties++;
-          console.log('tie', game.team_name1, game.team_name2);
+          // console.log('tie', game.team_name1, game.team_name2);
           continue;
         }
 
@@ -321,8 +321,8 @@ export class DesktopViewComponent implements OnInit {
         if (game.winner === game.curlingteam1_id) {
           to_add.list.find((e) => e.team_id === game.curlingteam1_id).wins++;
           to_add.list.find((e) => e.team_id === game.curlingteam2_id).losses++;
-          console.log('winner', game.team_name1);
-          console.log('loser', game.team_name2);
+          // console.log('winner', game.team_name1);
+          // console.log('loser', game.team_name2);
           continue;
         }
 
@@ -330,8 +330,8 @@ export class DesktopViewComponent implements OnInit {
         if (game.winner === game.curlingteam2_id) {
           to_add.list.find((e) => e.team_id === game.curlingteam2_id).wins++;
           to_add.list.find((e) => e.team_id === game.curlingteam1_id).losses++;
-          console.log('winner', game.team_name2);
-          console.log('loser', game.team_name1);
+          // console.log('winner', game.team_name2);
+          // console.log('loser', game.team_name1);
           continue;
         }
 
@@ -340,7 +340,7 @@ export class DesktopViewComponent implements OnInit {
       this.poolBracketList.push(to_add);
     }
 
-    console.log('poolBracketList', this.poolBracketList);
+    // console.log('poolBracketList', this.poolBracketList);
 
     // Combine all lists for All Teams list
     let totals = {};
@@ -356,7 +356,7 @@ export class DesktopViewComponent implements OnInit {
       }
     }
 
-    console.log('totals', totals);
+    // console.log('totals', totals);
 
     // Prepend All Teams list to poolBracketList
     this.poolBracketList.unshift({
@@ -369,7 +369,7 @@ export class DesktopViewComponent implements OnInit {
     this.dataSourceStandings = Object.values(totals);
     this.dataSourceStandings.sort((a, b) => a.wins - b.wins).reverse();
 
-    console.log('dataSourceStandings', this.dataSourceStandings);
+    // console.log('dataSourceStandings', this.dataSourceStandings);
   }
 
   openYoutubeDialog() {

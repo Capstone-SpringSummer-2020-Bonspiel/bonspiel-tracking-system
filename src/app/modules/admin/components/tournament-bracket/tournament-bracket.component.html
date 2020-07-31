@@ -1,12 +1,16 @@
-<ngx-graph class="chart-container"
+<ngx-graph *ngIf="nodes && edges"
+  class="chart-container"
   [view]="[1000, 1100]"
   [links]="edges"
   [nodes]="nodes"
   layout="dagreCluster"
   [curve]="curve"
   [enableZoom]="true"
+  [zoomSpeed]="0.02"
   autoZoom="true"
   autoCenter="true">
+
+  <!-- ARROWS -->
   <!-- <ng-template #defsTemplate>
     <svg:marker id="arrow"
       viewBox="0 -5 10 10"
@@ -21,7 +25,7 @@
   </ng-template> -->
 
   <!-- CLUSTER -->
-  <ng-template #clusterTemplate
+  <!-- <ng-template #clusterTemplate
     let-cluster>
     <svg:g class="node cluster"
       ngx-tooltip
@@ -34,7 +38,7 @@
         [attr.height]="cluster.dimension.height"
         [attr.fill]="cluster.data.color" />
     </svg:g>
-  </ng-template>
+  </ng-template> -->
 
   <!-- NODE -->
   <ng-template #nodeTemplate
@@ -44,8 +48,8 @@
       [tooltipPlacement]="'top'"
       [tooltipType]="'tooltip'"
       [tooltipTitle]="node.label">
-      <svg:rect [attr.width]="node.dimension.width"
-        [attr.height]="node.dimension.height"
+      <svg:rect [attr.width]="100"
+        [attr.height]="70"
         [attr.fill]="node.data.color" />
       <svg:text alignment-baseline="central"
         [attr.x]="10"
@@ -73,4 +77,5 @@
       </svg:text>
     </svg:g>
   </ng-template>
+
 </ngx-graph>
