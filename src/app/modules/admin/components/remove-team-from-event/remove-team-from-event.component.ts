@@ -18,8 +18,10 @@ export class RemoveTeamFromEventComponent implements OnInit {
   selectedEvent = '';
   selectedTeam = '';
 
-  constructor(private fb: FormBuilder,
-    private apiService: ApiService,) { }
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiService
+  ) { }
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
@@ -33,7 +35,6 @@ export class RemoveTeamFromEventComponent implements OnInit {
   }
 
   getEvents() {
-    // Get list of existing events
     this.apiService.getEvents().subscribe((res) => {
       this.events = res;
       console.log('events:');
@@ -41,29 +42,27 @@ export class RemoveTeamFromEventComponent implements OnInit {
     });
   }
 
-  getTeamsByEventId() {
-    // Get teams
-    this.apiService.getTeamsByEventId(this.firstFormGroup.get('eventCtrl').value).subscribe((res) => {
+  getTeamsByEventId(stepper: MatStepper) {
+    const eventId = this.firstFormGroup.get('eventCtrl').value;
+
+    this.apiService.getTeamsByEventId(eventId).subscribe((res) => {
       this.teams = res;
       this.teams.sort((a, b) => (a.team_name > b.team_name) ? 1 : -1);
       console.log('teams:');
       console.log(this.teams);
+
+      stepper.next();
     });
   }
 
-  setSelections() {
+  setSelections(stepper: MatStepper) {
     this.selectedEvent = this.events.find(e => e.id === this.firstFormGroup.get('eventCtrl').value).name;
     this.selectedTeam = this.teams.find(e => e.id === this.secondFormGroup.get('teamCtrl').value).team_name;
+
+    stepper.next();
   };
 
-  onClickSubmit() {
+  onClickRemove(stepper: MatStepper) {
 
-  }
-
-  resetStepper(stepper: MatStepper) {
-    stepper.reset();
-
-    this.firstFormGroup.reset();
-    this.secondFormGroup.reset();
   }
 }
