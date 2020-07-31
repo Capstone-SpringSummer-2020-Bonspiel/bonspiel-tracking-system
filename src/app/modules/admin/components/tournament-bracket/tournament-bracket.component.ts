@@ -10,9 +10,9 @@ export class TournamentBracketComponent implements OnInit {
 
   curve = shape.curveLinear;
 
-  private nodes = [];
-  private edges = [];
-  private data = null;
+  public nodes = [];
+  public edges = [];
+  public data = null;
 
   @Input() set message(data: any) {
     console.log('===========>', data);

@@ -36,6 +36,8 @@ import { RemoveTeamFromEventComponent } from './components/remove-team-from-even
 import { AuthGuard } from '@core/_helpers';
 import { PasswordComponent } from './components/password/password.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { InstructionalsComponent } from './components/instructionals/instructionals.component';
+import { FaqsComponent } from './components/faqs/faqs.component';
 
 const UsersModule = () => import('./components/users/users.module').then(x => x.UsersModule);
 
@@ -76,6 +78,8 @@ const routes: Routes = [
       { path: 'remove-team-from-event', component: RemoveTeamFromEventComponent },
       { path: 'users', loadChildren: UsersModule, canActivate: [AuthGuard] },
       { path: 'password', component: PasswordComponent },
+      { path: 'instructionals', component: InstructionalsComponent },
+      { path: 'faqs', component: FaqsComponent },
     ]
   },
 ];

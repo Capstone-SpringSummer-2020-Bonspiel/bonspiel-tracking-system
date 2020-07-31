@@ -31,6 +31,14 @@ export class HeaderComponent implements OnInit {
     }, 300);
   }
 
+  instructionals() {
+    this.router.navigate(['/admin/instructionals']);
+  }
+
+  faqs() {
+    this.router.navigate(['/admin/faqs']);
+  }
+
   changePassword() {
     this.router.navigate(['/admin/password']);
   }

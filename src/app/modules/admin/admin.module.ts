@@ -84,6 +84,8 @@ import { TournamentBracketComponent } from './components/tournament-bracket/tour
 import { MatExpansionModule } from '@angular/material/expansion';
 import { PasswordComponent } from './components/password/password.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { InstructionalsComponent } from './components/instructionals/instructionals.component';
+import { FaqsComponent } from './components/faqs/faqs.component';
 
 @NgModule({
   declarations: [
@@ -128,6 +130,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     TournamentBracketComponent,
     PasswordComponent,
     FileUploadComponent,
+    InstructionalsComponent,
+    FaqsComponent,
   ],
   imports: [
     CommonModule,

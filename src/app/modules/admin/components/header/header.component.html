@@ -47,11 +47,13 @@
             <mat-icon>help_outline</mat-icon>
           </button>
           <mat-menu #helpMenu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item
+              (click)="instructionals()">
               <mat-icon>live_help</mat-icon>
               Instructionals
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item
+              (click)="faqs()">
               <mat-icon>question_answer</mat-icon>
               FAQs
             </button>
