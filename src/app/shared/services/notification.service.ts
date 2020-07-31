@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class NotificationService {
   defaultPositionClass = {
-    timeOut: 4000,
+    timeOut: 30000,
     extendedTimeOut: 100,
     tapToDismiss: true,
     debug: false,
