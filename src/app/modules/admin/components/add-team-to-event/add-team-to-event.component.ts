@@ -31,7 +31,7 @@ export class AddTeamToEventComponent implements OnInit {
       teamCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      eventCtrl: ['', Validators.required],
+      eventIdCtrl: ['', Validators.required],
     });
 
     // Get Events and Teams
@@ -55,8 +55,11 @@ export class AddTeamToEventComponent implements OnInit {
   }
 
   onClickSubmit(stepper: MatStepper) {
-    const eventId = this.firstFormGroup.value.eventCtrl;
     const teamId = this.firstFormGroup.value.teamCtrl;
+    const eventId = this.secondFormGroup.value.eventIdCtrl;
+
+    console.log('eventId', eventId);
+    console.log('teamId', teamId);
 
     this.spinnerService.on();
     this.apiService
@@ -90,12 +93,5 @@ export class AddTeamToEventComponent implements OnInit {
 
           this.spinnerService.off()
         });
-  }
-
-  resetStepper(stepper: MatStepper) {
-    stepper.reset();
-
-    this.firstFormGroup.reset();
-    this.secondFormGroup.reset();
   }
 }

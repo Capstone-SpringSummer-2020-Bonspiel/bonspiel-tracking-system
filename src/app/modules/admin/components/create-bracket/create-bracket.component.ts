@@ -12,12 +12,10 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrls: ['./create-bracket.component.scss']
 })
 export class CreateBracketComponent implements OnInit {
-  zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
-  allEventData: null;
-  selectedEventId: Number = undefined;
-  selectedEvent: any = undefined;
+  events: null;
 
   constructor(
     private fb: FormBuilder,
@@ -34,55 +32,60 @@ export class CreateBracketComponent implements OnInit {
       .subscribe((res: any) => {
         console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
-        this.allEventData = res;
+        this.events = res;
         this.spinnerService.off();
       })
 
     this.firstFormGroup = this.fb.group({
-      eventNameCtrl: ['', Validators.required],
+      eventCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.fb.group({
+      bracketNameCtrl: ['', Validators.required],
     });
   }
 
   onEventSelected(event: any, stepper: MatStepper) {
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    if (this.selectedEvent === undefined) {
-      this.selectedEvent = undefined;
-      this.selectedEventId = undefined;
-    } else {
-      this.selectedEvent = event.value;
-      this.selectedEventId = event.value.id;
-      stepper.next()
+    if (event === undefined) {
+      return;
     }
+    stepper.next()
   }
 
   onClickSubmit(stepper) {
-    //Create Bracket
-    const bracketName = this.firstFormGroup.value.eventNameCtrl;
-    console.log('SELECTED EVENT ID');
-    console.log(this.selectedEventId)
-    console.log('NEW BRACKET NAME:');
-    console.log(bracketName);
+    const eventId = String(this.firstFormGroup.value.eventCtrl.id);
+    const bracketName = this.secondFormGroup.value.bracketNameCtrl;
+    console.log('eventId', eventId);
+    console.log('bracketName', bracketName);
 
     this.spinnerService.on();
     this.apiService
-      .createBracket(bracketName, String(this.selectedEvent.id))
-      .subscribe((res: any) => {
-        // this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-        //   console.log("display bracket for event:")
-        //   console.log(res)
-        // })
-        console.log(res)
-        this.notificationService.showSuccess('Bracket has been created!', '')
-      },
+      .createBracket(bracketName, eventId)
+      .subscribe(
+        (res: any) => {
+          console.log(res)
+          this.notificationService.showSuccess('Bracket has been created!', '')
+
+          // Reset the stepper, forms and validation
+          stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
+        },
         (err) => {
           console.log(err);
           this.notificationService.showError(err, 'Bracket create failed!');
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
   }

@@ -5,35 +5,39 @@
 <mat-vertical-stepper linear
   #stepper>
   <!-- SELECT EVENT -->
-  <mat-step [stepControl]="zeroFormGroup">
-    <ng-template matStepLabel> Select Event </ng-template>
-    <mat-form-field>
-      <mat-label>Select an Event</mat-label>
-      <mat-select [(value)]="selectedEvent"
-        (selectionChange)="onEventSelected($event); stepper.next()"
-        required>
-        <mat-option *ngFor="let event of this.allEventData"
-          [value]="event">
-          {{event.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <button mat-button
-        matStepperNext>Next</button>
-    </div>
-  </mat-step>
-
-  <!-- INPUT NEW INFO -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select Event </ng-template>
+      <mat-form-field>
+        <mat-label>Select an Event</mat-label>
+        <mat-select formControlName="eventCtrl"
+          (selectionChange)="onEventSelected($event, stepper)"
+          required>
+          <mat-option> -- </mat-option>
+          <mat-option *ngFor="let event of this.events"
+            [value]="event">
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+
+  <!-- NEW POOL NAME -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> New Pool Name </ng-template>
       <mat-form-field>
         <mat-label> New Pool Name </mat-label>
         <input matInput
           type='text'
-          placeholder="New Bracket Name"
-          formControlName="eventNameCtrl">
+          placeholder="New Pool Name"
+          formControlName="poolNameCtrl">
       </mat-form-field>
       <div>
         <button mat-button
@@ -44,9 +48,10 @@
     </form>
   </mat-step>
 
+  <!-- SUBMIT -->
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
     <div>
       <button mat-button
         matStepperPrevious>Back</button>

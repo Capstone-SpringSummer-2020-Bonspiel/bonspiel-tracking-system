@@ -4,6 +4,7 @@ import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-create-pool',
@@ -11,10 +12,10 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./create-pool.component.scss']
 })
 export class CreatePoolComponent implements OnInit {
-  zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
-  allEventData: null;
+  events: null;
   selectedEventId: Number;
   selectedEvent: any = {
     shortName: 'shortname',
@@ -36,7 +37,7 @@ export class CreatePoolComponent implements OnInit {
       .subscribe((res: any) => {
         console.log('[DEBUG] getEvent() obtain data:');
         console.log(res);
-        this.allEventData = res;
+        this.events = res;
         this.selectedEvent = res[0];
         this.selectedEventId = res[0].id;
 
@@ -44,40 +45,47 @@ export class CreatePoolComponent implements OnInit {
       })
 
     this.firstFormGroup = this.fb.group({
-      eventNameCtrl: ['', Validators.required],
+      eventCtrl: ['', Validators.required],
     });
-
+    this.secondFormGroup = this.fb.group({
+      poolNameCtrl: ['', Validators.required],
+    });
   }
-  onEventSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
+  onEventSelected(event: any, stepper: MatStepper) {
+    if (event === undefined) {
+      return;
+    }
+    stepper.next()
   }
 
   onClickSubmit(stepper) {
-    //Create Pool
-    const poolName = this.firstFormGroup.value.eventNameCtrl;
-    console.log('SELECTED EVENT ID');
-    console.log(this.selectedEventId)
-    console.log('NEW BRACKET NAME:');
-    console.log(poolName);
+    const eventId = String(this.firstFormGroup.value.eventCtrl.id);
+    const poolName = this.secondFormGroup.value.poolNameCtrl;
+    console.log('eventId', eventId);
+    console.log('poolName', poolName);
 
     this.spinnerService.on();
     this.apiService
-      .createPool(poolName, String(this.selectedEventId))
+      .createPool(poolName, eventId)
       .subscribe(
         (res: any) => {
-          // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-          //   console.log("display pool for event:")
-          //   console.log(res)
-          // })
           console.log(res)
-          this.notificationService.showSuccess('Pool has been created', '')
+          this.notificationService.showSuccess('Pool has been created!', '')
+
+          // Reset the stepper, forms and validation
+          stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
@@ -85,7 +93,6 @@ export class CreatePoolComponent implements OnInit {
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
   }

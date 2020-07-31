@@ -44,15 +44,15 @@ export class CreateCurlerComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required],
+      orgIdCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
+      teamIdCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
-      thirdCtrlName: ['', Validators.required],
-      thirdCtrlThrowing: [''],
-      thirdCtrlPosition: [''],
+      curlerNameCtrl: ['', Validators.required],
+      curlerThrowingOrderCtrl: [''],
+      curlerPositionCtrl: [''],
     });
 
     this.spinnerService.on();
@@ -64,7 +64,7 @@ export class CreateCurlerComponent implements OnInit {
   }
 
   getAllTeams() {
-    this.selectedOrganizationID = this.firstFormGroup.value.firstCtrl;
+    this.selectedOrganizationID = this.firstFormGroup.value.orgIdCtrl;
     this.spinnerService.on();
     this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
@@ -74,31 +74,37 @@ export class CreateCurlerComponent implements OnInit {
   }
 
   getTeamId() {
-    this.selectedTeamID = this.secondFormGroup.value.secondCtrl;
+    this.selectedTeamID = this.secondFormGroup.value.teamIdCtrl;
   }
 
   onClickSubmit(stepper: MatStepper) {
-    const name = this.thirdFormGroup.value.thirdCtrlName;
-    const throwingOrder = this.thirdFormGroup.value.thirdCtrlThrowing || null;
-    const position = this.thirdFormGroup.value.thirdCtrlPosition || null;
+    const name = this.thirdFormGroup.value.curlerNameCtrl;
+    const throwingOrder = this.thirdFormGroup.value.curlerThrowingOrderCtrl || null;
+    const position = this.thirdFormGroup.value.curlerPositionCtrl || null;
     const photoObj = null;
 
     this.spinnerService.on();
-
     this.apiService
-      .createCurler(
-        name,
-        position,
-        this.selectedOrganizationID.toString(),
-        this.selectedTeamID.toString(),
-        photoObj,
-        throwingOrder
-      )
+      .createCurler(name, position, this.selectedOrganizationID.toString(), this.selectedTeamID.toString(), photoObj, throwingOrder)
       .subscribe(
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Curler has been created', '');
+
+          // Reset the stepper, forms and validation
           stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (error) => {
           console.log(error);

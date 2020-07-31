@@ -8,7 +8,6 @@ import {
 import { ApiService } from '@app/core/api/api.service';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 
 @Component({
@@ -17,7 +16,9 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrls: ['./create-event.component.scss'],
 })
 export class CreateEventComponent implements OnInit {
-  formGroup: FormGroup;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
 
   eventDetails = [
     { value: 'Bonspiel', label: 'Bonspiel' },
@@ -29,6 +30,7 @@ export class CreateEventComponent implements OnInit {
     { value: 'pools', label: 'Pool' },
     { value: 'brackets', label: 'Bracket' },
     { value: 'championship', label: 'Championship' },
+    { value: 'friendly', label: 'Friendly' },
   ];
 
   statusTypes: any[] = [
@@ -42,44 +44,34 @@ export class CreateEventComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
-    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
     // Initialize form group
-    this.formGroup = this.fb.group({
-      formArray: this.fb.array([
-        this.fb.group({
-          eventNameCtrl: ['', Validators.required],
-          eventInfoCtrl: ['', Validators.required],
-        }),
-        this.fb.group({
-          eventTypeCtrl: ['', Validators.required],
-          eventFinishedCtrl: ['', Validators.required],
-        }),
-        this.fb.group({
-          eventStartCtrl: ['', Validators.required],
-          eventEndCtrl: ['', Validators.required],
-        }),
-      ]),
+    this.firstFormGroup = this.fb.group({
+      eventNameCtrl: ['', Validators.required],
+      eventInfoCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.fb.group({
+      eventTypeCtrl: ['', Validators.required],
+      eventFinishedCtrl: ['', Validators.required],
+    });
+    this.thirdFormGroup = this.fb.group({
+      eventStartCtrl: ['', Validators.required],
+      eventEndCtrl: ['', Validators.required],
     });
   }
 
-  // Returns a FormArray with the name 'formArray'
-  get formArray(): AbstractControl | null {
-    return this.formGroup.get('formArray');
-  }
-
   onClickSubmit(stepper: MatStepper) {
-    const name = this.formGroup.value.formArray[0].eventNameCtrl;
-    const info = this.formGroup.value.formArray[0].eventInfoCtrl;
-    const event_type = this.formGroup.value.formArray[1].eventTypeCtrl;
-    const completed = String(this.formGroup.value.formArray[1].eventFinishedCtrl);
-    const begin_date = String(this.formGroup.value.formArray[2].eventStartCtrl.toLocaleString());
-    const end_date = String(this.formGroup.value.formArray[2].eventEndCtrl.toLocaleString());
+    const name = this.firstFormGroup.controls.eventNameCtrl.value;
+    const begin_date = String(this.thirdFormGroup.controls.eventStartCtrl.value.toLocaleString());
+    const end_date = String(this.thirdFormGroup.controls.eventEndCtrl.value.toLocaleString());
+    const completed = String(this.secondFormGroup.controls.eventFinishedCtrl.value);
+    const info = this.firstFormGroup.controls.eventInfoCtrl.value;
+    const event_type = this.secondFormGroup.controls.eventTypeCtrl.value;
 
     this.spinnerService.on();
-    this.apiService.createEvent(name, info, event_type, completed, begin_date, end_date)
+    this.apiService.createEvent(name, begin_date, end_date, completed, info, event_type)
       .subscribe(
         (res) => {
           console.log(res);
@@ -88,7 +80,13 @@ export class CreateEventComponent implements OnInit {
           // Reset the stepper, forms and validation
           stepper.reset();
 
-          for (let formGroup of this.formGroup.value.formArray) {
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
             formGroup.reset();
             Object.keys(formGroup.controls).forEach((key) => {
               formGroup.controls[key].setErrors(null);
@@ -104,22 +102,4 @@ export class CreateEventComponent implements OnInit {
           this.spinnerService.off()
         });
   }
-}
-
-export interface DialogData {
-  signal: String;
-  name: String;
-  info: String;
-  begin_date: String;
-  end_date: String;
-  event_type: String;
-  completed: String;
-}
-
-@Component({
-  selector: 'create-event-dialog',
-  templateUrl: 'create-event-dialog.html',
-})
-export class CreateEventDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 }

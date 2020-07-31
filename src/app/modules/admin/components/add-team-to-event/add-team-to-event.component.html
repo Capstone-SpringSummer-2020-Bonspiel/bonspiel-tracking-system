@@ -19,6 +19,11 @@
             [value]="team.id"> {{team.team_name}} </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
@@ -28,7 +33,7 @@
       <ng-template matStepLabel> Select an Event </ng-template>
       <mat-form-field>
         <mat-label> Choose an Event </mat-label>
-        <mat-select formControlName="eventCtrl"
+        <mat-select formControlName="eventIdCtrl"
           (selectionChange)="stepper.next()"
           required>
           <mat-option> -- </mat-option>

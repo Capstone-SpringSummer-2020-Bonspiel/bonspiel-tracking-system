@@ -2,14 +2,12 @@
   <h1> Add Event </h1>
 </div>
 
-<form [formGroup]="formGroup">
-  <mat-vertical-stepper #stepper
-    linear
-    formArrayName="formArray">
+<mat-vertical-stepper linear
+  #stepper>
 
-    <!-- EVENT NAME + EVENT DETAIL -->
-    <mat-step formGroupName="0"
-      [stepControl]="formArray?.get([0])">
+  <!-- EVENT NAME + EVENT DETAIL -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> New Event Name </ng-template>
       <mat-form-field>
         <mat-label> Event Name </mat-label>
@@ -19,8 +17,7 @@
           formControlName="eventNameCtrl"
           required>
       </mat-form-field>
-      <br>
-      <mat-form-field>
+      <mat-form-field class="ml-5">
         <mat-label> Event Detail </mat-label>
         <mat-select formControlName="eventInfoCtrl"
           name="eventDetail"
@@ -29,22 +26,17 @@
             [value]="eventDetail.value"> {{eventDetail.label}} </mat-option>
         </mat-select>
       </mat-form-field>
-      <!-- <mat-form-field>
-        <mat-label> Event Details </mat-label>
-        <input matInput
-          type='text'
-          placeholder="Additional Info"
-          formControlName="eventInfoCtrl">
-      </mat-form-field> -->
+
       <div>
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <!-- EVENT TYPE + EVENT STATUS -->
-    <mat-step formGroupName="1"
-      [stepControl]="formArray?.get([1])">
+  <!-- EVENT TYPE + EVENT STATUS -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> New Event Type </ng-template>
       <mat-form-field>
         <mat-label> Event Type </mat-label>
@@ -65,17 +57,19 @@
             [value]="statusTypes.value"> {{statusTypes.label}} </mat-option>
         </mat-select>
       </mat-form-field>
+
       <div>
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <!-- EVENT START + EVENT END -->
-    <mat-step formGroupName="2"
-      [stepControl]="formArray?.get([2])">
+  <!-- EVENT START + EVENT END -->
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> New Event Begin Date </ng-template>
       <mat-form-field>
         <mat-label>Event Beginning Date</mat-label>
@@ -99,27 +93,28 @@
         <mat-datepicker #picker2
           color="primary"></mat-datepicker>
       </mat-form-field>
+
       <div>
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <!-- SUBMIT -->
-    <mat-step>
-      <ng-template matStepLabel>Submit</ng-template>
-      <p>Click Submit when ready.</p>
-      <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
-      </div>
-    </mat-step>
+  <!-- SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
+  </mat-step>
 
-  </mat-vertical-stepper>
-</form>
+</mat-vertical-stepper>

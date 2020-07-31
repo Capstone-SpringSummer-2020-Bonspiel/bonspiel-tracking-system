@@ -43,10 +43,7 @@ import { PieComponent } from './components/widgets/pie/pie.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  CreateEventComponent,
-  CreateEventDialog,
-} from './components/create-event/create-event.component';
+import { CreateEventComponent } from './components/create-event/create-event.component';
 import { CreateOrganizationComponent } from './components/create-organization/create-organization.component'
 import { CreateDrawComponent } from './components/create-draw/create-draw.component';
 import { CreateGameComponent } from './components/create-game/create-game.component';
@@ -126,7 +123,6 @@ import { PasswordComponent } from './components/password/password.component';
     CreateEventComponent,
     CreateGameComponent,
     CreateTeamComponent,
-    CreateEventDialog,
     EditEventDialog,
     TournamentBracketComponent,
     PasswordComponent,

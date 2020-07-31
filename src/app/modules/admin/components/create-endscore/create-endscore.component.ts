@@ -21,7 +21,7 @@ export class CreateEndscoreComponent implements OnInit {
   thirdFormGroup: FormGroup;
   fourthFormGroup: FormGroup;
 
-  eventNames: any[] = [];
+  events: any[] = [];
   draws: any[] = [];
   games: any[] = [];
   endScores: any[] = [];
@@ -42,18 +42,18 @@ export class CreateEndscoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required],
+      eventCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
+      drawIdCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
-      thirdCtrl: ['', Validators.required],
+      gameIdCtrl: ['', Validators.required],
     });
     this.fourthFormGroup = this.fb.group({
-      fourthCtrlEndNumber: ['', Validators.required],
-      fourthCtrlTeam1Score: ['', Validators.required],
-      fourthCtrlTeam2Score: ['', Validators.required],
+      endNumberCtrl: ['', Validators.required],
+      team1ScoreCtrl: ['', Validators.required],
+      team2ScoreCtrl: ['', Validators.required],
     });
 
     this.spinnerService.on();
@@ -67,68 +67,72 @@ export class CreateEndscoreComponent implements OnInit {
         return;
       }
       this.spinnerService.off();
-      this.eventNames = res;
-      console.log('eventNames:');
-      console.log(this.eventNames);
+      this.events = res;
+      console.log('events:');
+      console.log(this.events);
     });
   }
 
-  getEventDraws() {
-    this.selectedEventId = this.firstFormGroup.value.firstCtrl;
-    console.log(`selectedEventId= ${this.selectedEventId}`);
+  getEventDraws(stepper: MatStepper) {
+    this.selectedEventId = this.firstFormGroup.value.eventCtrl;
+
     this.spinnerService.on();
     this.apiService.getDraws(this.selectedEventId).subscribe((res: any) => {
       this.draws = res;
       this.spinnerService.off();
       console.log('draws');
       console.log(this.draws);
+
+      stepper.next();
     });
   }
 
-  getDrawGames() {
-    this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    console.log(`selectedDrawId= ${this.selectedDrawId}`);
+  getDrawGames(stepper: MatStepper) {
+    this.selectedDrawId = this.secondFormGroup.value.drawIdCtrl;
+
     this.spinnerService.on();
     this.apiService.getGames(this.selectedEventId).subscribe((res: any) => {
       this.games = res.filter((x) => x.draw_id === this.selectedDrawId);
       this.spinnerService.off();
       console.log('games');
       console.log(this.games);
+
+      stepper.next();
     });
   }
 
-  getEndScores() {
-    this.selectedGameId = this.thirdFormGroup.value.thirdCtrl;
-    console.log(`selectedGameId= ${this.selectedGameId}`);
+  getEndScores(stepper: MatStepper) {
+    this.selectedGameId = this.thirdFormGroup.value.gameIdCtrl;
+
     this.spinnerService.on();
-    this.apiService
-      .getScoresByEvent(this.selectedEventId)
-      .subscribe((res: any) => {
-        const eventScores = res;
-        this.endScores = eventScores.filter(
-          (x) => x.game_id === this.selectedGameId && x.endscore_id != null
-        );
-        this.spinnerService.off();
-        this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
-        const selectedGame = this.games.filter(
-          (x) => x.game_id === this.selectedGameId
-        );
-        this.team1 = selectedGame[0].team_name1;
-        this.team2 = selectedGame[0].team_name2;
-        console.log('endScores= ');
-        console.log(this.endScores);
-        this.isGameFinished = selectedGame[0].finished;
-        console.log(`isGameFinished= ${this.isGameFinished}`);
-      });
+    this.apiService.getScoresByEvent(this.selectedEventId).subscribe((res: any) => {
+      const eventScores = res;
+      this.endScores = eventScores.filter(
+        (x) => x.game_id === this.selectedGameId && x.endscore_id != null
+      );
+      this.spinnerService.off();
+      this.endScores.sort((a, b) => (a.end_number > b.end_number ? 1 : -1));
+      const selectedGame = this.games.filter(
+        (x) => x.game_id === this.selectedGameId
+      );
+      this.team1 = selectedGame[0].team_name1;
+      this.team2 = selectedGame[0].team_name2;
+      console.log('endScores= ');
+      console.log(this.endScores);
+      this.isGameFinished = selectedGame[0].finished;
+      console.log(`isGameFinished= ${this.isGameFinished}`);
+
+      stepper.next();
+    });
   }
 
   onClickSubmit(stepper: MatStepper) {
     var blank = 'false';
     var curlingTeam1Scored;
     var score;
-    const endNumber = this.fourthFormGroup.value.fourthCtrlEndNumber;
-    const team1Score = this.fourthFormGroup.value.fourthCtrlTeam1Score;
-    const team2Score = this.fourthFormGroup.value.fourthCtrlTeam2Score;
+    const endNumber = this.fourthFormGroup.value.endNumberCtrl;
+    const team1Score = this.fourthFormGroup.value.team1ScoreCtrl;
+    const team2Score = this.fourthFormGroup.value.team2ScoreCtrl;
     if (team2Score < 0 || team1Score < 0) {
       this.notificationService.showError('Scores must be positive values', '');
       return;
@@ -147,7 +151,6 @@ export class CreateEndscoreComponent implements OnInit {
     }
 
     this.spinnerService.on();
-
     this.apiService.createEndScore(this.selectedGameId, endNumber, blank, curlingTeam1Scored, score)
       .subscribe(
         (res: any) => {

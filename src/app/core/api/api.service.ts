@@ -80,7 +80,7 @@ export class ApiService {
     return this.httpService.get(`${environment.apiUrl}/api/v1/events`);
   }
 
-  public createEvent(name, info, eventType, completed, beginDate, endDate) {
+  public createEvent(name, beginDate, endDate, completed, info, eventType) {
     const body = {
       name,
       beginDate,
@@ -89,7 +89,6 @@ export class ApiService {
       info,
       eventType
     };
-    console.log(body);
     return this.httpService.post(`${environment.apiUrl}/api/v1/admin/event`, body);
   }
 

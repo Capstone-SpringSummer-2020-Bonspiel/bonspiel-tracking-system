@@ -4,13 +4,14 @@
 
 <mat-vertical-stepper linear
   #stepper>
-  <!-- Stepper: Select Affiliation -->
+
+  <!-- SELECT ORGANIZATION -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Affiliation</ng-template>
       <mat-form-field>
         <mat-label> Select Organization... </mat-label>
-        <mat-select formControlName="firstCtrl"
+        <mat-select formControlName="orgIdCtrl"
           name="organizations"
           (selectionChange)="getAllTeams(); stepper.next()"
           required>
@@ -20,16 +21,20 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
-  <!-- Stepper: Select Team -->
+  <!-- SELECT TEAM -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> Select a Team</ng-template>
       <mat-form-field>
         <mat-label> Select Team... </mat-label>
-        <mat-select formControlName="secondCtrl"
+        <mat-select formControlName="teamIdCtrl"
           name="teams"
           (selectionChange)="getTeamId(); stepper.next()"
           required>
@@ -39,23 +44,29 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
-  <!-- Stepper: Curler Information-->
+  <!-- CURLER INFO -->
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> Add Curler Information </ng-template>
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput
-          formControlName="thirdCtrlName"
+          formControlName="curlerNameCtrl"
           required>
       </mat-form-field>
       <br>
       <mat-form-field>
         <mat-label>Throwing Order</mat-label>
-        <mat-select formControlName="thirdCtrlThrowing"
+        <mat-select formControlName="curlerThrowingOrderCtrl"
           name="throwingOrders">
           <mat-option *ngFor="let order of throwingOrders"
             [value]="order.value">
@@ -66,7 +77,7 @@
       <br>
       <mat-form-field>
         <mat-label>Position</mat-label>
-        <mat-select formControlName="thirdCtrlPosition"
+        <mat-select formControlName="curlerPositionCtrl"
           name="positions">
           <mat-option *ngFor="let position of positions"
             [value]="position.value">
@@ -75,14 +86,26 @@
         </mat-select>
       </mat-form-field>
 
-
       <div>
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
+          matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
+
+  <!-- SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

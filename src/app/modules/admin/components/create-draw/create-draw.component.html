@@ -3,7 +3,8 @@
 </div>
 <mat-vertical-stepper linear
   #stepper>
-  <!-- Stepper: Select Event Name-->
+
+  <!-- SELECT EVENT -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select Curling Event </ng-template>
@@ -21,10 +22,15 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
-  <!-- Stepper: Draw Information-->
+  <!-- ADD DRAW INFO -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> Add Draw Information </ng-template>
@@ -58,15 +64,26 @@
           placeholder="Ex. https://www.youtube.com/embed/zesl6jZnSDM">
       </mat-form-field>
 
-
       <div>
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
+          matStepperNext>Next</button>
       </div>
-
     </form>
   </mat-step>
 
+  <!-- SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
+  </mat-step>
 </mat-vertical-stepper>
