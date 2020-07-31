@@ -106,9 +106,9 @@ export class CreateCurlerComponent implements OnInit {
             });
           }
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {

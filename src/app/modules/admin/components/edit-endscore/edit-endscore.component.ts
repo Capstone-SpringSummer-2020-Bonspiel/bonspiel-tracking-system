@@ -157,9 +157,9 @@ export class EditEndscoreComponent implements OnInit {
           );
           stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {

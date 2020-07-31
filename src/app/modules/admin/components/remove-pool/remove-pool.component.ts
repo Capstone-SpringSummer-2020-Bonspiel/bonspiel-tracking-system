@@ -101,9 +101,8 @@ export class RemovePoolComponent implements OnInit {
           this.notificationService.showSuccess('Pool has been removed', '');
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Pool deleted failed!');
-          this.spinnerService.off();
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Pool deleted failed!');
         })
       .add(
         () => {

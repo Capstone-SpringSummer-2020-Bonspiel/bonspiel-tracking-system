@@ -110,9 +110,9 @@ export class RemoveCurlerComponent implements OnInit {
           // Re-fetch events
           this.getOrganizations();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {

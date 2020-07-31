@@ -113,6 +113,13 @@ export class DashboardComponent implements OnInit {
   menuItems = [
     {
       category: 'myCategory',
+      label: 'Set Homepage Default Event',
+      option: 'setHomepageDefaultEvent',
+      icon: 'home',
+      tooltip: '',
+    },
+    {
+      category: 'myCategory',
       label: 'Export to CSV',
       option: 'exportCSV',
       icon: 'get_app',
@@ -125,13 +132,13 @@ export class DashboardComponent implements OnInit {
       icon: 'done_all',
       tooltip: '',
     },
-    {
-      category: 'myCategory',
-      label: 'Delete Events',
-      option: 'deleteEvents',
-      icon: 'delete_forever',
-      tooltip: '',
-    },
+    // {
+    //   category: 'myCategory',
+    //   label: 'Delete Events',
+    //   option: 'deleteEvents',
+    //   icon: 'delete_forever',
+    //   tooltip: '',
+    // },
     {
       category: 'myCategory',
       label: 'Refresh Data',
@@ -233,8 +240,6 @@ export class DashboardComponent implements OnInit {
         this.spinnerService.off();
         return;
       }
-      // console.log('Fetching curling events:');
-      // console.log(rows);
 
       const newData = this.dataSource.data;
       this.dataSource.sort = this.mainTableSort;
@@ -278,9 +283,7 @@ export class DashboardComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.position + 1
-      }`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
   onClickTabs(event: MatTabChangeEvent, sample: any) {
@@ -389,5 +392,9 @@ export class DashboardComponent implements OnInit {
 
   convertKeyToLabel(key) {
     return this.keyToLabel[key];
+  }
+
+  setHomepageDefaultEvent() {
+    console.log(this.dataSource);
   }
 }

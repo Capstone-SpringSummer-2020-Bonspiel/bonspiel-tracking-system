@@ -72,8 +72,8 @@ export class RemoveTeamComponent implements OnInit {
           this.getTeams();
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Something went wrong');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Something went wrong');
         }
       )
       .add(() => {

@@ -67,9 +67,9 @@ export class EditTeamComponent implements OnInit {
           this.notificationService.showSuccess('Team has been created', '');
           stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {

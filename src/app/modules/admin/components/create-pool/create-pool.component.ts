@@ -88,8 +88,8 @@ export class CreatePoolComponent implements OnInit {
           }
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Pool create failed!');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Pool create failed!');
         })
       .add(
         () => {

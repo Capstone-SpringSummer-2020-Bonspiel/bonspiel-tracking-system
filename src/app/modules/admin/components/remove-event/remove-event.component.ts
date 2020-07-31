@@ -66,7 +66,7 @@ export class RemoveEventComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError(err, 'Event deleted failed!');
+          this.notificationService.showError(err.message, 'Event deleted failed!');
           this.spinnerService.off();
         })
       .add(
@@ -84,7 +84,7 @@ export class RemoveEventComponent implements OnInit {
         }
         // (err) => {
         //   console.log(err);
-        //   this.notificationService.showError(err,'Something went wrong');
+        //   this.notificationService.showError(err.message,'Something went wrong');
         // })
         // .add(() => {
         //   this.spinnerService.off();

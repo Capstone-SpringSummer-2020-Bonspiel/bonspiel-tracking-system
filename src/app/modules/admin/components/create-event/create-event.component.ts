@@ -94,8 +94,8 @@ export class CreateEventComponent implements OnInit {
           }
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Event create failed!');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Event create failed!');
         })
       .add(
         () => {

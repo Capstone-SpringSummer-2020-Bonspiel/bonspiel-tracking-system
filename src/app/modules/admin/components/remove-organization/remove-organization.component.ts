@@ -61,8 +61,8 @@ export class RemoveOrganizationComponent implements OnInit {
           stepper.reset();
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Organization deleted failed!');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Organization deleted failed!');
           this.spinnerService.off();
         })
       .add(

@@ -51,8 +51,8 @@ export class CreateOrganizationComponent implements OnInit {
           });
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Organization create failed!');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Organization create failed!');
         })
       .add(
         () => {

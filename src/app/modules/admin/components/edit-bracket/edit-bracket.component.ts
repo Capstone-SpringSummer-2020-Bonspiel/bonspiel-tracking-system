@@ -98,8 +98,8 @@ export class EditBracketComponent implements OnInit {
           this.spinnerService.off();
         },
         (err) => {
-          console.log(err);
-          this.notificationService.showError(err, 'Bracket deleted failed!');
+          console.log(err.message);
+          this.notificationService.showError(err.message, 'Bracket deleted failed!');
           this.spinnerService.off();
         })
       .add(

@@ -112,7 +112,7 @@ export class EditPoolComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError(err, 'Pool modified failed!');
+          this.notificationService.showError(err.message, 'Pool modified failed!');
         })
       .add(
         () => {

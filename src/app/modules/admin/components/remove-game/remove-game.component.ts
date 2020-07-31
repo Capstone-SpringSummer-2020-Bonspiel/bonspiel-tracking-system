@@ -27,7 +27,7 @@ export class RemoveGameComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Initialize form group
@@ -101,9 +101,9 @@ export class RemoveGameComponent implements OnInit {
           this.notificationService.showSuccess('Game was removed', '');
           stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {

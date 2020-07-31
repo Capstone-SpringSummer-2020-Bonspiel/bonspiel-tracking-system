@@ -34,7 +34,7 @@ export class RemoveEndscoreComponent implements OnInit {
     private apiService: ApiService,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Initialize form group
@@ -167,9 +167,9 @@ export class RemoveEndscoreComponent implements OnInit {
           );
           stepper.reset();
         },
-        (error) => {
-          console.log(error);
-          this.notificationService.showError(error.message, 'ERROR');
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         }
       )
       .add(() => {
