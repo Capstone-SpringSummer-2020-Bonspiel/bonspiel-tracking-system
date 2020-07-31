@@ -29,10 +29,14 @@ export class FileUploadComponent implements OnInit {
 
   uploadFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({
-      fileData: file
-    });
+    this.form.patchValue({ fileData: file });
     this.form.get('fileData').updateValueAndValidity()
+  }
+
+  resetProgressBar() {
+    setTimeout(() => {
+      this.progress = 0;
+    }, 100);
   }
 
   submitUpload() {
@@ -59,9 +63,6 @@ export class FileUploadComponent implements OnInit {
             case HttpEventType.Response:
               console.log('User successfully created!', event.body);
               this.notificationService.showSuccess('File successfully uploaded!', '');
-              setTimeout(() => {
-                this.progress = 0;
-              }, 1500);
           }
         },
         (err) => {
@@ -69,6 +70,7 @@ export class FileUploadComponent implements OnInit {
           this.notificationService.showError(err, 'Something went wrong');
         })
       .add(() => {
+        this.resetProgressBar();
         this.spinnerService.off();
       });
   }
