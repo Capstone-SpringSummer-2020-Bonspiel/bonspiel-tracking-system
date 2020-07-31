@@ -71,6 +71,7 @@ export class FileUploadComponent implements OnInit {
         })
       .add(() => {
         this.resetProgressBar();
+        this.form.reset();
         this.spinnerService.off();
       });
   }
