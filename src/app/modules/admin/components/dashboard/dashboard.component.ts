@@ -221,6 +221,8 @@ export class DashboardComponent implements OnInit {
 
   tournamentBracketData = [];
 
+  selectedEvent = null;
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
@@ -292,45 +294,59 @@ export class DashboardComponent implements OnInit {
     console.log('tab => ', event.tab);
     console.log('sample => ', sample);
 
-    // Bracket tab
-    if (event.index === 1) {
-      console.log('bracket view tab!');
+    switch (event.index) {
+      case 0:
+        // this.loadEventInfo(sample.id);  
+        break;
 
-      this.spinnerService.on();
+      case 1:
+        this.loadBracket(sample.id);
+        break;
 
-      const eventId = sample.id;
+      case 2:
+        this.loadDraws(sample.id);
+        break;
 
-      this.apiService.getTournamentBracketData(eventId).subscribe((data: any) => {
-        // let payload = [data.nodes, data.edges];
-        // console.log('payload', payload);
+      default:
+        break;
+    }
+  }
 
-        data.nodes.forEach(e => delete e.data);
-        data.nodes.forEach(e => delete e.dimension);
-        data.nodes.forEach(e => delete e.meta);
-        data.nodes.forEach(e => delete e.position);
-        data.edges.forEach(e => e.label = '');
+  loadBracket(eventId) {
+    console.log('bracket view tab!');
 
-        this.tournamentBracketData = data;
+    this.spinnerService.on();
 
+    this.apiService.getTournamentBracketData(eventId).subscribe((data: any) => {
+      // let payload = [data.nodes, data.edges];
+      // console.log('payload', payload);
+
+      data.nodes.forEach(e => delete e.data);
+      data.nodes.forEach(e => delete e.dimension);
+      data.nodes.forEach(e => delete e.meta);
+      data.nodes.forEach(e => delete e.position);
+      data.edges.forEach(e => e.label = '');
+
+      this.tournamentBracketData = data;
+
+      this.spinnerService.off();
+    });
+  }
+
+  loadDraws(eventId) {
+    this.spinnerService.on();
+
+    // Get all draws + games
+    this.apiService.getDraws(eventId).subscribe(rows => {
+      this.draws = rows;
+      console.log(this.draws);
+      this.apiService.getGames(eventId).subscribe((rows: any[]) => {
+        // Convert integer to alpha
+        this.games = rows;
+        console.log(this.games);
         this.spinnerService.off();
       });
-    }
-
-    // Draws tab
-    else if (event.index === 2) {
-      this.spinnerService.on();
-      // Get all draws + games
-      this.apiService.getDraws(sample.id).subscribe(rows => {
-        this.draws = rows;
-        console.log(this.draws);
-        this.apiService.getGames(sample.id).subscribe((rows: any[]) => {
-          // Convert integer to alpha
-          this.games = rows;
-          console.log(this.games);
-          this.spinnerService.off();
-        });
-      });
-    }
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -376,11 +392,17 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshData() {
-    this.spinnerService.on();
-    setTimeout(() => {
-      this.notificationService.showInfo('Refreshed data', '');
-      this.spinnerService.off();
-    }, 2000);
+    console.log('selectedEvent', this.selectedEvent);
+
+    if (this.selectedEvent === null) {
+      return;
+    }
+
+    const eventId = this.selectedEvent.id;
+    console.log('refreshing eventId', eventId);
+
+    this.loadBracket(eventId);
+    this.loadDraws(eventId);
   }
 
   filterGames(draw_id) {
@@ -395,6 +417,19 @@ export class DashboardComponent implements OnInit {
   }
 
   setHomepageDefaultEvent() {
-    console.log(this.dataSource);
+    console.log('dataSource', this.dataSource);
+    console.log('selection', this.selection);
+
+    if (this.selection.selected.length !== 1) {
+      this.notificationService.showError('You must select a single Event', '');
+      return;
+    }
+    const eventId = this.selection.selected[0].id;
+    this.notificationService.showSuccess(`Event ID ${eventId} is set to the default Homepage`, '');
+    this.selection.clear();
+  }
+
+  setSelectedEvent(event) {
+    this.selectedEvent = event;
   }
 }

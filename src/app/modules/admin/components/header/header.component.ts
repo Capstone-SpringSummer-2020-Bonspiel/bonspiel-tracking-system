@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@app/core/_services';
 import { NotificationService } from '@app/shared/services/notification.service';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private accountService: AccountService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private spinnerService: SpinnerService
   ) { }
 
   ngOnInit() {
@@ -37,6 +39,14 @@ export class HeaderComponent implements OnInit {
 
   faqs() {
     this.router.navigate(['/admin/faqs']);
+  }
+
+  feedback() {
+    // SPINNER TEST
+    this.spinnerService.on();
+    setTimeout(() => {
+      this.spinnerService.off();
+    }, 2000);
   }
 
   changePassword() {

@@ -387,7 +387,8 @@
           *matRowDef="let sample; columns: displayedColumns; let i = index;"
           class="example-sample-row"
           [class.example-expanded-row]="expandedElement === sample"
-          (click)="expandedElement = expandedElement === sample ? null : sample"></tr>
+          (click)="expandedElement = expandedElement === sample ? null : sample"
+          (click)="setSelectedEvent(sample)"></tr>
         <tr mat-row
           *matRowDef="let row; columns: ['expandedDetail']; let i = index;"
           class="example-detail-row"></tr>

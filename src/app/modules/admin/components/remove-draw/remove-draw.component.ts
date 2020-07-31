@@ -134,11 +134,11 @@ export class RemoveDrawComponent implements OnInit {
           // Reset the stepper
           stepper.reset();
 
-          // // Reset the form and validation
-          // this.formGroup.reset()
-          // Object.keys(this.formGroup.controls).forEach(key => {
-          //   this.formGroup.controls[key].setErrors(null)
-          // });
+          // Reset the form and validation
+          this.formGroup.reset()
+          Object.keys(this.formGroup.controls).forEach(key => {
+            this.formGroup.controls[key].setErrors(null)
+          });
 
           // Re-fetch events
           this.getEvents();
