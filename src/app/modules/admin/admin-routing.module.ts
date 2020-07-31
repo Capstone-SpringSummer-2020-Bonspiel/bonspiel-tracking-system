@@ -45,7 +45,7 @@ const routes: Routes = [
   {
     path: '', component: AdminComponent,
     children: [
-      { path: '', component: DashboardComponent },
+      { path: '', component: DashboardComponent, data: { reuse: true } },
       { path: 'file-upload', component: FileUploadComponent },
       { path: 'create-bracket', component: CreateBracketComponent },
       { path: 'create-curler', component: CreateCurlerComponent },

@@ -33,6 +33,8 @@ import { MatListModule } from '@angular/material/list';
 import { JwtInterceptor, ErrorInterceptor, fakeBackendProvider } from './core/_helpers';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './core/router-strategy';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }
 
     // provider used to create fake backend
     // fakeBackendProvider,
