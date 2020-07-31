@@ -113,7 +113,7 @@
           <!-- GAME SCORE TAB-->
           <mat-tab label="Scores">
             <table mat-table
-              [dataSource]="game.dataSource"
+              [dataSource]="game.data"
               class="">
               <ng-container matColumnDef="name"
                 sticky>
@@ -124,14 +124,15 @@
                   *matCellDef="let team"
                   class="m-0 p-0">
                   <button type="button"
-                    class="btn btn-light"> {{team.name}} </button>
+                    class="btn btn-light"
+                    (click)="openDialog(team.Team.team_id)"> {{team.Team.team}} </button>
                 </td>
               </ng-container>
               <ng-container matColumnDef="total_score">
                 <th mat-header-cell
                   *matHeaderCellDef> Total </th>
                 <td mat-cell
-                  *matCellDef="let team"> </td>
+                  *matCellDef="let team"> {{team.Total}}</td>
               </ng-container>
 
               <tr mat-header-row
