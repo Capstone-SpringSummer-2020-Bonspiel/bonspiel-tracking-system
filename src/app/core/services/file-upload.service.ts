@@ -24,16 +24,16 @@ export class FileUploadService {
     )
   }
 
-  errorMgmt(error: HttpErrorResponse) {
+  errorMgmt(error: any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // Get client-side error
       errorMessage = error.error.message;
     } else {
       // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = error;
     }
-    console.log(errorMessage);
+    console.log('errorMessage in file-upload service', errorMessage);
     return throwError(errorMessage);
   }
 

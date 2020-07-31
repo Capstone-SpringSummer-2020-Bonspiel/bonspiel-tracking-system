@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { FileUploadService } from '@app/core/services/file-upload.service';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { NotificationService } from '@app/shared/services/notification.service';
+import { SpinnerService } from '@app/shared/services/spinner.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -16,7 +17,8 @@ export class FileUploadComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     public fileUploadService: FileUploadService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    public spinnerService: SpinnerService
   ) {
     this.form = this.fb.group({
       fileData: [null]
@@ -35,6 +37,7 @@ export class FileUploadComponent implements OnInit {
 
   submitUpload() {
     console.log('submitUpload() executed!');
+    this.spinnerService.on();
 
     this.fileUploadService.uploadFile(this.form.value.fileData)
       .subscribe(
@@ -62,8 +65,11 @@ export class FileUploadComponent implements OnInit {
           }
         },
         (err) => {
-          console.log(err.message);
-          this.notificationService.showError(err.message, 'Something went wrong');
+          console.log(err);
+          this.notificationService.showError(err, 'Something went wrong');
         })
+      .add(() => {
+        this.spinnerService.off();
+      });
   }
 }
