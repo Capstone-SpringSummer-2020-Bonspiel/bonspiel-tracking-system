@@ -1,32 +1,31 @@
-.example-container {
-  display: flex;
-  overflow: auto;
-}
-.col-sm-12 {
-  padding: 15px;
-}
 
-table {
+.horizontal-scroll {
+  display: block;
   width: 100%;
-}
-
-td.mat-column-star {
-  width: 20px;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
-th.mat-column-position,
-td.mat-column-position {
-  padding-left: 8px;
-}
-
-.mat-table-sticky:first-child {
-  border-right: 1px solid #e0e0e0;
-}
-
-.mat-table-sticky:last-child {
-  border-left: 1px solid #e0e0e0;
+  overflow-x: auto;
+  .mat-table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      display: table;
+      border-collapse: collapse;
+      margin: 0px;
+  }
+  .mat-row,
+  .mat-header-row {
+      display: table-row;
+  }
+  .mat-cell,
+  .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 5px;
+      line-break: unset;
+      width: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+  }
 }
 
 th.mat-header-cell,
@@ -42,16 +41,6 @@ td.mat-cell {
 .mat-form-field + .mat-form-field {
   margin-left: 8px;
 }
-$primary-color: #004713;
-$secondary-color: #58595b;
-$accent-color-1: #dbe120;
-$accent-color-2: #13778e;
-
-// .mat-icon-button {
-//   background-color: $secondary-color;
-//   color: white;
-//   margin: 10px;
-// }
 
 .mat-form-field {
   text-align: center;
