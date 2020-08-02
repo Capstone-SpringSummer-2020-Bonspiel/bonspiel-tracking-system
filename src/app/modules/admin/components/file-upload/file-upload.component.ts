@@ -49,7 +49,7 @@ export class FileUploadComponent implements OnInit {
           switch (event.type) {
             case HttpEventType.Sent:
               console.log('Request has been made!');
-              this.notificationService.showInfo('Request has been made!', '');
+              // this.notificationService.showInfo('Request has been made!', '');
               break;
             case HttpEventType.ResponseHeader:
               console.log('Response header has been received!');
@@ -72,6 +72,7 @@ export class FileUploadComponent implements OnInit {
       .add(() => {
         this.resetProgressBar();
         this.form.reset();
+        console.log('form', this.form);
         this.spinnerService.off();
       });
   }
