@@ -24,6 +24,14 @@
         [dataSource]="this.allTeamData"
         multiTemplateDataRows
         class="mat-elevation-z8">
+
+        <ng-container matColumnDef="arrow">
+          <th mat-header-cell
+            *matHeaderCellDef> ID </th>
+          <td mat-cell
+            *matCellDef="let team"> ID: {{team.id}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="team_name">
           <th mat-header-cell
             *matHeaderCellDef> TEAM </th>
@@ -39,12 +47,13 @@
             <div class="team-detail"
               [@detailExpand]="team == expandedElement ? 'expanded' : 'collapsed'">
 
-              <div *ngIf="team.curlers.length==0">
-                <div class="col-sm-12">
-                  <div class="member-other"> No One in this team </div>
+              <!-- <div class='row'>
+                <div *ngIf="team.curlers.length==0">
+                  <div class="col-sm-12">
+                    <div class="member-other"> No One in this team </div>
+                  </div>
                 </div>
-              </div>
-
+              </div> -->
 
               <div class='row'
                 style="width:100%">

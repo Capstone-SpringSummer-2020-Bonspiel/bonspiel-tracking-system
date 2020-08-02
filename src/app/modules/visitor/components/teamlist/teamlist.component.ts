@@ -17,9 +17,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
-  ],
-  viewProviders: [MatExpansionPanel],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  ]
 })
 
 
@@ -32,10 +30,6 @@ export class TeamlistComponent {
 
   allTeamData: null;
   allEventData: null;
-
-  panelOpenState = false;
-
-
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private spinnerService: SpinnerService) { }
 
@@ -67,7 +61,11 @@ export class TeamlistComponent {
   }
 
   // dataSource = TEAM_DATA;
-  //dataSource = this.allTeamData;
+  dataSource = this.allTeamData;
+  displayedColumns = [
+    // 'arrow',
+    'team_name'
+  ];
 
 
   onEventSelected(event: any) {
@@ -100,7 +98,7 @@ export class TeamlistComponent {
 
   }
 
-  displayedColumns = ['team_name'];
+
 }
 
 export interface Member {
