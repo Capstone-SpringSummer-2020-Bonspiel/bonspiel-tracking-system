@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InstructionalsComponent implements OnInit {
 
+  src = "assets\test.pdf"
   constructor() { }
 
   ngOnInit(): void {

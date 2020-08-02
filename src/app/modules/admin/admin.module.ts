@@ -87,6 +87,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { InstructionalsComponent } from './components/instructionals/instructionals.component';
 import { FaqsComponent } from './components/faqs/faqs.component';
 
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 @NgModule({
   declarations: [
     AdminComponent,
@@ -172,8 +174,13 @@ import { FaqsComponent } from './components/faqs/faqs.component';
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     NgxChartsModule,
-    NgxGraphModule
+    NgxGraphModule,
+    BrowserModule,
+    FormsModule,
+    PdfViewerModule
   ],
   providers: [DashboardService],
+  bootstrap: [InstructionalsComponent]
+
 })
 export class AdminModule { }

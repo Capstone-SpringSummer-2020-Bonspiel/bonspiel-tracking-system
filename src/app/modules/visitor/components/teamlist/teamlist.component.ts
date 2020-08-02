@@ -17,7 +17,9 @@ import { MatExpansionPanel } from '@angular/material/expansion';
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
-  ]
+  ],
+  // viewProviders: [MatExpansionPanel],
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 
@@ -30,6 +32,10 @@ export class TeamlistComponent {
 
   allTeamData: null;
   allEventData: null;
+
+  // panelOpenState = false;
+
+
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private spinnerService: SpinnerService) { }
 

@@ -19,8 +19,8 @@
         style="margin: 0 0 0 30;">
 
         <!-- FILTER INPUT BOX -->
-        <div class="col-8 col-md-5"
-          style="padding-top: 15px; padding-left: 35px">
+        <div class="col-9 col-md-5"
+          style="padding-top: 15px; padding-left: 15px">
           <mat-form-field class="no-padding"
             appearance="outline"
             style="width: 100%">
@@ -33,7 +33,7 @@
 
         <!-- MENU BUTTON -->
         <div class="col-2 col-md-1"
-          style="padding-right: 35px">
+          style="padding-right: 15px">
           <button id="menu"
             mat-raised-button
             [matMenuTriggerFor]="menu"
@@ -52,17 +52,15 @@
           </mat-menu>
         </div>
 
-        <div class="col-12 col-md-6"
-          style="padding-top: 15px">
+        <div class="col-12 col-md-5">
 
           <!-- TOP PAGINATOR -->
           <mat-paginator #paginatorTop
-            [pageSize]="50"
+            [pageSize]="20"
             [pageSizeOptions]="[5, 10, 20, 50, 100]"
             (page)="paginatorBottom.pageIndex = $event.pageIndex"
             showFirstLastButtons>
           </mat-paginator>
-
         </div>
       </div>
 
@@ -73,7 +71,8 @@
         #mainTableSort="matSort"
         matSort
         matSortActive="begin_date"
-        matSortDirection="desc">
+        matSortDirection="desc"
+        style="padding-top: 15px">
         <ng-container [matColumnDef]="column"
           *ngFor="let column of displayedColumns">
           <div [ngSwitch]="column">
@@ -129,6 +128,7 @@
               <th mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header> {{columnsTable[column]}} </th>
+
               <td mat-cell
                 *matCellDef="let sample">
                 <ng-container *ngIf="sample.completed; else elseTemplate">
@@ -138,6 +138,8 @@
                   <mat-icon style="color: orangered"> highlight_off </mat-icon>
                 </ng-template>
               </td>
+
+
             </ng-container>
 
             <!-- DEFAULT COLUMN -->
@@ -148,7 +150,7 @@
               <div *ngIf="column === 'begin_date' || column === 'end_date'; then content else other_content"></div>
               <ng-template #content>
                 <td mat-cell
-                  *matCellDef="let sample"> {{sample[column] | date: 'fullDate'}} </td>
+                  *matCellDef="let sample"> {{sample[column] | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}} </td>
               </ng-template>
               <ng-template #other_content>
                 <td mat-cell
