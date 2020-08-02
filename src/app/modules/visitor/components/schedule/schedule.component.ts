@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
 import { MatDialog } from '@angular/material/dialog';
-import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
+// import { TeamDialogOverviewComponent } from '../../components/team-dialog-overview/team-dialog-overview.component';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { parseHostBindings } from '@angular/compiler';
 import { KeyboardNavigationFocusBorderOptionsObject } from 'highcharts';
@@ -13,24 +13,21 @@ import { KeyboardNavigationFocusBorderOptionsObject } from 'highcharts';
 })
 
 export class ScheduleComponent implements OnInit {
-  animal: string;
-  name: string;
-  // selectedEvent = null;
-  // currentEvent = null;
-  // currentEventId = null;
+  // animal: string;
+  // name: string;
+
   eventGameData = null;
   eventDrawData = null;
   totalGame = 0;
   totalDraw = 0;
-  // finalDrawData: gameData[] = [];
   finalEventData: drawData[] = [];
   finalData: any[] = [];
-  // sheetSize = 0;
-  selectedEventId = null;
+
   drawSizeNumber = null;
   displayedColumns: String[]
   allEventData: null;
-  selectedEvent: drawData;
+  selectedEvent: null;
+  selectedEventId = null;
 
   tableSize: Number;
   tableColumn: any[] = [];
@@ -66,22 +63,21 @@ export class ScheduleComponent implements OnInit {
                 this.spinnerService.off();
               })
           });
-        // this.spinnerService.off()
       })
   }
 
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-      width: 'auto',
-      data: { name: this.name, animal: this.animal },
-    });
+  // openDialog(): void {
+  //   const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
+  //     width: 'auto',
+  //     data: { name: this.name, animal: this.animal },
+  //   });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      this.animal = result;
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     console.log('The dialog was closed');
+  //     this.animal = result;
+  //   });
+  // }
 
   onEventSelected(event: any) {
     console.log('the selected event is:');

@@ -26,36 +26,41 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 export class TeamlistComponent {
   expandedElement: Team | null;
   curlingteam = null;
+
+  selectedEvent: null;
   selectedEventId = null;
-  allTeamData = null;
-  allEventData = null;
-  selectedEvent = null;
+
+  allTeamData: null;
+  allEventData: null;
+
   panelOpenState = false;
 
-  constructor(private api: ApiService, public dialog: MatDialog, private spinner: SpinnerService) { }
+
+
+  constructor(private apiService: ApiService, public dialog: MatDialog, private spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.on();
+    this.spinnerService.on();
 
-    this.api
+    this.apiService
       .getEvents()
       .subscribe((res: any) => {
         this.allEventData = res;
         this.selectedEvent = res[0];
         this.selectedEventId = res[0].id;
-        console.log(this.selectedEventId);
+        console.log(this.selectedEvent);
 
-        this.api
+        this.apiService
           .getTeamsByEventId(this.selectedEventId)
           .subscribe((res: any) => {
-            console.log('[DEBUG] eventObtain() in schedule component:');
+            console.log('[DEBUG] teamObtain() in schedule component:');
             console.log(res);
             this.allTeamData = res;
             // this.allTeamData.sort(this.allTeamData.id);
             console.log(this.allTeamData);
             // console.log("ThisEventDrawDataBelow:");
             // console.log(this.eventDrawData);
-            this.spinner.off();
+            this.spinnerService.off();
           });
 
       })
@@ -63,10 +68,7 @@ export class TeamlistComponent {
 
   // dataSource = TEAM_DATA;
   //dataSource = this.allTeamData;
-  displayedColumns = [
-    // 'id',
-    'team_name',
-  ];
+
 
   onEventSelected(event: any) {
     console.log('the selected event is:');
@@ -81,8 +83,8 @@ export class TeamlistComponent {
   }
 
   eventBegin() {
-    this.spinner.on();
-    this.api
+    this.spinnerService.on();
+    this.apiService
       .getTeamsByEventId(this.selectedEventId)
       .subscribe((res: any) => {
         console.log('[DEBUG] eventObtain() in schedule component:');
@@ -90,11 +92,15 @@ export class TeamlistComponent {
         this.allTeamData = res;
         // this.allTeamData.sort(this.allTeamData.id);
         console.log(this.allTeamData);
+
         // console.log("ThisEventDrawDataBelow:");
         // console.log(this.eventDrawData);
-        this.spinner.off();
+        this.spinnerService.off();
       });
+
   }
+
+  displayedColumns = ['team_name'];
 }
 
 export interface Member {
