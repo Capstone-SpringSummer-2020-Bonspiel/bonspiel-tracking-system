@@ -15,7 +15,8 @@ export class EditTeamComponent implements OnInit {
   thirdFormGroup: FormGroup;
   organizations: any[] = [];
   teams: any[] = [];
-  selectedTeamId;
+  selectedTeam: any;
+
 
   constructor(
     private fb: FormBuilder,
@@ -37,9 +38,16 @@ export class EditTeamComponent implements OnInit {
     });
 
     this.spinnerService.on();
+
+    this.getTeamsAndOrganizations();
+  }
+
+  getTeamsAndOrganizations() {
     this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
       this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
+      console.log('this.teams');
+      console.log(this.teams);
       this.apiService.getAllOrganizations().subscribe((res: any) => {
         this.organizations = res;
         this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
@@ -49,7 +57,12 @@ export class EditTeamComponent implements OnInit {
   }
 
   getTeamId() {
-    this.selectedTeamId = this.firstFormGroup.value.firstCtrl;
+    this.selectedTeam = this.teams.filter(x => x.id === this.firstFormGroup.value.firstCtrl)[0];
+    console.log('this.selectedTeam ', this.selectedTeam);
+
+    this.secondFormGroup.controls.secondCtrl.setValue(this.selectedTeam.team_name);
+
+    this.secondFormGroup.controls.secondCtrlNote.setValue(this.selectedTeam.note);
   }
 
   onClickSubmit(stepper: MatStepper) {
@@ -60,20 +73,30 @@ export class EditTeamComponent implements OnInit {
     this.spinnerService.on();
 
     this.apiService
-      .editTeam(this.selectedTeamId, name, note, org)
+      .editTeam(this.selectedTeam.id, name, note, org)
       .subscribe(
         (res: any) => {
           console.log(res);
-          this.notificationService.showSuccess('Team has been created', '');
-          stepper.reset();
+          this.notificationService.showSuccess('Team has been modified', '');
+          this.spinnerService.off();
         },
         (err) => {
           console.log(err);
           this.notificationService.showError(err.message, 'ERROR');
+          this.spinnerService.off();
         }
       )
       .add(() => {
-        this.spinnerService.off();
+        stepper.reset();
+        // Reset the form and validation
+        let formGroups = [this.firstFormGroup, this.secondFormGroup];
+        for (let formGroup of formGroups) {
+          formGroup.reset();
+          Object.keys(formGroup.controls).forEach((key) => {
+            formGroup.controls[key].setErrors(null);
+          });
+        }
+        this.getTeamsAndOrganizations();
       });
   }
 }
