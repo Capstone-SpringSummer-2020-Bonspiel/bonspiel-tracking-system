@@ -189,6 +189,12 @@ export class ApiService {
     );
   }
 
+  public editGame(gameId, body) {
+    return this.httpService.put(
+      `${environment.apiUrl}/api/v1/admin/game/${gameId}`, body
+    );
+  }
+
   public removeGame(gameId) {
     return this.httpService.delete(
       `${environment.apiUrl}/api/v1/admin/game/${gameId}`

@@ -21,10 +21,16 @@ export class EditGameComponent implements OnInit {
   events: any = [];
   draws: any = [];
   games: any = [];
+  teams: any = [];
   pools: any = [];
   brackets: any = [];
   selectedDraw: any = [];
   selectedGame: any = [];
+
+
+  colors = ['red', 'yellow'];
+  iceSheets = ['A', 'B', 'C'];
+  eventTypes = ['pools', 'brackets'];
 
   constructor(
     private fb: FormBuilder,
@@ -47,10 +53,20 @@ export class EditGameComponent implements OnInit {
           gameCtrl: ['', Validators.required],
         }),
         this.fb.group({
-          poolCtrl: ['', Validators.required],
+          poolCtrl: [''], bracketCtrl: [''], newDrawCtrl: [''],
         }),
         this.fb.group({
-          bracketCtrl: ['', Validators.required],
+          gameNameCtrl: [''],
+          team1IdCtrl: [''],
+          team1StoneColorCtrl: [''],
+          team2IdCtrl: [''],
+          team2StoneColorCtrl: [''],
+          iceSheetCtrl: [''],
+          winnerCtrl: [''],
+          destWinnerCtrl: [''],
+          destLoserCtrl: [''],
+          notesCtrl: [''],
+          finishedCtrl: ['']
         }),
       ]),
     });
@@ -85,7 +101,7 @@ export class EditGameComponent implements OnInit {
       });
   }
 
-  getDraws() {
+  getDrawsAndTeams() {
     const selectedEventID = this.getCtrlValue(0).eventCtrl;
 
     // Get draws
@@ -99,6 +115,10 @@ export class EditGameComponent implements OnInit {
         }
         this.draws = res;
         this.draws.sort((a, b) => (a.name > b.name ? 1 : -1));
+        this.apiService.getTeamsByEventId(selectedEventID).subscribe((res: any) => {
+          this.teams = res;
+          this.teams.sort((a, b) => (a.name > b.name ? 1 : -1));
+        })
       })
       .add(() => {
         this.spinnerService.off();
@@ -126,15 +146,30 @@ export class EditGameComponent implements OnInit {
     });
   }
 
+  getGameId() {
+    this.selectedGame = this.games.filter(
+      (x) => x.game_id === this.getCtrlValue(2).gameCtrl
+    )[0];
+    console.log('selectedGame');
+    console.log(this.selectedGame);
+    this.getPoolsByEventId();
+    this.getBracketsByEventId();
+    this.getDrawsAndTeams();
+    this.selectedGame.draw_name = this.draws.filter(x => x.id === this.selectedGame.draw_id)[0].name;
+  }
+
   getPoolsByEventId() {
     const selectedEventId = this.getCtrlValue(0).eventCtrl;
     this.spinnerService.on();
     this.apiService.getPool(selectedEventId).subscribe((res: any) => {
-      this.pools = res.rows;
+      this.pools = res;
       console.log('pools');
       console.log(this.pools);
-      this.spinnerService.off();
+      if (this.pools.length != 0) {
+        this.selectedGame.pool_name = this.pools.filter(x => x.id === this.selectedGame.pool_id)[0].name;
+      }
     });
+
   }
 
   getBracketsByEventId() {
@@ -144,17 +179,83 @@ export class EditGameComponent implements OnInit {
       this.brackets = res;
       console.log('brackets');
       console.log(this.brackets);
+      if (this.brackets.length != 0) {
+        this.selectedGame.bracket_name = this.brackets.filter(x => x.id === this.selectedGame.bracket_id)[0].name;
+      }
       this.spinnerService.off();
     });
   }
 
-  getGameId() {
-    this.selectedGame = this.games.filter(
-      (x) => x.game_id === this.getCtrlValue(2).gameCtrl
-    );
-    console.log('selectedGame');
-    console.log(this.selectedGame);
+  getGameDetails() {
+    this.getCtrlValue(4).notesCtrl.setValue(this.selectedGame.notes);
   }
 
-  onClickSubmit(stepper: MatStepper) { }
+  disableOptions(team_id) {
+    const selectedTeamId1 = this.getCtrlValue(4).team1IdCtrl;
+    const selectedTeamId2 = this.getCtrlValue(4).team2IdCtrl;
+    const A = [Number(selectedTeamId1), Number(selectedTeamId2)];
+
+    if (A.includes(team_id)) {
+      return true;
+    }
+    return false;
+  }
+
+  selectedTeams() {
+    const selectedTeamId1 = this.getCtrlValue(4).team1IdCtrl ? this.getCtrlValue(4).team1IdCtrl : this.selectedGame.teamname_1;
+    const selectedTeamId2 = this.getCtrlValue(4).team2IdCtrl ? this.getCtrlValue(4).team2IdCtrl : this.selectedGame.teamname_2;
+    return this.teams.filter((e) => e.id === selectedTeamId1 || e.id === selectedTeamId2);
+  }
+
+
+
+
+  onClickSubmit(stepper: MatStepper) {
+    console.log('bracketCtrl');
+    console.log(this.getCtrlValue(3).bracketCtrl);
+    console.log('poolCtrl');
+    console.log(this.getCtrlValue(3).poolCtrl);
+    console.log('newDrawCtrl');
+    console.log(this.getCtrlValue(3).newDrawCtrl);
+    let body = {
+      notes: this.getCtrlValue(4).notesCtrl || this.selectedGame.notes,
+      gameName: this.getCtrlValue(4).gameNameCtrl || this.selectedGame.game_name,
+      bracketId: this.getCtrlValue(3).bracketCtrl ? this.getCtrlValue(3).bracketCtrl : this.selectedGame.bracket_id,
+      poolId: this.getCtrlValue(3).poolCtrl ? this.getCtrlValue(3).poolCtrl : this.selectedGame.pool_id,
+      drawId: this.getCtrlValue(3).newDrawCtrl || this.selectedGame.draw_id,
+      curlingTeam1Id: this.getCtrlValue(4).team1IdCtrl || this.selectedGame.curlingteam1_id,
+      curlingTeam2Id: this.getCtrlValue(4).team2IdCtrl || this.selectedGame.curlingteam2_id,
+      stoneColor1: this.getCtrlValue(4).team1StoneColorCtrl || this.selectedGame.stone_color1,
+      stoneColor2: this.getCtrlValue(4).team2StoneColorCtrl || this.selectedGame.stone_color2,
+      destLoser: this.getCtrlValue(4).destLoserCtrl || this.selectedGame.loser_dest,
+      destWinner: this.getCtrlValue(4).destWinnerCtrl || this.selectedGame.winner_dest,
+      iceSheet: this.getCtrlValue(4).iceSheetCtrl || this.selectedGame.ice_sheet,
+      finished: this.getCtrlValue(4).finishedCtrl || this.selectedGame.finished,
+      winner: this.getCtrlValue(4).winnerCtrl || this.selectedGame.winner
+    }
+
+    console.log(body);
+
+    //this.selectedGame.game_id;
+    this.spinnerService.on();
+    this.apiService.editGame(this.selectedGame.game_id, body)
+      .subscribe((res: any) => {
+        console.log(res);
+        this.notificationService.showSuccess('Game has been modified', '');
+        this.spinnerService.off();
+      },
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
+          this.spinnerService.off();
+        })
+      .add(() => {
+        stepper.reset();
+        this.formGroup.reset();
+        Object.keys(this.formGroup.controls).forEach((key) => {
+          this.formGroup.controls[key].setErrors(null);
+        })
+        this.getEvents();
+      })
+  }
 }
