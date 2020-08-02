@@ -69,7 +69,7 @@ export class TeamlistComponent {
   // dataSource = TEAM_DATA;
   dataSource = this.allTeamData;
   displayedColumns = [
-    // 'arrow',
+    'arrow',
     'team_name'
   ];
 
