@@ -21,7 +21,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -175,12 +175,12 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     NgxMatTimepickerModule,
     NgxChartsModule,
     NgxGraphModule,
-    BrowserModule,
+    // BrowserModule,
     FormsModule,
     PdfViewerModule
   ],
   providers: [DashboardService],
-  bootstrap: [InstructionalsComponent]
+  bootstrap: [InstructionalsComponent, FaqsComponent]
 
 })
 export class AdminModule { }
