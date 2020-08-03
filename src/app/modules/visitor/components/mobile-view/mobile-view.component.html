@@ -29,9 +29,9 @@
         <h5 *ngIf="selectedDraw">{{selectedDraw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}</h5>
       </div>
     </div>
-    <div class="d-flex justify-content-center align-self-center">
-      <button *ngIf="selectedDraw && selectedDraw.video_url"
-        mat-icon-button
+    <div class="d-flex justify-content-center align-self-center"
+      *ngIf="selectedDraw && selectedDraw.video_url && validateYouTubeUrl(selectedDraw.video_url)">
+      <button mat-icon-button
         matTooltip=" YouTube Link"
         aria-label="YouTube link button"
         (click)="openYoutubeDialog()">

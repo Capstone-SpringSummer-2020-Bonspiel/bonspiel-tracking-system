@@ -186,10 +186,6 @@ export class EditGameComponent implements OnInit {
     });
   }
 
-  getGameDetails() {
-    this.getCtrlValue(4).notesCtrl.setValue(this.selectedGame.notes);
-  }
-
   disableOptions(team_id) {
     const selectedTeamId1 = this.getCtrlValue(4).team1IdCtrl;
     const selectedTeamId2 = this.getCtrlValue(4).team2IdCtrl;
