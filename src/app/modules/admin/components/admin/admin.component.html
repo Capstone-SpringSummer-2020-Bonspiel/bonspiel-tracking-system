@@ -1,7 +1,8 @@
 <app-header (toggleSideBarForMe)="sideBarToggler()"></app-header>
 
 <mat-drawer-container>
-  <mat-drawer mode="side"
+  <mat-drawer class="col-md-12 col-lg-4"
+    mode="push"
     [opened]="sideBarOpen">
     <app-sidebar></app-sidebar>
   </mat-drawer>
