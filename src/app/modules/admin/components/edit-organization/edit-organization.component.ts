@@ -30,8 +30,8 @@ export class EditOrganizationComponent implements OnInit {
       organizationCtrl: ['', Validators.required],
     });
     this.firstFormGroup = this.fb.group({
-      eventFullCtrl: [''],
-      eventShortCtrl: [''],
+      eventFullCtrl: ['', Validators.required],
+      eventShortCtrl: ['', Validators.required],
     });
 
     this.getEvents();
@@ -65,8 +65,8 @@ export class EditOrganizationComponent implements OnInit {
 
   onClickSubmit(stepper) {
     //Edit Organization
-    const fullName = this.firstFormGroup.value.eventFullCtrl || this.selectedOrganization.full_name;
-    const shortName = this.firstFormGroup.value.eventShortCtrl || this.selectedOrganization.short_name;
+    const fullName = this.firstFormGroup.value.eventFullCtrl;
+    const shortName = this.firstFormGroup.value.eventShortCtrl;
 
     this.spinnerService.on();
     this.apiService
