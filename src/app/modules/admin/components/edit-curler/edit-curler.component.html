@@ -7,7 +7,7 @@
   <!-- Stepper: Select Affiliation -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select an Organization</ng-template>
+      <ng-template matStepLabel> Select an Affiliation</ng-template>
       <mat-form-field>
         <mat-label> Select Organization... </mat-label>
         <mat-select formControlName="firstCtrl"
@@ -20,6 +20,10 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
@@ -39,6 +43,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
@@ -108,10 +118,22 @@
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
+          matStepperNext>Next</button>
       </div>
     </form>
+  </mat-step>
+
+  <!-- FINISH & SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
   </mat-step>
 </mat-vertical-stepper>

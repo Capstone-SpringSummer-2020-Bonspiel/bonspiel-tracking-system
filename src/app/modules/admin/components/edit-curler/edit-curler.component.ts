@@ -52,12 +52,17 @@ export class EditCurlerComponent implements OnInit {
       secondCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
-      thirdCtrlName: ['', Validators.required],
-      thirdCtrlPosition: ['', Validators.required],
-      thirdCtrlTeam: ['', Validators.required],
-      thirdCtrlOrg: ['', Validators.required],
+      thirdCtrlName: [''],
+      thirdCtrlThrowing: [''],
+      thirdCtrlPosition: [''],
+      thirdCtrlTeam: [''],
+      thirdCtrlOrg: [''],
     });
 
+    this.getOrganizations();
+  }
+
+  getOrganizations() {
     this.spinnerService.on();
     this.apiService.getAllOrganizations().subscribe((res: any) => {
       this.organizations = res;
@@ -101,10 +106,10 @@ export class EditCurlerComponent implements OnInit {
       this.thirdFormGroup.value.thirdCtrlPosition ||
       this.selectedCurler.position;
     const newTeam =
-      this.thirdFormGroup.value.thirdCtrlTeam.toString() ||
+      this.thirdFormGroup.value.thirdCtrlTeam ||
       this.selectedCurler.curlingteam_id;
     const newOrg =
-      this.thirdFormGroup.value.thirdCtrlOrg.toString() ||
+      this.thirdFormGroup.value.thirdCtrlOrg ||
       this.selectedCurler.affiliation;
     const newThrowing =
       this.thirdFormGroup.value.thirdCtrlThrowing ||
@@ -156,6 +161,7 @@ export class EditCurlerComponent implements OnInit {
       )
       .add(() => {
         this.spinnerService.off();
+        this.getOrganizations();
       });
   }
 }
