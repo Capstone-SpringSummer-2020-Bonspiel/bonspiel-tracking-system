@@ -21,7 +21,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -86,6 +86,8 @@ import { PasswordComponent } from './components/password/password.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { InstructionalsComponent } from './components/instructionals/instructionals.component';
 import { FaqsComponent } from './components/faqs/faqs.component';
+
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -172,8 +174,13 @@ import { FaqsComponent } from './components/faqs/faqs.component';
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     NgxChartsModule,
-    NgxGraphModule
+    NgxGraphModule,
+    // BrowserModule,
+    FormsModule,
+    PdfViewerModule
   ],
   providers: [DashboardService],
+  bootstrap: [InstructionalsComponent, FaqsComponent]
+
 })
 export class AdminModule { }

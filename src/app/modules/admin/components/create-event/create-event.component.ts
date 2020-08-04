@@ -19,6 +19,7 @@ export class CreateEventComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
+  // begin_date: Date;
 
   eventDetails = [
     { value: 'Bonspiel', label: 'Bonspiel' },
@@ -65,11 +66,12 @@ export class CreateEventComponent implements OnInit {
   onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.controls.eventNameCtrl.value;
     const begin_date = String(this.thirdFormGroup.controls.eventStartCtrl.value.toLocaleString());
+    // this.begin_date = new Date(this.thirdFormGroup.controls.eventStartCtrl.value.getTime() + (12 * 60 * 60 * 1000));
     const end_date = String(this.thirdFormGroup.controls.eventEndCtrl.value.toLocaleString());
     const completed = String(this.secondFormGroup.controls.eventFinishedCtrl.value);
     const info = this.firstFormGroup.controls.eventInfoCtrl.value;
     const event_type = this.secondFormGroup.controls.eventTypeCtrl.value;
-
+    // console.log(begin_date)
     this.spinnerService.on();
     this.apiService.createEvent(name, begin_date, end_date, completed, info, event_type)
       .subscribe(

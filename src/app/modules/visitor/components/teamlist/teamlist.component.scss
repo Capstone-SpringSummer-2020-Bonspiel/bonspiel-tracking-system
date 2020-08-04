@@ -9,7 +9,7 @@ tr.detail-row {
 }
 
 tr.team-row:not(.expanded-row):hover {
-  background: whitesmoke;
+  background: rgb(225, 252, 235);
 }
 
 tr.team-row:not(.expanded-row):active {
@@ -24,16 +24,25 @@ tr.team-row:not(.expanded-row):active {
   overflow: hidden;
   display: flex;
 }
-
-.team-member{
+.curler-detail {
+  width: 100%;
   margin: 10px;
+  border: 1px solid black;
+  word-wrap:break-word;
 }
+
+// .team-member{
+//   margin: 10px;
+// }
 .curler-info {
   text-align:left;
 }
 .curler-photo{
-  display: block;
-  left: 50%;
+  display: flex;
+  margin: 5px;
+  // left: 50%;
+  // width: 10%;
+  // height: 40px;
 }
 
 .lement-diagram {
@@ -64,14 +73,13 @@ tr.team-row:not(.expanded-row):active {
   width: auto;
   min-width: 25%;
   color: black;
+  text-align: center;
 }
-.field-center{
-  position: relative;
-  left: 37%;
-}
-.expansion-panel{
-  width: 100%;
-  margin: 10px;
-  border: 1px solid black;
-  word-wrap:break-word;
+// .field-center{
+//   position: relative;
+//   left: 37%;
+// }
+.mat-column-arrow{
+  flex: 0 0 8%;
+  width: 8%;
 }
