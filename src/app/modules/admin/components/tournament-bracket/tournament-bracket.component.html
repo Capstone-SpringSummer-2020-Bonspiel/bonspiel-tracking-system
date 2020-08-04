@@ -1,17 +1,34 @@
-<ngx-graph *ngIf="nodes && edges"
-  class="chart-container"
-  [view]="[1000, 1100]"
-  [links]="edges"
-  [nodes]="nodes"
-  layout="dagreCluster"
-  [curve]="curve"
-  [enableZoom]="true"
-  [zoomSpeed]="0.02"
-  autoZoom="true"
-  autoCenter="true">
+<button (click)="centerGraph()">
+  Center Graph
+</button>
 
-  <!-- ARROWS -->
-  <!-- <ng-template #defsTemplate>
+<button (click)="fitGraph()">
+  Zoom to Fit
+</button>
+
+<button (click)="updateGraph()">
+  Update Graph
+</button>
+
+<div class="mt-4 w-100"
+  style="height: 100%">
+  <ngx-graph *ngIf="nodes && edges"
+    class="chart-container"
+    [links]="edges"
+    [nodes]="nodes"
+    layout="dagreCluster"
+    [curve]="curve"
+    [draggingEnabled]="false"
+    [enableZoom]="true"
+    [zoomSpeed]="0.02"
+    autoZoom="true"
+    autoCenter="true"
+    [center$]="center$"
+    [zoomToFit$]="zoomToFit$"
+    [update$]="update$">
+
+    <!-- ARROWS -->
+    <!-- <ng-template #defsTemplate>
     <svg:marker id="arrow"
       viewBox="0 -5 10 10"
       refX="8"
@@ -24,8 +41,8 @@
     </svg:marker>
   </ng-template> -->
 
-  <!-- CLUSTER -->
-  <!-- <ng-template #clusterTemplate
+    <!-- CLUSTER -->
+    <!-- <ng-template #clusterTemplate
     let-cluster>
     <svg:g class="node cluster"
       ngx-tooltip
@@ -40,42 +57,43 @@
     </svg:g>
   </ng-template> -->
 
-  <!-- NODE -->
-  <ng-template #nodeTemplate
-    let-node>
-    <svg:g class="node"
-      ngx-tooltip
-      [tooltipPlacement]="'top'"
-      [tooltipType]="'tooltip'"
-      [tooltipTitle]="node.label">
-      <svg:rect [attr.width]="100"
+    <!-- NODE -->
+    <ng-template #nodeTemplate
+      let-node>
+      <svg:g class="node"
+        ngx-tooltip
+        [tooltipPlacement]="'top'"
+        [tooltipType]="'tooltip'"
+        [tooltipTitle]="node.label">
+        <!-- <svg:rect [attr.width]="100"
         [attr.height]="70"
-        [attr.fill]="node.data.color" />
-      <svg:text alignment-baseline="central"
-        [attr.x]="10"
-        [attr.y]="node.dimension.height / 2">
-        {{node.label}}
-      </svg:text>
-    </svg:g>
-  </ng-template>
+        [attr.fill]="node.data.color" /> -->
+        <svg:text alignment-baseline="central"
+          [attr.x]="10"
+          [attr.y]="node.dimension.height / 2">
+          {{node.label}}
+        </svg:text>
+      </svg:g>
+    </ng-template>
 
-  <!-- EDGE -->
-  <ng-template #linkTemplate
-    let-link>
-    <svg:g class="edge">
-      <svg:path class="line"
-        stroke-width="2"
-        marker-end="url(#arrow)"></svg:path>
-      <svg:text class="edge-label"
-        text-anchor="middle">
-        <textPath class="text-path"
-          [attr.href]="'#' + link.id"
-          [style.dominant-baseline]="link.dominantBaseline"
-          startOffset="50%">
-          {{link.label}}
-        </textPath>
-      </svg:text>
-    </svg:g>
-  </ng-template>
+    <!-- EDGE -->
+    <ng-template #linkTemplate
+      let-link>
+      <svg:g class="edge">
+        <svg:path class="line"
+          stroke-width="2"
+          marker-end="url(#arrow)"></svg:path>
+        <svg:text class="edge-label"
+          text-anchor="middle">
+          <textPath class="text-path"
+            [attr.href]="'#' + link.id"
+            [style.dominant-baseline]="link.dominantBaseline"
+            startOffset="50%">
+            {{link.label}}
+          </textPath>
+        </svg:text>
+      </svg:g>
+    </ng-template>
 
-</ngx-graph>
+  </ngx-graph>
+</div>

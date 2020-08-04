@@ -41,7 +41,7 @@ export class AppComponent {
 
   ngOnInit() {
 
-    console.log('APP COMPONENT STARTED!');
+    // console.log('APP COMPONENT STARTED!');
 
     // JWT Authentication
     let dateNow = new Date().getTime();  // epoch in milliseconds 
@@ -49,7 +49,7 @@ export class AppComponent {
 
     if (token) {
 
-      console.log('we have a token!');
+      // console.log('we have a token!');
 
       // Case: token is invalid, logout
       if (!this.isValidToken(token)) {
@@ -130,7 +130,7 @@ export class AppComponent {
           this.apiService.changeEventId(previousEvent);
         }
 
-        console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
+        // console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
       });
   }
 
