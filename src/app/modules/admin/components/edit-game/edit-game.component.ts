@@ -156,6 +156,7 @@ export class EditGameComponent implements OnInit {
     this.getBracketsByEventId();
     this.getDrawsAndTeams();
     this.selectedGame.draw_name = this.draws.filter(x => x.id === this.selectedGame.draw_id)[0].name;
+    this.selectedGame.winner_name = this.selectedGame.winner === this.selectedGame.curlingteam1_id ? this.selectedGame.team_name1 : this.selectedGame.team_name2;
   }
 
   getPoolsByEventId() {
