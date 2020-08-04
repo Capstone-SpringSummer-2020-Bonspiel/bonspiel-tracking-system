@@ -16,13 +16,11 @@ export class EditPoolComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  allPoolData: null;
-  selectedPool: { name: 'Defaultname'; }
-  selectedPoolId: Number;
+  events: any[] = [];
+  selectedEvent = null;
 
-  allEventData: null;
-  selectedEvent: null;
-  selectedEventId: 0;
+  pools: any[] = [];
+  selectedPool = null;
 
   constructor(
     private fb: FormBuilder,
@@ -33,27 +31,6 @@ export class EditPoolComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.spinnerService.on();
-    this.apiService
-      .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        this.selectedEvent = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
-
-        // this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-        //   console.log(res)
-        //   this.allPoolData = res;
-        //   this.selectedPool = res[0];
-        //   // this.selectedPoolId = res[0].id;
-        // })
-
-        this.spinnerService.off();
-      })
-
     this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
@@ -63,61 +40,74 @@ export class EditPoolComponent implements OnInit {
     this.secondFormGroup = this.fb.group({
       eventNameCtrl: ['', Validators.required],
     });
+
+    this.getPoolEvents();
   }
-  onEventSelected(event: any) {
-    console.log('the selected event is:');
+
+  getPoolEvents() {
+    this.spinnerService.on();
+    this.apiService
+      .getEvents()
+      .subscribe((res: any) => {
+        this.events = res.filter(x => x.event_type === 'pools');
+        this.events.sort((a, b) => a.name > b.name ? 1 : -1);
+        console.log('events');
+        console.log(this.events);
+        this.spinnerService.off();
+      })
+  }
+
+  selectEvent() {
+    this.selectedEvent = this.events.filter(x => x.id === this.zeroFormGroup.value.eventCtrl)[0];
+    console.log('selectedEvent');
     console.log(this.selectedEvent);
 
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
-
-    console.log('the selected event is:');
-    console.log(this.selectedEvent);
-
-    this.apiService.getPool(this.selectedEventId).subscribe((res: any) => {
-      console.log(res)
-      this.allPoolData = res;
-      this.selectedPool = res[0];
-      if (res[0]) {
-        this.selectedPoolId = res[0].id;
-      }
+    this.spinnerService.on();
+    this.apiService.getPool(this.selectedEvent.id).subscribe((res: any) => {
+      this.pools = res;
+      this.pools.sort((a, b) => a.name > b.name ? 1 : -1);
+      console.log('pools');
+      console.log(this.pools);
+      this.spinnerService.off();
     })
   }
-  onPoolSelected(pool: any) {
-    console.log(this.allEventData);
-    console.log('the selected Pool is:');
-    console.log(this.allEventData);
-    console.log(pool.value);
-
-    this.selectedPool = pool.value;
-    this.selectedPoolId = pool.value.id;
-
+  selectPool() {
+    this.selectedPool = this.pools.filter(x => x.id === this.firstFormGroup.value.poolCtrl)[0];
     this.secondFormGroup.controls.eventNameCtrl.setValue(this.selectedPool.name);
   }
 
   onClickSubmit(stepper) {
     //Edit Pool
-    const poolName = this.secondFormGroup.value.eventNameCtrl;
-    console.log("Event Select: ")
-    console.log(this.selectedEventId)
-    console.log("Pool Delete: ")
-    console.log(this.selectedPoolId)
+    const newpoolName = this.secondFormGroup.value.eventNameCtrl;
 
     this.spinnerService.on();
     this.apiService
-      .editPool(poolName, String(this.selectedEventId), String(this.selectedPoolId))
+      .editPool(newpoolName, this.selectedEvent.id, this.selectedPool.id)
       .subscribe(
         (res: any) => {
+          console.log(res);
           this.notificationService.showSuccess('Pool has been successfully modified!', '');
+
+          // Reset the form and validation
+          stepper.reset();
+
+          let formGroups = [this.zeroFormGroup, this.firstFormGroup, this.secondFormGroup];
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
-          this.notificationService.showError(err.message, 'Pool modified failed!');
+          this.notificationService.showError(err.message, 'ERROR');
         })
       .add(
         () => {
-          stepper.reset();
-          this.spinnerService.off()
+          this.spinnerService.off();
+          this.getPoolEvents();
         });
 
 
