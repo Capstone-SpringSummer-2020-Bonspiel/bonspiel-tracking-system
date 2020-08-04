@@ -116,14 +116,15 @@ export class AppComponent {
           return c > d ? 1 : -1;
         });
 
+        console.log('currentCurlingEvents:', this.currentCurlingEvents);
+        console.log('pastCurlingEvents:', this.pastCurlingEvents);
+
         // Set to most recent event if current value is null
         // Otherwise, set it to current value
         let sorted = this.currentCurlingEvents;
 
         if (sorted.length === 0) {
           sorted = this.pastCurlingEvents;
-        } else {
-          sorted = [];
         }
 
         console.log('sorted', sorted);
@@ -138,6 +139,7 @@ export class AppComponent {
         } else {
           this.apiService.changeEventId(previousEventId);
         }
+
         if (previousEvent === null) {
           this.apiService.changeEvent(sorted[0]);
         } else {
