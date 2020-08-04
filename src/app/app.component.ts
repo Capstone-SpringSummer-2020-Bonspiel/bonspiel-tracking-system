@@ -104,15 +104,29 @@ export class AppComponent {
           }
         }
 
-        // Set to most recent event if current value is null
-        // Otherwise, set it to current value
-        let sorted = this.currentCurlingEvents.sort((a, b) => {
+        this.currentCurlingEvents = this.currentCurlingEvents.sort((a, b) => {
           let c = new Date(a);
           let d = new Date(b);
           return c > d ? 1 : -1;
         });
 
-        // console.log('sorted', sorted);
+        this.pastCurlingEvents = this.pastCurlingEvents.sort((a, b) => {
+          let c = new Date(a);
+          let d = new Date(b);
+          return c > d ? 1 : -1;
+        });
+
+        // Set to most recent event if current value is null
+        // Otherwise, set it to current value
+        let sorted = this.currentCurlingEvents;
+
+        if (sorted.length === 0) {
+          sorted = this.pastCurlingEvents;
+        } else {
+          sorted = [];
+        }
+
+        console.log('sorted', sorted);
 
         let previousEventId = this.apiService.currentEventId;
         let previousEvent = this.apiService.currentEvent;

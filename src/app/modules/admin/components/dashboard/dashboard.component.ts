@@ -318,16 +318,9 @@ export class DashboardComponent implements OnInit {
     this.spinnerService.on();
 
     this.apiService.getTournamentBracketData(eventId).subscribe((data: any) => {
-      // let payload = [data.nodes, data.edges];
       console.log('tournamentBracketData', data);
 
-      // data.nodes.forEach(e => delete e.data);
-      // data.nodes.forEach(e => delete e.dimension);
-      // data.nodes.forEach(e => delete e.meta);
-      // data.nodes.forEach(e => delete e.position);
-      // data.edges.forEach(e => e.label = '');
-
-      // this.tournamentBracketData = data;
+      this.tournamentBracketData = data;
 
       this.spinnerService.off();
     });
