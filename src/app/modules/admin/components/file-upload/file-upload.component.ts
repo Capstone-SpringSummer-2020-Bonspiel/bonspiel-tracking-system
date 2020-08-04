@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FileUploadService } from '@app/core/services/file-upload.service';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
@@ -13,6 +13,8 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 export class FileUploadComponent implements OnInit {
   form: FormGroup;
   progress: number = 0;
+
+  @ViewChild('filename') input: ElementRef
 
   constructor(
     public fb: FormBuilder,
@@ -49,7 +51,7 @@ export class FileUploadComponent implements OnInit {
           switch (event.type) {
             case HttpEventType.Sent:
               console.log('Request has been made!');
-              this.notificationService.showInfo('Request has been made!', '');
+              // this.notificationService.showInfo('Request has been made!', '');
               break;
             case HttpEventType.ResponseHeader:
               console.log('Response header has been received!');
@@ -72,6 +74,8 @@ export class FileUploadComponent implements OnInit {
       .add(() => {
         this.resetProgressBar();
         this.form.reset();
+        this.input.nativeElement.value = '';
+        console.log('form', this.form);
         this.spinnerService.off();
       });
   }
