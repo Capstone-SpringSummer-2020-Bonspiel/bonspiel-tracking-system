@@ -16,6 +16,7 @@ export class EditTeamComponent implements OnInit {
   organizations: any[] = [];
   teams: any[] = [];
   selectedTeam: any;
+  selectedTeamAffiliation: string = "";
 
 
   constructor(
@@ -56,8 +57,14 @@ export class EditTeamComponent implements OnInit {
   }
 
   getTeamId() {
+    this.selectedTeamAffiliation = "";
     this.selectedTeam = this.teams.filter(x => x.id === this.firstFormGroup.value.teamCtrl)[0];
     console.log('this.selectedTeam ', this.selectedTeam);
+    //console.log(this.selectedTeam.affiliation.fullName);
+    if (this.selectedTeam.affiliation) {
+      this.selectedTeamAffiliation = this.selectedTeam.affiliation.fullName;
+      console.log(this.selectedTeamAffiliation);
+    }
 
     this.secondFormGroup.controls.secondCtrlName.setValue(this.selectedTeam.team_name);
 
@@ -66,9 +73,9 @@ export class EditTeamComponent implements OnInit {
 
   onClickSubmit(stepper: MatStepper) {
     const name = this.secondFormGroup.value.secondCtrlName;
-    const note = this.thirdFormGroup.value.thirdCtrlNote;
-    const org = this.thirdFormGroup.value.thirdCtrlOrg;
+    const note = this.thirdFormGroup.value.thirdCtrlNote || "";
 
+    const org = (this.selectedTeam.affiliation) ? (this.thirdFormGroup.value.thirdCtrlOrg ? this.thirdFormGroup.value.thirdCtrlOrg : this.selectedTeam.affiliation.id) : this.thirdFormGroup.value.thirdCtrlOrg;;
     this.spinnerService.on();
 
     this.apiService

@@ -59,7 +59,7 @@
           formControlName="thirdCtrlNote">
       </mat-form-field>
       <br />
-      <p>Current Affiliation: {{selectedTeam.affiliation}}</p>
+      <p *ngIf="selectedTeamAffiliation">Current Affiliation: {{this.selectedTeamAffiliation}}</p>
       <mat-form-field>
         <mat-label> Select Organization... </mat-label>
         <mat-select formControlName="thirdCtrlOrg"
