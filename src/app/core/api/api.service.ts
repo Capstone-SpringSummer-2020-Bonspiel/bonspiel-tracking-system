@@ -109,7 +109,6 @@ export class ApiService {
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    console.log('last check before lunch');
     console.log(body);
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`,

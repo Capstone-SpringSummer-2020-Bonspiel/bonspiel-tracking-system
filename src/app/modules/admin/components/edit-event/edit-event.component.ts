@@ -81,17 +81,17 @@ export class EditEventComponent implements OnInit {
 
   onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.value.nameCtrl;
-    const info = this.firstFormGroup.value.infoCtrl;
+    const info = this.firstFormGroup.value.infoCtrl || (this.selectedEvent.info ? this.selectedEvent.info : "");
     const type = this.secondFormGroup.value.eventTypeCtrl || this.selectedEvent.event_type;
     const condition = this.secondFormGroup.value.conditionCtrl || this.selectedEvent.completed;
     const beginDate = this.thirdFormGroup.value.eventStartCtrl || this.selectedEvent.begin_date;
     const endDate = this.thirdFormGroup.value.eventEndCtrl || this.selectedEvent.end_date;
-    console.log(`full name: ${name}`);
-    console.log(`detail info: ${info}`);
-    console.log(`event type: ${type}`);
-    console.log(`complete: ${condition}`);
-    console.log(`begin-date: ${beginDate}`);
-    console.log(`End-date: ${endDate}`);
+    // console.log(`full name: ${name}`);
+    // console.log(`detail info: ${info}`);
+    // console.log(`event type: ${type}`);
+    // console.log(`complete: ${condition}`);
+    // console.log(`begin-date: ${beginDate}`);
+    // console.log(`End-date: ${endDate}`);
 
     this.spinnerService.on();
     this.apiService.editEvent(name, info, type, condition, beginDate, endDate, this.selectedEvent.id)
