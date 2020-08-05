@@ -57,12 +57,13 @@
     <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> Edit Curler Information </ng-template>
       <mat-card *ngIf="selectedCurler"
+        [ngStyle]="{width:'fit-content'}"
         class="m-2">
-        Name: {{selectedCurler.name}} <br />
-        Throwing Order: {{selectedCurler.throwing_order | titlecase}} <br />
-        Position: {{selectedCurler.position | titlecase}} <br />
-        Team: {{selectedCurler.curlingteamname}} <br />
-        Club Affiliation: {{selectedCurler.organization.full_name}} <br />
+        <strong>Name:</strong> {{selectedCurler.name}} <br />
+        <strong>Throwing Order:</strong> {{selectedCurler.throwing_order | titlecase}} <br />
+        <strong>Position:</strong> {{selectedCurler.position | titlecase}} <br />
+        <strong>Team</strong> {{selectedCurler.curlingteamname}} <br />
+        <strong>Club Affiliation:</strong> {{selectedCurler.organization.full_name}} <br />
       </mat-card>
       <mat-form-field>
         <mat-label>Name</mat-label>

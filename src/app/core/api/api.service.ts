@@ -94,17 +94,17 @@ export class ApiService {
 
   public editEvent(
     nameData,
-    beginDateData,
-    endDateData,
-    completedData,
     infoData,
     eventTypeData,
+    completedData,
+    beginDateData,
+    endDateData,
     eventId
   ) {
     const body = {
       name: nameData,
-      eventType: eventTypeData,
       info: infoData,
+      eventType: eventTypeData,
       completed: completedData,
       beginDate: beginDateData,
       endDate: endDateData,
