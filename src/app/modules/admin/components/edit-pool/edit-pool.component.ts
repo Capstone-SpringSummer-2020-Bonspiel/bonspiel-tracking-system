@@ -38,7 +38,7 @@ export class EditPoolComponent implements OnInit {
       poolCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      eventNameCtrl: ['', Validators.required],
+      poolNameCtrl: ['', Validators.required],
     });
 
     this.getPoolEvents();
@@ -71,13 +71,13 @@ export class EditPoolComponent implements OnInit {
       this.spinnerService.off();
     })
   }
+
   selectPool() {
     this.selectedPool = this.pools.filter(x => x.id === this.firstFormGroup.value.poolCtrl)[0];
-    this.secondFormGroup.controls.eventNameCtrl.setValue(this.selectedPool.name);
+    this.secondFormGroup.controls.poolNameCtrl.setValue(this.selectedPool.name);
   }
 
   onClickSubmit(stepper) {
-    //Edit Pool
     const newpoolName = this.secondFormGroup.value.eventNameCtrl;
 
     this.spinnerService.on();

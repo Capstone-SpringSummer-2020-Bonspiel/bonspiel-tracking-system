@@ -15,13 +15,12 @@ export class EditBracketComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  allBracketData: null;
-  selectedBracket: any = { name: 'SampleName', }
-  selectedBracketId: Number;
+  events: any[] = [];
+  selectedEvent = null;
 
-  allEventData: null;
-  selectedEventId: Number;
-  selectedEvent: null;
+  brackets: any[] = [];
+  selectedBracket = null;
+
 
   constructor(
     private fb: FormBuilder,
@@ -32,20 +31,6 @@ export class EditBracketComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.spinnerService.on();
-    this.apiService
-      .getEvents()
-      .subscribe((res: any) => {
-        console.log('[DEBUG] eventObtain() in schedule component:');
-        console.log(res);
-        this.allEventData = res;
-        this.selectedEvent = res[0];
-        console.log("ThisEventDataBelow:");
-        console.log(this.allEventData);
-
-        this.spinnerService.off();
-      })
-
     this.zeroFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
@@ -55,57 +40,74 @@ export class EditBracketComponent implements OnInit {
     this.secondFormGroup = this.fb.group({
       bracketNameCtrl: ['', Validators.required],
     });
+
+    this.getBracketEvents();
   }
-  onEventSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(event);
 
-    this.selectedEvent = event.value;
-    this.selectedEventId = event.value.id;
+  getBracketEvents() {
+    this.spinnerService.on();
+    this.apiService
+      .getEvents()
+      .subscribe((res: any) => {
+        this.events = res.filter(x => x.event_type === 'brackets');
+        this.events.sort((a, b) => a.name > b.name ? 1 : -1);
+        console.log('events');
+        console.log(this.events);
+        this.spinnerService.off();;
+      })
+  }
 
-    console.log('the selected event is:');
+  selectEvent() {
+    this.selectedEvent = this.events.filter(x => x.id === this.zeroFormGroup.value.eventCtrl)[0];
+    console.log('selectedEvent');
     console.log(this.selectedEvent);
 
-    this.apiService.getBracket(this.selectedEventId).subscribe((res: any) => {
-      console.log(res)
-      this.allBracketData = res;
-      this.selectedBracket = res[0];
-      if (res[0]) {
-        this.selectedBracketId = res[0].id;
-      }
-    })
+    this.spinnerService.on();
+    this.apiService.getBracket(this.selectedEvent.id).subscribe((res: any) => {
+      this.brackets = res;
+      this.brackets.sort((a, b) => a.name > b.name ? 1 : -1);
+      console.log('brackets');
+      console.log(this.brackets);
+      this.spinnerService.off();
+    });
   }
-  onBracketSelected(bracket: any) {
-    this.selectedBracket = bracket.value;
-    this.selectedBracketId = bracket.value.id;
+
+  selectBracket() {
+    this.selectedBracket = this.brackets.filter(x => x.id === this.firstFormGroup.value.bracketCtrl)[0];
     this.secondFormGroup.controls.bracketNameCtrl.setValue(this.selectedBracket.name);
   }
 
   onClickSubmit(stepper) {
     const bracketName = this.secondFormGroup.value.bracketNameCtrl;
-    console.log("Event Select: ")
-    console.log(this.selectedEventId)
-    console.log("Bracket selected: ")
-    console.log(this.selectedBracket)
-    console.log(this.selectedBracketId)
 
     this.spinnerService.on();
     this.apiService
-      .editBracket(bracketName, String(this.selectedEventId), String(this.selectedBracketId))
+      .editBracket(bracketName, this.selectedEvent.id, this.selectedBracket.id)
       .subscribe(
         (res: any) => {
-          this.notificationService.showSuccess('Bracket has been successfully deleted!', '');
-          this.spinnerService.off();
+          console.log(res);
+          this.notificationService.showSuccess('Bracket has been modified', '');
+
+          // Reset the form and validation
+          stepper.reset();
+
+          let formGroups = [this.zeroFormGroup, this.firstFormGroup, this.secondFormGroup];
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
-          console.log(err.message);
-          this.notificationService.showError(err.message, 'Bracket deleted failed!');
-          this.spinnerService.off();
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
         })
       .add(
         () => {
-          stepper.reset();
-          this.spinnerService.off()
+          this.spinnerService.off();
+          this.getBracketEvents();
         });
 
 

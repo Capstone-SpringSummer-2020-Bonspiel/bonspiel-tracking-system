@@ -1,20 +1,20 @@
 <div class="slide-in-text">
-  <h1> Edit Bracket </h1>
+  <h1> Edit a Bracket </h1>
 </div>
 
 <mat-vertical-stepper linear
   #stepper>
-  <!-- SELECT EVENT -->
+  <!-- EVENT -->
   <mat-step [stepControl]="zeroFormGroup">
     <form [formGroup]="zeroFormGroup">
       <ng-template matStepLabel> Select Event </ng-template>
       <mat-form-field>
         <mat-label>Select Event for Brackets</mat-label>
         <mat-select formControlName="eventCtrl"
-          (selectionChange)="onEventSelected($event);"
+          (selectionChange)="selectEvent(); stepper.next();"
           required>
-          <mat-option *ngFor="let event of this.allEventData"
-            [value]="event">
+          <mat-option *ngFor="let event of events"
+            [value]="event.id">
             {{event.name}}
           </mat-option>
         </mat-select>
@@ -26,20 +26,20 @@
     </form>
   </mat-step>
 
-  <!-- SELECT Bracket -->
+  <!-- BRACKET -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select Bracket </ng-template>
-      <div *ngIf="this.selectedBracket == null">
-        <p> No Bracket exists in the selected Event. </p>
+      <div *ngIf="brackets.length === 0">
+        <p> No brackets exists in this event. </p>
       </div>
-      <mat-form-field *ngIf="this.selectedBracket != null">
-        <mat-label>Select Bracket to Modify</mat-label>
+      <mat-form-field *ngIf="brackets.length">
+        <mat-label>Select Bracket</mat-label>
         <mat-select formControlName="bracketCtrl"
-          (selectionChange)="onBracketSelected($event); stepper.next()"
+          (selectionChange)="selectBracket(); stepper.next()"
           required>
-          <mat-option *ngFor="let bracket of this.allBracketData"
-            [value]="bracket">
+          <mat-option *ngFor="let bracket of brackets"
+            [value]="bracket.id">
             {{bracket.name}}
           </mat-option>
         </mat-select>
@@ -53,12 +53,12 @@
     </form>
   </mat-step>
 
-  <!-- INPUT NEW INFO -->
+  <!-- BRACKET DETAILS -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> New Bracket Name </ng-template>
+      <ng-template matStepLabel> Edit Bracket Details </ng-template>
       <mat-form-field>
-        <mat-label> New Bracket Name </mat-label>
+        <mat-label> Bracket Name </mat-label>
         <input matInput
           type='text'
           placeholder="New Bracket Name"
@@ -73,6 +73,7 @@
     </form>
   </mat-step>
 
+  <!-- SUBMIT & RESET -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
