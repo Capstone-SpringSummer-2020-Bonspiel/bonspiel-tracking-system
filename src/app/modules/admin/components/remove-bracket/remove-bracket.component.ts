@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@app/core/api/api.service';
-import { MatDialog } from '@angular/material/dialog';
 import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import {
@@ -18,7 +17,8 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrls: ['./remove-bracket.component.scss'],
 })
 export class RemoveBracketComponent implements OnInit {
-  formGroup: FormGroup;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
   events: any = [];
   brackets: any = [];
@@ -26,39 +26,23 @@ export class RemoveBracketComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder,
-    public dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
     // Initialize form group
-    this.formGroup = this.fb.group({
-      formArray: this.fb.array([
-        this.fb.group({
-          eventCtrl: ['', Validators.required],
-        }),
-        this.fb.group({
-          bracketCtrl: ['', Validators.required],
-        }),
-      ]),
+    this.firstFormGroup = this.fb.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.fb.group({
+      bracketCtrl: ['', Validators.required],
     });
 
-    console.log(this.formGroup);
-
-    this.getEvents();
+    this.loadEvents();
   }
 
-  // Returns a FormArray with the name 'formArray'
-  get formArray(): AbstractControl | null {
-    return this.formGroup.get('formArray');
-  }
-
-  getCtrlValue(index) {
-    return this.formGroup.get('formArray').value[index];
-  }
-
-  getEvents() {
+  loadEvents() {
     // Get events
     this.spinnerService.on();
     this.apiService
@@ -74,15 +58,21 @@ export class RemoveBracketComponent implements OnInit {
       });
   }
 
-  getBrackets() {
+  getBrackets(stepper: MatStepper) {
+    const eventId = this.firstFormGroup.controls.eventCtrl.value;
+    console.log('eventId', eventId);
+
     // Get brackets
     this.spinnerService.on();
     this.apiService
-      .getBracket(this.getCtrlValue(0).eventCtrl)
-      .subscribe((res) => {
+      .getBracket(eventId)
+      .subscribe((res: any) => {
         this.brackets = res;
+        this.brackets.sort((a, b) => (a.name > b.name ? 1 : -1));
         console.log('brackets:');
         console.log(this.brackets);
+
+        stepper.next();
       })
       .add(() => {
         this.spinnerService.off();
@@ -90,7 +80,7 @@ export class RemoveBracketComponent implements OnInit {
   }
 
   onClickRemove(stepper: MatStepper) {
-    const bracketId = this.getCtrlValue(1).bracketCtrl;
+    const bracketId = this.secondFormGroup.controls.bracketCtrl.value;
 
     // Remove bracket
     this.spinnerService.on();
@@ -99,8 +89,22 @@ export class RemoveBracketComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
-
           this.notificationService.showSuccess('Bracket has been removed', '');
+
+          // Reset the stepper, forms and validation
+          stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
@@ -109,10 +113,7 @@ export class RemoveBracketComponent implements OnInit {
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
-
-
   }
 }

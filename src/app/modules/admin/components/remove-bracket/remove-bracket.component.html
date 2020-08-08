@@ -2,22 +2,22 @@
   <h1> Remove Bracket </h1>
 </div>
 
-<form [formGroup]="formGroup">
-  <mat-vertical-stepper linear
-    #stepper
-    formArrayName="formArray">
+<mat-vertical-stepper #stepper
+  linear>
 
-    <!-- EVENT -->
-    <mat-step formGroupName="0"
-      [stepControl]="formArray?.get([0])">
+  <!-- EVENT -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select an Event </ng-template>
       <mat-form-field>
         <mat-label>Choose an Event</mat-label>
         <mat-select formControlName="eventCtrl"
-          (selectionChange)="getBrackets(); stepper.next()"
+          (selectionChange)="getBrackets(stepper)"
           required>
           <mat-option *ngFor="let event of events"
-            [value]="event.id">
+            [value]="event.id"
+            matTooltip="{{event.begin_date | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+            [matTooltipPosition]="'right'">
             {{event.name}}
           </mat-option>
         </mat-select>
@@ -26,11 +26,12 @@
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <!-- BRACKET -->
-    <mat-step formGroupName="1"
-      [stepControl]="formArray?.get([1])">
+  <!-- BRACKET -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> Select a Bracket </ng-template>
       <mat-form-field>
         <mat-label>Choose Bracket</mat-label>
@@ -50,20 +51,20 @@
         <button mat-button
           matStepperNext>Next</button>
       </div>
-    </mat-step>
+    </form>
+  </mat-step>
 
-    <!-- REMOVE -->
-    <mat-step>
-      <ng-template matStepLabel>Remove</ng-template>
-      <p>Click Remove when ready.</p>
-      <div>
-        <button mat-button
-          matStepperPrevious>Back</button>
-        <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickRemove(stepper)">Remove</button>
-      </div>
-    </mat-step>
-  </mat-vertical-stepper>
-</form>
+  <!-- REMOVE -->
+  <mat-step>
+    <ng-template matStepLabel>Remove</ng-template>
+    <p>Click Remove when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickRemove(stepper)">Remove</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

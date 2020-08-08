@@ -17,7 +17,8 @@ import { NotificationService } from '@app/shared/services/notification.service';
   styleUrls: ['./remove-pool.component.scss'],
 })
 export class RemovePoolComponent implements OnInit {
-  formGroup: FormGroup;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
   events: any = [];
   pools: any = [];
@@ -31,32 +32,17 @@ export class RemovePoolComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize form group
-    this.formGroup = this.fb.group({
-      formArray: this.fb.array([
-        this.fb.group({
-          eventCtrl: ['', Validators.required],
-        }),
-        this.fb.group({
-          poolCtrl: ['', Validators.required],
-        }),
-      ]),
+    this.firstFormGroup = this.fb.group({
+      eventCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this.fb.group({
+      poolCtrl: ['', Validators.required],
     });
 
-    console.log(this.formGroup);
-
-    this.getEvents();
+    this.loadEvents();
   }
 
-  // Returns a FormArray with the name 'formArray'
-  get formArray(): AbstractControl | null {
-    return this.formGroup.get('formArray');
-  }
-
-  getCtrlValue(index) {
-    return this.formGroup.get('formArray').value[index];
-  }
-
-  getEvents() {
+  loadEvents() {
     // Get events
     this.spinnerService.on();
     this.apiService
@@ -72,16 +58,21 @@ export class RemovePoolComponent implements OnInit {
       });
   }
 
-  getPools() {
+  getPools(stepper: MatStepper) {
+    const eventId = this.firstFormGroup.controls.eventCtrl.value;
+    console.log('eventId', eventId);
+
     // Get pools
     this.spinnerService.on();
     this.apiService
-      .getPool(this.getCtrlValue(0).eventCtrl)
+      .getPool(eventId)
       .subscribe((res: any) => {
         this.pools = res;
         this.pools.sort((a, b) => (a.name > b.name ? 1 : -1));
         console.log('pools:');
         console.log(this.pools);
+
+        stepper.next();
       })
       .add(() => {
         this.spinnerService.off();
@@ -89,7 +80,7 @@ export class RemovePoolComponent implements OnInit {
   }
 
   onClickRemove(stepper: MatStepper) {
-    const poolId = this.getCtrlValue(1).poolCtrl;
+    const poolId = this.secondFormGroup.controls.poolCtrl.value;
 
     // Remove pool
     this.spinnerService.on();
@@ -99,6 +90,21 @@ export class RemovePoolComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Pool has been removed', '');
+
+          // Reset the stepper, forms and validation
+          stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err.message);
@@ -106,10 +112,7 @@ export class RemovePoolComponent implements OnInit {
         })
       .add(
         () => {
-          stepper.reset();
           this.spinnerService.off()
         });
-
-
   }
 }
