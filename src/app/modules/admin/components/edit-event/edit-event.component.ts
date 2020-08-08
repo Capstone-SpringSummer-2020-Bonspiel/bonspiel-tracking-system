@@ -82,10 +82,36 @@ export class EditEventComponent implements OnInit {
   onClickSubmit(stepper: MatStepper) {
     const name = this.firstFormGroup.value.nameCtrl;
     const info = this.firstFormGroup.value.infoCtrl || (this.selectedEvent.info ? this.selectedEvent.info : "");
-    const type = this.secondFormGroup.value.eventTypeCtrl || this.selectedEvent.event_type;
+    const type = this.secondFormGroup.value.typeCtrl || this.selectedEvent.event_type;
     const condition = this.secondFormGroup.value.conditionCtrl || this.selectedEvent.completed;
-    const beginDate = this.thirdFormGroup.value.eventStartCtrl || this.selectedEvent.begin_date;
-    const endDate = this.thirdFormGroup.value.eventEndCtrl || this.selectedEvent.end_date;
+    // const beginDate = this.thirdFormGroup.value.startCtrl || this.selectedEvent.begin_date;
+    // const endDate = this.thirdFormGroup.value.endCtrl || this.selectedEvent.end_date;
+
+    var beginDate = null;
+    var adjustBeginDate = null;
+    if (this.thirdFormGroup.value.startCtrl) {
+      beginDate = String(this.thirdFormGroup.controls.startCtrl.value.toLocaleString());
+    } else {
+      adjustBeginDate = new Date(this.selectedEvent.begin_date)
+      beginDate = String(adjustBeginDate.toLocaleString());
+    }
+
+    var endDate = null;
+    var adjustEndTime = null;
+    if (this.thirdFormGroup.value.endCtrl) {
+      adjustEndTime = new Date(this.thirdFormGroup.controls.endCtrl.value.getTime() + (23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 59 * 1000));
+      endDate = String(adjustEndTime.toLocaleString());
+    } else {
+      adjustEndTime = new Date(this.selectedEvent.end_date)
+      endDate = String(adjustEndTime.toLocaleString());
+    }
+
+    // console.log(this.selectedEvent.begin_date)
+    // console.log(this.selectedEvent.end_date)
+    // console.log('----------------')
+    // console.log(beginDate)
+    // console.log(endDate)
+    // console.log("final data ---------------------")
     // console.log(`full name: ${name}`);
     // console.log(`detail info: ${info}`);
     // console.log(`event type: ${type}`);
