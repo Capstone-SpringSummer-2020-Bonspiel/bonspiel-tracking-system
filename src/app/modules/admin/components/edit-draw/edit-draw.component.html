@@ -4,69 +4,85 @@
 
 <mat-vertical-stepper linear
   #stepper>
-  <!-- Stepper 1: Select Event Name-->
+
+  <!-- EVENT -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel> Select Curling Event </ng-template>
+      <ng-template matStepLabel> Select Event </ng-template>
       <mat-form-field>
-        <mat-label> Select Curling Event... </mat-label>
-        <mat-select formControlName="firstCtrl"
+        <mat-label> Select Event... </mat-label>
+        <mat-select formControlName="eventCtrl"
           name="eventName"
           (selectionChange)="getEventDraws(); stepper.next()"
           required>
-          <mat-option *ngFor="let eventName of eventNames"
-            [value]="eventName.id"
-            matTooltip="{{eventName.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"
+            matTooltip="{{event.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
             [matTooltipPosition]="'right'">
-            {{eventName.name}}
+            {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
 
-  <!-- Stepper 2: Select Draw-->
+  <!-- DRAW -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> Select Draw </ng-template>
 
       <mat-form-field>
         <mat-label> Select Draw... </mat-label>
-        <mat-select formControlName="secondCtrl"
+        <mat-select formControlName="drawCtrl"
           name="eventDraws"
           (selectionChange)="getDraw(); stepper.next()"
           required>
-          <mat-option *ngFor="let eventDraw of eventDraws"
-            [value]="eventDraw.id"
-            matTooltip="{{eventDraw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
+          <mat-option *ngFor="let draw of draws"
+            [value]="draw.id"
+            matTooltip="{{draw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}"
             [matTooltipPosition]="'right'">
-            {{eventDraw.name}}
+            {{draw.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-
+      <div>
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
     </form>
   </mat-step>
-  <!-- Stepper 3: Draw Information-->
+
+  <!-- EDIT DRAW DETAILS -->
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> Edit Draw Information </ng-template>
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput
-          formControlName="thirdCtrlName"
+          formControlName="nameCtrl"
           placeholder="Ex. Draw #1"
           required>
       </mat-form-field>
       <br>
 
+      <mat-card *ngIf="selectedDraw"
+        [ngStyle]="{width:'fit-content'}"
+        class="m-2">
+        <strong>Current Date:</strong> {{selectedDraw.start | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}
+      </mat-card>
       <mat-form-field>
         <input matInput
           [min]="minDate"
           [max]="maxDate"
           [ngxMatDatetimePicker]="picker2"
           placeholder="Choose a date"
-          formControlName="thirdCtrlDate">
+          formControlName="dateCtrl">
         <mat-datepicker-toggle matSuffix
           [for]="picker2"></mat-datepicker-toggle>
         <ngx-mat-datetime-picker #picker2
@@ -77,7 +93,7 @@
       <mat-form-field>
         <mat-label>Video URL (Optional)</mat-label>
         <input matInput
-          formControlName="thirdCtrlUrl"
+          formControlName="urlCtrl"
           placeholder="Ex. https://www.youtube.com/embed/zesl6jZnSDM">
       </mat-form-field>
 
@@ -85,12 +101,23 @@
         <button mat-button
           matStepperPrevious>Back</button>
         <button mat-button
-          (click)="stepper.reset()">Reset</button>
-        <button mat-button
-          (click)="onClickSubmit(stepper)">Submit</button>
+          matStepperNext>Next</button>
       </div>
-
     </form>
+  </mat-step>
+
+  <!-- FINISH & SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
   </mat-step>
 
 </mat-vertical-stepper>

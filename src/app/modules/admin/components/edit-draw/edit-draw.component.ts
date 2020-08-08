@@ -21,11 +21,11 @@ export class EditDrawComponent implements OnInit {
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
 
-  eventNames: any[] = [];
-  eventDraws: any[] = [];
-  selectedEvent;
-  selectedDrawId;
-  selectedDraw;
+  events: any[] = [];
+  selectedEvent = null;
+
+  draws: any[] = [];
+  selectedDraw = null;
 
   minDate: Date;
   maxDate: Date;
@@ -39,17 +39,21 @@ export class EditDrawComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required],
+      eventCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
+      drawCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
-      thirdCtrlName: ['', Validators.required],
-      thirdCtrlDate: ['', Validators.required],
-      thirdCtrlUrl: [''],
+      nameCtrl: ['', Validators.required],
+      dateCtrl: ['', Validators.required],
+      urlCtrl: [''],
     });
 
+    this.getEvents();
+  }
+
+  getEvents() {
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
@@ -61,36 +65,34 @@ export class EditDrawComponent implements OnInit {
         return;
       }
       this.spinnerService.off();
-      this.eventNames = res;
-      this.eventNames.sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.events = res;
+      this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
     });
   }
 
   getEventDraws() {
-    const selectedEventID = this.firstFormGroup.value.firstCtrl;
-    this.selectedEvent = this.eventNames.filter(
-      (x) => x.id === selectedEventID
-    );
+    this.selectedEvent = this.events.filter((x) => x.id === this.firstFormGroup.value.eventCtrl)[0];
     this.spinnerService.on();
-    this.apiService.getDraws(selectedEventID).subscribe((res: any) => {
+    this.apiService.getDraws(this.selectedEvent.id).subscribe((res: any) => {
       if (res === null || res === undefined) {
         this.notificationService.showError('Could not fetch draws', 'ERROR');
         this.spinnerService.off();
         return;
       }
-      this.eventDraws = res;
-      this.eventDraws.sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.draws = res;
+      this.draws.sort((a, b) => (a.name > b.name ? 1 : -1));
       this.spinnerService.off();
     });
   }
 
   getDraw() {
-    this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
-    this.selectedDraw = this.eventDraws.filter((x) => x.id === this.selectedDrawId);
-    this.minDate = new Date(this.selectedEvent[0].begin_date.toString());
-    this.maxDate = new Date(this.selectedEvent[0].end_date.toString());
+    this.selectedDraw = this.draws.filter((x) => x.id === this.secondFormGroup.value.drawCtrl)[0];
+    this.minDate = new Date(this.selectedEvent.begin_date.toString());
+    this.maxDate = new Date(this.selectedEvent.end_date.toString());
     console.log('selectedDraw', this.selectedDraw);
 
+    this.thirdFormGroup.controls.nameCtrl.setValue(this.selectedDraw.name);
+    this.thirdFormGroup.controls.urlCtrl.setValue(this.selectedDraw.video_url);
 
   }
 
@@ -98,16 +100,16 @@ export class EditDrawComponent implements OnInit {
 
     console.log('thirdFormGroup', this.thirdFormGroup);
 
-    const newDrawName = this.thirdFormGroup.value.thirdCtrlName;
+    const newDrawName = this.thirdFormGroup.value.nameCtrl;
     const newDrawStart = this.thirdFormGroup
-      .get('thirdCtrlDate')
+      .get('dateCtrl')
       .value?.toLocaleString();
-    const newDrawUrl = this.thirdFormGroup.value.thirdCtrlUrl;
+    const newDrawUrl = this.thirdFormGroup.value.urlCtrl;
 
     this.spinnerService.on();
 
     this.apiService
-      .editDraw(this.selectedDrawId, newDrawName, newDrawStart, newDrawUrl)
+      .editDraw(this.selectedDraw.id, newDrawName, newDrawStart, newDrawUrl)
       .subscribe(
         (res: any) => {
           console.log(res);
@@ -135,6 +137,7 @@ export class EditDrawComponent implements OnInit {
       )
       .add(() => {
         this.spinnerService.off();
+        this.getEvents();
       });
   }
 }
