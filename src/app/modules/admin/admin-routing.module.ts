@@ -38,8 +38,7 @@ import { PasswordComponent } from './components/password/password.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { InstructionalsComponent } from './components/instructionals/instructionals.component';
 import { FaqsComponent } from './components/faqs/faqs.component';
-
-
+import { SetDefaultEventComponent } from './components/set-default-event/set-default-event.component';
 
 const UsersModule = () => import('./components/users/users.module').then(x => x.UsersModule);
 
@@ -82,6 +81,7 @@ const routes: Routes = [
       { path: 'password', component: PasswordComponent },
       { path: 'instructionals', component: InstructionalsComponent },
       { path: 'faqs', component: FaqsComponent },
+      { path: 'set-default-event', component: SetDefaultEventComponent },
     ]
   },
 ];

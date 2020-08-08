@@ -6,8 +6,8 @@
   #stepper>
 
   <!-- EVENT -->
-  <mat-step [stepControl]="zeroFormGroup">
-    <form [formGroup]="zeroFormGroup">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select Event </ng-template>
       <mat-form-field>
         <mat-label>Select Event</mat-label>
@@ -28,8 +28,8 @@
   </mat-step>
 
   <!-- POOL -->
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel> Select Pool </ng-template>
       <div *ngIf="pools.length === 0">
         <p> No pools exist in this event. </p>
@@ -55,8 +55,8 @@
   </mat-step>
 
   <!-- POOL DETAILS -->
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
       <ng-template matStepLabel> Edit Pool Details </ng-template>
       <mat-form-field>
         <mat-label> Pool Name </mat-label>

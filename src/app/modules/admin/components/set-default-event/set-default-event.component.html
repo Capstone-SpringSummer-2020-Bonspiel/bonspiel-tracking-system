@@ -1,0 +1,44 @@
+<div class="slide-in-text">
+  <h1> Set Default Event </h1>
+</div>
+
+<mat-vertical-stepper linear
+  #stepper>
+
+  <!-- EVENT -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel> Select Event </ng-template>
+      <mat-form-field>
+        <mat-label>Select Event</mat-label>
+        <mat-select formControlName="eventIdCtrl"
+          required>
+          <mat-option *ngFor="let event of events"
+            [value]="event.id"
+            [disabled]="event.active_flag === true">
+            <mat-icon *ngIf="event.active_flag === true">check</mat-icon>
+            {{event.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- SUBMIT -->
+  <mat-step>
+    <ng-template matStepLabel>Submit</ng-template>
+    <p>Click Submit when ready.</p>
+    <div>
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="stepper.reset()">Reset</button>
+      <button mat-button
+        (click)="onClickSubmit(stepper)">Submit</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

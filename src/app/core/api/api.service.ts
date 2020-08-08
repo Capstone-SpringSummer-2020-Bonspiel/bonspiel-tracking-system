@@ -16,13 +16,34 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ApiService {
-  private eventIdSource = new BehaviorSubject(null); // Default to event ID 1
+  private eventIdSource = new BehaviorSubject(null);
   currentEventId$ = this.eventIdSource.asObservable();
 
   private eventSource = new BehaviorSubject(null);
   currentEvent$ = this.eventSource.asObservable();
 
-  constructor(private httpService: HttpClient) { }
+  constructor(private httpService: HttpClient) {
+
+    // Fetch default event ID & event object from the database
+    this.getDefaultEventId().subscribe((rows: any) => {
+      if (rows === null || rows === undefined) {
+        console.log('Could not fetch curling events', 'ERROR');
+        return;
+      }
+
+      const defaultEventId = rows[0].event_id;
+
+      this.changeEventId(defaultEventId);
+      console.log('DEFAULT EVENT ID', defaultEventId);
+
+      this.getEvents().subscribe((rows: any) => {
+        const defaultEvent = rows.find(e => e.id === defaultEventId);
+        console.log('EVENTS', defaultEvent);
+        this.changeEvent(defaultEvent);
+      });
+    });
+
+  }
 
   /********************************************************************/
 
@@ -124,6 +145,14 @@ export class ApiService {
   }
   // CASCADE DELETE will be setup on event_id in draw table, event_id in pool, and event_id in bracket.
   // All information from all tables related to the event will be deleted cleanly.
+
+  public getDefaultEventId() {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/defaultEventId`);
+  }
+
+  public setDefaultEventId(eventId) {
+    return this.httpService.get(`${environment.apiUrl}/api/v1/admin/defaultEventId/${eventId}`);
+  }
 
   /********************************************************************/
 

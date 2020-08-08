@@ -25,6 +25,12 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Set Default Event',
+      path: '/admin/set-default-event',
+      icon: 'home',
+      class: 'd-none d-sm-block'
+    },
+    {
       label: 'Batch Upload',
       path: '/admin/file-upload',
       icon: 'cloud_upload',

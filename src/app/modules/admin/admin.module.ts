@@ -85,6 +85,7 @@ import { InstructionalsComponent } from './components/instructionals/instruction
 import { FaqsComponent } from './components/faqs/faqs.component';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { SetDefaultEventComponent } from './components/set-default-event/set-default-event.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +131,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     FileUploadComponent,
     InstructionalsComponent,
     FaqsComponent,
+    SetDefaultEventComponent,
   ],
   imports: [
     CommonModule,

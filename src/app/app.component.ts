@@ -119,34 +119,34 @@ export class AppComponent {
         console.log('currentCurlingEvents:', this.currentCurlingEvents);
         console.log('pastCurlingEvents:', this.pastCurlingEvents);
 
-        // Set to most recent event if current value is null
-        // Otherwise, set it to current value
-        let sorted = this.currentCurlingEvents;
+        // // Set to most recent event if current value is null
+        // // Otherwise, set it to current value
+        // let sorted = this.currentCurlingEvents;
 
-        if (sorted.length === 0) {
-          sorted = this.pastCurlingEvents;
-        }
+        // if (sorted.length === 0) {
+        //   sorted = this.pastCurlingEvents;
+        // }
 
-        console.log('sorted', sorted);
+        // console.log('sorted', sorted);
 
-        let previousEventId = this.apiService.currentEventId;
-        let previousEvent = this.apiService.currentEvent;
+        // let previousEventId = this.apiService.currentEventId;
+        // let previousEvent = this.apiService.currentEvent;
 
-        // console.log('PREVIOUS', previousEventId, previousEvent);
+        // // console.log('PREVIOUS', previousEventId, previousEvent);
 
-        if (previousEventId === null) {
-          this.apiService.changeEventId(sorted[0].id);
-        } else {
-          this.apiService.changeEventId(previousEventId);
-        }
+        // if (previousEventId === null) {
+        //   this.apiService.changeEventId(sorted[0].id);
+        // } else {
+        //   this.apiService.changeEventId(previousEventId);
+        // }
 
-        if (previousEvent === null) {
-          this.apiService.changeEvent(sorted[0]);
-        } else {
-          this.apiService.changeEventId(previousEvent);
-        }
+        // if (previousEvent === null) {
+        //   this.apiService.changeEvent(sorted[0]);
+        // } else {
+        //   this.apiService.changeEventId(previousEvent);
+        // }
 
-        // console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
+        // // console.log('[DEBUG] curlingEvents', this.currentCurlingEvents);
       });
   }
 

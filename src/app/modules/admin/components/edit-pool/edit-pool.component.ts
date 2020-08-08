@@ -5,16 +5,15 @@ import { SpinnerService } from '@app/shared/services/spinner.service';
 import { NotificationService } from '@app/shared/services/notification.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-edit-pool',
   templateUrl: './edit-pool.component.html',
   styleUrls: ['./edit-pool.component.scss']
 })
 export class EditPoolComponent implements OnInit {
-  zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
 
   events: any[] = [];
   selectedEvent = null;
@@ -31,13 +30,13 @@ export class EditPoolComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.zeroFormGroup = this.fb.group({
+    this.firstFormGroup = this.fb.group({
       eventCtrl: ['', Validators.required],
     });
-    this.firstFormGroup = this.fb.group({
+    this.secondFormGroup = this.fb.group({
       poolCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this.fb.group({
+    this.thirdFormGroup = this.fb.group({
       poolNameCtrl: ['', Validators.required],
     });
 
@@ -58,7 +57,7 @@ export class EditPoolComponent implements OnInit {
   }
 
   selectEvent() {
-    this.selectedEvent = this.events.filter(x => x.id === this.zeroFormGroup.value.eventCtrl)[0];
+    this.selectedEvent = this.events.filter(x => x.id === this.firstFormGroup.value.eventCtrl)[0];
     console.log('selectedEvent');
     console.log(this.selectedEvent);
 
@@ -73,12 +72,12 @@ export class EditPoolComponent implements OnInit {
   }
 
   selectPool() {
-    this.selectedPool = this.pools.filter(x => x.id === this.firstFormGroup.value.poolCtrl)[0];
-    this.secondFormGroup.controls.poolNameCtrl.setValue(this.selectedPool.name);
+    this.selectedPool = this.pools.filter(x => x.id === this.secondFormGroup.value.poolCtrl)[0];
+    this.thirdFormGroup.controls.poolNameCtrl.setValue(this.selectedPool.name);
   }
 
   onClickSubmit(stepper) {
-    const newpoolName = this.secondFormGroup.value.eventNameCtrl;
+    const newpoolName = this.thirdFormGroup.value.eventNameCtrl;
 
     this.spinnerService.on();
     this.apiService
@@ -91,7 +90,7 @@ export class EditPoolComponent implements OnInit {
           // Reset the form and validation
           stepper.reset();
 
-          let formGroups = [this.zeroFormGroup, this.firstFormGroup, this.secondFormGroup];
+          let formGroups = [this.firstFormGroup, this.secondFormGroup, this.thirdFormGroup];
 
           for (let formGroup of formGroups) {
             formGroup.reset();
