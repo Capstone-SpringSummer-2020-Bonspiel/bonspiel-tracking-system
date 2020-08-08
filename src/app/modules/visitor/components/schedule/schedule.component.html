@@ -43,15 +43,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[0].team1 != null">
+              <div *ngIf="draw.games[0].eventGameId != null">
+                ID: {{draw.games[0].eventGameId}}
+              </div>
               <div *ngIf="draw.games[0].name != null">
                 {{draw.games[0].name}} <br>
               </div>
-              <div *ngIf="draw.games[0].name == null">
-                Game {{draw.games[0].gameId}} <br>
+
+              Team 1: {{draw.games[0].team1}} <br>
+              Team 2: {{draw.games[0].team2}} <br>
+
+              <div *ngIf="draw.games[0].winnerTo != null">
+                W &rarr; {{draw.games[0].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[0].team1}} <br>
-              Team2: {{draw.games[0].team2}} <br>
-              Winner -> Game {{draw.games[0].winnerTo}} <br>
+              <div *ngIf="draw.games[0].loserTo != null">
+                L &rarr; {{draw.games[0].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[0].finished">
+                <div *ngIf="draw.games[0].winnerId == draw.games[0].team1Id">
+                  Winner: {{draw.games[0].team1}}
+                </div>
+                <div *ngIf="draw.games[0].winnerId == draw.games[0].team2Id">
+                  Winner: {{draw.games[0].team2}}
+                </div>
+                <div *ngIf="draw.games[0].winnerId != draw.games[0].team2Id && draw.games[0].winnerId != draw.games[0].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
+
             </div>
           </td>
         </ng-container>
@@ -63,15 +83,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[1].team1 != null">
+              <div *ngIf="draw.games[1].eventGameId != null">
+                ID: {{draw.games[1].eventGameId}} <br>
+              </div>
               <div *ngIf="draw.games[1].name != null">
                 {{draw.games[1].name}} <br>
               </div>
-              <div *ngIf="draw.games[1].name == null">
-                Game {{draw.games[1].gameId}} <br>
+
+
+              Team 1: {{draw.games[1].team1}} <br>
+              Team 2: {{draw.games[1].team2}} <br>
+
+              <div *ngIf="draw.games[1].winnerTo != null">
+                W &rarr; {{draw.games[1].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[1].team1}} <br>
-              Team2: {{draw.games[1].team2}} <br>
-              Winner -> Game {{draw.games[1].winnerTo}} <br>
+              <div *ngIf="draw.games[1].loserTo != null">
+                L &rarr; {{draw.games[1].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[1].finished">
+                <div *ngIf="draw.games[1].winnerId == draw.games[1].team1Id">
+                  Winner: {{draw.games[1].team1}}
+                </div>
+                <div *ngIf="draw.games[1].winnerId == draw.games[1].team2Id">
+                  Winner: {{draw.games[1].team2}}
+                </div>
+                <div *ngIf="draw.games[1].winnerId != draw.games[1].team2Id && draw.games[1].winnerId != draw.games[1].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -83,15 +123,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[2].team1 != null">
+              <div *ngIf="draw.games[2].eventGameId != null">
+                ID: {{draw.games[2].eventGameId}} <br>
+              </div>
               <div *ngIf="draw.games[2].name != null">
                 {{draw.games[2].name}} <br>
               </div>
-              <div *ngIf="draw.games[2].name == null">
-                Game {{draw.games[2].gameId}} <br>
+
+
+              Team 1: {{draw.games[2].team1}} <br>
+              Team 2: {{draw.games[2].team2}} <br>
+
+              <div *ngIf="draw.games[2].winnerTo != null">
+                W &rarr; {{draw.games[2].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[2].team1}} <br>
-              Team2: {{draw.games[2].team2}} <br>
-              Winner -> Game {{draw.games[2].winnerTo}} <br>
+              <div *ngIf="draw.games[2].loserTo != null">
+                L &rarr; {{draw.games[2].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[2].finished">
+                <div *ngIf="draw.games[2].winnerId == draw.games[2].team1Id">
+                  Winner: {{draw.games[2].team1}}
+                </div>
+                <div *ngIf="draw.games[2].winnerId == draw.games[2].team2Id">
+                  Winner: {{draw.games[2].team2}}
+                </div>
+                <div *ngIf="draw.games[2].winnerId != draw.games[2].team2Id && draw.games[2].winnerId != draw.games[2].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -103,15 +163,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[3].team1 != null">
+              <div *ngIf="draw.games[3].eventGameId != null">
+                ID: {{draw.games[3].eventGameId}} <br>
+              </div>
               <div *ngIf="draw.games[3].name != null">
                 {{draw.games[3].name}} <br>
               </div>
-              <div *ngIf="draw.games[3].name == null">
-                Game {{draw.games[3].gameId}} <br>
+
+
+              Team 1: {{draw.games[3].team1}} <br>
+              Team 2: {{draw.games[3].team2}} <br>
+
+              <div *ngIf="draw.games[3].winnerTo != null">
+                W &rarr; {{draw.games[3].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[3].team1}} <br>
-              Team2: {{draw.games[3].team2}} <br>
-              Winner -> Game {{draw.games[3].winnerTo}} <br>
+              <div *ngIf="draw.games[3].loserTo != null">
+                L &rarr; {{draw.games[3].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[3].finished">
+                <div *ngIf="draw.games[3].winnerId == draw.games[3].team1Id">
+                  Winner: {{draw.games[3].team1}}
+                </div>
+                <div *ngIf="draw.games[3].winnerId == draw.games[3].team2Id">
+                  Winner: {{draw.games[3].team2}}
+                </div>
+                <div *ngIf="draw.games[3].winnerId != draw.games[3].team2Id && draw.games[3].winnerId != draw.games[3].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -123,15 +203,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[4].team1 != null">
+              <div *ngIf="draw.games[4].eventGameId != null">
+                ID: {{draw.games[4].eventGameId}} <br>
+              </div>
               <div *ngIf="draw.games[4].name != null">
                 {{draw.games[4].name}} <br>
               </div>
-              <div *ngIf="draw.games[4].name == null">
-                Game {{draw.games[4].gameId}} <br>
+
+
+              Team 1: {{draw.games[4].team1}} <br>
+              Team 2: {{draw.games[4].team2}} <br>
+
+              <div *ngIf="draw.games[4].winnerTo != null">
+                W &rarr; {{draw.games[4].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[4].team1}} <br>
-              Team2: {{draw.games[4].team2}} <br>
-              Winner -> Game {{draw.games[0].winnerTo}} <br>
+              <div *ngIf="draw.games[4].loserTo != null">
+                L &rarr; {{draw.games[4].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[4].finished">
+                <div *ngIf="draw.games[4].winnerId == draw.games[4].team1Id">
+                  Winner: {{draw.games[4].team1}}
+                </div>
+                <div *ngIf="draw.games[4].winnerId == draw.games[4].team2Id">
+                  Winner: {{draw.games[4].team2}}
+                </div>
+                <div *ngIf="draw.games[4].winnerId != draw.games[4].team2Id && draw.games[4].winnerId != draw.games[4].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -143,15 +243,35 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[5].team1 != null">
+              <div *ngIf="draw.games[5].eventGameId != null">
+                ID: {{draw.games[5].eventGameId}} <br>
+              </div>
               <div *ngIf="draw.games[5].name != null">
                 {{draw.games[5].name}} <br>
               </div>
-              <div *ngIf="draw.games[5].name == null">
-                Game {{draw.games[5].eventGameId}} <br>
+
+
+              Team 1: {{draw.games[5].team1}} <br>
+              Team 2: {{draw.games[5].team2}} <br>
+
+              <div *ngIf="draw.games[5].winnerTo != null">
+                W &rarr; {{draw.games[5].winnerTo}}<br>
               </div>
-              Team1: {{draw.games[5].team1}} <br>
-              Team2: {{draw.games[5].team2}} <br>
-              Winner -> Game {{draw.games[5].winnerTo}} <br>
+              <div *ngIf="draw.games[5].loserTo != null">
+                L &rarr; {{draw.games[5].loserTo}}<br>
+              </div>
+
+              <div *ngIf="draw.games[5].finished">
+                <div *ngIf="draw.games[5].winnerId == draw.games[5].team1Id">
+                  Winner: {{draw.games[5].team1}}
+                </div>
+                <div *ngIf="draw.games[5].winnerId == draw.games[5].team2Id">
+                  Winner: {{draw.games[5].team2}}
+                </div>
+                <div *ngIf="draw.games[5].winnerId != draw.games[5].team2Id && draw.games[5].winnerId != draw.games[5].team1Id">
+                  No Winner Data.
+                </div>
+              </div>
             </div>
           </td>
         </ng-container>

@@ -1,22 +1,24 @@
 .mat-table{
   width: 100%;
   border: 1px solid black;
-  word-wrap:break-word;
+  word-wrap: wrap normal;
+  border-collapse: separate;
 }
 
-.mat-column{
-  border-right: 1px solid black;
-  border-left: 1px solid black;
-}
+
 .mat-row:nth-child(even){
   background: rgb(165, 233, 216)
 }
 .mat-row:nth-child(odd){
   background: rgb(206, 206, 206)
 }
-.mat-column-draw{
-  width: 20%;
+.mat-column{
+  border-right: 1px solid black;
+  border-left: 1px solid black;
 }
+// .mat-column-draw{
+//   width: 20%;
+// }
 .mat-form-field{
   margin-left: 8px;
   width: auto;
