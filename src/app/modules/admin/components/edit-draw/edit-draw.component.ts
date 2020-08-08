@@ -45,8 +45,8 @@ export class EditDrawComponent implements OnInit {
       drawCtrl: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
-      nameCtrl: ['', Validators.required],
-      dateCtrl: ['', Validators.required],
+      nameCtrl: [''],
+      dateCtrl: [''],
       urlCtrl: [''],
     });
 
@@ -100,11 +100,9 @@ export class EditDrawComponent implements OnInit {
 
     console.log('thirdFormGroup', this.thirdFormGroup);
 
-    const newDrawName = this.thirdFormGroup.value.nameCtrl;
-    const newDrawStart = this.thirdFormGroup
-      .get('dateCtrl')
-      .value?.toLocaleString();
-    const newDrawUrl = this.thirdFormGroup.value.urlCtrl;
+    const newDrawName = this.thirdFormGroup.value.nameCtrl || this.selectedDraw.name;
+    const newDrawStart = this.thirdFormGroup.get('dateCtrl').value?.toLocaleString() || this.selectedDraw.start;
+    const newDrawUrl = this.thirdFormGroup.value.urlCtrl || this.selectedDraw.video_url;
 
     this.spinnerService.on();
 
