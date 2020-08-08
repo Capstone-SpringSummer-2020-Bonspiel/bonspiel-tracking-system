@@ -9,17 +9,17 @@
     <form [formGroup]="zeroFormGroup">
       <ng-template matStepLabel> Select Organization </ng-template>
       <mat-form-field>
-        <mat-label>Select Event to Edit</mat-label>
+        <mat-label>Select an Organization</mat-label>
         <mat-select formControlName="organizationCtrl"
-          (selectionChange)="onOrganizationSelected($event); stepper.next()"
+          (selectionChange)="selectOrganization(); stepper.next()"
           required>
-          <mat-option *ngFor="let Organization of this.allOrganizationData"
-            [value]="Organization">
-            {{Organization.full_name}}
+          <mat-option *ngFor="let organization of organizations"
+            [value]="organization.id">
+            {{organization.full_name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div *ngIf="this.selectedOrganization != null">
+      <div>
         <button mat-button
           matStepperNext>Next</button>
       </div>
@@ -34,14 +34,16 @@
         <mat-label> New Full Name </mat-label>
         <input matInput
           type='text'
-          formControlName="eventFullCtrl">
+          formControlName="eventFullCtrl"
+          required>
       </mat-form-field>
       <br>
       <mat-form-field>
         <mat-label> New Short Name </mat-label>
         <input matInput
           type='text'
-          formControlName="eventShortCtrl">
+          formControlName="eventShortCtrl"
+          required>
       </mat-form-field>
       <div>
         <button mat-button

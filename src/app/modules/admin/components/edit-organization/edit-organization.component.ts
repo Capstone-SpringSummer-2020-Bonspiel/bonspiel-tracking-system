@@ -14,12 +14,8 @@ export class EditOrganizationComponent implements OnInit {
   zeroFormGroup: FormGroup;
   firstFormGroup: FormGroup;
 
-  allOrganizationData: null;
-  selectedOrganizationId: Number;
-  selectedOrganization: any = {
-    shortName: 'shortname',
-    fullName: 'fullname',
-  };
+  organizations: any[] = [];
+  selectedOrganization = null;
 
   constructor(
     private fb: FormBuilder,
@@ -27,15 +23,15 @@ export class EditOrganizationComponent implements OnInit {
     private spinnerService: SpinnerService,
     private notificationService: NotificationService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.zeroFormGroup = this.fb.group({
       organizationCtrl: ['', Validators.required],
     });
     this.firstFormGroup = this.fb.group({
-      eventFullCtrl: [''],
-      eventShortCtrl: [''],
+      eventFullCtrl: ['', Validators.required],
+      eventShortCtrl: ['', Validators.required],
     });
 
     this.getEvents();
@@ -44,24 +40,17 @@ export class EditOrganizationComponent implements OnInit {
   getEvents() {
     this.spinnerService.on();
     this.apiService.getAllOrganizations().subscribe((res: any) => {
-      console.log('[DEBUG] eventObtain() in schedule component:');
-      console.log(res);
-      this.allOrganizationData = res;
-      this.selectedOrganization = res[0];
-      // this.selectedOrganizationId = res[0].id;
-      console.log('ThisEventDataBelow:');
-      console.log(this.allOrganizationData);
+      this.organizations = res;
+      this.organizations.sort((a, b) => (a.full_name > b.full_name ? 1 : -1));
+      console.log('organizations:');
+      console.log(this.organizations);
 
       this.spinnerService.off();
     });
   }
 
-  onOrganizationSelected(event: any) {
-    console.log('the selected event is:');
-    console.log(this.selectedOrganization);
-
-    this.selectedOrganization = event.value;
-    this.selectedOrganizationId = event.value.id;
+  selectOrganization() {
+    this.selectedOrganization = this.organizations.filter(x => x.id === this.zeroFormGroup.value.organizationCtrl)[0];
 
     this.firstFormGroup.controls.eventFullCtrl.setValue(
       this.selectedOrganization.full_name
@@ -70,71 +59,48 @@ export class EditOrganizationComponent implements OnInit {
       this.selectedOrganization.short_name
     );
 
-    console.log('the selected event is:');
+    console.log('selectedOrganization');
     console.log(this.selectedOrganization);
   }
 
   onClickSubmit(stepper) {
     //Edit Organization
-    var fullName = this.selectedOrganization.name;
-    if (this.firstFormGroup.value.eventFullCtrl != '') {
-      fullName = this.firstFormGroup.value.eventFullCtrl;
-    }
-    var shortName = this.selectedOrganization.info;
-    if (this.firstFormGroup.value.eventShortCtrl != '') {
-      shortName = this.firstFormGroup.value.eventShortCtrl;
-    }
-
-    console.log(`full name: ${fullName}`);
-    console.log(`detail info: ${shortName}`);
+    const fullName = this.firstFormGroup.value.eventFullCtrl;
+    const shortName = this.firstFormGroup.value.eventShortCtrl;
 
     this.spinnerService.on();
     this.apiService
       .editOrganization(
         fullName,
         shortName,
-        String(this.selectedOrganizationId)
+        this.selectedOrganization.id
       )
       .subscribe(
         (res: any) => {
           console.log(res);
+          this.notificationService.showSuccess('Organization has been modified', '');
 
-          this.notificationService.showSuccess(
-            'Organization has been modified',
-            ''
-          );
-          this.spinnerService.off();
+          // Reset the form and validation
+          stepper.reset();
+
+          let formGroups = [this.zeroFormGroup, this.firstFormGroup];
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
           this.notificationService.showError(err.message, 'ERROR');
-          this.spinnerService.off();
         }
       )
       .add(() => {
-        stepper.reset();
-        // Reset the form and validation
-        let formGroups = [this.zeroFormGroup, this.firstFormGroup];
-        for (let formGroup of formGroups) {
-          formGroup.reset();
-          Object.keys(formGroup.controls).forEach((key) => {
-            formGroup.controls[key].setErrors(null);
-          });
-        }
+        this.spinnerService.off();
         this.getEvents();
       });
   }
-
-  // const dialogRef = this.dialog.open(EditEventDialog, {
-  //   data: {
-  //     signal: '200',
-  //     name: name,
-  //     info: info,
-  //   }
-  // });
-  // dialogRef.afterClosed().subscribe(result => {
-  //   console.log("something happened.")
-  // })
 }
 
-//getAllOrganizations()

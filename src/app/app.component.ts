@@ -197,11 +197,8 @@ export class AppComponent {
     }
 
     const propertiesToTest = [
-      'username',
       'token',
-      'maxAge',
-      'isSuperAdmin',
-      'expiryAt'
+      'expiration'
     ];
     if (propertiesToTest.every(x => x in token)) {
       return true;

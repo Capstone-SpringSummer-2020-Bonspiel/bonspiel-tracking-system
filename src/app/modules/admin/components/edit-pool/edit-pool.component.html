@@ -1,44 +1,46 @@
 <div class="slide-in-text">
-  <h1> Edit Pool </h1>
+  <h1> Edit a Pool </h1>
 </div>
 
 <mat-vertical-stepper linear
   #stepper>
-  <mat-step [stepControl]="zeroFormGroup"
-    errorMessage="Selected Event Has No Pool.">
+
+  <!-- EVENT -->
+  <mat-step [stepControl]="zeroFormGroup">
     <form [formGroup]="zeroFormGroup">
       <ng-template matStepLabel> Select Event </ng-template>
       <mat-form-field>
-        <mat-label>Select Event for Pools</mat-label>
+        <mat-label>Select Event</mat-label>
         <mat-select formControlName="eventCtrl"
-          (selectionChange)="onEventSelected($event); stepper.next()"
+          (selectionChange)="selectEvent(); stepper.next()"
           required>
-          <mat-option *ngFor="let event of this.allEventData"
-            [value]="event">
+          <mat-option *ngFor="let event of events"
+            [value]="event.id">
             {{event.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div *ngIf="this.selectedEvent != null">
+      <div>
         <button mat-button
           matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
 
+  <!-- POOL -->
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel> Select Pool </ng-template>
-      <div *ngIf="this.selectedPool == null">
-        <p> No Pools exist in the selected Event. </p>
+      <div *ngIf="pools.length === 0">
+        <p> No pools exist in this event. </p>
       </div>
-      <mat-form-field *ngIf="this.selectedPool != null">
-        <mat-label>Select Pool to Modify</mat-label>
+      <mat-form-field *ngIf="pools.length">
+        <mat-label>Select Pool</mat-label>
         <mat-select formControlName="poolCtrl"
-          (selectionChange)="onPoolSelected($event); stepper.next()"
+          (selectionChange)="selectPool(); stepper.next()"
           required>
-          <mat-option *ngFor="let pool of this.allPoolData"
-            [value]="pool">
+          <mat-option *ngFor="let pool of pools"
+            [value]="pool.id">
             {{pool.name}}
           </mat-option>
         </mat-select>
@@ -52,15 +54,16 @@
     </form>
   </mat-step>
 
+  <!-- POOL DETAILS -->
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel> New Pool Name </ng-template>
+      <ng-template matStepLabel> Edit Pool Details </ng-template>
       <mat-form-field>
-        <mat-label> New Pool Name </mat-label>
+        <mat-label> Pool Name </mat-label>
         <input matInput
           type='text'
           placeholder="New Bracket Name"
-          formControlName="eventNameCtrl">
+          formControlName="poolNameCtrl">
       </mat-form-field>
       <div>
         <button mat-button
@@ -71,6 +74,7 @@
     </form>
   </mat-step>
 
+  <!-- SUBMIT & RESET -->
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>

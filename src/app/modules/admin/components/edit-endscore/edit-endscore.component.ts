@@ -21,7 +21,7 @@ export class EditEndscoreComponent implements OnInit {
   thirdFormGroup: FormGroup;
   fourthFormGroup: FormGroup;
 
-  eventNames: any[] = [];
+  events: any[] = [];
   draws: any[] = [];
   games: any[] = [];
   endScores: any[] = [];
@@ -56,6 +56,10 @@ export class EditEndscoreComponent implements OnInit {
       fourthCtrlTeam2Score: ['', Validators.required],
     });
 
+    this.getEvents();
+  }
+
+  getEvents() {
     this.spinnerService.on();
     this.apiService.getEvents().subscribe((res: any) => {
       if (res === null || res === undefined) {
@@ -67,13 +71,14 @@ export class EditEndscoreComponent implements OnInit {
         return;
       }
       this.spinnerService.off();
-      this.eventNames = res;
-      console.log('eventNames:');
-      console.log(this.eventNames);
+      this.events = res;
+      this.events.sort((a, b) => (a.name > b.name ? 1 : -1));
+      console.log('events:');
+      console.log(this.events);
     });
   }
 
-  getEventDraws() {
+  getDraws() {
     this.selectedEventId = this.firstFormGroup.value.firstCtrl;
     console.log(`selectedEventId= ${this.selectedEventId}`);
     this.spinnerService.on();
@@ -85,7 +90,7 @@ export class EditEndscoreComponent implements OnInit {
     });
   }
 
-  getDrawGames() {
+  getGames() {
     this.selectedDrawId = this.secondFormGroup.value.secondCtrl;
     console.log(`selectedDrawId= ${this.selectedDrawId}`);
     this.spinnerService.on();
@@ -145,7 +150,6 @@ export class EditEndscoreComponent implements OnInit {
     }
 
     this.spinnerService.on();
-
     this.apiService
       .editEndScore(this.selectedEndNumberId, blank, curlingTeam1Scored, score)
       .subscribe(
@@ -155,7 +159,23 @@ export class EditEndscoreComponent implements OnInit {
             'End Score has been modified',
             ''
           );
+
+          // Reset the stepper, forms and validation
           stepper.reset();
+
+          let formGroups = [
+            this.firstFormGroup,
+            this.secondFormGroup,
+            this.thirdFormGroup,
+            this.fourthFormGroup
+          ]
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
@@ -164,6 +184,7 @@ export class EditEndscoreComponent implements OnInit {
       )
       .add(() => {
         this.spinnerService.off();
+        this.getEvents();
       });
   }
 }

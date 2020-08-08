@@ -163,6 +163,7 @@ export class EditGameComponent implements OnInit {
     const selectedEventId = this.getCtrlValue(0).eventCtrl;
     this.spinnerService.on();
     this.apiService.getPool(selectedEventId).subscribe((res: any) => {
+      this.brackets = [];
       this.pools = res;
       console.log('pools');
       console.log(this.pools);
@@ -177,6 +178,7 @@ export class EditGameComponent implements OnInit {
     const selectedEventId = this.getCtrlValue(0).eventCtrl;
     this.spinnerService.on();
     this.apiService.getBracket(selectedEventId).subscribe((res: any) => {
+      this.pools = [];
       this.brackets = res;
       console.log('brackets');
       console.log(this.brackets);
@@ -239,19 +241,22 @@ export class EditGameComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res);
         this.notificationService.showSuccess('Game has been modified', '');
-        this.spinnerService.off();
-      },
-        (err) => {
-          console.log(err);
-          this.notificationService.showError(err.message, 'ERROR');
-          this.spinnerService.off();
-        })
-      .add(() => {
+
+        // Reset the form and validation
         stepper.reset();
+
         this.formGroup.reset();
         Object.keys(this.formGroup.controls).forEach((key) => {
           this.formGroup.controls[key].setErrors(null);
         })
+
+      },
+        (err) => {
+          console.log(err);
+          this.notificationService.showError(err.message, 'ERROR');
+        })
+      .add(() => {
+        this.spinnerService.off();
         this.getEvents();
       })
   }

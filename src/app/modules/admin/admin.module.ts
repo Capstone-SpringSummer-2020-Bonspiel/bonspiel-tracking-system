@@ -53,10 +53,7 @@ import { CreatePoolComponent } from './components/create-pool/create-pool.compon
 import { CreateCurlerComponent } from './components/create-curler/create-curler.component';
 import { CreateEndscoreComponent } from './components/create-endscore/create-endscore.component';
 import { AddTeamToEventComponent } from './components/add-team-to-event/add-team-to-event.component';
-import {
-  EditEventComponent,
-  EditEventDialog,
-} from './components/edit-event/edit-event.component';
+import { EditEventComponent } from './components/edit-event/edit-event.component';
 import { EditDrawComponent } from './components/edit-draw/edit-draw.component';
 import { EditGameComponent } from './components/edit-game/edit-game.component';
 import { EditBracketComponent } from './components/edit-bracket/edit-bracket.component';
@@ -128,7 +125,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     CreateEventComponent,
     CreateGameComponent,
     CreateTeamComponent,
-    EditEventDialog,
     TournamentBracketComponent,
     PasswordComponent,
     FileUploadComponent,

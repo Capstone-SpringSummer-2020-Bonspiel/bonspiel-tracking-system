@@ -94,22 +94,21 @@ export class ApiService {
 
   public editEvent(
     nameData,
-    beginDateData,
-    endDateData,
-    completedData,
     infoData,
     eventTypeData,
+    completedData,
+    beginDateData,
+    endDateData,
     eventId
   ) {
     const body = {
       name: nameData,
-      eventType: eventTypeData,
       info: infoData,
+      eventType: eventTypeData,
       completed: completedData,
       beginDate: beginDateData,
       endDate: endDateData,
     };
-    console.log('last check before lunch');
     console.log(body);
     return this.httpService.put(
       `${environment.apiUrl}/api/v1/admin/event/${eventId}`,

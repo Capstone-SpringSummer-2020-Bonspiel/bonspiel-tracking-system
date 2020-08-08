@@ -16,6 +16,7 @@ export class EditTeamComponent implements OnInit {
   organizations: any[] = [];
   teams: any[] = [];
   selectedTeam: any;
+  selectedTeamAffiliation: string = "";
 
 
   constructor(
@@ -27,22 +28,21 @@ export class EditTeamComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required],
+      teamCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this.fb.group({
-      secondCtrl: ['', Validators.required],
-      secondCtrlNote: ['', Validators.required],
+      secondCtrlName: ['', Validators.required],
     });
     this.thirdFormGroup = this.fb.group({
+      thirdCtrlNote: [''],
       thirdCtrlOrg: [null],
     });
-
-    this.spinnerService.on();
 
     this.getTeamsAndOrganizations();
   }
 
   getTeamsAndOrganizations() {
+    this.spinnerService.on();
     this.apiService.getAllTeams().subscribe((res: any) => {
       this.teams = res;
       this.teams.sort((a, b) => (a.team_name > b.team_name ? 1 : -1));
@@ -57,19 +57,25 @@ export class EditTeamComponent implements OnInit {
   }
 
   getTeamId() {
-    this.selectedTeam = this.teams.filter(x => x.id === this.firstFormGroup.value.firstCtrl)[0];
+    this.selectedTeamAffiliation = "";
+    this.selectedTeam = this.teams.filter(x => x.id === this.firstFormGroup.value.teamCtrl)[0];
     console.log('this.selectedTeam ', this.selectedTeam);
+    //console.log(this.selectedTeam.affiliation.fullName);
+    if (this.selectedTeam.affiliation) {
+      this.selectedTeamAffiliation = this.selectedTeam.affiliation.fullName;
+      console.log(this.selectedTeamAffiliation);
+    }
 
-    this.secondFormGroup.controls.secondCtrl.setValue(this.selectedTeam.team_name);
+    this.secondFormGroup.controls.secondCtrlName.setValue(this.selectedTeam.team_name);
 
-    this.secondFormGroup.controls.secondCtrlNote.setValue(this.selectedTeam.note);
+    this.thirdFormGroup.controls.thirdCtrlNote.setValue(this.selectedTeam.note);
   }
 
   onClickSubmit(stepper: MatStepper) {
-    const name = this.secondFormGroup.value.secondCtrl;
-    const note = this.secondFormGroup.value.secondCtrlNote;
-    const org = this.thirdFormGroup.value.thirdCtrlOrg;
+    const name = this.secondFormGroup.value.secondCtrlName;
+    const note = this.thirdFormGroup.value.thirdCtrlNote || "";
 
+    const org = (this.selectedTeam.affiliation) ? (this.thirdFormGroup.value.thirdCtrlOrg ? this.thirdFormGroup.value.thirdCtrlOrg : this.selectedTeam.affiliation.id) : this.thirdFormGroup.value.thirdCtrlOrg;;
     this.spinnerService.on();
 
     this.apiService
@@ -78,24 +84,26 @@ export class EditTeamComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.notificationService.showSuccess('Team has been modified', '');
-          this.spinnerService.off();
+
+          // Reset the form and validation
+          stepper.reset();
+
+          let formGroups = [this.firstFormGroup, this.secondFormGroup, this.thirdFormGroup];
+
+          for (let formGroup of formGroups) {
+            formGroup.reset();
+            Object.keys(formGroup.controls).forEach((key) => {
+              formGroup.controls[key].setErrors(null);
+            });
+          }
         },
         (err) => {
           console.log(err);
           this.notificationService.showError(err.message, 'ERROR');
-          this.spinnerService.off();
         }
       )
       .add(() => {
-        stepper.reset();
-        // Reset the form and validation
-        let formGroups = [this.firstFormGroup, this.secondFormGroup];
-        for (let formGroup of formGroups) {
-          formGroup.reset();
-          Object.keys(formGroup.controls).forEach((key) => {
-            formGroup.controls[key].setErrors(null);
-          });
-        }
+        this.spinnerService.off();
         this.getTeamsAndOrganizations();
       });
   }

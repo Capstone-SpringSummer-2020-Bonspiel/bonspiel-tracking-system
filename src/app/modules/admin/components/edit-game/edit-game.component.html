@@ -84,8 +84,18 @@
     <mat-step formGroupName="3"
       [stepControl]="formArray?.get([3])">
       <ng-template matStepLabel>Edit Pool, Bracket or Draw</ng-template>
+      <mat-card *ngIf="selectedGame"
+        [ngStyle]="{width:'fit-content'}"
+        class="m-2">
+        <div *ngIf="selectedGame.pool_id">
+          <strong>Current Pool:</strong> {{selectedGame.pool_name}} <br />
+        </div>
+        <div *ngIf="selectedGame.bracket_id">
+          <strong>Current Bracket:</strong> {{selectedGame.bracket_name}} <br />
+        </div>
+        <strong>Current Draw: </strong> {{selectedGame.draw_name}} <br />
+      </mat-card>
       <div *ngIf="selectedGame.pool_id">
-        <p>Current Pool: {{selectedGame.pool_name}}</p>
         <mat-form-field>
           <mat-label>Edit Pool</mat-label>
           <mat-select formControlName="poolCtrl">
@@ -97,7 +107,6 @@
         </mat-form-field>
       </div>
       <div *ngIf="selectedGame.bracket_id">
-        <p>Current Bracket: {{selectedGame.bracket_name}}</p>
         <mat-form-field>
           <mat-label>Edit Bracket</mat-label>
           <mat-select formControlName="bracketCtrl">
@@ -108,18 +117,15 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div>
-        <p>Current Draw: {{selectedGame.draw_name}}</p>
-        <mat-form-field>
-          <mat-label>Edit Draw</mat-label>
-          <mat-select formControlName="newDrawCtrl">
-            <mat-option *ngFor="let draw of draws"
-              [value]="draw.id">
-              {{draw.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+      <mat-form-field>
+        <mat-label>Edit Draw</mat-label>
+        <mat-select formControlName="newDrawCtrl">
+          <mat-option *ngFor="let draw of draws"
+            [value]="draw.id">
+            {{draw.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div>
         <button mat-button
@@ -133,30 +139,39 @@
     <mat-step formGroupName="4"
       [stepControl]="formArray?.get([4])">
       <ng-template matStepLabel>Edit Game Details</ng-template>
+      <mat-card *ngIf="selectedGame"
+        [ngStyle]="{width:'fit-content'}"
+        class="m-2">
+        <strong>Game Name: </strong>{{ selectedGame.game_name}} <br>
+        <strong>Team 1: </strong>{{selectedGame.team_name1}} ({{selectedGame.stone_color1}})<br>
+        <strong>Team 2: </strong>{{selectedGame.team_name2}} ({{selectedGame.stone_color2}})<br>
+        <strong>Color: </strong>{{ selectedGame.stone_color2}} <br>
+        <strong>Ice Sheet: </strong>{{selectedGame.ice_sheet}}<br>
+        <strong>Winner: </strong>{{selectedGame.winner_name}}<br>
+        <strong>Winner Destination Game: </strong>{{ selectedGame.winner_dest }}<br>
+        <strong>Loser Destination Game: </strong>{{ selectedGame.loser_dest}}<br>
+        <strong>Notes: </strong>{{ selectedGame.notes}}<br>
+        <strong>Finished?</strong> {{selectedGame.finished}}
+      </mat-card>
       <div class="container-fluid">
 
         <div class="row">
           <div class="col-lg-12">
-
             <p>
-              Current Game Name: {{ selectedGame.game_name}} <br>
               <mat-form-field appearance="outline">
                 <mat-label>Game Name</mat-label>
                 <input formControlName="gameNameCtrl"
                   matInput
                   placeholder="e.g., Game 12">
               </mat-form-field>
-
             </p>
           </div>
         </div>
 
         <div class="row">
           <div class="col-lg-12">
-
             <ng-template matStepLabel> Select Teams & Other </ng-template>
             <div>
-              <p>Current Team 1: {{selectedGame.team_name1}} </p>
               <mat-form-field>
                 <mat-label> Team 1 </mat-label>
                 <mat-select formControlName="team1IdCtrl">
@@ -167,8 +182,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <p>Current Color: {{ selectedGame.stone_color1}} </p>
-              <mat-form-field>
+              <mat-form-field class="ml-3">
                 <mat-label> Pick a Stone Color </mat-label>
                 <mat-select formControlName="team1StoneColorCtrl">
                   <mat-option> -- </mat-option>
@@ -179,7 +193,6 @@
             </div>
 
             <div>
-              <p>Current Team 2: {{selectedGame.team_name2}}</p>
               <mat-form-field>
                 <mat-label> Team 2 </mat-label>
                 <mat-select formControlName="team2IdCtrl">
@@ -190,8 +203,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <p>Current Color: {{ selectedGame.stone_color2}} </p>
-              <mat-form-field>
+              <mat-form-field class="ml-3">
                 <mat-label> Pick a Stone Color </mat-label>
                 <mat-select formControlName="team2StoneColorCtrl">
                   <mat-option> -- </mat-option>
@@ -200,60 +212,54 @@
                 </mat-select>
               </mat-form-field>
             </div>
-
           </div>
         </div>
 
         <div class="row">
           <div class="col-lg-12">
+            <div>
+              <mat-form-field>
+                <mat-label> Select Ice Sheet </mat-label>
+                <mat-select formControlName="iceSheetCtrl">
+                  <mat-option> -- </mat-option>
+                  <mat-option *ngFor="let iceSheet of iceSheets"
+                    [value]="iceSheet"> {{iceSheet}} </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <p>Current Ice Sheet: {{selectedGame.ice_sheet}}</p>
-            <mat-form-field>
-              <mat-label> Select Ice Sheet </mat-label>
-              <mat-select formControlName="iceSheetCtrl">
-                <mat-option> -- </mat-option>
-                <mat-option *ngFor="let iceSheet of iceSheets"
-                  [value]="iceSheet"> {{iceSheet}} </mat-option>
-              </mat-select>
-            </mat-form-field>
+              <mat-form-field class="ml-3">
+                <mat-label> Select Winner </mat-label>
+                <mat-select formControlName="winnerCtrl">
+                  <mat-option> -- </mat-option>
+                  <mat-option *ngFor="let team of selectedTeams()"
+                    [value]="team.id"> {{team.team_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label> Select Winner Destination Game </mat-label>
+                <mat-select formControlName="destWinnerCtrl">
+                  <mat-option> -- </mat-option>
+                  <mat-option *ngFor="let game of games"
+                    [value]="game.game_id"> {{game.game_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <p>Current Winner: {{selectedGame.winner_name}}</p>
-            <mat-form-field>
-              <mat-label> Select Winner </mat-label>
-              <mat-select formControlName="winnerCtrl">
-                <mat-option> -- </mat-option>
-                <mat-option *ngFor="let team of selectedTeams()"
-                  [value]="team.id"> {{team.team_name}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <p>Current Winner Destination Game: {{ selectedGame.winner_dest }}</p>
-            <mat-form-field>
-              <mat-label> Select Winner Destination Game </mat-label>
-              <mat-select formControlName="destWinnerCtrl">
-                <mat-option> -- </mat-option>
-                <mat-option *ngFor="let game of games"
-                  [value]="game.game_id"> {{game.game_name}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-
-            <p>Current Loser Destination Game: {{ selectedGame.loser_dest}}</p>
-            <mat-form-field>
-              <mat-label> Select Loser Destination Game </mat-label>
-              <mat-select formControlName="destLoserCtrl">
-                <mat-option> -- </mat-option>
-                <mat-option *ngFor="let game of games"
-                  [value]="game.game_id"> {{game.game_name}} </mat-option>
-              </mat-select>
-            </mat-form-field>
-
+              <mat-form-field class="ml-3">
+                <mat-label> Select Loser Destination Game </mat-label>
+                <mat-select formControlName="destLoserCtrl">
+                  <mat-option> -- </mat-option>
+                  <mat-option *ngFor="let game of games"
+                    [value]="game.game_id"> {{game.game_name}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
 
         <div class="row">
           <div class="col-lg-12 example-form">
-            <p>Current Notes: {{ selectedGame.notes}}</p>
             <mat-form-field class="example-full-width mr-4">
               <mat-label> Games Notes </mat-label>
               <textarea matInput
@@ -281,10 +287,10 @@
       </div>
     </mat-step>
 
-    <!-- EDIT -->
+    <!-- FINISH & SUBMIT -->
     <mat-step>
-      <ng-template matStepLabel>Submit</ng-template>
-      <p>Click Submit when ready.</p>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
       <div>
         <button mat-button
           matStepperPrevious>Back</button>
