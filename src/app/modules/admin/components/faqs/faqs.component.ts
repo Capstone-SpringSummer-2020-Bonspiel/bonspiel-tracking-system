@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./faqs.component.scss']
 })
 export class FaqsComponent implements OnInit {
-  src = "https://github.com/Capstone-SpringSummer-2020-Bonspiel/bonspiel-tracking-system/blob/master/src/assets/test_sample.pdf"
+  src = "https://github.com/Capstone-SpringSummer-2020-Bonspiel/bonspiel-tracking-system/raw/dev/src/assets/FAQ.pdf"
   constructor() { }
 
   ngOnInit(): void {
