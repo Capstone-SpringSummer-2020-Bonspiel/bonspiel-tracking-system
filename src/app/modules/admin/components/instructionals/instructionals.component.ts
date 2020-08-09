@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./instructionals.component.scss']
 })
 export class InstructionalsComponent implements OnInit {
-  src = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf"
+  src = "https://nbviewer.jupyter.org/github/Capstone-SpringSummer-2020-Bonspiel/bonspiel-tracking-system/blob/dev/src/assets/pdf/Batch%20Upload%20Rule.pdf"
   // src = "assets\img\curler-silhouette.jpg"
 
   constructor() { }
