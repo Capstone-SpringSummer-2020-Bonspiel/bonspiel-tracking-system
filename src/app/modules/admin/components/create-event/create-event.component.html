@@ -71,7 +71,7 @@
   <!-- EVENT START + EVENT END -->
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-      <ng-template matStepLabel> New Event Begin Date </ng-template>
+      <ng-template matStepLabel> New Event Begin/End Date </ng-template>
       <mat-form-field>
         <mat-label>Event Beginning Date</mat-label>
         <input matInput
@@ -107,7 +107,7 @@
   <!-- SUBMIT -->
   <mat-step>
     <ng-template matStepLabel>Submit</ng-template>
-    <!-- {{this.begin_date | date: 'EEE, M/d/yy @ h:mm':'PST'}} PST -->
+    {{this.begin_date | date: 'EEE, M/d/yy @ h:mm'}}
     <p>Click Submit when ready.</p>
     <div>
       <button mat-button

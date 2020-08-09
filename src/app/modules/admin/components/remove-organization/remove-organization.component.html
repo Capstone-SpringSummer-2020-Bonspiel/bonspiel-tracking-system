@@ -11,6 +11,7 @@
       <mat-form-field>
         <mat-label>Select Organization to Delete</mat-label>
         <mat-select formControlName="organizationCtrl"
+          (selectionChange)="stepper.next();"
           required>
           <mat-option *ngFor="let organization of this.organizations"
             [value]="organization">

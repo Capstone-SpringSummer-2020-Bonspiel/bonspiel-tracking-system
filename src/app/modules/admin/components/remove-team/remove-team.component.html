@@ -12,6 +12,7 @@
       <mat-form-field>
         <mat-label> Team Name </mat-label>
         <mat-select formControlName="teamIdCtrl"
+          (selectionChange)="stepper.next();"
           name="teams"
           required>
           <mat-option *ngFor="let team of teams"

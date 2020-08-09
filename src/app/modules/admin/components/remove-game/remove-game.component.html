@@ -14,7 +14,7 @@
       <mat-form-field>
         <mat-label>Choose an Event</mat-label>
         <mat-select formControlName="eventCtrl"
-          (selectionChange)="getGames()"
+          (selectionChange)="getGames();stepper.next();"
           required>
           <mat-option> -- </mat-option>
           <mat-option *ngFor="let event of events"
@@ -34,7 +34,8 @@
 
       <mat-form-field>
         <mat-label>Choose Game</mat-label>
-        <mat-select formControlName="gameCtrl">
+        <mat-select formControlName="gameCtrl"
+          (selectionChange)="stepper.next();">
           <mat-option>--</mat-option>
           <mat-option *ngFor="let game of games"
             [value]="game.game_id">

@@ -12,6 +12,7 @@
       <mat-form-field>
         <mat-label>Select Event to Remove</mat-label>
         <mat-select formControlName="eventIdCtrl"
+          (selectionChange)="stepper.next()"
           required>
           <mat-option *ngFor="let event of this.events"
             [value]="event">

@@ -215,7 +215,8 @@ export class ScheduleComponent implements OnInit {
           team2Id: 0,
           finished: null,
           winnerId: 0,
-          winnerTo: 0
+          winnerTo: 0,
+          loserTo: 0,
         })
       }
       // console.log(this.p + " Draw Data Has been Added. -----------+");
@@ -254,15 +255,16 @@ export class ScheduleComponent implements OnInit {
           }
 
           this.finalEventData[p].games[s].gameId = i + 1;
-          this.finalEventData[p].games[s].eventGameId = this.eventGameData[i].id;
-          this.finalEventData[p].games[s].name = this.eventGameData[i].notes;
+          this.finalEventData[p].games[s].eventGameId = this.eventGameData[i].game_id;
+          this.finalEventData[p].games[s].name = this.eventGameData[i].game_name;
           this.finalEventData[p].games[s].team1 = this.eventGameData[i].team_name1;
           this.finalEventData[p].games[s].team1Id = this.eventGameData[i].curlingteam1_id;
           this.finalEventData[p].games[s].team2 = this.eventGameData[i].team_name2;
           this.finalEventData[p].games[s].team2Id = this.eventGameData[i].curlingteam2_id;
           this.finalEventData[p].games[s].finished = this.eventGameData[i].finished;
-          this.finalEventData[p].games[s].winnerId = this.eventGameData[i].null;
-          this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner;
+          this.finalEventData[p].games[s].winnerId = this.eventGameData[i].winner;
+          this.finalEventData[p].games[s].winnerTo = this.eventGameData[i].winner_dest;
+          this.finalEventData[p].games[s].loserTo = this.eventGameData[i].loser_dest;
           // console.log(this.finalEventData[p]);
 
         }
@@ -317,6 +319,7 @@ export interface gameData {
   finished: Boolean;
   winnerId: Number;
   winnerTo: Number;
+  loserTo: Number;
 }
 export interface drawData {
   id: Number; // the id of draw in this event
@@ -332,7 +335,7 @@ var GAME_DATA: gameData[] = []
 for (let i = 1; i < 10; i++) {
   GAME_DATA = [];
   for (let n = 1; n < 5; n++) {
-    GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20 });
+    GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20, loserTo: 20 });
   }
   SCHEDULE_DATA1.push({ id: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
 }
