@@ -15,7 +15,7 @@
         <mat-label>Select Organization</mat-label>
         <mat-select formControlName="organizationIdCtrl"
           name="organizations"
-          (selectionChange)="getCurlersByOrganizationId()"
+          (selectionChange)="getCurlersByOrganizationId(); stepper.next();"
           required>
           <mat-option *ngFor="let organization of organizations"
             [value]="organization.id">
@@ -37,6 +37,7 @@
       <mat-form-field>
         <mat-label> Select Curler... </mat-label>
         <mat-select formControlName="curlerIdCtrl"
+          (selectionChange)="stepper.next();"
           name="curlers"
           required>
           <mat-option *ngFor="let curler of curlers"
