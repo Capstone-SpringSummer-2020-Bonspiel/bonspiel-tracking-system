@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FaqsComponent implements OnInit {
   // pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
-  pdfSrc = "https://nbviewer.jupyter.org/github/Capstone-SpringSummer-2020-Bonspiel/bonspiel-tracking-system/blob/dev/src/assets/pdf/FAQ.pdf"
+  pdfSrc = "https://github.com/Capstone-SpringSummer-2020-Bonspiel/bonspiel-tracking-system/raw/dev/src/assets/pdf/FAQ.pdf"
   constructor() { }
 
   ngOnInit(): void {
