@@ -40,6 +40,7 @@ tr.team-row:not(.expanded-row):active {
 .curler-photo{
   display: flex;
   margin: 5px;
+  margin: 20px;
   // left: 50%;
   // width: 10%;
   // height: 40px;
@@ -51,7 +52,7 @@ tr.team-row:not(.expanded-row):active {
   padding: 8px;
   font-weight: lighter;
   margin: 8px 0;
-  height: 104px;
+  height: 105px;
 }
 
 .team-symbol {
@@ -82,4 +83,12 @@ tr.team-row:not(.expanded-row):active {
 .mat-column-arrow{
   flex: 0 0 8%;
   width: 8%;
+}
+
+.curler-card{
+  margin-bottom: 10px;
+  background-color:transparent;
+  // padding: 2px;
+  // border: 1px solid rgb(0, 255, 157);
+  // box-shadow: 0 3px 5px darkgreen;
 }

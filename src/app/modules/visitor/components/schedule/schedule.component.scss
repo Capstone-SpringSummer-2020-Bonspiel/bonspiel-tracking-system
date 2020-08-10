@@ -1,16 +1,28 @@
 .mat-table{
-  width: 100%;
   border: 1px solid black;
-  word-wrap: wrap normal;
+  word-wrap: nowrap;
+  white-space: normal; 
   border-collapse: separate;
+  width: 100%;
+  min-width: 1000px;
 }
+.mat-cell{
+  border-right:1px solid darkgray;
+  padding: 5px;
+}
+.mat-header-cell{
+  border-right:1px solid darkgray;
+  padding: 5px;
+  text-align: center;
 
+}
 
 .mat-row:nth-child(even){
-  background: rgb(165, 233, 216)
+  background: rgb(255, 255, 255)
 }
 .mat-row:nth-child(odd){
-  background: rgb(206, 206, 206)
+  
+  background: rgb(230, 255, 249)
 }
 .mat-column{
   border-right: 1px solid black;
@@ -18,6 +30,8 @@
 }
 .mat-column-draw{
   width: 20%;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
 }
 .mat-form-field{
   margin-left: 8px;

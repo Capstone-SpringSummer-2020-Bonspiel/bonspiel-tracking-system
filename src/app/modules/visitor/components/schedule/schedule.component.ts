@@ -66,19 +66,6 @@ export class ScheduleComponent implements OnInit {
       })
   }
 
-
-  // openDialog(): void {
-  //   const dialogRef = this.dialog.open(TeamDialogOverviewComponent, {
-  //     width: 'auto',
-  //     data: { name: this.name, animal: this.animal },
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     console.log('The dialog was closed');
-  //     this.animal = result;
-  //   });
-  // }
-
   onEventSelected(event: any) {
     console.log('the selected event is:');
     console.log(event);
@@ -132,50 +119,25 @@ export class ScheduleComponent implements OnInit {
     var s = 0;
 
     //initialize number array to count size of each draw
-    // for (let i = 0; i < this.totalGame; i++) {
-    //   if (this.eventGameData[i].ice_sheet == 'A' || this.eventGameData[i].ice_sheet == 1) {
-    //     s = 1
-    //   } else if (this.eventGameData[i].ice_sheet == 'B' || this.eventGameData[i].ice_sheet == 2) {
-    //     s = 2
-    //   } else if (this.eventGameData[i].ice_sheet == 'C' || this.eventGameData[i].ice_sheet == 3) {
-    //     s = 3
-    //   } else if (this.eventGameData[i].ice_sheet == 'D' || this.eventGameData[i].ice_sheet == 4) {
-    //     s = 4
-    //   } else if (this.eventGameData[i].ice_sheet == 'E' || this.eventGameData[i].ice_sheet == 5) {
-    //     s = 5
-    //   } else if (this.eventGameData[i].ice_sheet == 'F' || this.eventGameData[i].ice_sheet == 6) {
-    //     s = 6
-    //   }
-    //   if (this.drawSizeNumber < s) {
-    //     this.drawSizeNumber = s;
-    //   }
-    // }
-
-    //initialize number array to count size of each draw
     this.tableColumn = []
     this.tableSize = 0;
     for (let i = 0; i < this.totalGame; i++) {
       if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 48 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 57) {
         this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 48)
-        // console.log(this.eventGameData[i].ice_sheet)
-        // console.log(this.eventGameData[i].ice_sheet)
         this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 48
       }
       else if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 65 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 90) {
         this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 64)
-        // console.log(this.eventGameData[i].ice_sheet)
-        // console.log(this.eventGameData[i].ice_sheet.charCodeAt(0) - 64)
         this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 64
       }
       else if (this.eventGameData[i].ice_sheet.charCodeAt(0) >= 97 && this.eventGameData[i].ice_sheet.charCodeAt(0) <= 122) {
         this.tableColumn.push(this.eventGameData[i].ice_sheet.charCodeAt(0) - 96)
-        // console.log(this.eventGameData[i].ice_sheet)
-        // console.log(this.eventGameData[i].ice_sheet.charCodeAt(0) - 96)
         this.eventGameData[i].ice_sheet = this.eventGameData[i].ice_sheet.charCodeAt(0) - 96
       }
     }
     this.tableColumn = this.tableColumn.sort()
-    console.log(this.tableColumn)
+    // console.log(this.tableColumn)
+
     let n = 0;
     for (let i = 0; i < this.tableColumn.length; i++) {
       if (this.tableColumn[i] !== this.tableColumn[n]) {
@@ -184,15 +146,10 @@ export class ScheduleComponent implements OnInit {
       }
     }
     this.tableColumn.splice(n + 1)
-    console.log(this.tableColumn)
     this.tableSize = this.tableColumn.length;
     this.drawSizeNumber = this.tableSize;
-    // for (let i = 0; i < this.tableColumn.length; i++) {
-    //   this.tableColumn[i] = String.fromCharCode(this.tableColumn[i] + 64)
-    // }
     this.tableColumn.push(0);
     this.tableColumn.sort();
-    console.log(this.tableColumn)
 
     //process data to create the final dataset
     for (let p = 0; p < this.totalDraw; p++) {
@@ -217,18 +174,13 @@ export class ScheduleComponent implements OnInit {
           winnerId: 0,
           winnerTo: 0,
           loserTo: 0,
+          winnerTG: null,
+          loserTG: null,
         })
       }
       // console.log(this.p + " Draw Data Has been Added. -----------+");
       // console.log(this.finalEventData[this.p]);
     }
-
-
-
-    console.log("Empty Data Here");
-    console.log(this.finalEventData);
-    console.log(this.eventGameData);
-
 
     for (let p = 0; p < this.totalDraw; p++) {
       for (let i = 0; i < this.totalGame; i++) {
@@ -268,7 +220,22 @@ export class ScheduleComponent implements OnInit {
           // console.log(this.finalEventData[p]);
 
         }
+      }
+    }
 
+    for (let p = 0; p < this.totalDraw; p++) {
+      for (let i = 0; i < this.drawSizeNumber; i++) {
+        if (this.finalEventData[p].games[i].team1 != null) {
+          // console.log(this.finalEventData[p].games[i])
+          for (let a = 0; a < this.totalGame; a++) {
+            if (this.eventGameData[a].game_id == this.finalEventData[p].games[i].winnerTo) {
+              this.finalEventData[p].games[i].winnerTG = this.eventGameData[a].game_name
+            }
+            if (this.eventGameData[a].game_id == this.finalEventData[p].games[i].loserTo) {
+              this.finalEventData[p].games[i].loserTG = this.eventGameData[a].game_name
+            }
+          }
+        }
       }
     }
     console.log("Final Dataset Below:");
@@ -320,6 +287,8 @@ export interface gameData {
   winnerId: Number;
   winnerTo: Number;
   loserTo: Number;
+  winnerTG: String;
+  loserTG: String;
 }
 export interface drawData {
   id: Number; // the id of draw in this event
@@ -335,7 +304,7 @@ var GAME_DATA: gameData[] = []
 for (let i = 1; i < 10; i++) {
   GAME_DATA = [];
   for (let n = 1; n < 5; n++) {
-    GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20, loserTo: 20 });
+    GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20, loserTo: 20, winnerTG: "String", loserTG: "String" });
   }
   SCHEDULE_DATA1.push({ id: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
 }

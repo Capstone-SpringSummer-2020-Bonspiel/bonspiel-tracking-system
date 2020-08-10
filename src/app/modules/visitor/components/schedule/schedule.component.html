@@ -24,14 +24,16 @@
         [dataSource]="this.finalEventData"
         class="mat-elevation-z8">
 
-        <ng-container matColumnDef="Draw">
+        <ng-container matColumnDef="Draw"
+          style="white-space:nowrap">
           <th mat-header-cell
             *matHeaderCellDef> Draw </th>
           <td mat-cell
             *matCellDef="let draw">
             {{draw.drawName}}<br>
             <!-- Time: {{draw.startTime | date: 'yyyy-MM-dd HH:mm:ss'}}<br> -->
-            {{draw.startTime | date: 'EEE, M/d/yy @ h:mm aaa':'UTC'}}<br>
+            {{draw.startTime | date: 'EEE, M/d/yy ':'UTC'}}<br>
+            {{draw.startTime | date: '@ h:mm aaa':'UTC'}}<br>
 
           </td>
         </ng-container>
@@ -43,7 +45,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[0].team1 != null">
-              <div *ngIf="draw.games[0].eventGameId != null">
+              <div *ngIf="draw.games[0].eventname == null">
                 ID: {{draw.games[0].eventGameId}}
               </div>
               <div *ngIf="draw.games[0].name != null">
@@ -54,10 +56,10 @@
               Team 2: {{draw.games[0].team2}} <br>
 
               <div *ngIf="draw.games[0].winnerTo != null">
-                W &rarr; {{draw.games[0].winnerTo}}<br>
+                W &rarr; {{draw.games[0].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[0].loserTo != null">
-                L &rarr; {{draw.games[0].loserTo}}<br>
+                L &rarr; {{draw.games[0].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[0].finished">
@@ -83,7 +85,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[1].team1 != null">
-              <div *ngIf="draw.games[1].eventGameId != null">
+              <div *ngIf="draw.games[1].name == null">
                 ID: {{draw.games[1].eventGameId}} <br>
               </div>
               <div *ngIf="draw.games[1].name != null">
@@ -95,10 +97,10 @@
               Team 2: {{draw.games[1].team2}} <br>
 
               <div *ngIf="draw.games[1].winnerTo != null">
-                W &rarr; {{draw.games[1].winnerTo}}<br>
+                W &rarr; {{draw.games[1].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[1].loserTo != null">
-                L &rarr; {{draw.games[1].loserTo}}<br>
+                L &rarr; {{draw.games[1].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[1].finished">
@@ -123,7 +125,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[2].team1 != null">
-              <div *ngIf="draw.games[2].eventGameId != null">
+              <div *ngIf="draw.games[2].name == null">
                 ID: {{draw.games[2].eventGameId}} <br>
               </div>
               <div *ngIf="draw.games[2].name != null">
@@ -135,10 +137,10 @@
               Team 2: {{draw.games[2].team2}} <br>
 
               <div *ngIf="draw.games[2].winnerTo != null">
-                W &rarr; {{draw.games[2].winnerTo}}<br>
+                W &rarr; {{draw.games[2].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[2].loserTo != null">
-                L &rarr; {{draw.games[2].loserTo}}<br>
+                L &rarr; {{draw.games[2].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[2].finished">
@@ -163,7 +165,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[3].team1 != null">
-              <div *ngIf="draw.games[3].eventGameId != null">
+              <div *ngIf="draw.games[3].name == null">
                 ID: {{draw.games[3].eventGameId}} <br>
               </div>
               <div *ngIf="draw.games[3].name != null">
@@ -175,10 +177,10 @@
               Team 2: {{draw.games[3].team2}} <br>
 
               <div *ngIf="draw.games[3].winnerTo != null">
-                W &rarr; {{draw.games[3].winnerTo}}<br>
+                W &rarr; {{draw.games[3].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[3].loserTo != null">
-                L &rarr; {{draw.games[3].loserTo}}<br>
+                L &rarr; {{draw.games[3].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[3].finished">
@@ -203,7 +205,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[4].team1 != null">
-              <div *ngIf="draw.games[4].eventGameId != null">
+              <div *ngIf="draw.games[4].name == null">
                 ID: {{draw.games[4].eventGameId}} <br>
               </div>
               <div *ngIf="draw.games[4].name != null">
@@ -215,10 +217,10 @@
               Team 2: {{draw.games[4].team2}} <br>
 
               <div *ngIf="draw.games[4].winnerTo != null">
-                W &rarr; {{draw.games[4].winnerTo}}<br>
+                W &rarr; {{draw.games[4].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[4].loserTo != null">
-                L &rarr; {{draw.games[4].loserTo}}<br>
+                L &rarr; {{draw.games[4].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[4].finished">
@@ -243,7 +245,7 @@
           <td mat-cell
             *matCellDef="let draw">
             <div *ngIf="draw.games[5].team1 != null">
-              <div *ngIf="draw.games[5].eventGameId != null">
+              <div *ngIf="draw.games[5].name == null">
                 ID: {{draw.games[5].eventGameId}} <br>
               </div>
               <div *ngIf="draw.games[5].name != null">
@@ -255,10 +257,10 @@
               Team 2: {{draw.games[5].team2}} <br>
 
               <div *ngIf="draw.games[5].winnerTo != null">
-                W &rarr; {{draw.games[5].winnerTo}}<br>
+                W &rarr; {{draw.games[5].winnerTG}}<br>
               </div>
               <div *ngIf="draw.games[5].loserTo != null">
-                L &rarr; {{draw.games[5].loserTo}}<br>
+                L &rarr; {{draw.games[5].loserTG}}<br>
               </div>
 
               <div *ngIf="draw.games[5].finished">
