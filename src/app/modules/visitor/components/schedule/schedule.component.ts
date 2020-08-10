@@ -39,6 +39,7 @@ export class ScheduleComponent implements OnInit {
   ngOnInit(): void {
     this.spinnerService.on()
 
+    //first API, read all event data
     this.apiService
       .getEvents()
       .subscribe((res: any) => {
@@ -48,12 +49,14 @@ export class ScheduleComponent implements OnInit {
         console.log(this.selectedEventId);
         console.log(this.selectedEvent);
 
+        //second API, read all draw data
         this.apiService
           .getDraws(this.selectedEventId)
           .subscribe((res: any) => {
             this.eventDrawData = res;
             this.totalDraw = res.length;
 
+            //third API, read all game data
             this.apiService
               .getGames(this.selectedEventId)
               .subscribe((res: any) => {
@@ -67,6 +70,7 @@ export class ScheduleComponent implements OnInit {
       })
   }
 
+  //select event function
   onEventSelected(event: any) {
     console.log('the selected event is:');
     console.log(event);
@@ -80,6 +84,7 @@ export class ScheduleComponent implements OnInit {
     this.eventBegin();
   }
 
+  //select the new event and running the follow
   eventBegin() {
     this.spinnerService.on();
 
@@ -183,6 +188,7 @@ export class ScheduleComponent implements OnInit {
       // console.log(this.finalEventData[this.p]);
     }
 
+    //assign data from backend to new format
     for (let p = 0; p < this.totalDraw; p++) {
       for (let i = 0; i < this.totalGame; i++) {
         if (this.finalEventData[p].eventDrawId == this.eventGameData[i].draw_id) {
@@ -303,12 +309,13 @@ export interface drawData {
   games: gameData[];
 }
 
-const SCHEDULE_DATA1: drawData[] = []
-var GAME_DATA: gameData[] = []
-for (let i = 1; i < 10; i++) {
-  GAME_DATA = [];
-  for (let n = 1; n < 5; n++) {
-    GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20, loserTo: 20, winnerTG: "String", loserTG: "String" });
-  }
-  SCHEDULE_DATA1.push({ id: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
-}
+// test data below
+// const SCHEDULE_DATA1: drawData[] = []
+// var GAME_DATA: gameData[] = []
+// for (let i = 1; i < 10; i++) {
+//   GAME_DATA = [];
+//   for (let n = 1; n < 5; n++) {
+//     GAME_DATA.push({ gameId: 4 * (i - 1) + n, eventGameId: 1, name: "testid", team1: "team1", team2: "team2", team1Id: 1, team2Id: 2, finished: true, winnerId: 1, winnerTo: 20, loserTo: 20, winnerTG: "String", loserTG: "String" });
+//   }
+//   SCHEDULE_DATA1.push({ id: i, eventDrawId: 0, drawName: "Testgame", startTime: "Independence Day", videoUrl: "CCC", games: GAME_DATA });
+// }

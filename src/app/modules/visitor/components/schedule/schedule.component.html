@@ -3,6 +3,8 @@
     <div class="col-sm-12">
       <h1 class="text-center"> Event Draw Schedule </h1>
     </div>
+
+    <!-- event select drop down menu -->
     <div class="col-sm-12"
       style="text-align:center">
       <mat-form-field class="field-center">
@@ -17,7 +19,7 @@
     </div>
   </div>
 
-
+  <!-- context of schedule table -->
   <div class="row">
     <div class="col-sm-12">
       <table mat-table
@@ -59,6 +61,7 @@
                 *matHeaderCellDef> {{this.extraColumns[i-1]}} </th>
               <td mat-cell
                 *matCellDef="let draw">
+                <!-- display game name, or id if name not exist -->
                 <div *ngIf="draw.games[i-1].team1 != null">
                   <div *ngIf="draw.games[i-1].name == null">
                     ID: {{draw.games[i-1].eventGameId}}
@@ -67,9 +70,11 @@
                     {{draw.games[i-1].name}} <br>
                   </div>
 
+                  <!-- team 1 & 2 name -->
                   Team 1: {{draw.games[i-1].team1}} <br>
                   Team 2: {{draw.games[i-1].team2}} <br>
 
+                  <!-- winner and loser destination game name -->
                   <div *ngIf="draw.games[i-1].winnerTo != null">
                     W &rarr; {{draw.games[i-1].winnerTG}}<br>
                   </div>
@@ -77,6 +82,7 @@
                     L &rarr; {{draw.games[i-1].loserTG}}<br>
                   </div>
 
+                  <!-- display winner team name if winner id match-->
                   <div *ngIf="draw.games[i-1].finished">
                     <div *ngIf="draw.games[i-1].winnerId == draw.games[i-1].team1Id">
                       Winner: {{draw.games[i-1].team1}}
