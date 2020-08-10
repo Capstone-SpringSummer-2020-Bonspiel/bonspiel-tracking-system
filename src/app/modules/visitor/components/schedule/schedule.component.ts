@@ -25,6 +25,7 @@ export class ScheduleComponent implements OnInit {
 
   drawSizeNumber = null;
   displayedColumns: String[]
+  extraColumns: String[];
   allEventData: null;
   selectedEvent: null;
   selectedEventId = null;
@@ -240,11 +241,14 @@ export class ScheduleComponent implements OnInit {
     }
     console.log("Final Dataset Below:");
     console.log(this.finalEventData);
+    console.log("draw size:" + this.drawSizeNumber);
 
     this.displayedColumns = []
+    this.extraColumns = []
     this.displayedColumns.push('Draw')
     for (let p = 1; p < this.drawSizeNumber + 1; p++) {
       this.displayedColumns.push('track_' + String.fromCharCode(96 + p))
+      this.extraColumns.push(String.fromCharCode(96 + p))
     } console.log(this.displayedColumns)
   }
 
