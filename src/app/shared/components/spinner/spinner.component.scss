@@ -1,0 +1,13 @@
+// Medium devices (tablets, 768px and up)
+@media (min-width: 992px) {
+  .loadText {
+    visibility: visible;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (max-width: 992px) {
+  .loadText {
+    visibility: hidden;
+  }
+}
