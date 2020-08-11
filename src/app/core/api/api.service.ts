@@ -151,7 +151,7 @@ export class ApiService {
   }
 
   public setDefaultEventId(eventId) {
-    return this.httpService.get(`${environment.apiUrl}/api/v1/admin/defaultEventId/${eventId}`);
+    return this.httpService.post(`${environment.apiUrl}/api/v1/admin/defaultEventId/${eventId}`, {});
   }
 
   /********************************************************************/
