@@ -156,13 +156,14 @@ export class AppComponent {
 
     // Redirect to Home page
     if (this.router.url !== '/') {
-      this.router.navigateByUrl('/')
+      this.router.navigateByUrl('/');
+      console.log('redirecting to home');
     }
 
     this.apiService.changeEventId(newEvent.id);
     let found = this.currentCurlingEvents.find((e) => e.id === newEvent.id);
     if (!found) {
-      found = this.pastCurlingEvents.find((e) => e.id === newEvent.id)
+      found = this.pastCurlingEvents.find((e) => e.id === newEvent.id);
     }
     this.apiService.changeEvent(found);
     this.sidenav.close();

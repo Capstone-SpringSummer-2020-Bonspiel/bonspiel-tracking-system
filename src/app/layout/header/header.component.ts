@@ -38,4 +38,9 @@ export class HeaderComponent implements OnInit {
   signOut() {
     this.accountService.logout();
   }
+
+  navigateTo(dst) {
+    console.log('navigating to: ', dst);
+    this.router.navigateByUrl(`/${dst}`);
+  }
 }

@@ -71,7 +71,7 @@ import { CustomRouteReuseStrategy } from './core/router-strategy';
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }
+    // { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }
 
     // provider used to create fake backend
     // fakeBackendProvider,
