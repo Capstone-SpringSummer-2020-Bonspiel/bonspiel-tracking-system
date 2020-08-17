@@ -194,7 +194,7 @@ export class DashboardComponent implements OnInit {
     },
     {
       name: 'completed',
-      header: 'Status',
+      header: 'Completed?',
     },
     {
       name: 'begin_date',
@@ -212,7 +212,7 @@ export class DashboardComponent implements OnInit {
     name: 'Name',
     event_type: 'Event Type',
     info: 'Info',
-    completed: 'Status',
+    completed: 'Completed?',
     begin_date: 'Start Date',
     end_date: 'End Date',
   };
