@@ -52,6 +52,12 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Add an Event',
+      path: '/admin/create-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
       label: 'Add a Team to an Event',
       path: '/admin/add-team-to-event',
       icon: 'group_add',
@@ -73,12 +79,6 @@ export class SidebarComponent implements OnInit {
       label: 'Add a Bracket',
       path: '/admin/create-bracket',
       icon: 'library_add',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Add an Event',
-      path: '/admin/create-event',
-      icon: 'calendar_today',
       class: 'd-none d-sm-block'
     },
     {
@@ -115,6 +115,12 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Edit an Event',
+      path: '/admin/edit-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
       label: 'Edit a Curler',
       path: '/admin/edit-curler',
       icon: 'person_add',
@@ -130,12 +136,6 @@ export class SidebarComponent implements OnInit {
       label: 'Edit a Bracket',
       path: '/admin/edit-bracket',
       icon: 'library_add',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Edit an Event',
-      path: '/admin/edit-event',
-      icon: 'calendar_today',
       class: 'd-none d-sm-block'
     },
     {
@@ -172,6 +172,12 @@ export class SidebarComponent implements OnInit {
       class: 'd-none d-sm-block'
     },
     {
+      label: 'Remove an Event',
+      path: '/admin/remove-event',
+      icon: 'calendar_today',
+      class: 'd-none d-sm-block'
+    },
+    {
       label: 'Remove a Team from an Event',
       path: '/admin/remove-team-from-event',
       icon: 'group_add',
@@ -193,12 +199,6 @@ export class SidebarComponent implements OnInit {
       label: 'Remove a Bracket',
       path: '/admin/remove-bracket',
       icon: 'library_add',
-      class: 'd-none d-sm-block'
-    },
-    {
-      label: 'Remove an Event',
-      path: '/admin/remove-event',
-      icon: 'calendar_today',
       class: 'd-none d-sm-block'
     },
     {
